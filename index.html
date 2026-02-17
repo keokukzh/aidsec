@@ -214,20 +214,59 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logonoback.PNG" />
 
-    <!-- Privacy-friendly analytics by Plausible -->
-    <script async src="/js/plausible.js"></script>
+    <!-- Cookie Consent: Plausible wird nur nach Zustimmung geladen -->
     <script>
-      ((window.plausible =
-        window.plausible ||
-        function () {
-          (plausible.q = plausible.q || []).push(arguments);
-        }),
-        (plausible.init =
-          plausible.init ||
-          function (i) {
-            plausible.o = i || {};
-          }));
-      plausible.init();
+      // Cookie Consent Management
+      (function() {
+        var CONSENT_KEY = 'aidsec_cookie_consent';
+        var consent = localStorage.getItem(CONSENT_KEY);
+        
+        // Banner anzeigen wenn keine Entscheidung getroffen
+        if (!consent) {
+          document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('cookie-banner').style.display = 'block';
+          });
+        }
+        
+        // Tracking-Scripts nur laden wenn Consent erteilt
+        if (consent === 'accepted') {
+          loadPlausible();
+          loadHubSpot();
+        }
+        
+        function loadPlausible() {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = '/js/plausible.js';
+          document.head.appendChild(script);
+          
+          var initScript = document.createElement('script');
+          initScript.textContent = 'window.plausible = window.plausible || function() { (plausible.q = plausible.q || []).push(arguments); }; plausible.init = plausible.init || function(i) { plausible.o = i || {}; }; plausible.init();';
+          document.head.appendChild(initScript);
+        }
+        
+        function loadHubSpot() {
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.id = 'hs-script-loader';
+          script.async = true;
+          script.defer = true;
+          script.src = '//js-eu1.hs-scripts.com/147823018.js';
+          document.body.appendChild(script);
+        }
+        
+        window.loadConsentScripts = function() {
+          localStorage.setItem(CONSENT_KEY, 'accepted');
+          loadPlausible();
+          loadHubSpot();
+          document.getElementById('cookie-banner').style.display = 'none';
+        };
+        
+        window.rejectConsent = function() {
+          localStorage.setItem(CONSENT_KEY, 'rejected');
+          document.getElementById('cookie-banner').style.display = 'none';
+        };
+      })();
     </script>
 
     <!-- WARUM KEIN GOOGLE ANALYTICS / HOTJAR:
@@ -237,6 +276,25 @@
        EU-gehostet, cookieless und erfordert keinen Cookie-Banner. -->
   </head>
   <body>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+      <div class="cookie-banner__content">
+        <p class="cookie-banner__text">
+          Wir verwenden Cookies und Tracking-Technologien, um Ihnen die bestmoegliche Nutzererfahrung zu bieten. 
+          Mit Ihrer Zustimmung helfen Sie uns, unsere Website zu verbessern. 
+          <a href="/datenschutz.html" class="cookie-banner__link">Mehr erfahren</a>
+        </p>
+        <div class="cookie-banner__buttons">
+          <button id="cookie-accept" class="cookie-banner__btn cookie-banner__btn--accept" onclick="loadConsentScripts()">
+            Cookies akzeptieren
+          </button>
+          <button id="cookie-reject" class="cookie-banner__btn cookie-banner__btn--reject" onclick="rejectConsent()">
+            Ablehnen
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Skip to content -->
     <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
 
@@ -2125,14 +2183,5 @@
     <script src="js/form.js" defer></script>
     <!-- React Island: Hero BlurText Animation (built by Vite) -->
     <script type="module" src="js/dist/hero-app.js"></script>
-    <!-- Start of HubSpot Embed Code -->
-    <script
-      type="text/javascript"
-      id="hs-script-loader"
-      async
-      defer
-      src="//js-eu1.hs-scripts.com/147823018.js"
-    ></script>
-    <!-- End of HubSpot Embed Code -->
   </body>
 </html>
