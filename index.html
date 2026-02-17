@@ -214,10 +214,21 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logonoback.PNG" />
 
-    <!-- ANALYTICS — Plausible.io (optional, cookieless, nDSG-konform)
-       Aktivierung: plausibleDomain in config.json setzen, npm run fill ausfuehren.
-       Proxied via /js/plausible.js (Netlify Redirect). Docs: https://plausible.io/docs -->
-    <!-- <script defer data-domain="PLATZHALTER_DOMAIN" src="/js/plausible.js"></script> -->
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="/js/plausible.js"></script>
+    <script>
+      ((window.plausible =
+        window.plausible ||
+        function () {
+          (plausible.q = plausible.q || []).push(arguments);
+        }),
+        (plausible.init =
+          plausible.init ||
+          function (i) {
+            plausible.o = i || {};
+          }));
+      plausible.init();
+    </script>
 
     <!-- WARUM KEIN GOOGLE ANALYTICS / HOTJAR:
        AidSec positioniert sich als Privacy-First-Sicherheitsunternehmen.
