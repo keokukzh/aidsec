@@ -214,13 +214,9 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logonoback.PNG" />
 
-    <!-- ═══════════════════════════════════════════════
-       ANALYTICS — Plausible.io (cookieless, nDSG-konform)
-       Kein Cookie-Banner nötig. Keine persönlichen Daten.
-       AKTIVIEREN: Ersetzen Sie PLATZHALTER_DOMAIN mit Ihrer Plausible-Domain.
-       Proxied via /js/plausible.js (Netlify Redirect) um Adblocker zu umgehen.
-       Docs: https://plausible.io/docs
-       ═══════════════════════════════════════════════ -->
+    <!-- ANALYTICS — Plausible.io (optional, cookieless, nDSG-konform)
+       Aktivierung: plausibleDomain in config.json setzen, npm run fill ausfuehren.
+       Proxied via /js/plausible.js (Netlify Redirect). Docs: https://plausible.io/docs -->
     <!-- <script defer data-domain="PLATZHALTER_DOMAIN" src="/js/plausible.js"></script> -->
 
     <!-- WARUM KEIN GOOGLE ANALYTICS / HOTJAR:
@@ -1018,10 +1014,7 @@
         </div>
       </section>
 
-      <!-- ════════════════════════════════════════
-         SOCIAL PROOF — Kundenstimmen
-         ════════════════════════════════════════ -->
-      <!-- PLATZHALTER: Ersetzen Sie die anonymisierten Testimonials mit echten Kundenstimmen -->
+      <!-- SOCIAL PROOF — Kundenstimmen -->
       <section class="section section--alt" id="referenzen">
         <div class="container">
           <div class="section-header" data-reveal="fade-up">
@@ -1895,7 +1888,7 @@
                 data-netlify="true"
                 data-netlify-honeypot="bot-field"
                 novalidate
-                data-hcaptcha-sitekey=""
+                data-hcaptcha-sitekey="a4ba1564-f7a8-433c-a5a8-d7c046d469ba"
               >
                 <input type="hidden" name="form-name" value="contact" />
                 <p class="contact-form__hidden" aria-hidden="true">
