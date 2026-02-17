@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+dist/
+js/dist/
+css/fonts/
+*.local
+.env
+.env.local
+config.json
+.cursor/

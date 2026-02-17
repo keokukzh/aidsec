@@ -1,0 +1,316 @@
+/* ============================================
+   AidSec Base — Reset, Typography, Globals
+   ============================================ */
+
+/* ── Modern Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  color: var(--gray-600);
+  background-color: var(--gray-50);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── Typography ── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--navy);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--text-4xl);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+}
+
+h4 {
+  font-size: var(--text-xl);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+p {
+  margin-bottom: var(--space-4);
+  max-width: 68ch;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+a {
+  color: var(--gold-text);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-in-out);
+}
+
+a:hover {
+  color: var(--gold-dark);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Consistent focus indicator for buttons and inputs (WCAG 2.4.7) */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+strong,
+b {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+/* ── Images ── */
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Lists ── */
+ul,
+ol {
+  list-style: none;
+}
+
+/* ── Forms ── */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+input,
+textarea {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* ── Tables ── */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ── Utility Classes ── */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Skip to Content ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  z-index: var(--z-toast);
+  transition: top var(--duration-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── Section Spacing ── */
+.section {
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+}
+
+.section--dark {
+  background-color: var(--navy);
+  color: var(--gray-200);
+}
+
+.section--dark h2,
+.section--dark h3,
+.section--dark h4,
+.section--dark strong {
+  color: var(--white);
+}
+
+.section--alt {
+  background-color: var(--gray-100);
+}
+
+.section--pricing {
+  background-color: var(--white);
+}
+
+/* ── Section Headers ── */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-16);
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header h2 {
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.section-header h2::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin-top: var(--space-3);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header__sub {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  letter-spacing: var(--tracking-wide);
+  margin-bottom: var(--space-4);
+}
+
+.section--dark .section-header__sub {
+  color: var(--gray-400);
+}
+
+.section-header p {
+  font-size: var(--text-lg);
+  color: var(--gray-500);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section--dark .section-header p {
+  color: var(--gray-400);
+}
+
+/* ── Gold Decorative Divider ── */
+.divider-gold {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: var(--space-8) auto;
+  max-width: 200px;
+}
+
+.divider-gold::before,
+.divider-gold::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--gold);
+}
+
+.divider-gold::before {
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+
+.divider-gold::after {
+  background: linear-gradient(to left, transparent, var(--gold));
+}
+
+.divider-gold-diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── Text Accents ── */
+.text-gold {
+  color: var(--gold);
+}
+
+.text-navy {
+  color: var(--navy);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--gold);
+  color: var(--navy);
+}

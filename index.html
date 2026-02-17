@@ -1,0 +1,2125 @@
+<!doctype html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AidSec — IT Sicherheit für Anwälte und Ärzte | WordPress Sicherheit Schweiz</title>
+    <meta
+      name="description"
+      content="78% der Schweizer Kanzlei-Webseiten haben Note F. AidSec bringt WordPress und Security Headers in 24h auf Note A. nDSG-konform."
+    />
+    <meta
+      name="keywords"
+      content="IT Sicherheit Anwalt Zürich, Cybersicherheit Anwalt, WordPress Sicherheit Schweiz, WordPress Sicherheit Arztpraxis, Security Headers Schweiz, WordPress Härtung, nDSG, Datenschutz Schweiz, BACS Cybervorfälle"
+    />
+    <meta name="author" content="AidSec" />
+    <link rel="canonical" href="https://aidsec.ch" />
+
+    <!-- Open Graph -->
+    <meta
+      property="og:title"
+      content="AidSec — Digitale Sicherheit für Schweizer Kanzleien & Praxen"
+    />
+    <meta
+      property="og:description"
+      content="78% der Schweizer Kanzlei-Webseiten haben Note F. AidSec bringt WordPress und Security Headers in 24h auf Note A. nDSG-konform."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aidsec.ch" />
+    <meta property="og:locale" content="de_CH" />
+    <meta property="og:site_name" content="AidSec" />
+    <meta property="og:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
+    <meta property="og:image:width" content="2048" />
+    <meta property="og:image:height" content="2048" />
+    <meta property="og:image:type" content="image/jpeg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="AidSec — Digitale Sicherheit für Schweizer Kanzleien & Praxen"
+    />
+    <meta
+      name="twitter:description"
+      content="78% der Schweizer Kanzlei-Webseiten haben Note F. AidSec bringt WordPress und Security Headers in 24h auf Note A."
+    />
+    <meta name="twitter:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "AidSec",
+        "url": "https://aidsec.ch",
+        "description": "IT-Sicherheitsagentur spezialisiert auf WordPress-Härtung und Security-Header-Optimierung für Schweizer Kanzleien und Arztpraxen. Von Note F zu Note A in unter 24 Stunden. nDSG-konform.",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Schweiz"
+        },
+        "serviceType": [
+          "WordPress Security",
+          "Security Header Optimization",
+          "Website Hardening",
+          "Reputation Monitoring",
+          "nDSG Compliance"
+        ],
+        "knowsAbout": [
+          "IT Security",
+          "WordPress",
+          "nDSG",
+          "Data Protection",
+          "BACS",
+          "Security Headers"
+        ],
+        "priceRange": "CHF 490 - 950",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Sicherheitsleistungen",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "name": "Rapid Header Fix",
+              "price": "490",
+              "priceCurrency": "CHF",
+              "description": "Security Headers von Note F zu A in 24 Stunden",
+              "availability": "https://schema.org/InStock",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Rapid Header Fix"
+              }
+            },
+            {
+              "@type": "Offer",
+              "name": "Kanzlei-Härtung",
+              "price": "950",
+              "priceCurrency": "CHF",
+              "description": "Vollständige WordPress-Härtung inkl. nDSG-Check",
+              "availability": "https://schema.org/InStock",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Kanzlei-Härtung"
+              }
+            },
+            {
+              "@type": "Offer",
+              "name": "Cyber-Mandat",
+              "price": "89",
+              "priceCurrency": "CHF",
+              "description": "Monatliche Betreuung und Monitoring",
+              "availability": "https://schema.org/InStock",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Cyber-Mandat"
+              }
+            }
+          ]
+        }
+      }
+    </script>
+
+    <!-- FAQ Schema (SEO Rich Snippets) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Brauchen Sie Zugriff auf meine Mandantendaten?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Für den Header-Fix arbeiten wir ausschliesslich auf Server-/Header-Ebene — ohne CMS-Login. Bei der WordPress-Härtung benötigen wir SSH- oder Panel-Zugang zum Server, jedoch nie Zugriff auf gespeicherte Mandantendaten."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ist meine Webseite während der Härtung offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Alle Massnahmen werden im laufenden Betrieb durchgeführt. Unsere Kunden verzeichnen 0 Minuten Downtime."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet ein Cyberangriff im Vergleich zu Ihren Leistungen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei CHF 1.04 Millionen (Sophos/IT-Markt 2025). 54% der Schweizer Unternehmen zahlen Lösegeld. Unsere präventive Härtung kostet ab CHF 490."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was bedeutet Security Header Note F?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SecurityHeaders.com bewertet, ob Ihre Webseite die wichtigsten HTTP-Security-Headers sendet (HSTS, CSP, X-Frame-Options u.a.). Note F bedeutet: Kein einziger Schutz-Header ist aktiv. Clickjacking, XSS und Man-in-the-Middle-Angriffe werden dadurch deutlich einfacher."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Welche Strafen drohen bei Datenschutzverstössen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Das nDSG sieht Bussen bis CHF 250'000 für verantwortliche natürliche Personen vor (Art. 60ff. nDSG). Bei Verletzung der beruflichen Schweigepflicht (Art. 62 nDSG) drohen ebenfalls Bussen bis CHF 250'000 — besonders relevant für Anwälte und Ärzte."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Genügt ein SSL-Zertifikat nicht als Schutz?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SSL/TLS verschlüsselt die Verbindung, schützt aber nicht vor Clickjacking, XSS oder fehlender Content-Security-Policy. Security Headers sind die zweite Verteidigungslinie — und die am häufigsten vergessene."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Critical Font Preloads -->
+    <link
+      rel="preload"
+      href="css/fonts/instrument-serif-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="css/fonts/plus-jakarta-sans-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="css/fonts/plus-jakarta-sans-latin-600-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Fonts (self-hosted, nDSG-optimiert) -->
+    <link rel="stylesheet" href="css/fonts.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/sections.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/print.css" media="print" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logonoback.PNG" />
+
+    <!-- ═══════════════════════════════════════════════
+       ANALYTICS — Plausible.io (cookieless, nDSG-konform)
+       Kein Cookie-Banner nötig. Keine persönlichen Daten.
+       AKTIVIEREN: Ersetzen Sie PLATZHALTER_DOMAIN mit Ihrer Plausible-Domain.
+       Proxied via /js/plausible.js (Netlify Redirect) um Adblocker zu umgehen.
+       Docs: https://plausible.io/docs
+       ═══════════════════════════════════════════════ -->
+    <!-- <script defer data-domain="PLATZHALTER_DOMAIN" src="/js/plausible.js"></script> -->
+
+    <!-- WARUM KEIN GOOGLE ANALYTICS / HOTJAR:
+       AidSec positioniert sich als Privacy-First-Sicherheitsunternehmen.
+       Google Analytics & Hotjar senden Nutzerdaten an US-Server, setzen Cookies
+       und widersprechen der nDSG-konformen Positionierung. Plausible.io ist
+       EU-gehostet, cookieless und erfordert keinen Cookie-Banner. -->
+  </head>
+  <body>
+    <!-- Skip to content -->
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+
+    <!-- ════════════════════════════════════════
+       NAVIGATION
+       ════════════════════════════════════════ -->
+    <header class="nav" id="nav" role="banner">
+      <div class="container nav__inner">
+        <!-- Logo -->
+        <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
+          <img
+            src="logowhite.png"
+            alt="AidSec"
+            width="119"
+            height="109"
+            class="nav__logo-img"
+            loading="eager"
+          />
+        </a>
+
+        <!-- Desktop Links -->
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="#preise" class="nav__link">Preise</a>
+          <a href="#leistungen" class="nav__link">Leistungen</a>
+          <a href="#sicherheits-audit" class="nav__link">Sicherheits-Audit</a>
+          <a href="#meldungen" class="nav__link">Meldungen</a>
+          <a href="#ueber-uns" class="nav__link">Über uns</a>
+        </nav>
+
+        <!-- CTA -->
+        <a
+          href="#kontakt"
+          class="btn btn--gold nav__cta"
+          data-track="nav-cta"
+          aria-label="Gratis Security-Check starten"
+        >
+          Gratis Security-Check
+          <span class="btn__badge">24h</span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button
+          class="nav__toggle"
+          id="nav-toggle"
+          aria-label="Menü öffnen"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
+          <a href="#preise" class="mobile-menu__link">Preise</a>
+          <a href="#leistungen" class="mobile-menu__link">Leistungen</a>
+          <a href="#sicherheits-audit" class="mobile-menu__link">Sicherheits-Audit</a>
+          <a href="#meldungen" class="mobile-menu__link">Meldungen</a>
+          <a href="#ueber-uns" class="mobile-menu__link">Über uns</a>
+          <a
+            href="#kontakt"
+            class="btn btn--gold mobile-menu__cta"
+            data-track="mobile-cta"
+            aria-label="Gratis Security-Check starten"
+            >Gratis Security-Check</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- ════════════════════════════════════════
+         HERO SECTION
+         ════════════════════════════════════════ -->
+      <section class="hero" id="hero">
+        <!-- Background Video -->
+        <div class="hero__video-wrap" aria-hidden="true">
+          <video
+            class="hero__video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="VeniceAI_poster.jpg"
+          >
+            <source src="Scene_pingpong.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <!-- Overlays on top of video -->
+        <div class="hero__pattern" aria-hidden="true"></div>
+        <div class="hero__overlay" aria-hidden="true"></div>
+
+        <div class="container hero__content">
+          <!-- Animated Rotating Headlines (React Island) -->
+          <div id="hero-react-root" class="hero__rotator-wrap">
+            <!-- Fallback while React loads -->
+            <h1 class="hero__title hero__title--fallback">
+              78% der Schweizer Kanzleien sind angreifbar.
+              <span class="text-gold">Sie müssen es nicht sein.</span>
+            </h1>
+          </div>
+
+          <p class="hero__subtitle" data-reveal="fade-up" data-reveal-delay="100">
+            Schützen Sie Ihre Kanzlei vor Ransomware, nDSG-Strafen und Reputationsverlust.
+            <span class="text-gold">Einmalig ab CHF 490.–</span> statt
+            <span class="hero__subtitle-strike">CHF 1 Mio.</span> Wiederherstellungskosten.
+          </p>
+
+          <!-- Inline Security Check Widget -->
+          <div class="hero__check" data-reveal="fade-up" data-reveal-delay="150">
+            <label for="hero-url-input" class="hero__check-label">
+              Wie sicher ist Ihre Website? Finden Sie es jetzt heraus:
+            </label>
+            <div class="hero__check-row">
+              <input
+                type="url"
+                id="hero-url-input"
+                class="hero__check-input"
+                placeholder="ihre-kanzlei.ch"
+                autocomplete="url"
+                aria-describedby="hero-url-hint"
+              />
+              <button
+                type="button"
+                id="hero-url-btn"
+                class="btn btn--gold hero__check-btn"
+                data-track="security-check"
+                aria-label="Website-Sicherheit jetzt prüfen"
+              >
+                <span class="hero__check-btn-text">Jetzt pr&uuml;fen</span>
+                <svg
+                  class="hero__check-btn-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span class="hero__check-btn-spinner" aria-hidden="true"></span>
+              </button>
+            </div>
+            <p class="hero__check-hint" id="hero-url-hint">
+              Ergebnis in wenigen Sekunden &mdash; kostenlos &amp; anonym
+            </p>
+            <a
+              href="https://securityheaders.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="hero-secheaders-link"
+              class="hero__check-external"
+            >
+              Oder unabh&auml;ngig pr&uuml;fen auf SecurityHeaders.com
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+
+            <!-- Result Container (hidden by default, populated by JS) -->
+            <div class="hero__check-result" id="hero-check-result" hidden aria-live="polite">
+              <div class="hero__check-result-head">
+                <span class="hero__check-grade" id="hero-check-grade"></span>
+                <span class="hero__check-url" id="hero-check-url"></span>
+              </div>
+              <ul class="hero__check-headers" id="hero-check-headers"></ul>
+              <p class="hero__check-score" id="hero-check-score"></p>
+              <a
+                href="#kontakt"
+                class="btn btn--gold btn--sm hero__check-cta"
+                data-track="check-result-cta"
+              >
+                Wir bringen Sie auf Note A &mdash; in unter 24h
+                <svg
+                  class="btn__icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+
+            <!-- Error Container -->
+            <div class="hero__check-error" id="hero-check-error" hidden aria-live="polite"></div>
+          </div>
+
+          <div class="hero__actions" data-reveal="fade-up" data-reveal-delay="200">
+            <a
+              href="#kontakt"
+              class="btn btn--gold btn--lg hero__cta-primary"
+              data-track="hero-cta"
+              aria-label="Vollständiges Audit kostenlos anfordern"
+            >
+              Vollst&auml;ndiges Audit anfordern (kostenlos)
+              <svg
+                class="btn__icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+            <a href="#leistungen" class="btn btn--ghost btn--lg">Unsere Leistungen</a>
+          </div>
+          <p class="hero__cta-trust" data-reveal="fade-up" data-reveal-delay="250">
+            Keine Kreditkarte &middot; Keine Installation &middot; Resultat in 24h
+          </p>
+
+          <!-- Trust Bar -->
+          <div class="hero__trust-bar" data-reveal="fade-up" data-reveal-delay="300">
+            <div class="hero__trust-item">
+              <svg
+                class="hero__trust-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>nDSG-konform</span>
+            </div>
+            <div class="hero__trust-item">
+              <svg
+                class="hero__trust-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>Note A in 24h</span>
+            </div>
+            <div class="hero__trust-item">
+              <svg
+                class="hero__trust-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <span>Kein Mandantendaten-Zugriff</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="hero__scroll" aria-hidden="true">
+          <div class="hero__scroll-line"></div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         LAGEBERICHT — Cyber-Statistiken Schweiz
+         ════════════════════════════════════════ -->
+      <section class="section section--dark lagebericht" id="lagebericht">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Lagebericht Schweiz 2025</h2>
+            <p>Die Bedrohung ist real. Die Zahlen sind eindeutig.</p>
+          </div>
+
+          <div class="lagebericht__grid" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="lagebericht__card">
+              <span
+                class="lagebericht__number"
+                data-count-to="35727"
+                data-count-prefix="+"
+                data-count-separator="'"
+                >+35'727</span
+              >
+              <span class="lagebericht__label">Cyber-Vorf&auml;lle (H1 2025)</span>
+              <span class="lagebericht__source">Quelle: BACS Halbjahresbericht 2025/1</span>
+            </div>
+            <div class="lagebericht__card">
+              <span class="lagebericht__number" data-count-to="24000" data-count-separator="'"
+                >24'000</span
+              >
+              <span class="lagebericht__label">Betroffene KMU</span>
+              <span class="lagebericht__source">Opfer schwerer Angriffe</span>
+            </div>
+            <div class="lagebericht__card">
+              <span class="lagebericht__number" data-count-to="73" data-count-suffix="%">73%</span>
+              <span class="lagebericht__label">Finanzieller Schaden</span>
+              <span class="lagebericht__source">bei erfolgreichem Angriff</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         SCARY TRUTH — Grade F vs A
+         ════════════════════════════════════════ -->
+      <section class="section section--alt" id="sicherheits-audit">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Die unbequeme Wahrheit</h2>
+            <p>
+              Wissen Sie, welche Sicherheitsnote Ihre Webseite hat? Das BACS meldete im ersten
+              Halbjahr 2025 über 35'000 Cybervorfälle in der Schweiz — viele davon durch fehlende
+              HTTP-Security-Headers ermöglicht. Ein «F» gefährdet nicht nur Ihre Daten, sondern auch
+              Ihren professionellen Ruf.
+            </p>
+          </div>
+
+          <div class="grades" data-reveal="fade-up" data-reveal-delay="100">
+            <!-- Grade F Card -->
+            <div class="grade-card grade-card--fail">
+              <div class="grade-card__header">
+                <span class="grade-card__site">beispiel-kanzlei.ch</span>
+                <span class="grade-card__source">SecurityHeaders.com</span>
+              </div>
+              <div class="grade-card__body">
+                <div class="grade-card__grade-display">
+                  <span class="grade-card__letter grade-card__letter--f">F</span>
+                </div>
+                <div class="grade-card__details">
+                  <div class="grade-card__row grade-card__row--fail">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M18 6L6 18" />
+                        <path d="M6 6L18 18" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">Content-Security-Policy</span>
+                  </div>
+                  <div class="grade-card__row grade-card__row--fail">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M18 6L6 18" />
+                        <path d="M6 6L18 18" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">Strict-Transport-Security</span>
+                  </div>
+                  <div class="grade-card__row grade-card__row--fail">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M18 6L6 18" />
+                        <path d="M6 6L18 18" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">X-Frame-Options</span>
+                  </div>
+                  <div class="grade-card__row grade-card__row--fail">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M18 6L6 18" />
+                        <path d="M6 6L18 18" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">Permissions-Policy</span>
+                  </div>
+                </div>
+              </div>
+              <div class="grade-card__footer">
+                <span class="grade-card__status grade-card__status--danger"
+                  >Kritisch gefährdet</span
+                >
+              </div>
+            </div>
+
+            <!-- Transformation Arrow -->
+            <div class="grades__arrow" aria-hidden="true">
+              <div class="grades__arrow-line"></div>
+              <svg
+                class="grades__arrow-icon"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--gold)"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+              <span class="grades__arrow-label">24h</span>
+            </div>
+
+            <!-- Grade A Card -->
+            <div class="grade-card grade-card--pass">
+              <div class="grade-card__header">
+                <span class="grade-card__site">beispiel-kanzlei.ch</span>
+                <span class="grade-card__source">SecurityHeaders.com</span>
+              </div>
+              <div class="grade-card__body">
+                <div class="grade-card__grade-display">
+                  <span class="grade-card__letter grade-card__letter--a">A</span>
+                </div>
+                <div class="grade-card__details">
+                  <div class="grade-card__row grade-card__row--pass">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M20 6 9 17 4 12" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">Content-Security-Policy</span>
+                  </div>
+                  <div class="grade-card__row grade-card__row--pass">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M20 6 9 17 4 12" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">Strict-Transport-Security</span>
+                  </div>
+                  <div class="grade-card__row grade-card__row--pass">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M20 6 9 17 4 12" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">X-Frame-Options</span>
+                  </div>
+                  <div class="grade-card__row grade-card__row--pass">
+                    <span class="grade-card__check" aria-hidden="true"
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M20 6 9 17 4 12" /></svg
+                    ></span>
+                    <span class="grade-card__row-name">Permissions-Policy</span>
+                  </div>
+                </div>
+              </div>
+              <div class="grade-card__footer">
+                <span class="grade-card__status grade-card__status--safe"
+                  >Vollständig geschützt</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <p class="grades__explanation" data-reveal="fade-up" data-reveal-delay="150">
+            Die Noten A–F bewerten, ob Ihre Webseite die wichtigsten HTTP-Security-Headers sendet.
+            Ohne sie sind Clickjacking, XSS und Man-in-the-Middle-Angriffe deutlich einfacher.
+          </p>
+          <p class="grades__source" data-reveal="fade-up" data-reveal-delay="150">
+            Basierend auf SecurityHeaders.com und BACS Halbjahresbericht 2025.
+          </p>
+          <p class="grades__transition" data-reveal="fade-up" data-reveal-delay="150">
+            Die gute Nachricht: Note A ist in unter 24 Stunden erreichbar.
+          </p>
+
+          <div class="grades__cta" data-reveal="fade-up" data-reveal-delay="200">
+            <a href="#kontakt" class="btn btn--gold">Kostenlose Prüfung anfordern</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         SERVICES — 3 Column Cards
+         ════════════════════════════════════════ -->
+      <section class="section" id="leistungen">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Unsere Leistungen</h2>
+            <p>
+              Kanzleien und Praxen sind bevorzugte Ziele für automatisierte Angriffe. Drei
+              Massnahmen schützen Ihre Webseite und Ihren Ruf — diskret und nach Schweizer
+              Standards.
+            </p>
+          </div>
+
+          <div class="services">
+            <!-- Card 1: Header-Optimierung -->
+            <article class="service-card" data-reveal="fade-up" data-reveal-delay="0">
+              <div class="service-card__icon">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--gold)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+              </div>
+              <h3 class="service-card__title">Header-Optimierung</h3>
+              <p class="service-card__desc">
+                Fehlende HTTP-Security-Headers sind das erste, was Angreifer und Aufsichtsbehörden
+                sehen. Wir implementieren alle sicherheitsrelevanten Headers und bringen Ihre
+                Webseite auf die Bestnote A — in weniger als 24 Stunden.
+              </p>
+              <ul class="service-card__features">
+                <li>Strict-Transport-Security (HSTS)</li>
+                <li>Content-Security-Policy (CSP)</li>
+                <li>X-Frame-Options & X-Content-Type</li>
+                <li>Referrer-Policy & Permissions-Policy</li>
+              </ul>
+            </article>
+
+            <!-- Card 2: WordPress-Härtung -->
+            <article class="service-card" data-reveal="fade-up" data-reveal-delay="100">
+              <div class="service-card__icon">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--gold)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  <circle cx="12" cy="16" r="1" />
+                </svg>
+              </div>
+              <h3 class="service-card__title">WordPress-Härtung</h3>
+              <p class="service-card__desc">
+                WordPress betreibt über 40% aller Webseiten weltweit — und ist damit Ziel Nr. 1 für
+                automatisierte Angriffe. Wir härten Ihre Installation auf Serverebene, ohne Zugriff
+                auf Mandanten- oder Patientendaten.
+              </p>
+              <ul class="service-card__features">
+                <li>Web Application Firewall (WAF)</li>
+                <li>Brute-Force-Schutz & Login-Härtung</li>
+                <li>Automatisierte Malware-Scans</li>
+                <li>Datei-Integritätsüberwachung</li>
+              </ul>
+            </article>
+
+            <!-- Card 3: Reputation-Monitoring -->
+            <article class="service-card" data-reveal="fade-up" data-reveal-delay="200">
+              <div class="service-card__icon">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--gold)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                  <path d="M2 12h20" />
+                  <path d="M12 2c2.5 3.5 4 7.5 4 10s-1.5 6.5-4 10" />
+                </svg>
+              </div>
+              <h3 class="service-card__title">Reputation-Monitoring</h3>
+              <p class="service-card__desc">
+                Wenn Ihre Domain auf einer Blacklist landet, erreichen Ihre E-Mails weder Gericht
+                noch Klienten. Wir überwachen Ihre Domain-Reputation rund um die Uhr und greifen
+                ein, bevor Schaden entsteht.
+              </p>
+              <ul class="service-card__features">
+                <li>Domain-Reputation-Monitoring</li>
+                <li>E-Mail-Zustellbarkeitsanalyse</li>
+                <li>Blacklist-Überwachung</li>
+                <li>SPF, DKIM & DMARC Konfiguration</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         SO FUNKTIONIERT ES — 4-Schritt-Prozess
+         ════════════════════════════════════════ -->
+      <section class="section section--alt" id="ablauf">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>So funktioniert es</h2>
+            <p>
+              Von der ersten Analyse bis zur verifizierten Note A — transparent, diskret und ohne
+              Downtime.
+            </p>
+          </div>
+
+          <div class="process" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="process__steps">
+              <div class="process__step">
+                <span class="process__step-number">1</span>
+                <h3 class="process__step-title">Kostenlose Analyse</h3>
+                <p class="process__step-desc">
+                  Wir prüfen Ihre Security Headers und WordPress-Konfiguration — diskret und ohne
+                  Zugriff auf Ihr CMS.
+                </p>
+              </div>
+              <div class="process__step">
+                <span class="process__step-number">2</span>
+                <h3 class="process__step-title">Individueller Massnahmenplan</h3>
+                <p class="process__step-desc">
+                  Sie erhalten ein klares Audit-Protokoll mit allen Schwachstellen und empfohlenen
+                  Massnahmen.
+                </p>
+              </div>
+              <div class="process__step">
+                <span class="process__step-number">3</span>
+                <h3 class="process__step-title">Umsetzung innert 24h</h3>
+                <p class="process__step-desc">
+                  Wir härten Ihre Webseite auf Server- und Header-Ebene. Keine Downtime, kein
+                  CMS-Login nötig für Header-Fix.
+                </p>
+              </div>
+              <div class="process__step">
+                <span class="process__step-number">4</span>
+                <h3 class="process__step-title">Verifizierung + Bericht</h3>
+                <p class="process__step-desc">
+                  Sie erhalten den Nachweis: Note A bei SecurityHeaders.com und ein schriftliches
+                  Sicherheitsprotokoll.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         ERGEBNISSE IN ZAHLEN
+         ════════════════════════════════════════ -->
+      <section class="section" id="ergebnisse">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Ergebnisse in Zahlen</h2>
+          </div>
+
+          <div class="stats" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="stats__grid">
+              <div class="stats__item">
+                <span
+                  class="stats__number"
+                  data-count-to="4"
+                  data-count-prefix="Ø "
+                  data-count-suffix="h"
+                  >Ø 4h</span
+                >
+                <span class="stats__label">Von Note F zu Note A</span>
+              </div>
+              <div class="stats__item">
+                <span class="stats__number">0 Min.</span>
+                <span class="stats__label">Downtime bei Härtung</span>
+              </div>
+              <div class="stats__item">
+                <span
+                  class="stats__number"
+                  data-count-to="1"
+                  data-count-prefix="CHF "
+                  data-count-suffix=" Mio."
+                  >CHF 1 Mio.</span
+                >
+                <span class="stats__label"
+                  >Ø Wiederherstellungskosten nach Ransomware in der Schweiz</span
+                >
+              </div>
+            </div>
+            <p class="stats__context">
+              54% der Schweizer Unternehmen zahlen Lösegeld. Eine präventive Härtung kostet einen
+              Bruchteil davon.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         SOCIAL PROOF — Kundenstimmen
+         ════════════════════════════════════════ -->
+      <!-- PLATZHALTER: Ersetzen Sie die anonymisierten Testimonials mit echten Kundenstimmen -->
+      <section class="section section--alt" id="referenzen">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Was unsere Kunden sagen</h2>
+            <p class="section-header__sub">Kunden von Schweizer Kanzleien und Praxen</p>
+            <p>
+              Diskret, schnell und ohne Zugriff auf Mandantendaten — so erleben Schweizer Kanzleien
+              und Praxen unsere Arbeit.
+            </p>
+          </div>
+
+          <div class="testimonials" data-reveal="fade-up" data-reveal-delay="100">
+            <blockquote class="testimonial">
+              <div class="testimonial__quote" aria-hidden="true">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--gold)"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"
+                  />
+                  <path
+                    d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
+                  />
+                </svg>
+              </div>
+              <p class="testimonial__text">
+                Nach dem Security-Check haben wir innert 18 Stunden Note A erreicht. Kein CMS-Login
+                nötig, keine Downtime. Genau richtig für unsere Kanzlei.
+              </p>
+              <footer class="testimonial__author">
+                <span class="testimonial__name">Partner, Anwaltskanzlei Zürich</span>
+                <span class="testimonial__role">WordPress-Härtung + Header-Fix</span>
+              </footer>
+            </blockquote>
+
+            <blockquote class="testimonial">
+              <div class="testimonial__quote" aria-hidden="true">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--gold)"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"
+                  />
+                  <path
+                    d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
+                  />
+                </svg>
+              </div>
+              <p class="testimonial__text">
+                Wir wussten nicht, dass unsere Webseite angreifbar war. AidSec hat das Problem
+                innert Stunden behoben — professionell und diskret.
+              </p>
+              <footer class="testimonial__author">
+                <span class="testimonial__name">Praxisinhaber, Arztpraxis Bern</span>
+                <span class="testimonial__role">Security-Header-Optimierung</span>
+              </footer>
+            </blockquote>
+
+            <blockquote class="testimonial">
+              <div class="testimonial__quote" aria-hidden="true">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--gold)"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"
+                  />
+                  <path
+                    d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
+                  />
+                </svg>
+              </div>
+              <p class="testimonial__text">
+                Das Audit-Protokoll hat uns überzeugt: klar, nachvollziehbar, nDSG-konform. Jetzt
+                sind wir auf Note A und unsere Partner beruhigt.
+              </p>
+              <footer class="testimonial__author">
+                <span class="testimonial__name">Managing Partner, Kanzlei Zentralschweiz</span>
+                <span class="testimonial__role">Kanzlei-Härtung + Cyber-Mandat</span>
+              </footer>
+            </blockquote>
+          </div>
+
+          <div class="trust-logos" data-reveal="fade-up" data-reveal-delay="200">
+            <p class="trust-logos__label">Spezialisiert auf Schweizer Kanzleien und Praxen</p>
+            <div class="trust-logos__grid">
+              <span class="trust-logos__item">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                SecurityHeaders.com Note A
+              </span>
+              <span class="trust-logos__item">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="m9 12 2 2 4-4" />
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                nDSG-konform
+              </span>
+              <span class="trust-logos__item">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                0 Min. Downtime
+              </span>
+              <span class="trust-logos__item">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                Schweizer Hosting
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         SICHERHEITSMELDUNGEN — Blog/News
+         ════════════════════════════════════════ -->
+      <section class="section section--dark" id="meldungen">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Sicherheitsmeldungen</h2>
+            <p>
+              Aktuelle Bedrohungen durch automatisierte KI-Angriffe, Agent-Swarm-Hacking und neue
+              Angriffswellen — und warum Ihre Webseite jetzt geschützt werden muss.
+            </p>
+          </div>
+
+          <div class="alerts">
+            <!-- Alert 1 -->
+            <article class="alert-card" data-reveal="fade-up" data-reveal-delay="0">
+              <div class="alert-card__severity alert-card__severity--critical"></div>
+              <div class="alert-card__body">
+                <span class="alert-card__date">Nov 2025</span>
+                <h3 class="alert-card__title">KI-Agent-Schwarm-Angriffe auf dem Vormarsch</h3>
+                <p class="alert-card__excerpt">
+                  Anthropic dokumentierte die erste KI-orchestrierte Spionagekampagne: 30
+                  Organisationen angegriffen, 80–90% der Operation ohne menschliche Steuerung. Opfer
+                  bemerkten den Einbruch nicht selbst.
+                </p>
+                <span class="alert-card__source">Quelle: Anthropic, Kiteworks 2025</span>
+                <span class="alert-card__tip"
+                  >WordPress-Härtung und Firewall schützen vor automatisierten Einbrüchen.</span
+                >
+                <a href="#kontakt" class="alert-card__link"
+                  >Kostenlose Analyse
+                  <svg
+                    class="alert-card__link-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </article>
+
+            <!-- Alert 2 -->
+            <article class="alert-card" data-reveal="fade-up" data-reveal-delay="100">
+              <div class="alert-card__severity alert-card__severity--critical"></div>
+              <div class="alert-card__body">
+                <span class="alert-card__date">1. Halbjahr 2025</span>
+                <h3 class="alert-card__title">Cybervorfälle in der Schweiz auf Rekordniveau</h3>
+                <p class="alert-card__excerpt">
+                  Das BACS meldete 35'727 Cybervorfälle im ersten Halbjahr 2025 — 57
+                  Ransomware-Fälle allein. Real-Time-Phishing zielte gezielt auf Schweizer
+                  Bankkunden und professionelle Dienstleister.
+                </p>
+                <span class="alert-card__source">Quelle: BACS Halbjahresbericht 2025/1</span>
+                <span class="alert-card__tip"
+                  >Security Headers und nDSG-konforme Härtung minimieren Angriffsflächen.</span
+                >
+                <a href="#kontakt" class="alert-card__link"
+                  >Kostenlose Analyse
+                  <svg
+                    class="alert-card__link-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </article>
+
+            <!-- Alert 3 -->
+            <article class="alert-card" data-reveal="fade-up" data-reveal-delay="200">
+              <div class="alert-card__severity alert-card__severity--high"></div>
+              <div class="alert-card__body">
+                <span class="alert-card__date">2025</span>
+                <h3 class="alert-card__title">Autonome KI-Hacking-Agenten kommen</h3>
+                <p class="alert-card__excerpt">
+                  Sicherheitsforscher erwarten, dass die Mehrheit der Cyberangriffe bald von
+                  autonomen KI-Agenten ausgeführt wird. Diese operieren in Maschinengeschwindigkeit
+                  — ohne menschliche Anleitung.
+                </p>
+                <span class="alert-card__source">Quelle: MIT Technology Review 2025</span>
+                <span class="alert-card__tip"
+                  >Proaktive Härtung schützt, bevor Angreifer zuschlagen.</span
+                >
+                <a href="#kontakt" class="alert-card__link"
+                  >Kostenlose Analyse
+                  <svg
+                    class="alert-card__link-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </article>
+
+            <!-- Alert 4 -->
+            <article class="alert-card" data-reveal="fade-up" data-reveal-delay="0">
+              <div class="alert-card__severity alert-card__severity--high"></div>
+              <div class="alert-card__body">
+                <span class="alert-card__date">1. Halbjahr 2025</span>
+                <h3 class="alert-card__title">Betrügerische Werbung in Suchmaschinen</h3>
+                <p class="alert-card__excerpt">
+                  Bezahlte Werbung in Suchmaschinen und Social Media wird zunehmend für Phishing,
+                  Schadsoftware und Betrug missbraucht. Gefälschte Domains und Landing Pages
+                  imitieren seriöse Anbieter — auch Kanzleien und Praxen.
+                </p>
+                <span class="alert-card__source">Quelle: BACS Halbjahresbericht 2025/1</span>
+                <span class="alert-card__tip"
+                  >Header-Optimierung und Domain-Monitoring reduzieren dieses Risiko.</span
+                >
+                <a href="#kontakt" class="alert-card__link"
+                  >Kostenlose Analyse
+                  <svg
+                    class="alert-card__link-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </article>
+
+            <!-- Alert 5 -->
+            <article class="alert-card" data-reveal="fade-up" data-reveal-delay="100">
+              <div class="alert-card__severity alert-card__severity--warning"></div>
+              <div class="alert-card__body">
+                <span class="alert-card__date">2025</span>
+                <h3 class="alert-card__title">
+                  Security Headers: 78% der Schweizer Kanzleien mangelhaft
+                </h3>
+                <p class="alert-card__excerpt">
+                  Unsere Analyse von Schweizer Anwaltskanzlei-Webseiten zeigt: Die Mehrheit erhält
+                  Note F bei SecurityHeaders.com. Fehlende HTTP-Headers ermöglichen Clickjacking,
+                  XSS und Man-in-the-Middle-Angriffe.
+                </p>
+                <span class="alert-card__source">Quelle: AidSec Analyse, SecurityHeaders.com</span>
+                <span class="alert-card__tip"
+                  >Rapid Header Fix bringt Ihre Webseite in 24h auf Note A.</span
+                >
+                <a href="#kontakt" class="alert-card__link"
+                  >Kostenlose Analyse
+                  <svg
+                    class="alert-card__link-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </article>
+
+            <!-- Alert 6 -->
+            <article class="alert-card" data-reveal="fade-up" data-reveal-delay="200">
+              <div class="alert-card__severity alert-card__severity--warning"></div>
+              <div class="alert-card__body">
+                <span class="alert-card__date">2024</span>
+                <h3 class="alert-card__title">7'966 neue WordPress-Schwachstellen in einem Jahr</h3>
+                <p class="alert-card__excerpt">
+                  Patchstack dokumentierte 7'966 neue Schwachstellen — 22 pro Tag, 34% mehr als
+                  2023. 96% betreffen Plugins, nur 7 den WordPress-Kern. Automatisierte Scans suchen
+                  gezielt nach verwundbaren Installationen.
+                </p>
+                <span class="alert-card__source"
+                  >Quelle: Patchstack State of WordPress Security 2025</span
+                >
+                <span class="alert-card__tip"
+                  >Regelmässige Härtung und Monitoring halten Ihre Installation geschützt.</span
+                >
+                <a href="#kontakt" class="alert-card__link"
+                  >Kostenlose Analyse
+                  <svg
+                    class="alert-card__link-icon"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" /></svg
+                ></a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         TRUST & COMPLIANCE
+         ════════════════════════════════════════ -->
+      <section class="section section--dark" id="ueber-uns">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Warum Schweizer Kanzleien AidSec wählen</h2>
+            <p>
+              AidSec ist spezialisiert auf den Rechts- und Gesundheitssektor. Wir arbeiten nach
+              Schweizer Standards — ohne Zugriff auf Mandantendaten. Jede Massnahme ist
+              dokumentiert, jede Änderung nachvollziehbar.
+            </p>
+          </div>
+
+          <div class="trust">
+            <div class="trust__features" data-reveal="fade-up" data-reveal-delay="100">
+              <!-- Feature 1 -->
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--gold)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">nDSG-Konformität</h4>
+                  <p class="trust__feature-desc">
+                    Vollständig konform mit dem neuen Schweizer Datenschutzgesetz (nDSG) — inklusive
+                    Art. 8 Datensicherheit und Privacy by Design. Keine Compliance-Sorgen bei
+                    Aufsichtsbehörden.
+                  </p>
+                </div>
+              </div>
+              <!-- Feature 2 -->
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--gold)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">100% Diskretion</h4>
+                  <p class="trust__feature-desc">
+                    Kein Zugriff auf Mandantendaten nötig. Wir arbeiten ausschliesslich auf Server-
+                    und Header-Ebene — für den Header-Fix ist kein CMS-Login erforderlich. Ihre
+                    Schweigepflicht bleibt gewahrt.
+                  </p>
+                </div>
+              </div>
+              <!-- Feature 3 -->
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--gold)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">Schweizer Präzision</h4>
+                  <p class="trust__feature-desc">
+                    Keine Templates — jeder Auftrag erhält ein individuelles Audit-Protokoll
+                    angepasst an Ihre Infrastruktur. Massgeschneiderte Sicherheit statt
+                    Standardlösungen von der Stange.
+                  </p>
+                </div>
+              </div>
+              <!-- Feature 4 -->
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--gold)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">Ergebnisse in 24 Stunden</h4>
+                  <p class="trust__feature-desc">
+                    Klarer Ablauf: Analyse → Umsetzung → Verifizierung → Bericht. Ihre Webseite ist
+                    innert eines Arbeitstages vollständig abgesichert — ohne Downtime.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="trust__visual" data-reveal="fade-up" data-reveal-delay="200">
+              <div class="trust-badges">
+                <div class="trust-badges__seal">
+                  <div class="trust-badges__seal-icon">
+                    <svg
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--gold)"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                  </div>
+                  <span class="trust-badges__seal-title">nDSG</span>
+                  <span class="trust-badges__seal-subtitle">Konform</span>
+                </div>
+                <a
+                  href="https://securityheaders.com/?q=https://aidsec.ch"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="trust-badges__link"
+                  title="Security Headers prüfen"
+                >
+                  <span class="trust-badges__link-grade">A</span>
+                  <span class="trust-badges__link-label">SecurityHeaders.com</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         PRICING — 3-Spalten Premium
+         ════════════════════════════════════════ -->
+      <section class="section section--pricing" id="preise">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Transparente Investition</h2>
+            <p>
+              Investition in Sicherheit, nicht in Schadensbegrenzung. Wählen Sie den Schutz, der zu
+              Ihrer Kanzlei passt — von der schnellen Korrektur bis zur laufenden Betreuung.
+            </p>
+          </div>
+
+          <div class="pricing__grid">
+            <!-- Card 1: Rapid Header Fix -->
+            <article class="pricing-card" data-reveal="fade-up" data-reveal-delay="0">
+              <h3 class="pricing-card__title">Rapid Header Fix</h3>
+              <span class="pricing-card__type">Einmalige Optimierung</span>
+              <span class="pricing-card__subtext">Ideal für Einzelkanzleien und kleine Praxen</span>
+              <div class="pricing-card__price">
+                <span class="pricing-card__currency">CHF</span>
+                <span class="pricing-card__amount">490.–</span>
+              </div>
+              <ul class="pricing-card__features">
+                <li>Behebung Note F zu A (SecurityHeaders.com)</li>
+                <li>Implementierung HSTS &amp; CSP</li>
+                <li>X-Frame-Options (Clickjacking Schutz)</li>
+                <li>Umsetzung innerhalb von 24h</li>
+              </ul>
+              <p class="pricing-card__value">
+                Eine verhinderte Ransomware-Anfrage rechtfertigt die Investition.
+              </p>
+              <div class="pricing-card__roi">
+                <span class="pricing-card__roi-compare"
+                  >= 0.05% der Ø Ransomware-Kosten (CHF 1 Mio.)</span
+                >
+              </div>
+              <a
+                href="#kontakt"
+                class="btn btn--outline pricing-card__cta"
+                data-track="pricing-header-fix"
+                >Rapid Header Fix anfragen</a
+              >
+            </article>
+
+            <!-- Card 2: Kanzlei-Härtung (Featured) -->
+            <article
+              class="pricing-card pricing-card--featured"
+              data-reveal="fade-up"
+              data-reveal-delay="100"
+            >
+              <span class="pricing-card__badge">Empfohlen für Kanzleien</span>
+              <h3 class="pricing-card__title">Kanzlei-Härtung</h3>
+              <span class="pricing-card__type">Komplett-Schutz</span>
+              <span class="pricing-card__subtext"
+                >Der meistgewählte Schutz für Schweizer Anwaltskanzleien</span
+              >
+              <div class="pricing-card__price">
+                <span class="pricing-card__currency">CHF</span>
+                <span class="pricing-card__amount">950.–</span>
+              </div>
+              <ul class="pricing-card__features">
+                <li>Alles aus «Rapid Header Fix»</li>
+                <li>Login-Verschleierung &amp; Brute-Force Schutz</li>
+                <li>Professionelle Firewall-Konfiguration</li>
+                <li>nDSG-Konformitäts-Check</li>
+                <li>Schriftliches Audit-Protokoll</li>
+              </ul>
+              <p class="pricing-card__value">Schutz vor Reputationsschaden und nDSG-Verstössen.</p>
+              <div class="pricing-card__roi">
+                <span class="pricing-card__roi-compare"
+                  >= 0.1% der Ø Ransomware-Kosten (CHF 1 Mio.)</span
+                >
+              </div>
+              <a
+                href="#kontakt"
+                class="btn btn--gold pricing-card__cta"
+                data-track="pricing-kanzlei"
+                >Kanzlei absichern</a
+              >
+            </article>
+
+            <!-- Card 3: Cyber-Mandat -->
+            <article class="pricing-card" data-reveal="fade-up" data-reveal-delay="200">
+              <h3 class="pricing-card__title">Cyber-Mandat</h3>
+              <span class="pricing-card__type">Monatliche Betreuung</span>
+              <span class="pricing-card__subtext"
+                >Für Kanzleien, die nichts dem Zufall überlassen</span
+              >
+              <div class="pricing-card__price">
+                <span class="pricing-card__currency">CHF</span>
+                <span class="pricing-card__amount">ab 89.–</span>
+                <span class="pricing-card__period">/ Mt.</span>
+              </div>
+              <ul class="pricing-card__features">
+                <li>Kontinuierliches Sicherheits-Monitoring</li>
+                <li>Monatlicher Sicherheitsbericht für Partner</li>
+                <li>Priorisierter Notfall-Support</li>
+                <li>Cloud-Backups auf Schweizer Servern</li>
+              </ul>
+              <p class="pricing-card__value">Laufende Absicherung statt punktueller Reaktion.</p>
+              <div class="pricing-card__roi">
+                <span class="pricing-card__roi-compare">= weniger als ein Arbeitstag pro Jahr</span>
+              </div>
+              <a
+                href="#kontakt"
+                class="btn btn--outline pricing-card__cta"
+                data-track="pricing-cyber-mandat"
+                >Cyber-Mandat anfragen</a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         FAQ
+         ════════════════════════════════════════ -->
+      <section class="section section--alt" id="faq">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Häufige Fragen</h2>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="faq__item">
+              <button
+                type="button"
+                class="faq__question"
+                aria-expanded="false"
+                aria-controls="faq-1"
+                id="faq-q1"
+              >
+                Brauchen Sie Zugriff auf meine Mandantendaten?
+              </button>
+              <div class="faq__answer" id="faq-1" role="region" aria-labelledby="faq-q1">
+                <p>
+                  Nein. Für den Header-Fix arbeiten wir ausschliesslich auf Server-/Header-Ebene —
+                  ohne CMS-Login. Bei der WordPress-Härtung benötigen wir SSH- oder Panel-Zugang zum
+                  Server, jedoch nie Zugriff auf gespeicherte Mandantendaten.
+                </p>
+              </div>
+            </div>
+            <div class="faq__item">
+              <button
+                type="button"
+                class="faq__question"
+                aria-expanded="false"
+                aria-controls="faq-2"
+                id="faq-q2"
+              >
+                Ist meine Webseite während der Härtung offline?
+              </button>
+              <div class="faq__answer" id="faq-2" role="region" aria-labelledby="faq-q2">
+                <p>
+                  Nein. Alle Massnahmen werden im laufenden Betrieb durchgeführt. Unsere Kunden
+                  verzeichnen 0 Minuten Downtime.
+                </p>
+              </div>
+            </div>
+            <div class="faq__item">
+              <button
+                type="button"
+                class="faq__question"
+                aria-expanded="false"
+                aria-controls="faq-3"
+                id="faq-q3"
+              >
+                Was kostet ein Cyberangriff im Vergleich zu Ihren Leistungen?
+              </button>
+              <div class="faq__answer" id="faq-3" role="region" aria-labelledby="faq-q3">
+                <p>
+                  Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz
+                  liegen bei CHF 1.04 Millionen (Sophos/IT-Markt 2025). 54% der Schweizer
+                  Unternehmen zahlen Lösegeld. Unsere präventive Härtung kostet ab CHF 490.
+                </p>
+              </div>
+            </div>
+            <div class="faq__item">
+              <button
+                type="button"
+                class="faq__question"
+                aria-expanded="false"
+                aria-controls="faq-4"
+                id="faq-q4"
+              >
+                Was bedeutet Security Header Note F?
+              </button>
+              <div class="faq__answer" id="faq-4" role="region" aria-labelledby="faq-q4">
+                <p>
+                  SecurityHeaders.com bewertet, ob Ihre Webseite die wichtigsten
+                  HTTP-Security-Headers sendet (HSTS, CSP, X-Frame-Options u.a.). Note F bedeutet:
+                  Kein einziger Schutz-Header ist aktiv. Clickjacking, XSS und
+                  Man-in-the-Middle-Angriffe werden dadurch deutlich einfacher.
+                </p>
+              </div>
+            </div>
+            <div class="faq__item">
+              <button
+                type="button"
+                class="faq__question"
+                aria-expanded="false"
+                aria-controls="faq-5"
+                id="faq-q5"
+              >
+                Welche Strafen drohen bei Datenschutzverstössen?
+              </button>
+              <div class="faq__answer" id="faq-5" role="region" aria-labelledby="faq-q5">
+                <p>
+                  Das nDSG sieht Bussen bis CHF 250'000 für verantwortliche natürliche Personen vor
+                  (Art. 60ff. nDSG). Bei Verletzung der beruflichen Schweigepflicht (Art. 62 nDSG)
+                  drohen ebenfalls Bussen bis CHF 250'000 — besonders relevant für Anwälte und
+                  Ärzte.
+                </p>
+              </div>
+            </div>
+            <div class="faq__item">
+              <button
+                type="button"
+                class="faq__question"
+                aria-expanded="false"
+                aria-controls="faq-6"
+                id="faq-q6"
+              >
+                Genügt ein SSL-Zertifikat nicht als Schutz?
+              </button>
+              <div class="faq__answer" id="faq-6" role="region" aria-labelledby="faq-q6">
+                <p>
+                  SSL/TLS verschlüsselt die Verbindung, schützt aber nicht vor Clickjacking, XSS
+                  oder fehlender Content-Security-Policy. Security Headers sind die zweite
+                  Verteidigungslinie — und die am häufigsten vergessene.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         CONTACT / LEAD-GEN
+         ════════════════════════════════════════ -->
+      <section class="section" id="kontakt">
+        <div class="container">
+          <div class="contact">
+            <div class="contact__info" data-reveal="fade-up">
+              <h2>Kostenfreier Sicherheits-Check</h2>
+              <p>
+                Erfahren Sie in wenigen Minuten, wie es um die Sicherheit Ihrer Webseite steht. Wir
+                analysieren Ihre Security Headers und WordPress-Konfiguration — diskret und
+                unverbindlich. Ergebnisse innert 24 Stunden.
+              </p>
+              <p class="contact__urgency">
+                Erste Analyse innert 24 Stunden — unverbindlich und diskret.
+              </p>
+              <p class="contact__social-proof">
+                Spezialisiert auf Schweizer Kanzleien und Arztpraxen.
+              </p>
+
+              <div class="divider-gold">
+                <span class="divider-gold-diamond"></span>
+              </div>
+
+              <div class="contact__details">
+                <div class="contact__detail">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--gold)"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                    />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  <span>info@aidsec.ch</span>
+                </div>
+                <div class="contact__detail">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--gold)"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Schweiz</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact__form-wrapper" data-reveal="fade-up" data-reveal-delay="100">
+              <form
+                class="contact-form"
+                id="contact-form"
+                name="contact"
+                method="POST"
+                action="/"
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                novalidate
+                data-hcaptcha-sitekey=""
+              >
+                <input type="hidden" name="form-name" value="contact" />
+                <p class="contact-form__hidden" aria-hidden="true">
+                  <label>Bitte leer lassen: <input name="bot-field" /></label>
+                </p>
+                <div class="contact-form__group">
+                  <label for="name" class="contact-form__label">Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="contact-form__input"
+                    placeholder="Dr. Max Muster"
+                    required
+                    autocomplete="name"
+                  />
+                  <span class="contact-form__error" aria-live="polite"></span>
+                </div>
+
+                <div class="contact-form__group">
+                  <label for="company" class="contact-form__label">Kanzlei / Praxis</label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    class="contact-form__input"
+                    placeholder="Muster & Partner Rechtsanwälte"
+                    autocomplete="organization"
+                  />
+                  <span class="contact-form__error" aria-live="polite"></span>
+                </div>
+
+                <div class="contact-form__group">
+                  <label for="website" class="contact-form__label"
+                    >Website-URL (für Gratis-Check) *</label
+                  >
+                  <input
+                    type="url"
+                    id="website"
+                    name="website"
+                    class="contact-form__input"
+                    placeholder="https://www.ihre-kanzlei.ch"
+                    required
+                  />
+                  <span class="contact-form__error" aria-live="polite"></span>
+                </div>
+
+                <div class="contact-form__group">
+                  <label for="email" class="contact-form__label">E-Mail *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="contact-form__input"
+                    placeholder="m.muster@kanzlei.ch"
+                    required
+                    autocomplete="email"
+                  />
+                  <span class="contact-form__error" aria-live="polite"></span>
+                </div>
+
+                <!-- hCaptcha: data-hcaptcha-sitekey am Form setzen für Spam-Schutz (optional) -->
+                <div
+                  id="hcaptcha-container"
+                  class="contact-form__hcaptcha"
+                  aria-hidden="true"
+                  hidden
+                ></div>
+
+                <!-- AGB Checkbox for Security-Check Authorization -->
+                <div class="contact-form__group contact-form__group--checkbox">
+                  <label class="contact-form__checkbox-label">
+                    <input
+                      type="checkbox"
+                      id="agb-check"
+                      name="agb"
+                      class="contact-form__checkbox"
+                      required
+                    />
+                    <span class="contact-form__checkbox-mark" aria-hidden="true"></span>
+                    <span class="contact-form__checkbox-text">
+                      Ich best&auml;tige, dass AidSec berechtigt ist, einen Sicherheitstest an der
+                      oben angegebenen Website durchzuf&uuml;hren.
+                      <a href="agb.html" target="_blank" rel="noopener">AGB lesen</a>
+                    </span>
+                  </label>
+                  <span class="contact-form__error" aria-live="polite"></span>
+                </div>
+
+                <div
+                  class="contact-form__error contact-form__error--submit"
+                  id="form-submit-error"
+                  role="alert"
+                  aria-live="polite"
+                  hidden
+                ></div>
+                <button
+                  type="submit"
+                  class="btn btn--gold btn--lg contact-form__submit"
+                  id="form-submit"
+                  data-track="form-submit"
+                >
+                  <span class="contact-form__submit-text">Kostenfreie Analyse anfordern</span>
+                  <span class="contact-form__submit-loading" aria-hidden="true">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32">
+                        <animateTransform
+                          attributeName="transform"
+                          type="rotate"
+                          from="0 12 12"
+                          to="360 12 12"
+                          dur="1s"
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="stroke-dashoffset"
+                          values="32;0"
+                          dur="1s"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                    </svg>
+                  </span>
+                </button>
+
+                <p class="contact-form__privacy">
+                  Ihre Daten werden verschlüsselt übertragen und ausschliesslich für die
+                  Sicherheitsanalyse verwendet. Mit dem Absenden stimmen Sie unserer
+                  <a href="datenschutz.html">Datenschutzerklärung</a> zu. Verarbeitung gemäss nDSG.
+                </p>
+              </form>
+
+              <!-- Success Message -->
+              <div class="contact-form__success" id="form-success" hidden>
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--green-safe)"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                <h3>Anfrage erhalten</h3>
+                <p>
+                  Vielen Dank! Wir analysieren Ihre Webseite und melden uns innert 24 Stunden bei
+                  Ihnen.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════ -->
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img
+              src="logowhite.png"
+              alt="AidSec"
+              width="36"
+              height="36"
+              class="footer__logo"
+              loading="lazy"
+            />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="impressum.html" class="footer__link">Impressum</a>
+            <a href="agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA Bar (visible on mobile after scrolling past hero) -->
+    <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+      <a
+        href="#kontakt"
+        class="sticky-cta__link"
+        data-track="sticky-cta"
+        aria-label="Gratis Security-Check anfordern"
+      >
+        <span class="sticky-cta__text">Gratis Security-Check</span>
+        <svg
+          class="sticky-cta__icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js" defer></script>
+    <script src="js/form.js" defer></script>
+    <!-- React Island: Hero BlurText Animation (built by Vite) -->
+    <script type="module" src="js/dist/hero-app.js"></script>
+  </body>
+</html>

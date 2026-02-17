@@ -1,0 +1,293 @@
+/* ============================================
+   AidSec Animations — Reveals, Entrance, Hover, Motion
+   ============================================ */
+
+/* ── Scroll Reveal System ── */
+[data-reveal] {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: var(--duration-slower);
+  transition-timing-function: var(--ease-out);
+}
+
+[data-reveal='fade-up'] {
+  transform: translateY(32px);
+}
+
+[data-reveal='fade-down'] {
+  transform: translateY(-32px);
+}
+
+[data-reveal='fade-left'] {
+  transform: translateX(32px);
+}
+
+[data-reveal='fade-right'] {
+  transform: translateX(-32px);
+}
+
+[data-reveal='fade'] {
+  transform: none;
+}
+
+[data-reveal='scale'] {
+  transform: scale(0.95);
+}
+
+/* Revealed state */
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Delay modifiers (set via data-reveal-delay in JS) */
+[data-reveal-delay='100'] {
+  transition-delay: 100ms;
+}
+[data-reveal-delay='200'] {
+  transition-delay: 200ms;
+}
+[data-reveal-delay='300'] {
+  transition-delay: 300ms;
+}
+[data-reveal-delay='400'] {
+  transition-delay: 400ms;
+}
+[data-reveal-delay='500'] {
+  transition-delay: 500ms;
+}
+
+/* ── Hero Entrance Sequence ── */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero__subtitle {
+  animation: heroFadeUp 1s var(--ease-out) 0.4s both;
+}
+
+.hero__actions {
+  animation: heroFadeUp 1s var(--ease-out) 0.6s both;
+}
+
+.hero-rotator__dots {
+  animation: heroFadeUp 1s var(--ease-out) 0.5s both;
+}
+
+.hero__trust-bar {
+  animation: heroFadeUp 1s var(--ease-out) 0.8s both;
+}
+
+/* Fallback title animation (hidden once React mounts) */
+.hero__title--fallback {
+  animation: heroFadeUp 1s var(--ease-out) 0.2s both;
+}
+
+/* ── Hero Glow Breathing ── */
+@keyframes heroGlow {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* ── CTA Pulse ── */
+@keyframes ctaPulse {
+  0%,
+  100% {
+    box-shadow: 0 4px 20px rgba(200, 168, 76, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 4px 20px rgba(200, 168, 76, 0.25),
+      0 0 24px 4px rgba(200, 168, 76, 0.15);
+  }
+}
+
+.hero__cta-primary {
+  animation: ctaPulse 3s ease-in-out infinite;
+}
+
+/* ── Grade F Shake (Scary Truth) ── */
+@keyframes subtleShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(-1px);
+  }
+  20% {
+    transform: translateX(1px);
+  }
+  30% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+}
+
+.grade-card--fail .grade-card__letter--f {
+  animation: subtleShake 3s ease-in-out infinite;
+}
+
+/* Grade F pulse border */
+@keyframes dangerPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+  }
+}
+
+.grade-card--fail {
+  animation: dangerPulse 2.5s ease-in-out infinite;
+}
+
+/* ── Grades Arrow ── */
+@keyframes arrowSlide {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.grades__arrow-icon {
+  animation: arrowSlide 1.5s ease-in-out infinite;
+}
+
+/* ── Hero Pattern Drift ── */
+@keyframes patternDrift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+.hero__pattern {
+  animation: patternDrift 20s linear infinite;
+}
+
+/* ── Service Card Icon Hover ── */
+.service-card:hover .service-card__icon {
+  background: rgba(200, 168, 76, 0.15);
+  border-color: rgba(200, 168, 76, 0.3);
+  transition:
+    background var(--duration-normal) var(--ease-in-out),
+    border-color var(--duration-normal) var(--ease-in-out);
+}
+
+.service-card:hover .service-card__icon svg {
+  transform: scale(1.1);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+/* ── Trust Feature Hover ── */
+.trust__feature {
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.trust__feature:hover {
+  transform: translateX(4px);
+}
+
+.trust__feature:hover .trust__feature-icon {
+  background: rgba(200, 168, 76, 0.18);
+  transition: background var(--duration-normal) var(--ease-in-out);
+}
+
+/* ── Form Input Focus Ring ── */
+.contact-form__input {
+  transition:
+    border-color var(--duration-fast) var(--ease-in-out),
+    box-shadow var(--duration-fast) var(--ease-in-out);
+}
+
+/* ── Button Ripple-like Shine ── */
+.btn--gold::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s var(--ease-out);
+}
+
+.btn--gold:hover::after {
+  left: 100%;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero__title--fallback,
+  .hero__subtitle,
+  .hero__actions,
+  .hero__trust-bar,
+  .hero-rotator__dots,
+  .hero__cta-primary {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero__content::before {
+    animation: none;
+  }
+
+  .grade-card--fail .grade-card__letter--f,
+  .grade-card--fail,
+  .grades__arrow-icon,
+  .hero__pattern {
+    animation: none;
+  }
+
+  /* Pause background videos */
+  .hero__video,
+  .trust__video {
+    animation-play-state: paused;
+  }
+}

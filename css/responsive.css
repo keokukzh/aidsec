@@ -1,0 +1,577 @@
+/* ============================================
+   AidSec Responsive — Mobile-First Breakpoints
+   ============================================ */
+
+/* ── Min 1440px — Large Screens / Desktop XL ── */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+
+  .section {
+    padding-top: var(--space-32);
+    padding-bottom: var(--space-32);
+  }
+
+  h1 {
+    font-size: var(--text-7xl);
+  }
+
+  h2 {
+    font-size: var(--text-5xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-xl);
+    max-width: 48rem;
+  }
+
+  .hero-rotator__text {
+    font-size: var(--text-6xl);
+  }
+
+  .hero__rotator-wrap {
+    min-height: 140px;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-16);
+  }
+
+  .section-header p {
+    font-size: var(--text-lg);
+    max-width: 48rem;
+  }
+
+  .services {
+    gap: var(--space-8);
+  }
+
+  .pricing__grid {
+    gap: var(--space-8);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .lagebericht__grid {
+    max-width: 72rem;
+    gap: var(--space-10);
+  }
+
+  .lagebericht__number {
+    font-size: var(--text-6xl);
+  }
+
+  .stats__grid {
+    gap: var(--space-10);
+  }
+
+  .alerts {
+    gap: var(--space-8);
+  }
+
+  .trust {
+    gap: var(--space-16);
+  }
+
+  .contact {
+    gap: var(--space-16);
+  }
+
+  .faq {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+/* ── Max 1024px — Tablet Landscape ── */
+@media (max-width: 1024px) {
+  :root {
+    --nav-height: 88px;
+  }
+
+  .nav {
+    height: 88px;
+  }
+
+  .nav__logo-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .nav.scrolled .nav__logo-img {
+    width: 48px;
+    height: 48px;
+  }
+
+  h1 {
+    font-size: var(--text-5xl);
+  }
+  h2 {
+    font-size: var(--text-3xl);
+  }
+
+  .hero-rotator__text {
+    font-size: var(--text-4xl);
+  }
+
+  .hero__rotator-wrap {
+    min-height: 100px;
+  }
+
+  .hero-rotator__category {
+    font-size: 0.6rem;
+    padding: 3px 12px;
+  }
+
+  .hero__trust-bar {
+    gap: var(--space-6);
+  }
+
+  .pricing__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pricing__grid .pricing-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .services {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .process__steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lagebericht__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .lagebericht__number {
+    font-size: var(--text-4xl);
+  }
+
+  .stats__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .services .service-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .alerts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .testimonials {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .trust-logos__grid {
+    gap: var(--space-4);
+  }
+
+  .trust {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    text-align: center;
+  }
+
+  .trust__feature {
+    text-align: left;
+  }
+
+  .trust__badge,
+  .trust__visual {
+    order: -1;
+  }
+
+  .trust__visual {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    min-height: 240px;
+    padding: var(--space-8);
+  }
+
+  .contact {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .contact__info {
+    text-align: center;
+  }
+
+  .contact__info p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact__details {
+    align-items: center;
+  }
+
+  /* Nav: show toggle, hide desktop links */
+  .nav__links {
+    display: none;
+  }
+
+  .nav__cta {
+    display: none;
+  }
+
+  .nav__toggle {
+    display: flex;
+  }
+}
+
+/* ── Max 768px — Tablet Portrait ── */
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 80px;
+  }
+
+  .nav {
+    height: 80px;
+  }
+
+  /* Logo initial 72px auf kleinen Screens */
+  .nav__logo-img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .nav.scrolled {
+    height: 64px;
+  }
+
+  .nav.scrolled .nav__logo-img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .section {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-10);
+  }
+
+  h1 {
+    font-size: var(--text-4xl);
+  }
+  h2 {
+    font-size: var(--text-3xl);
+  }
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  .container {
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
+  }
+
+  .hero-rotator__text {
+    font-size: var(--text-3xl);
+  }
+
+  .hero__rotator-wrap {
+    min-height: 80px;
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-base);
+  }
+
+  .hero-rotator__category {
+    font-size: 0.55rem;
+    padding: 3px 10px;
+  }
+
+  .hero-rotator__dots {
+    gap: 6px;
+  }
+
+  .hero-rotator__dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .hero__check {
+    max-width: 100%;
+  }
+
+  .hero__check-row {
+    flex-direction: column;
+    border-radius: var(--radius-md);
+  }
+
+  .hero__check-btn {
+    min-height: 48px;
+    min-width: 48px;
+    border-radius: 0;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .hero__check-headers {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__check-result {
+    padding: var(--space-4);
+  }
+
+  .hero__check-grade {
+    width: 44px;
+    height: 44px;
+    font-size: var(--text-xl);
+  }
+
+  .hero__trust-bar {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+  }
+
+  .hero__cta-primary {
+    min-height: 48px;
+    font-size: var(--text-lg);
+  }
+
+  .alerts {
+    grid-template-columns: 1fr;
+  }
+
+  /* Grades: stack vertically */
+  .grades {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .grades__arrow {
+    flex-direction: row;
+    padding: 0;
+  }
+
+  .grades__arrow-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .grades__arrow-icon {
+    transform: rotate(90deg);
+  }
+
+  .grade-card {
+    width: 100%;
+    max-width: 340px;
+    flex-shrink: 1;
+  }
+
+  /* Pricing: single column */
+  .pricing__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .pricing__grid .pricing-card:last-child {
+    max-width: none;
+  }
+
+  .pricing-card {
+    padding: var(--space-6);
+  }
+
+  .pricing-card__amount {
+    font-size: var(--text-3xl);
+  }
+
+  /* Services: single column */
+  .services {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .process__steps {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .stats__number {
+    font-size: var(--text-2xl);
+  }
+
+  .services .service-card:last-child {
+    max-width: none;
+  }
+
+  .service-card {
+    padding: var(--space-6);
+  }
+
+  /* Trust */
+  .trust__features {
+    gap: var(--space-6);
+  }
+
+  .compliance-seal {
+    width: 160px;
+    height: 160px;
+  }
+
+  /* Contact */
+  .contact__form-wrapper {
+    padding: var(--space-6);
+  }
+
+  /* Footer */
+  .footer__inner {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .footer {
+    padding-bottom: calc(var(--space-8) + 64px);
+  }
+}
+
+/* ── Max 480px — Small Mobile ── */
+@media (max-width: 480px) {
+  /* On very small screens, reduce video opacity further for readability */
+  .hero__video {
+    opacity: 0.2;
+  }
+  .container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-3xl);
+  }
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: calc(var(--nav-height) + var(--space-10));
+    padding-bottom: var(--space-16);
+  }
+
+  .hero-rotator__text {
+    font-size: var(--text-2xl);
+  }
+
+  .hero__rotator-wrap {
+    min-height: 70px;
+  }
+
+  .hero__content {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .hero__scroll {
+    display: none;
+  }
+
+  .hero__trust-bar {
+    display: none;
+  }
+
+  .hero__cta-primary {
+    min-height: 52px;
+    font-size: var(--text-base);
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .hero-rotator__category {
+    font-size: 0.5rem;
+    padding: 2px 8px;
+  }
+
+  .hero-rotator__dots {
+    gap: 5px;
+  }
+
+  .hero-rotator__dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  .section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .lagebericht__number {
+    font-size: var(--text-3xl);
+  }
+
+  .lagebericht__card {
+    padding: var(--space-8) var(--space-5);
+  }
+
+  .grade-card {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .grade-card__body {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .btn--lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-sm);
+  }
+
+  .btn__badge {
+    display: none;
+  }
+
+  .pricing-card__badge {
+    font-size: 0.65rem;
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .contact-form__input {
+    padding: var(--space-3);
+  }
+
+  .mobile-menu {
+    width: 100%;
+    max-width: 100vw;
+  }
+}

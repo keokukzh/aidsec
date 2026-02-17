@@ -1,0 +1,23 @@
+# AidSec — Netlify Konfiguration
+# Die Seite ist statisches HTML, kein SPA-Build in dist/
+
+[build]
+  command = "npm run prepare-fonts && npm run build"
+  publish = "."
+  functions = "netlify/functions"
+
+# Security Check API: /api/check-headers -> Netlify Function
+[[redirects]]
+  from = "/api/check-headers"
+  to = "/.netlify/functions/check-headers"
+  status = 200
+  force = true
+
+# Plausible Analytics Proxy (optional, wenn plausibleDomain in config.json gesetzt)
+[[redirects]]
+  from = "/js/plausible.js"
+  to = "https://plausible.io/js/script.js"
+  status = 200
+  force = true
+
+# _headers wird automatisch für Security Headers verwendet

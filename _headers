@@ -1,0 +1,38 @@
+# Security Headers für AidSec — Netlify
+# Siehe https://docs.netlify.com/routing/headers/
+
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://js.hcaptcha.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://hcaptcha.com https://*.hcaptcha.com; media-src 'self'; frame-src https://newassets.hcaptcha.com; frame-ancestors 'none'
+
+# Static Asset Caching — Fonts
+/css/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static Asset Caching — CSS & JS
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static Asset Caching — Images
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static Asset Caching — Videos
+/*.mp4
+  Cache-Control: public, max-age=2592000
+/*.webm
+  Cache-Control: public, max-age=2592000

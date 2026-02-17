@@ -1,0 +1,13 @@
+{
+  "impressum": {
+    "firma": "Aid Destani (AidSec)",
+    "strasse": "Volketswil",
+    "plzOrt": "Zürich",
+    "uid": "nicht UID-pflichtig",
+    "handelsregister": "nicht eingetragen",
+    "mwst": "Nicht MwSt-pflichtig"
+  },
+  "securityHeadersUrl": "https://aidsec.ch",
+  "hCaptchaSiteKey": "",
+  "plausibleDomain": ""
+}

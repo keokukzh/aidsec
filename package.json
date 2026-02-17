@@ -1,0 +1,34 @@
+{
+  "name": "aidsec.ch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "fill": "node scripts/fill-placeholders.js",
+    "prepare-fonts": "node scripts/prepare-fonts.js",
+    "verify-headers": "node scripts/verify-security-headers.js",
+    "lint": "eslint js/*.js js/*.jsx api/*.js",
+    "format": "prettier --write js/*.js js/*.jsx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@fontsource/instrument-serif": "^5.2.8",
+    "@fontsource/plus-jakarta-sans": "^5.2.8",
+    "motion": "^12.34.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "prettier": "^3.8.1",
+    "vite": "^7.3.1"
+  }
+}
