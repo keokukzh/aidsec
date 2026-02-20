@@ -24,7 +24,7 @@ body {
   font-size: var(--text-base);
   font-weight: 400;
   line-height: var(--leading-normal);
-  color: var(--gray-600);
+  color: var(--navy-deep); /* High contrast for legal/medical authority */
   background-color: var(--gray-50);
   overflow-x: hidden;
   min-height: 100vh;
@@ -194,7 +194,7 @@ table {
 
 /* ── Section Spacing ── */
 .section {
-  padding-top: var(--space-24);
+  padding-top: calc(var(--nav-height) + var(--space-8));
   padding-bottom: var(--space-24);
 }
 
@@ -203,11 +203,16 @@ table {
   color: var(--gray-200);
 }
 
+.section--dark h1,
 .section--dark h2,
 .section--dark h3,
 .section--dark h4,
 .section--dark strong {
-  color: var(--white);
+  color: var(--white) !important;
+}
+
+.article-header h1 {
+  color: var(--white) !important;
 }
 
 .section--alt {

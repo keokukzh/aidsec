@@ -6,7 +6,12 @@
     <title>nDSG-Checkliste 2026: IT-Pflichten für Schweizer Kanzleien — AidSec</title>
     <meta name="description" content="Erfahren Sie, welche technischen Massnahmen Schweizer Anwälte bis 2026 umsetzen müssen, um DSG-konform zu sein." />
     
-    <link rel="stylesheet" href="../css/main.css" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../css/fonts.css" />
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/sections.css" />
     <link rel="stylesheet" href="../css/animations.css" />
@@ -136,9 +141,28 @@
       </article>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
       <div class="container">
-        <p>&copy; 2026 AidSec. Alle Rechte vorbehalten.</p>
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img
+              src="../logowhite.png"
+              alt="AidSec"
+              width="36"
+              height="36"
+              class="footer__logo"
+              loading="lazy"
+            />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
       </div>
     </footer>
 
