@@ -176,6 +176,62 @@
       }
     </script>
 
+    <!-- BreadcrumbList Schema (SEO) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://aidsec.ch"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Leistungen",
+            "item": "https://aidsec.ch#leistungen"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Preise",
+            "item": "https://aidsec.ch#preise"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Kontakt",
+            "item": "https://aidsec.ch#kontakt"
+          }
+        ]
+      }
+    </script>
+
+    <!-- LocalBusiness Schema (Google Knowledge Panel) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "AidSec",
+        "url": "https://aidsec.ch",
+        "description": "IT-Sicherheitsagentur für Schweizer Kanzleien und Arztpraxen. WordPress-Härtung und Security-Header-Optimierung.",
+        "foundingDate": "2024",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Schweiz"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "CH"
+        },
+        "priceRange": "CHF 490 - 950",
+        "sameAs": []
+      }
+    </script>
+
     <!-- Critical Font Preloads -->
     <link
       rel="preload"
@@ -217,34 +273,35 @@
     <!-- Cookie Consent: Plausible wird nur nach Zustimmung geladen -->
     <script>
       // Cookie Consent Management
-      (function() {
+      (function () {
         var CONSENT_KEY = 'aidsec_cookie_consent';
         var consent = localStorage.getItem(CONSENT_KEY);
-        
+
         // Banner anzeigen wenn keine Entscheidung getroffen
         if (!consent) {
-          document.addEventListener('DOMContentLoaded', function() {
+          document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('cookie-banner').style.display = 'block';
           });
         }
-        
+
         // Tracking-Scripts nur laden wenn Consent erteilt
         if (consent === 'accepted') {
           loadPlausible();
           loadHubSpot();
         }
-        
+
         function loadPlausible() {
           var script = document.createElement('script');
           script.async = true;
           script.src = '/js/plausible.js';
           document.head.appendChild(script);
-          
+
           var initScript = document.createElement('script');
-          initScript.textContent = 'window.plausible = window.plausible || function() { (plausible.q = plausible.q || []).push(arguments); }; plausible.init = plausible.init || function(i) { plausible.o = i || {}; }; plausible.init();';
+          initScript.textContent =
+            'window.plausible = window.plausible || function() { (plausible.q = plausible.q || []).push(arguments); }; plausible.init = plausible.init || function(i) { plausible.o = i || {}; }; plausible.init();';
           document.head.appendChild(initScript);
         }
-        
+
         function loadHubSpot() {
           var script = document.createElement('script');
           script.type = 'text/javascript';
@@ -254,15 +311,15 @@
           script.src = '//js-eu1.hs-scripts.com/147823018.js';
           document.body.appendChild(script);
         }
-        
-        window.loadConsentScripts = function() {
+
+        window.loadConsentScripts = function () {
           localStorage.setItem(CONSENT_KEY, 'accepted');
           loadPlausible();
           loadHubSpot();
           document.getElementById('cookie-banner').style.display = 'none';
         };
-        
-        window.rejectConsent = function() {
+
+        window.rejectConsent = function () {
           localStorage.setItem(CONSENT_KEY, 'rejected');
           document.getElementById('cookie-banner').style.display = 'none';
         };
@@ -280,15 +337,24 @@
     <div id="cookie-banner" class="cookie-banner">
       <div class="cookie-banner__content">
         <p class="cookie-banner__text">
-          Wir verwenden Cookies und Tracking-Technologien, um Ihnen die bestmoegliche Nutzererfahrung zu bieten. 
-          Mit Ihrer Zustimmung helfen Sie uns, unsere Website zu verbessern. 
+          Wir verwenden Cookies und Tracking-Technologien, um Ihnen die bestmoegliche
+          Nutzererfahrung zu bieten. Mit Ihrer Zustimmung helfen Sie uns, unsere Website zu
+          verbessern.
           <a href="/datenschutz.html" class="cookie-banner__link">Mehr erfahren</a>
         </p>
         <div class="cookie-banner__buttons">
-          <button id="cookie-accept" class="cookie-banner__btn cookie-banner__btn--accept" onclick="loadConsentScripts()">
+          <button
+            id="cookie-accept"
+            class="cookie-banner__btn cookie-banner__btn--accept"
+            onclick="loadConsentScripts()"
+          >
             Cookies akzeptieren
           </button>
-          <button id="cookie-reject" class="cookie-banner__btn cookie-banner__btn--reject" onclick="rejectConsent()">
+          <button
+            id="cookie-reject"
+            class="cookie-banner__btn cookie-banner__btn--reject"
+            onclick="rejectConsent()"
+          >
             Ablehnen
           </button>
         </div>
@@ -319,8 +385,9 @@
         <nav class="nav__links" aria-label="Hauptnavigation">
           <a href="#preise" class="nav__link">Preise</a>
           <a href="#leistungen" class="nav__link">Leistungen</a>
+          <a href="#fallstudien" class="nav__link">Ergebnisse</a>
           <a href="#sicherheits-audit" class="nav__link">Sicherheits-Audit</a>
-          <a href="#meldungen" class="nav__link">Meldungen</a>
+          <a href="wissen/index.html" class="nav__link">Wissen</a>
           <a href="#ueber-uns" class="nav__link">Über uns</a>
         </nav>
 
@@ -354,8 +421,9 @@
         <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
           <a href="#preise" class="mobile-menu__link">Preise</a>
           <a href="#leistungen" class="mobile-menu__link">Leistungen</a>
+          <a href="#fallstudien" class="mobile-menu__link">Ergebnisse</a>
           <a href="#sicherheits-audit" class="mobile-menu__link">Sicherheits-Audit</a>
-          <a href="#meldungen" class="mobile-menu__link">Meldungen</a>
+          <a href="wissen/index.html" class="mobile-menu__link">Wissen</a>
           <a href="#ueber-uns" class="mobile-menu__link">Über uns</a>
           <a
             href="#kontakt"
@@ -419,6 +487,7 @@
                 class="hero__check-input"
                 placeholder="ihre-kanzlei.ch"
                 autocomplete="url"
+                inputmode="url"
                 aria-describedby="hero-url-hint"
               />
               <button
@@ -594,6 +663,10 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
               <span>Kein Mandantendaten-Zugriff</span>
+            </div>
+            <div class="hero__trust-item hero__trust-item--live">
+              <span class="hero__live-dot" aria-hidden="true"></span>
+              <span>Anfragen diese Woche</span>
             </div>
           </div>
         </div>
@@ -1255,6 +1328,135 @@
       </section>
 
       <!-- ════════════════════════════════════════
+         FALLSTUDIEN — Anonymisierte Kundenergebnisse
+         ════════════════════════════════════════ -->
+      <section class="section" id="fallstudien">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Ergebnisse unserer Kunden</h2>
+            <p>
+              Drei Schweizer Organisationen — drei transformierte Sicherheitsprofile.
+              Anonym dargestellt zum Schutz der Mandanten.
+            </p>
+          </div>
+
+          <div class="case-studies__grid">
+            <!-- Case Study 1 -->
+            <article class="case-study-card" data-reveal="fade-up" data-reveal-delay="0">
+              <div class="case-study-card__header">
+                <span class="case-study-card__type">Anwaltskanzlei</span>
+                <span class="case-study-card__location">Zürich</span>
+              </div>
+              <div class="case-study-card__grades">
+                <div class="case-study-card__grade case-study-card__grade--before">
+                  <span class="case-study-card__grade-label">Vorher</span>
+                  <span class="case-study-card__grade-letter case-study-card__grade-letter--f">F</span>
+                </div>
+                <div class="case-study-card__arrow">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </div>
+                <div class="case-study-card__grade case-study-card__grade--after">
+                  <span class="case-study-card__grade-label">Nachher</span>
+                  <span class="case-study-card__grade-letter case-study-card__grade-letter--a">A</span>
+                </div>
+              </div>
+              <div class="case-study-card__details">
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                  <span>4 Stunden</span>
+                </div>
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                  <span>Rapid Header Fix</span>
+                </div>
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                  <span>0 Min. Downtime</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Case Study 2 -->
+            <article class="case-study-card case-study-card--featured" data-reveal="fade-up" data-reveal-delay="100">
+              <span class="case-study-card__badge">Komplett-Härtung</span>
+              <div class="case-study-card__header">
+                <span class="case-study-card__type">Arztpraxis</span>
+                <span class="case-study-card__location">Bern</span>
+              </div>
+              <div class="case-study-card__grades">
+                <div class="case-study-card__grade case-study-card__grade--before">
+                  <span class="case-study-card__grade-label">Vorher</span>
+                  <span class="case-study-card__grade-letter case-study-card__grade-letter--f">F</span>
+                </div>
+                <div class="case-study-card__arrow">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </div>
+                <div class="case-study-card__grade case-study-card__grade--after">
+                  <span class="case-study-card__grade-label">Nachher</span>
+                  <span class="case-study-card__grade-letter case-study-card__grade-letter--a">A</span>
+                </div>
+              </div>
+              <div class="case-study-card__details">
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                  <span>18 Stunden</span>
+                </div>
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                  <span>Kanzlei-Härtung</span>
+                </div>
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                  <span>0 Min. Downtime</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Case Study 3 -->
+            <article class="case-study-card" data-reveal="fade-up" data-reveal-delay="200">
+              <div class="case-study-card__header">
+                <span class="case-study-card__type">Notariat</span>
+                <span class="case-study-card__location">Luzern</span>
+              </div>
+              <div class="case-study-card__grades">
+                <div class="case-study-card__grade case-study-card__grade--before">
+                  <span class="case-study-card__grade-label">Vorher</span>
+                  <span class="case-study-card__grade-letter case-study-card__grade-letter--f">F</span>
+                </div>
+                <div class="case-study-card__arrow">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </div>
+                <div class="case-study-card__grade case-study-card__grade--after">
+                  <span class="case-study-card__grade-label">Nachher</span>
+                  <span class="case-study-card__grade-letter case-study-card__grade-letter--a">A</span>
+                </div>
+              </div>
+              <div class="case-study-card__details">
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                  <span>8 Stunden</span>
+                </div>
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                  <span>Cyber-Mandat</span>
+                </div>
+                <div class="case-study-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                  <span>0 Min. Downtime</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
          SICHERHEITSMELDUNGEN — Blog/News
          ════════════════════════════════════════ -->
       <section class="section section--dark" id="meldungen">
@@ -1650,6 +1852,65 @@
       </section>
 
       <!-- ════════════════════════════════════════
+         GRÜNDER & MISSION
+         ════════════════════════════════════════ -->
+      <section class="section" id="mission">
+        <div class="container">
+          <div class="founder" data-reveal="fade-up">
+            <div class="founder__avatar">
+              <div class="founder__shield">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+              </div>
+              <span class="founder__avatar-label">Gegründet 2024</span>
+            </div>
+            <div class="founder__content">
+              <h2 class="founder__title">Digitale Sicherheit sollte kein Luxus sein</h2>
+              <p class="founder__mission">
+                AidSec wurde gegründet, weil zu viele Schweizer Kanzleien und Praxen mit
+                Note F operieren — ohne es zu wissen. Unsere Mission: Jede Organisation im
+                Rechts- und Gesundheitssektor verdient den gleichen Schutzstandard wie ein
+                Fortune-500-Unternehmen.
+              </p>
+              <div class="founder__pillars">
+                <div class="founder__pillar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  <div>
+                    <strong>Diskretion</strong>
+                    <span>Kein Zugriff auf Mandantendaten. Nie.</span>
+                  </div>
+                </div>
+                <div class="founder__pillar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  <div>
+                    <strong>Schweizer Qualität</strong>
+                    <span>Hosting, Analyse und Support — alles in der Schweiz.</span>
+                  </div>
+                </div>
+                <div class="founder__pillar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" aria-hidden="true">
+                    <path d="m9 12 2 2 4-4" />
+                    <circle cx="12" cy="12" r="10" />
+                  </svg>
+                  <div>
+                    <strong>Messbare Ergebnisse</strong>
+                    <span>Von Note F zu A — verifizierbar auf SecurityHeaders.com.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
          PRICING — 3-Spalten Premium
          ════════════════════════════════════════ -->
       <section class="section section--pricing" id="preise">
@@ -1760,6 +2021,159 @@
                 >Cyber-Mandat anfragen</a
               >
             </article>
+          </div>
+
+          <!-- Pricing Comparison Table -->
+          <div class="pricing-compare" data-reveal="fade-up" data-reveal-delay="200">
+            <h3 class="pricing-compare__title">Leistungen im Vergleich</h3>
+            <div class="pricing-compare__scroll">
+              <table class="pricing-compare__table">
+                <thead>
+                  <tr>
+                    <th class="pricing-compare__feature-header">Leistung</th>
+                    <th>Rapid Header Fix</th>
+                    <th class="pricing-compare__featured">Kanzlei-Härtung</th>
+                    <th>Cyber-Mandat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Security Headers (HSTS, CSP, X-Frame)</td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Note F → A in 24h</td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Login-Verschleierung &amp; Brute-Force Schutz</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Professionelle Firewall-Konfiguration</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>nDSG-Konformitäts-Check</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Schriftliches Audit-Protokoll</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Kontinuierliches Sicherheits-Monitoring</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Monatlicher Sicherheitsbericht</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Priorisierter Notfall-Support</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                  <tr>
+                    <td>Cloud-Backups (Schweizer Server)</td>
+                    <td><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td class="pricing-compare__featured"><span class="pricing-compare__dash" aria-label="Nicht enthalten">—</span></td>
+                    <td><span class="pricing-compare__check" aria-label="Enthalten">✓</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="pricing-compare__footnote">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              <span>Mögliche nDSG-Busse bei Datenschutzverstössen: bis <strong>CHF 250'000</strong> (Art. 60ff. nDSG)</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════
+         ROI CALCULATOR
+         ════════════════════════════════════════ -->
+      <section class="section section--dark" id="roi-rechner">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Lohnt sich die Investition?</h2>
+            <p>
+              Berechnen Sie Ihr individuelles Cyber-Risiko und sehen Sie,
+              wie sich eine AidSec-Härtung auswirkt.
+            </p>
+          </div>
+
+          <div class="roi" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="roi__card">
+              <div class="roi__inputs">
+                <div class="roi__field">
+                  <label class="roi__label" for="roi-branche">Branche</label>
+                  <select class="roi__select" id="roi-branche">
+                    <option value="kanzlei">Anwaltskanzlei</option>
+                    <option value="arztpraxis">Arztpraxis</option>
+                    <option value="notariat">Notariat</option>
+                  </select>
+                </div>
+                <div class="roi__field">
+                  <label class="roi__label" for="roi-mitarbeiter">
+                    Mitarbeiter: <output id="roi-mitarbeiter-output">5</output>
+                  </label>
+                  <input type="range" class="roi__slider" id="roi-mitarbeiter" min="1" max="50" value="5" />
+                </div>
+                <div class="roi__field">
+                  <label class="roi__label">
+                    <input type="checkbox" class="roi__checkbox" id="roi-wordpress" checked />
+                    <span class="roi__checkbox-mark"></span>
+                    WordPress-Webseite
+                  </label>
+                </div>
+              </div>
+              <div class="roi__results" aria-live="polite" aria-atomic="true" role="region" aria-label="Berechnungsergebnis">
+                <div class="roi__result">
+                  <span class="roi__result-label">Jährliches Risiko</span>
+                  <span class="roi__result-value roi__result-value--risk" id="roi-risk">CHF 52'000</span>
+                  <span class="roi__result-sub">Geschätzte Exposition ohne Schutz</span>
+                </div>
+                <div class="roi__result">
+                  <span class="roi__result-label">AidSec Investition</span>
+                  <span class="roi__result-value roi__result-value--cost" id="roi-cost">CHF 950</span>
+                  <span class="roi__result-sub">Einmalige Kanzlei-Härtung</span>
+                </div>
+                <div class="roi__result roi__result--highlight">
+                  <span class="roi__result-label">Return on Investment</span>
+                  <span class="roi__result-value roi__result-value--roi" id="roi-roi">5'374%</span>
+                  <span class="roi__result-sub">Risikoreduktion vs. Investition</span>
+                </div>
+              </div>
+              <a href="#kontakt" class="btn btn--gold btn--lg roi__cta" data-track="roi-cta">
+                Jetzt absichern
+                <svg class="btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -2177,6 +2591,40 @@
         </svg>
       </a>
     </div>
+
+    <!-- Exit-Intent Popup -->
+    <div class="modal" id="exit-modal" aria-hidden="true" role="dialog" aria-labelledby="exit-modal-title">
+      <div class="modal__overlay" id="exit-modal-overlay"></div>
+      <div class="modal__container container--narrow">
+        <button class="modal__close" id="exit-modal-close" aria-label="Schliessen">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <div class="modal__content">
+          <div class="modal__header">
+            <span class="badge">Warten Sie!</span>
+            <h2 id="exit-modal-title">Bevor Sie Ihre Sicherheit riskieren...</h2>
+          </div>
+          <div class="modal__body">
+            <p>Sichern Sie sich die <strong>Ransomware Prevention Roadmap</strong> – speziell entwickelt für Schweizer Kanzleien und Arztpraxen.</p>
+            <div class="cta-banner cta-banner--mini">
+              <div class="cta-banner__content">
+                <a href="#kontakt" class="btn btn--gold btn--lg" id="exit-modal-cta">Jetzt Roadmap sichern</a>
+                <p class="text-xs">100% nDSG-konform & kostenlos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll-to-top -->
+    <button class="scroll-top" id="scroll-top" aria-label="Nach oben scrollen" title="Nach oben">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m18 15-6-6-6 6"/>
+      </svg>
+    </button>
 
     <!-- Scripts -->
     <script src="js/main.js" defer></script>
