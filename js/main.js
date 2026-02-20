@@ -586,49 +586,7 @@
     });
   }
 
-  // ── Exit-Intent Popup Logic ──
-  var exitModal = document.getElementById('exit-modal');
-  var exitModalClose = document.getElementById('exit-modal-close');
-  var exitModalOverlay = document.getElementById('exit-modal-overlay');
-  var exitModalCta = document.getElementById('exit-modal-cta');
 
-  if (exitModal) {
-    var showExitPopup = function () {
-      if (!sessionStorage.getItem('aidsec_exit_shown')) {
-        exitModal.classList.add('visible');
-        exitModal.setAttribute('aria-hidden', 'false');
-        sessionStorage.setItem('aidsec_exit_shown', 'true');
-        
-        // Tracking
-        if (window.plausible) {
-          window.plausible('exit_intent_show');
-        }
-      }
-    };
-
-    var closeExitPopup = function () {
-      exitModal.classList.remove('visible');
-      exitModal.setAttribute('aria-hidden', 'true');
-    };
-
-    // Detect mouse leave viewport (top)
-    document.addEventListener('mouseleave', function (e) {
-      if (e.clientY <= 0) {
-        showExitPopup();
-      }
-    });
-
-    if (exitModalClose) exitModalClose.addEventListener('click', closeExitPopup);
-    if (exitModalOverlay) exitModalOverlay.addEventListener('click', closeExitPopup);
-    if (exitModalCta) exitModalCta.addEventListener('click', closeExitPopup);
-
-    // Escape key handling
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && exitModal.classList.contains('visible')) {
-        closeExitPopup();
-      }
-    });
-  }
   // ── Knowledge Base Search Logic removed as per structural simplification ──
 
 })();
