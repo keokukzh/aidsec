@@ -232,6 +232,36 @@
       }
     </script>
 
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://js.hsforms.net" />
+    <link rel="preconnect" href="https://plausible.io" />
+
+    <!-- Critical CSS (Design Tokens & Hero Core) -->
+    <style>
+      :root {
+        --navy: #0b1d3a;
+        --navy-deep: #060f1f;
+        --gold: #c8a84c;
+        --white: #ffffff;
+        --gray-50: #f8fafc;
+        --gray-400: #94a3b8;
+        --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+        --font-body: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+        --nav-height: 116px;
+        --space-20: 5rem;
+        --z-sticky: 200;
+        --glass-blur: blur(20px);
+      }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+      body { font-family: var(--font-body); background-color: var(--gray-50); color: var(--navy-deep); overflow-x: hidden; }
+      .nav { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-sticky); height: var(--nav-height); background: rgba(11, 29, 58, 0.95); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
+      .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+      .hero { position: relative; min-height: 100vh; display: flex; align-items: center; background: var(--navy-deep); overflow: hidden; padding-top: var(--nav-height); }
+      .hero__content { position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: var(--space-20); }
+      h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--white); line-height: 1.1; font-weight: 700; }
+    </style>
+
     <!-- Critical Font Preloads -->
     <link
       rel="preload"
@@ -366,6 +396,7 @@
             height="109"
             class="nav__logo-img"
             loading="eager"
+            decoding="async"
           />
         </a>
 
@@ -2580,32 +2611,7 @@
       </a>
     </div>
 
-    <!-- Exit-Intent Popup -->
-    <div class="modal" id="exit-modal" aria-hidden="true" role="dialog" aria-labelledby="exit-modal-title">
-      <div class="modal__overlay" id="exit-modal-overlay"></div>
-      <div class="modal__container container--narrow">
-        <button class="modal__close" id="exit-modal-close" aria-label="Schliessen">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
-        </button>
-        <div class="modal__content">
-          <div class="modal__header">
-            <span class="badge">Warten Sie!</span>
-            <h2 id="exit-modal-title">Bevor Sie Ihre Sicherheit riskieren...</h2>
-          </div>
-          <div class="modal__body">
-            <p>Sichern Sie sich die <strong>Ransomware Prevention Roadmap</strong> – speziell entwickelt für Schweizer Kanzleien und Arztpraxen.</p>
-            <div class="cta-banner cta-banner--mini">
-              <div class="cta-banner__content">
-                <a href="#kontakt" class="btn btn--gold btn--lg" id="exit-modal-cta">Jetzt Roadmap sichern</a>
-                <p class="text-xs">100% nDSG-konform & kostenlos.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
 
     <!-- Scroll-to-top -->
     <button class="scroll-top" id="scroll-top" aria-label="Nach oben scrollen" title="Nach oben">
