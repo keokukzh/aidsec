@@ -6,13 +6,17 @@
     <title>Wissen & Ressourcen — AidSec</title>
     <meta name="description" content="Fachbeiträge zu IT-Sicherheit, nDSG-Compliance und Ransomware-Schutz für Schweizer Kanzleien und Arztpraxen." />
     
-    <link rel="stylesheet" href="../css/main.css" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../css/fonts.css" />
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/sections.css" />
     <link rel="stylesheet" href="../css/animations.css" />
     <link rel="stylesheet" href="../css/responsive.css" />
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="../favicon.png" />
   </head>
   <body>
@@ -31,32 +35,80 @@
     </header>
 
     <main id="main-content">
-      <section class="section section--dark">
+      <!-- Knowledge Hero -->
+      <section class="section section--dark knowledge-hero">
         <div class="container">
-          <div class="section-header" data-reveal="fade-up">
-            <span class="badge">Ressourcen</span>
-            <h1>Wissen & Sicherheit</h1>
-            <p>Experten-Know-how für die digitale Integrität Ihrer Schweizer Kanzlei oder Praxis.</p>
+          <div class="knowledge-hero__inner">
+            <div class="section-header" data-reveal="fade-up">
+              <span class="badge">Ressourcen</span>
+              <h1>Wissen & Sicherheit</h1>
+              <p>Professionalisierte IT-Sicherheit und Compliance-Expertise für die Schweizer Kanzlei- und Praxiswelt.</p>
+            </div>
+            
+            <div class="knowledge-search" data-reveal="fade-up" data-reveal-delay="100">
+              <div class="knowledge-search__box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" placeholder="Themen durchsuchen (z.B. nDSG, Ransomware...)" disabled />
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div class="knowledge-grid" data-reveal="fade-up" data-reveal-delay="100">
-            <!-- Article 1 -->
+      <section class="section section--deep">
+        <div class="container">
+          <div class="knowledge-grid" data-reveal="fade-up" data-reveal-delay="200">
+            <!-- Article 1: nDSG -->
             <article class="article-card">
+              <div class="article-card__image-placeholder">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+              </div>
               <div class="article-card__content">
                 <span class="article-card__tag">Compliance</span>
                 <h2 class="article-card__title">nDSG-Checkliste 2026: IT-Pflichten für Anwälte</h2>
                 <p class="article-card__excerpt">Die wichtigsten technischen Massnahmen, um die Anforderungen des Schweizer Datenschutzgesetzes rechtssicher umzusetzen.</p>
-                <a href="ndsg-compliance-kanzlei.html" class="article-card__link">Weiterlesen &rarr;</a>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">8 Min. Lesezeit</span>
+                  <a href="ndsg-compliance-kanzlei.html" class="article-card__link">Beitrag lesen &rarr;</a>
+                </div>
               </div>
             </article>
 
-            <!-- Article 2 -->
+            <!-- Article 2: Ransomware -->
             <article class="article-card">
+              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+              </div>
               <div class="article-card__content">
                 <span class="article-card__tag">Sicherheit</span>
                 <h2 class="article-card__title">Ransomware-Schutz: Strategie gegen Erpressung</h2>
                 <p class="article-card__excerpt">Warum Backups allein nicht reichen und wie eine "Defense-in-Depth" Strategie Ihre Mandantendaten schützt.</p>
-                <a href="ransomware-schutz-schweiz.html" class="article-card__link">Weiterlesen &rarr;</a>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">10 Min. Lesezeit</span>
+                  <a href="ransomware-schutz-schweiz.html" class="article-card__link">Beitrag lesen &rarr;</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 3: Cloud -->
+            <article class="article-card">
+              <div class="article-card__image-placeholder">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c.3 0 .5 0 .8-.2a3.5 3.5 0 0 0 1-5.9 5 5 0 0 0-9.8-1.4 3.5 3.5 0 0 0-1 6.8c.2.1.5.7.7.7h8.3Z"/></svg>
+                </div>
+              </div>
+              <div class="article-card__content">
+                <span class="article-card__tag">Gesundheitswesen</span>
+                <h2 class="article-card__title">Cloud-Sicherheit für Arztpraxen</h2>
+                <p class="article-card__excerpt">Patientendaten nDSG-konform in der Cloud verarbeiten – worauf Mediziner beim Serverstandort und Verschlüsselung achten müssen.</p>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">12 Min. Lesezeit</span>
+                  <a href="cloud-sicherheit-arztpraxen.html" class="article-card__link">Beitrag lesen &rarr;</a>
+                </div>
               </div>
             </article>
           </div>
