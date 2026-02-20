@@ -287,7 +287,6 @@
         // Tracking-Scripts nur laden wenn Consent erteilt
         if (consent === 'accepted') {
           loadPlausible();
-          loadHubSpot();
         }
 
         function loadPlausible() {
@@ -302,20 +301,9 @@
           document.head.appendChild(initScript);
         }
 
-        function loadHubSpot() {
-          var script = document.createElement('script');
-          script.type = 'text/javascript';
-          script.id = 'hs-script-loader';
-          script.async = true;
-          script.defer = true;
-          script.src = '//js-eu1.hs-scripts.com/147823018.js';
-          document.body.appendChild(script);
-        }
-
         window.loadConsentScripts = function () {
           localStorage.setItem(CONSENT_KEY, 'accepted');
           loadPlausible();
-          loadHubSpot();
           document.getElementById('cookie-banner').style.display = 'none';
         };
 

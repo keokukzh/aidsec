@@ -44,7 +44,7 @@ Following the existing AidSec architecture for maximum speed and security.
 
 1. **Form Submission**: Extended `form.js` with `lead_type` parameter.
 2. **Backend**: Netlify forms capturing lead data.
-3. **Automation**: HubSpot auto-responder triggering PDF delivery via email.
+3. **Automation**: Internal lead management via Netlify forms and email notifications.
 4. **Analytics**: `aidsec:lead_gen` custom event in Plausible.
 
 ## 5. Implementation Roadmap
@@ -53,4 +53,4 @@ Following the existing AidSec architecture for maximum speed and security.
 2. Build the first two "Pillar" articles.
 3. Implement the Inline CTA component.
 4. Implement the Exit-Intent Popup logic and UI.
-5. Setup HubSpot auto-responders.
+5. (Optional) Setup internal auto-responders or manual delivery.
