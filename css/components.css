@@ -10,6 +10,9 @@
   right: 0;
   z-index: var(--z-sticky);
   height: 116px;
+  background: rgba(11, 29, 58, 0.95); /* High opacity for guaranteed readability on all backgrounds */
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   transition:
     background var(--duration-normal) var(--ease-in-out),
     box-shadow var(--duration-normal) var(--ease-in-out),
@@ -17,14 +20,13 @@
     height 400ms var(--ease-in-out);
 }
 
-.nav.scrolled {
-  height: 72px;
-  background: var(--glass-navy);
+body .nav.scrolled {
+  background: var(--navy-deep) !important; /* Force high-contrast background for branding visibility */
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow:
-    0 1px 0 var(--glass-border),
-    var(--shadow-lg);
+    0 4px 20px rgba(0, 0, 0, 0.2),
+    0 1px 0 var(--glass-border);
 }
 
 .nav__inner {
@@ -69,7 +71,7 @@
 .nav__link {
   font-size: 0.75rem; /* 12px */
   font-weight: 500;
-  color: var(--gray-300);
+  color: var(--white);
   text-decoration: none;
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;

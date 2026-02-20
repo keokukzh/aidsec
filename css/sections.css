@@ -1984,13 +1984,24 @@
 
 .checklist li strong {
   display: block;
-  color: var(--white);
+  color: var(--navy); /* Changed from white for readability on light backgrounds */
   margin-bottom: var(--space-1);
 }
 
 .checklist li span {
   display: block;
   font-size: var(--text-sm);
+  color: var(--gray-600); /* Darker for accessibility */
+}
+
+/* Dark theme overrides for checklists on dark sections */
+.section--dark .checklist li strong,
+.article-card .checklist li strong {
+  color: var(--white);
+}
+
+.section--dark .checklist li span,
+.article-card .checklist li span {
   color: var(--gray-400);
 }
 
@@ -2218,44 +2229,49 @@
   margin-top: var(--space-20);
 }
 
-.cta-banner h2 {
-  color: var(--white);
+.article-body .cta-banner h2 {
+  color: var(--white) !important;
   margin-bottom: var(--space-4);
 }
 
-.cta-banner p {
-  color: var(--gray-300);
+.article-body .cta-banner p {
+  color: var(--gray-100) !important;
   margin-bottom: var(--space-8);
   font-size: var(--text-lg);
 }
 
 /* ── Article Layout ── */
 .article-header {
-  padding: var(--space-20) 0 var(--space-12);
-  background: linear-gradient(to bottom, #060c18, var(--navy));
+  padding: calc(var(--nav-height) + var(--space-12)) 0 var(--space-12);
+  background: var(--navy-deep);
+  text-align: center;
 }
 
 .article-meta {
   display: flex;
-  gap: var(--space-6);
-  color: var(--gray-500);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  color: var(--gold-light);
   font-size: var(--text-sm);
   margin-bottom: var(--space-6);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
 }
 
 .article-body {
   max-width: 800px;
   margin: 0 auto;
-  padding: var(--space-12) 0;
+  padding: var(--space-16) 0 var(--space-24);
   font-size: var(--text-lg);
-  line-height: 1.8;
-  color: var(--gray-200);
+  line-height: var(--leading-relaxed);
+  color: var(--navy-deep); /* Explicit high contrast for body */
 }
 
 .article-body h2 {
-  margin-top: var(--space-12);
+  margin-top: var(--space-16);
   margin-bottom: var(--space-6);
-  color: var(--white);
+  color: var(--navy);
 }
 
 .article-body p {
@@ -2263,15 +2279,17 @@
 }
 
 .article-body ul {
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-12);
   list-style: none;
   padding-left: 0;
 }
 
 .article-body li {
   position: relative;
-  padding-left: var(--space-6);
-  margin-bottom: var(--space-4);
+  padding-left: var(--space-8);
+  margin-bottom: var(--space-6);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
 }
 
 .article-body li::before {
@@ -2279,5 +2297,5 @@
   position: absolute;
   left: 0;
   color: var(--gold);
-  font-weight: 700;
+  font-weight: 800; /* Increased weight for visibility */
 }

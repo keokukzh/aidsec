@@ -233,6 +233,22 @@
   .nav__toggle {
     display: flex;
   }
+
+  /* Pricing comparison table: scrollable on tablet */
+  .pricing-compare__scroll {
+    overflow-x: auto;
+  }
+
+  .pricing-compare__table {
+    min-width: 580px;
+  }
+
+  /* FAQ: larger tap targets */
+  .faq__question {
+    min-height: 52px;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-4);
+  }
 }
 
 /* ── Max 768px — Tablet Portrait ── */
@@ -457,6 +473,30 @@
   .footer {
     padding-bottom: calc(var(--space-8) + 64px);
   }
+
+  /* Pricing comparison: stack-friendly adjustments */
+  .pricing-compare {
+    margin-top: var(--space-10);
+  }
+
+  .pricing-compare__title {
+    font-size: var(--text-xl);
+  }
+
+  .pricing-compare__table th,
+  .pricing-compare__table td {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+  }
+
+  .pricing-compare__feature-header {
+    min-width: 160px;
+  }
+
+  .pricing-compare__footnote {
+    font-size: var(--text-xs);
+    flex-wrap: wrap;
+  }
 }
 
 /* ── Max 480px — Small Mobile ── */
@@ -573,5 +613,76 @@
   .mobile-menu {
     width: 100%;
     max-width: 100vw;
+  }
+}
+
+/* ── Responsive: Case Studies, Founder, ROI ── */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .case-studies__grid {
+    grid-template-columns: 1fr;
+    max-width: 28rem;
+    margin: 0 auto;
+  }
+
+  .founder {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: var(--space-6);
+    padding: var(--space-8);
+  }
+
+  .founder__avatar {
+    align-items: center;
+  }
+
+  .founder__pillars {
+    align-items: center;
+  }
+
+  .founder__pillar {
+    max-width: 20rem;
+  }
+
+  .roi__card {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    padding: var(--space-6);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .case-study-card {
+    padding: var(--space-6);
+  }
+
+  .case-study-card__badge {
+    font-size: 0.65rem;
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .case-study-card__grade-letter {
+    width: 48px;
+    height: 48px;
+    font-size: var(--text-xl);
+  }
+
+  .founder {
+    padding: var(--space-6);
+  }
+
+  .founder__title {
+    font-size: var(--text-xl);
+  }
+
+  .founder__shield {
+    width: 80px;
+    height: 80px;
+  }
+
+  .roi__result-value {
+    font-size: var(--text-xl);
   }
 }

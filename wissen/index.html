@@ -38,18 +38,11 @@
       <!-- Knowledge Hero -->
       <section class="section section--dark knowledge-hero">
         <div class="container">
-          <div class="knowledge-hero__inner">
+            <div class="knowledge-hero__inner">
             <div class="section-header" data-reveal="fade-up">
               <span class="badge">Ressourcen</span>
               <h1>Wissen & Sicherheit</h1>
               <p>Professionalisierte IT-Sicherheit und Compliance-Expertise für die Schweizer Kanzlei- und Praxiswelt.</p>
-            </div>
-            
-            <div class="knowledge-search" data-reveal="fade-up" data-reveal-delay="100">
-              <div class="knowledge-search__box">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" id="knowledge-search-input" placeholder="Themen durchsuchen (z.B. nDSG, Ransomware...)" />
-              </div>
             </div>
           </div>
         </div>
@@ -111,12 +104,6 @@
                 </div>
               </div>
             </article>
-
-            <!-- No Results Message -->
-            <div id="knowledge-no-results" class="no-results" style="display: none;">
-              <h3>Keine Ergebnisse gefunden</h3>
-              <p>Versuchen Sie es mit einem anderen Suchbegriff.</p>
-            </div>
           </div>
         </div>
       </section>
@@ -135,9 +122,28 @@
       </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
       <div class="container">
-        <p>&copy; 2026 AidSec. Alle Rechte vorbehalten.</p>
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img
+              src="../logowhite.png"
+              alt="AidSec"
+              width="36"
+              height="36"
+              class="footer__logo"
+              loading="lazy"
+            />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
       </div>
     </footer>
 

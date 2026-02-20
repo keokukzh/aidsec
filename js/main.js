@@ -629,34 +629,6 @@
       }
     });
   }
-
-  // ── Knowledge Base Search Logic ──
-  const searchInput = document.getElementById('knowledge-search-input');
-  const articleCards = document.querySelectorAll('.article-card');
-  const noResults = document.getElementById('knowledge-no-results');
-
-  if (searchInput && articleCards.length > 0) {
-    searchInput.addEventListener('input', function (e) {
-      const term = e.target.value.toLowerCase().trim();
-      let visibleCount = 0;
-
-      articleCards.forEach(function (card) {
-        const title = card.querySelector('.article-card__title').textContent.toLowerCase();
-        const tag = card.querySelector('.article-card__tag').textContent.toLowerCase();
-        const excerpt = card.querySelector('.article-card__excerpt').textContent.toLowerCase();
-
-        if (title.includes(term) || tag.includes(term) || excerpt.includes(term)) {
-          card.style.display = '';
-          visibleCount++;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      if (noResults) {
-        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-      }
-    });
-  }
+  // ── Knowledge Base Search Logic removed as per structural simplification ──
 
 })();
