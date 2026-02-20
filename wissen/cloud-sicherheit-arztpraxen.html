@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloud-Sicherheit für Arztpraxen: Patientendaten schützen — AidSec</title>
+    <meta name="description" content="Erfahren Sie, wie Sie medizinische Daten in der Cloud nDSG-konform und sicher verarbeiten. Ein Leitfaden für Schweizer Mediziner." />
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../css/fonts.css" />
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/sections.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+    
+    <link rel="icon" type="image/png" href="../favicon.png" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="../index.html" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="../logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="../index.html#preise" class="nav__link">Preise</a>
+          <a href="../index.html#leistungen" class="nav__link">Leistungen</a>
+          <a href="index.html" class="nav__link active">Wissen</a>
+          <a href="../index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <header class="article-header">
+        <div class="container--narrow">
+          <div class="article-meta" data-reveal="fade-up">
+            <span>Gesundheitswesen</span>
+            <span>&bull;</span>
+            <span>12 Min. Lesezeit</span>
+            <span>&bull;</span>
+            <span>20. Feb 2026</span>
+          </div>
+          <h1 data-reveal="fade-up" data-reveal-delay="100">Cloud-Sicherheit für Arztpraxen: Patientendaten nDSG-konform schützen</h1>
+        </div>
+      </header>
+
+      <article class="article-body container--narrow" data-reveal="fade-up" data-reveal-delay="200">
+        <p class="lead">Der Wechsel in die Cloud bietet Arztpraxen enorme Effizienzvorteile. Doch bei Patientendaten – den sensibelsten Daten überhaupt – gelten im Rahmen des neuen Datenschutzgesetzes (nDSG) strengste Anforderungen.</p>
+
+        <h2>Besonders schützenswerte Personendaten</h2>
+        <p>Gesundheitsdaten unterliegen gemäss nDSG einem erhöhten Schutzbedarf. Ein Fehler bei der Wahl des Cloud-Anbieters oder der Konfiguration kann nicht nur rechtliche Konsequenzen haben, sondern das Vertrauensverhältnis zu Ihren Patienten nachhaltig zerstören.</p>
+
+        <!-- Inline Lead Magnet CTA -->
+        <div class="cta-banner">
+          <div class="cta-banner__content">
+            <span class="badge">Checkliste</span>
+            <h3>Der Cloud-Compliance Guide</h3>
+            <p>12 Fragen, die Sie Ihrem IT-Dienstleister jetzt stellen müssen.</p>
+            <a href="../index.html#kontakt" class="btn btn--gold">Guide kostenlos anfordern</a>
+          </div>
+        </div>
+
+        <h2>Die 7-Punkte Cloud-Sicherheits-Roadmap für Ärzte</h2>
+        <p>Stellen Sie sicher, dass Ihre Cloud-Lösung (z.B. Praxissoftware, Mail oder Backup) folgende Kriterien erfüllt:</p>
+
+        <ul class="checklist">
+          <li>
+            <strong>Serverstandort Schweiz (Datensouveränität)</strong>
+            <span>Wählen Sie Anbieter, deren physische Server in der Schweiz stehen, um den Zugriff durch ausländische Behörden (z.B. US Cloud Act) zu minimieren.</span>
+          </li>
+          <li>
+            <strong>End-to-End-Verschlüsselung (Zero-Knowledge)</strong>
+            <span>Idealerweise verfügt der Anbieter nicht über die Schlüssel zu Ihren Daten. Nur Sie und Ihr berechtigtes Team können die Patientenakten entschlüsselt lesen.</span>
+          </li>
+          <li>
+            <strong>Strenge Zugriffskontrollen (RBAC)</strong>
+            <span>Nicht jeder Mitarbeiter benötigt Zugriff auf alle Daten. Implementieren Sie ein Rollen-basiertes Berechtigungskonzept (Role-Based Access Control).</span>
+          </li>
+          <li>
+            <strong>Multi-Faktor-Authentifizierung (MFA)</strong>
+            <span>Ein absolutes Muss. Der Zugriff auf Cloud-Portale darf niemals nur durch ein Passwort geschützt sein.</span>
+          </li>
+          <li>
+            <strong>Auftragsbearbeitungsvertrag (AVV)</strong>
+            <span>Schliessen Sie mit jedem Cloud-Anbieter einen schriftlichen AVV ab, der die Einhaltung des nDSG explizit garantiert.</span>
+          </li>
+          <li>
+            <strong>Regelmässige Backup-Integritätstests</strong>
+            <span>Verlassen Sie sich nicht blind auf die Cloud. Prüfen Sie monatlich, ob Daten aus der Cloud-Sicherung tatsächlich wiederherstellbar sind.</span>
+          </li>
+          <li>
+            <strong>Protokollierung gemäss nDSG</strong>
+            <span>Die Cloud-Lösung muss revisionssicher protokollieren, wer auf welche Gesundheitsdaten zugegriffen hat (Audit-Log).</span>
+          </li>
+        </ul>
+
+        <h2>Umgang mit Drittanbietern</h2>
+        <p>Viele moderne Diagnosegeräte senden Daten direkt in die Cloud. Prüfen Sie diese "Schatten-IT" kritisch:</p>
+        <ul>
+          <li>Werden Daten anonymisiert oder pseudonymisiert übertragen?</li>
+          <li>Wo genau werden diese Daten gespeichert?</li>
+          <li>Hat der Hersteller Zugriff auf die Klarnamen der Patienten?</li>
+        </ul>
+
+        <h2>Fazit: Digitalisierung mit Verantwortung</h2>
+        <p>Die Cloud ist sicher, wenn man sie richtig konfiguriert. Ein professionelles Setup schützt Ihre Praxis vor Datenverlust und sorgt für volle Compliance mit dem schweizerischen Recht.</p>
+        
+        <div class="cta-banner cta-banner--footer">
+          <div class="cta-banner__content">
+            <h3>Cloud-Check für Ihre Praxis</h3>
+            <p>Wir prüfen Ihre bestehende IT-Infrastruktur auf nDSG-Lücken und Cloud-Risiken.</p>
+            <a href="../index.html#kontakt" class="btn btn--gold">Jetzt Analyse vereinbaren</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 AidSec. Alle Rechte vorbehalten.</p>
+      </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>
