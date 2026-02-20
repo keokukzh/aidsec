@@ -1957,13 +1957,41 @@
   border-color: var(--gold);
 }
 
-@media (max-width: 768px) {
-  .scroll-top {
-    bottom: calc(var(--space-8) + 64px);
-    right: var(--space-4);
-    width: 40px;
-    height: 40px;
-  }
+/* ── Checklist Styling ── */
+.checklist {
+  list-style: none;
+  padding-left: 0;
+  margin: var(--space-8) 0;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: var(--space-10);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: var(--space-4);
+}
+
+.checklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--gold);
+  font-weight: 900;
+  font-size: var(--text-xl);
+}
+
+.checklist li strong {
+  display: block;
+  color: var(--white);
+  margin-bottom: var(--space-1);
+}
+
+.checklist li span {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--gray-400);
 }
 
 /* ── Knowledge Base Index ── */
@@ -2060,6 +2088,10 @@
 
 .cta-banner .badge {
   margin-bottom: var(--space-4);
+}
+
+.cta-banner--footer {
+  margin-top: var(--space-20);
 }
 
 .cta-banner h2 {
