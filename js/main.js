@@ -489,4 +489,144 @@
       window.plausible(eventName);
     }
   });
+
+  // ── ROI Calculator ──
+  var roiBranche = document.getElementById('roi-branche');
+  var roiMitarbeiter = document.getElementById('roi-mitarbeiter');
+  var roiMitarbeiterOut = document.getElementById('roi-mitarbeiter-output');
+  var roiWordpress = document.getElementById('roi-wordpress');
+  var roiRisk = document.getElementById('roi-risk');
+  var roiCost = document.getElementById('roi-cost');
+  var roiRoi = document.getElementById('roi-roi');
+
+  function chf(num) {
+    return 'CHF ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+  }
+
+  function calcROI() {
+    if (!roiBranche || !roiMitarbeiter) return;
+
+    var branche = roiBranche.value;
+    var mitarbeiter = parseInt(roiMitarbeiter.value, 10);
+    var isWP = roiWordpress && roiWordpress.checked;
+
+    if (roiMitarbeiterOut) roiMitarbeiterOut.textContent = mitarbeiter;
+
+    // Base risk: CHF 1.04M avg recovery cost * attack probability by sector
+    var brancheRisk = { kanzlei: 0.12, arztpraxis: 0.15, notariat: 0.10 };
+    var baseProbability = brancheRisk[branche] || 0.12;
+
+    // Size multiplier: larger firms = higher target value
+    var sizeFactor = 1 + (mitarbeiter - 1) * 0.08;
+    if (sizeFactor > 5) sizeFactor = 5;
+
+    // WordPress multiplier: adds 40% more risk
+    var wpFactor = isWP ? 1.4 : 1.0;
+
+    var annualRisk = Math.round(1040000 * baseProbability * sizeFactor * wpFactor / 100) * 100;
+
+    // AidSec cost recommendation
+    var cost;
+    var costLabel;
+    if (!isWP) {
+      cost = 490;
+      costLabel = 'Einmalige Header-Optimierung';
+    } else if (mitarbeiter <= 5) {
+      cost = 490;
+      costLabel = 'Einmaliger Rapid Header Fix';
+    } else if (mitarbeiter <= 20) {
+      cost = 950;
+      costLabel = 'Einmalige Kanzlei-Härtung';
+    } else {
+      cost = 89 * 12;
+      costLabel = 'Cyber-Mandat (jährlich)';
+    }
+
+    var roiPercent = Math.round(((annualRisk - cost) / cost) * 100);
+
+    if (roiRisk) roiRisk.textContent = chf(annualRisk);
+    if (roiCost) {
+      roiCost.textContent = chf(cost);
+      var costSub = roiCost.parentElement && roiCost.parentElement.querySelector('.roi__result-sub');
+      if (costSub) costSub.textContent = costLabel;
+    }
+    if (roiRoi) roiRoi.textContent = roiPercent.toLocaleString('de-CH') + '%';
+
+    // Pulse animation on value change
+    [roiRisk, roiCost, roiRoi].forEach(function (el) {
+      if (!el) return;
+      el.classList.remove('updated');
+      void el.offsetWidth; // force reflow
+      el.classList.add('updated');
+    });
+  }
+
+  if (roiBranche) roiBranche.addEventListener('change', calcROI);
+  if (roiMitarbeiter) roiMitarbeiter.addEventListener('input', calcROI);
+  if (roiWordpress) roiWordpress.addEventListener('change', calcROI);
+  calcROI();
+
+  // ── Scroll-to-top Button ──
+  var scrollTopBtn = document.getElementById('scroll-top');
+  if (scrollTopBtn) {
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (window.scrollY > 600) {
+          scrollTopBtn.classList.add('visible');
+        } else {
+          scrollTopBtn.classList.remove('visible');
+        }
+      },
+      { passive: true }
+    );
+
+    scrollTopBtn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // ── Exit-Intent Popup Logic ──
+  var exitModal = document.getElementById('exit-modal');
+  var exitModalClose = document.getElementById('exit-modal-close');
+  var exitModalOverlay = document.getElementById('exit-modal-overlay');
+  var exitModalCta = document.getElementById('exit-modal-cta');
+
+  if (exitModal) {
+    var showExitPopup = function () {
+      if (!sessionStorage.getItem('aidsec_exit_shown')) {
+        exitModal.classList.add('visible');
+        exitModal.setAttribute('aria-hidden', 'false');
+        sessionStorage.setItem('aidsec_exit_shown', 'true');
+        
+        // Tracking
+        if (window.plausible) {
+          window.plausible('exit_intent_show');
+        }
+      }
+    };
+
+    var closeExitPopup = function () {
+      exitModal.classList.remove('visible');
+      exitModal.setAttribute('aria-hidden', 'true');
+    };
+
+    // Detect mouse leave viewport (top)
+    document.addEventListener('mouseleave', function (e) {
+      if (e.clientY <= 0) {
+        showExitPopup();
+      }
+    });
+
+    if (exitModalClose) exitModalClose.addEventListener('click', closeExitPopup);
+    if (exitModalOverlay) exitModalOverlay.addEventListener('click', closeExitPopup);
+    if (exitModalCta) exitModalCta.addEventListener('click', closeExitPopup);
+
+    // Escape key handling
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && exitModal.classList.contains('visible')) {
+        closeExitPopup();
+      }
+    });
+  }
 })();
