@@ -102,8 +102,8 @@
   }
 
   .nav.scrolled .nav__logo-img {
-    width: 60px; /* Increased from 48px */
-    height: 60px; /* Increased from 48px */
+    width: 68px; /* Increased from 60px */
+    height: 68px; /* Increased from 60px */
   }
 
   h1 {
@@ -274,12 +274,12 @@
   }
 
   .nav.scrolled {
-    height: 64px;
+    height: 72px; /* Increased from 64px to support bigger logo */
   }
 
   .nav.scrolled .nav__logo-img {
-    width: 54px; /* Increased from 44px */
-    height: 54px; /* Increased from 44px */
+    width: 64px; /* Increased from 54px */
+    height: 64px; /* Increased from 54px */
   }
 
   .section {

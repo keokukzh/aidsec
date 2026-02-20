@@ -21,7 +21,8 @@
 }
 
 body .nav.scrolled {
-  background: var(--navy-deep) !important; /* Force high-contrast background for branding visibility */
+  height: 80px; /* Reduced from 116px, but enough for a bigger logo */
+  background: var(--navy-deep) !important;
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow:
@@ -57,8 +58,8 @@ body .nav.scrolled {
 }
 
 .nav.scrolled .nav__logo-img {
-  width: 68px; /* Increased from 52px */
-  height: 68px; /* Increased from 52px */
+  width: 80px; /* Increased from 68px */
+  height: 80px; /* Increased from 68px */
   filter: none;
 }
 
