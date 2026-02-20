@@ -2058,6 +2058,21 @@
   margin-top: calc(-1 * var(--space-8));
 }
 
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--space-20) 0;
+}
+
+.no-results h3 {
+  color: var(--white);
+  margin-bottom: var(--space-4);
+}
+
+.no-results p {
+  color: var(--gray-400);
+}
+
 .article-card {
   background: var(--glass-navy);
   border: 1px solid var(--glass-border);
