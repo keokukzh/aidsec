@@ -97,13 +97,13 @@
   }
 
   .nav__logo-img {
-    width: 80px;
-    height: 80px;
+    width: 110px; /* Increased from 80px */
+    height: 110px; /* Increased from 80px */
   }
 
   .nav.scrolled .nav__logo-img {
-    width: 48px;
-    height: 48px;
+    width: 60px; /* Increased from 48px */
+    height: 60px; /* Increased from 48px */
   }
 
   h1 {
@@ -267,10 +267,10 @@
     height: 80px;
   }
 
-  /* Logo initial 72px auf kleinen Screens */
+  /* Logo initial 90px auf kleinen Screens */
   .nav__logo-img {
-    width: 72px;
-    height: 72px;
+    width: 90px; /* Increased from 72px */
+    height: 90px; /* Increased from 72px */
   }
 
   .nav.scrolled {
@@ -278,8 +278,8 @@
   }
 
   .nav.scrolled .nav__logo-img {
-    width: 44px;
-    height: 44px;
+    width: 54px; /* Increased from 44px */
+    height: 54px; /* Increased from 44px */
   }
 
   .section {
