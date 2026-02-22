@@ -608,6 +608,14 @@
   font-style: italic;
 }
 
+.lagebericht__sources {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--gray-500);
+  font-style: italic;
+  margin-top: var(--space-6);
+}
+
 /* ── Grades Section ── */
 .grades {
   display: flex;

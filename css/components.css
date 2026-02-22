@@ -1268,6 +1268,12 @@ body .nav.scrolled {
   font-size: var(--text-lg);
 }
 
+.pricing-compare__text {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gold);
+}
+
 .pricing-compare__footnote {
   display: flex;
   align-items: center;
