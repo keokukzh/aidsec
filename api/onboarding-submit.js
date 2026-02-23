@@ -33,6 +33,16 @@ function trimValue(value) {
   return String(value).trim();
 }
 
+function getEnvFirst(names) {
+  for (let i = 0; i < names.length; i++) {
+    const value = process.env[names[i]];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+  return '';
+}
+
 function normalizePayload(body) {
   const data = body && typeof body === 'object' ? body : {};
   return {
@@ -109,16 +119,24 @@ function buildMailBody(payload, meta) {
 }
 
 function getTransportConfig() {
-  const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT || 587);
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const host = getEnvFirst(['SMTP_HOST', 'SMTP_SERVER', 'EMAIL_SERVER_HOST']);
+  const portRaw = getEnvFirst(['SMTP_PORT', 'EMAIL_SERVER_PORT']) || '587';
+  const port = Number(portRaw);
+  const user = getEnvFirst(['SMTP_USER', 'SMTP_USERNAME', 'EMAIL_SERVER_USER']);
+  const pass = getEnvFirst(['SMTP_PASS', 'SMTP_PASSWORD', 'EMAIL_SERVER_PASSWORD']);
 
-  if (!host || !user || !pass) {
-    return null;
+  const missing = [];
+  if (!host) missing.push('SMTP_HOST');
+  if (!user) missing.push('SMTP_USER');
+  if (!pass) missing.push('SMTP_PASS');
+  if (!Number.isFinite(port) || port <= 0) missing.push('SMTP_PORT');
+
+  if (missing.length > 0) {
+    return { ok: false, missing };
   }
 
   return {
+    ok: true,
     host,
     port,
     secure: port === 465,
@@ -163,19 +181,30 @@ export default async function handler(req, res) {
   }
 
   const transportConfig = getTransportConfig();
-  if (!transportConfig) {
-    return res.status(500).json({ error: 'SMTP ist nicht konfiguriert.' });
+  if (!transportConfig.ok) {
+    return res.status(500).json({
+      error:
+        'SMTP ist nicht konfiguriert. Fehlende Variablen in Vercel: ' +
+        transportConfig.missing.join(', '),
+    });
   }
 
-  const toEmail = process.env.ONBOARDING_TO_EMAIL || 'aid.destani@aidsec.ch';
-  const fromEmail = process.env.ONBOARDING_FROM_EMAIL || process.env.SMTP_USER;
+  const toEmail = getEnvFirst(['ONBOARDING_TO_EMAIL', 'MAIL_TO']) || 'aid.destani@aidsec.ch';
+  const fromEmail =
+    getEnvFirst(['ONBOARDING_FROM_EMAIL', 'MAIL_FROM']) ||
+    getEnvFirst(['SMTP_USER', 'SMTP_USERNAME', 'EMAIL_SERVER_USER']);
   const meta = {
     ip,
     userAgent: req.headers['user-agent'] || 'unknown',
   };
 
   try {
-    const transporter = nodemailer.createTransport(transportConfig);
+    const transporter = nodemailer.createTransport({
+      host: transportConfig.host,
+      port: transportConfig.port,
+      secure: transportConfig.secure,
+      auth: transportConfig.auth,
+    });
     await transporter.sendMail({
       from: fromEmail,
       to: toEmail,
