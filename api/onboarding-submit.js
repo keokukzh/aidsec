@@ -34,13 +34,37 @@ function trimValue(value) {
 }
 
 function getEnvFirst(names) {
+  const env = process.env || {};
+
   for (let i = 0; i < names.length; i++) {
-    const value = process.env[names[i]];
+    const value = env[names[i]];
     if (typeof value === 'string' && value.trim()) {
       return value.trim();
     }
+
+    const wanted = names[i].toLowerCase();
+    const matchedKey = Object.keys(env).find((key) => key.toLowerCase() === wanted);
+    if (matchedKey) {
+      const matchedValue = env[matchedKey];
+      if (typeof matchedValue === 'string' && matchedValue.trim()) {
+        return matchedValue.trim();
+      }
+    }
   }
+
   return '';
+}
+
+function listVisibleSmtpEnvKeys() {
+  return Object.keys(process.env || {}).filter((key) => {
+    const k = key.toLowerCase();
+    return (
+      k.includes('smtp') ||
+      k.includes('mail') ||
+      k.includes('email_server') ||
+      k.includes('onboarding_')
+    );
+  });
 }
 
 function normalizePayload(body) {
@@ -182,10 +206,14 @@ export default async function handler(req, res) {
 
   const transportConfig = getTransportConfig();
   if (!transportConfig.ok) {
+    const visible = listVisibleSmtpEnvKeys();
     return res.status(500).json({
       error:
         'SMTP ist nicht konfiguriert. Fehlende Variablen in Vercel: ' +
-        transportConfig.missing.join(', '),
+        transportConfig.missing.join(', ') +
+        (visible.length > 0
+          ? '. Laufzeit sieht aktuell diese Mail-Keys: ' + visible.join(', ')
+          : '. Laufzeit sieht aktuell keine SMTP/Mail-Variablen.'),
     });
   }
 
