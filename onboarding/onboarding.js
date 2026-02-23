@@ -19,7 +19,7 @@
   var twintQrMap = {
     'rapid-header-fix': TWINT_QR_RAPID,
     'kanzlei-haertung': TWINT_QR_HAERTUNG,
-    'cyber-mandat': TWINT_QR_MANDAT
+    'cyber-mandat': TWINT_QR_MANDAT,
   };
 
   /* ── DOM refs ──────────────────────────── */
@@ -82,7 +82,12 @@
           errorEl.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
           errorEl.classList.add('ob-error--visible');
         }
-      } else if (el.type === 'url' && el.value && !/^https?:\/\/.+/i.test(el.value) && !/^[a-z0-9][\w.-]+\.[a-z]{2,}/i.test(el.value)) {
+      } else if (
+        el.type === 'url' &&
+        el.value &&
+        !/^https?:\/\/.+/i.test(el.value) &&
+        !/^[a-z0-9][\w.-]+\.[a-z]{2,}/i.test(el.value)
+      ) {
         valid = false;
         el.classList.add('ob-input--error');
         if (errorEl) {
@@ -147,7 +152,9 @@
 
   paymentCards.forEach(function (card) {
     card.addEventListener('click', function () {
-      paymentCards.forEach(function (c) { c.classList.remove('ob-payment-card--active'); });
+      paymentCards.forEach(function (c) {
+        c.classList.remove('ob-payment-card--active');
+      });
       card.classList.add('ob-payment-card--active');
       selectedPayment = card.getAttribute('data-method');
       if (paymentInput) paymentInput.value = selectedPayment;
@@ -201,18 +208,46 @@
       // Collect form data
       var formData = new FormData(form);
 
+      // Diagnostic: Warn if on localhost (Netlify tools don't run locally)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.warn(
+          'Form-E-Mails funktionieren nur auf dem Live-System (Netlify). Lokal wird nur die Weiterleitung simuliert.'
+        );
+        // Still redirect for local testing UX
+        setTimeout(function () {
+          window.location.href = '/onboarding/bestaetigung/';
+        }, 500);
+        return;
+      }
+
+      // Netlify requires form-name to be present in AJAX body
+      var body = new URLSearchParams();
+      // Ensure form-name is first
+      body.append('form-name', form.getAttribute('name'));
+      // Add all other fields
+      for (var pair of formData.entries()) {
+        body.append(pair[0], pair[1]);
+      }
+
       // Submit via fetch to Netlify
       fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
+        body: body.toString(),
       })
-        .then(function () {
-          window.location.href = '/onboarding/bestaetigung/';
+        .then(function (response) {
+          if (response.ok) {
+            window.location.href = '/onboarding/bestaetigung/';
+          } else {
+            throw new Error('Server-Fehler');
+          }
         })
-        .catch(function () {
-          // Even on error, redirect (Netlify may handle differently in dev)
-          window.location.href = '/onboarding/bestaetigung/';
+        .catch(function (error) {
+          console.error('Submission error:', error);
+          alert(
+            'Es gab ein Problem beim Senden Ihrer Daten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt per E-Mail.'
+          );
+          goToStep(currentStep); // Stay on current step
         });
     });
   }
@@ -227,12 +262,14 @@
       if (radio) {
         radio.checked = true;
         // Visual toggle
-        optionCards.forEach(function (c) { c.classList.remove('ob-option-card--active'); });
+        optionCards.forEach(function (c) {
+          c.classList.remove('ob-option-card--active');
+        });
         card.classList.add('ob-option-card--active');
 
         // Show/Hide credentials
         if (credentialsSection) {
-          credentialsSection.style.display = (radio.value === 'a') ? 'block' : 'none';
+          credentialsSection.style.display = radio.value === 'a' ? 'block' : 'none';
         }
       }
     });
@@ -263,7 +300,7 @@
       }
 
       // Remove trailing slash
-      url = url.replace(/\/$/, "");
+      url = url.replace(/\/$/, '');
 
       // Update link
       resetBtn.href = url + '/wp-login.php?action=lostpassword';

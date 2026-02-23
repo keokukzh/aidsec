@@ -41,17 +41,33 @@
     setSubmitting(true);
 
     var formData = new FormData(form);
-    
-    // Netlify needs the form-name specifically for AJAX submissions
-    // We also ensure it's application/x-www-form-urlencoded
+
+    // Diagnostic: Warn if on localhost
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      console.warn(
+        'Form-E-Mails funktionieren nur auf dem Live-System (Netlify). Lokal wird nur die Weiterleitung simuliert.'
+      );
+      setTimeout(function () {
+        window.location.href = '/onboarding/bestaetigung/';
+      }, 500);
+      return;
+    }
+
+    // Netlify requires form-name to be present in AJAX body
+    var body = new URLSearchParams();
+    body.append('form-name', form.getAttribute('name'));
+    for (var pair of formData.entries()) {
+      body.append(pair[0], pair[1]);
+    }
+
+    // Submit via fetch to Netlify
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(formData).toString()
+      body: body.toString(),
     })
       .then(function (response) {
         if (response.ok) {
-          // Redirect to confirmation or show success
           window.location.href = '/onboarding/bestaetigung/';
         } else {
           throw new Error('Server-Antwort war nicht ok');
@@ -60,12 +76,12 @@
       .catch(function (error) {
         console.error('Submission error:', error);
         if (errorMsg) {
-          errorMsg.textContent = 'Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt per E-Mail.';
+          errorMsg.textContent =
+            'Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt per E-Mail.';
           errorMsg.hidden = false;
           errorMsg.removeAttribute('hidden');
         }
         setSubmitting(false);
       });
   });
-
 })();
