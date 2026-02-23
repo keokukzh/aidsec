@@ -2245,6 +2245,17 @@
   margin-bottom: var(--space-4);
 }
 
+.cta-banner h2 {
+  color: var(--white);
+  margin-bottom: var(--space-4);
+}
+
+.cta-banner p {
+  color: var(--gray-100);
+  margin-bottom: var(--space-8);
+  font-size: var(--text-lg);
+}
+
 .cta-banner--footer {
   margin-top: var(--space-20);
 }
