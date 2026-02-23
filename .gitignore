@@ -14,3 +14,5 @@ config.json
 .vercel
 .env*.local
 .env.vercel*
+scripts/reorder-sections.py
+scripts/verify.py
