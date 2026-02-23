@@ -43,6 +43,8 @@ npm run format  # Prettier
 
 Onboarding forms (`/onboarding/*`) submit to `POST /api/onboarding-submit` (Vercel Serverless Function) and send internal notifications via SMTP.
 
+Homepage Sicherheits-Check (`#contact-form`) submits to `POST /api/contact-submit` and sends a structured internal Anfrage-Mail.
+
 Required Vercel Environment Variables:
 
 - `SMTP_HOST`
@@ -51,6 +53,11 @@ Required Vercel Environment Variables:
 - `SMTP_PASS`
 - `ONBOARDING_TO_EMAIL` (defaults to `aid.destani@aidsec.ch`)
 - `ONBOARDING_FROM_EMAIL` (optional, defaults to `SMTP_USER`)
+
+Optional separate target/sender for Sicherheits-Check:
+
+- `CONTACT_TO_EMAIL` (fallback: `ONBOARDING_TO_EMAIL` → `MAIL_TO` → `aid.destani@aidsec.ch`)
+- `CONTACT_FROM_EMAIL` (fallback: `ONBOARDING_FROM_EMAIL` → `MAIL_FROM` → `SMTP_USER`)
 
 Optional durable rate-limiting (recommended for production):
 
@@ -72,7 +79,7 @@ Optional durable rate-limiting (recommended for production):
 
 ## Project Structure
 
-```
+```text
 aidsec.ch/
 ├── index.html, 404.html, impressum.html, agb.html, datenschutz.html
 ├── vercel.json        # Security headers + cache config
