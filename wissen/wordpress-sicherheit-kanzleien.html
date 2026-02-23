@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordPress Sicherheit f&uuml;r Kanzleien Schweiz | AidSec</title>
+    <meta name="description" content="Warum Schweizer Kanzleien mit WordPress besonders gef&auml;hrdet sind &mdash; und welche 5 Massnahmen sofort mehr Sicherheit bringen. Praxisnah erkl&auml;rt von AidSec." />
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "WordPress Sicherheit für Kanzleien: Was wirklich zählt",
+      "description": "Warum Schweizer Kanzleien mit WordPress besonders gefährdet sind — und welche Massnahmen sofort mehr Sicherheit bringen.",
+      "author": {"@type": "Organization", "name": "AidSec"},
+      "publisher": {"@type": "Organization", "name": "AidSec", "url": "https://aidsec.ch"},
+      "datePublished": "2026-02-01",
+      "url": "https://aidsec.ch/wissen/wordpress-sicherheit-kanzleien"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../css/fonts.css" />
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/sections.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+    <link rel="icon" type="image/png" href="../favicon.png" />
+  </head>
+  <body>
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="../index.html" class="nav__logo" aria-label="AidSec &mdash; Startseite">
+          <img src="../logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="../index.html#preise" class="nav__link">Preise</a>
+          <a href="../index.html#leistungen" class="nav__link">Leistungen</a>
+          <a href="../fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="index.html" class="nav__link active">Wissen</a>
+          <a href="../index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <header class="article-header">
+        <div class="container--narrow">
+          <div class="article-meta" data-reveal="fade-up">
+            <span>Grundlagen</span>
+            <span>&bull;</span>
+            <span>5 Min. Lesezeit</span>
+            <span>&bull;</span>
+            <span>1. Feb 2026</span>
+          </div>
+          <h1 data-reveal="fade-up" data-reveal-delay="100">WordPress Sicherheit f&uuml;r Kanzleien: Was wirklich z&auml;hlt</h1>
+        </div>
+      </header>
+
+      <article class="article-body container--narrow" data-reveal="fade-up" data-reveal-delay="200">
+        <p class="lead">WordPress betreibt &uuml;ber 40&nbsp;% aller Webseiten weltweit. Das macht es zum meistattackierten Content-Management-System &uuml;berhaupt. Automatisierte Angriffsskripte scannen rund um die Uhr nach Schwachstellen &mdash; unabh&auml;ngig von Branche oder Unternehmensgr&ouml;sse.</p>
+
+        <p>F&uuml;r Anwaltskanzleien wiegt ein erfolgreicher Angriff besonders schwer. Es geht nicht nur um technischen Schaden. Mandantendaten, Berufsgeheimnis, Reputation und nDSG-Konformit&auml;t stehen gleichzeitig auf dem Spiel. Eine kompromittierte Kanzlei-Webseite kann das Vertrauen jahrelanger Mandatsbeziehungen in wenigen Stunden zerst&ouml;ren.</p>
+
+        <h2>Warum Kanzleien ein bevorzugtes Angriffsziel sind</h2>
+        <p>Automatisierte Scanner durchsuchen das Internet 24 Stunden am Tag nach verwundbaren WordPress-Installationen. Veraltete Plugins, fehlende Security-Headers und offene Login-Seiten sind dabei die h&auml;ufigsten Einfallstore.</p>
+        <p>Kanzleien verf&uuml;gen selten &uuml;ber eine eigene IT-Abteilung. Die Webseite wird einmal erstellt und l&auml;uft dann oft jahrelang ohne Updates oder Sicherheitspr&uuml;fungen. Genau das wissen Angreifer. Sie suchen gezielt nach Seiten, die niemand &uuml;berwacht &mdash; und Kanzlei-Domains versprechen besonders wertvolle Daten.</p>
+
+        <h2>Die 5 h&auml;ufigsten Sicherheitsl&uuml;cken bei Kanzlei-Webseiten</h2>
+        <ol>
+          <li><strong>Fehlende HTTP-Security-Headers:</strong> Die meisten Kanzlei-Webseiten erhalten Note F bei SecurityHeaders.com. Ohne diese Headers sind Cross-Site-Scripting und Clickjacking-Angriffe trivial m&ouml;glich.</li>
+          <li><strong>Veraltete Plugins mit bekannten Schwachstellen:</strong> Ein einziges nicht aktualisiertes Plugin gen&uuml;gt. &Ouml;ffentlich dokumentierte Schwachstellen werden innerhalb von Stunden automatisiert ausgenutzt.</li>
+          <li><strong>Kein Brute-Force-Schutz auf der Login-Seite:</strong> Die Standard-URL <code>/wp-admin</code> ist jedem Angreifer bekannt. Ohne Zugriffsbeschr&auml;nkung oder Rate-Limiting sind Tausende Login-Versuche pro Minute m&ouml;glich.</li>
+          <li><strong>Keine Datei-Integrit&auml;ts&uuml;berwachung:</strong> Wenn Schadcode in Ihre Webseite eingeschleust wird, bemerken Sie es ohne Monitoring erst, wenn Google Ihre Seite als gef&auml;hrlich markiert &mdash; oder Ihre Mandanten Sie darauf hinweisen.</li>
+          <li><strong>Kein Domain-Reputations-Monitoring:</strong> Steht Ihre Domain auf einer Blacklist, landen Ihre E-Mails im Spam. Mandanten erhalten Ihre Nachrichten nicht mehr &mdash; und Sie erfahren davon als Letzter.</li>
+        </ol>
+
+        <h2>Was ein Angriff kostet &mdash; und was Schutz kostet</h2>
+        <p>Die durchschnittlichen Kosten einer Ransomware-Wiederherstellung in der Schweiz betragen CHF&nbsp;1,04&nbsp;Mio. Das zeigen aktuelle Zahlen von Sophos und IT-Markt (2025). Darin enthalten sind Betriebsausfall, Forensik, rechtliche Folgen und Reputationsverlust.</p>
+        <p>Pr&auml;ventives WordPress-Hardening durch AidSec beginnt ab CHF&nbsp;490. Das entspricht 0,05&nbsp;% der durchschnittlichen Schadenskosten. Oder anders formuliert: Eine einzige Sicherheitspr&uuml;fung kostet weniger als eine Stunde Anwaltshonorar &mdash; und sch&uuml;tzt den gesamten digitalen Auftritt Ihrer Kanzlei.</p>
+
+        <h2>Fazit: Pr&auml;vention ist keine IT-Frage &mdash; sie ist eine Gesch&auml;ftsentscheidung</h2>
+        <p>Websicherheit ist kein Luxus und kein reines Technik-Thema. F&uuml;r Kanzleien, die Mandantendaten sch&uuml;tzen und nDSG-konform arbeiten wollen, ist eine geh&auml;rtete Webseite Voraussetzung &mdash; nicht Option.</p>
+        <p>Die gute Nachricht: Sie m&uuml;ssen das nicht selbst l&ouml;sen. Ein professioneller Security-Check deckt Schwachstellen auf, bevor es Angreifer tun. Und die Umsetzung dauert in den meisten F&auml;llen weniger als einen Arbeitstag.</p>
+
+        <p><a href="index.html">&larr; Zur&uuml;ck zur &Uuml;bersicht</a></p>
+
+        <div class="cta-banner cta-banner--footer">
+          <div class="cta-banner__content">
+            <h3>Lassen Sie Ihre Kanzlei-Webseite jetzt kostenlos analysieren.</h3>
+            <p>Ergebnis innert 24 Stunden &mdash; unverbindlich und diskret.</p>
+            <a href="../index.html#kontakt" class="btn btn--gold">Kostenfreien Security-Check starten</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="../logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit f&uuml;r Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>

@@ -1154,9 +1154,9 @@ body .nav.scrolled {
 }
 
 .cookie-banner__btn--reject {
-  background: transparent;
-  color: var(--gray-400);
-  border: 1px solid var(--gray-600);
+  background: var(--navy);
+  color: var(--white);
+  border: 1px solid var(--gray-400);
 }
 
 .cookie-banner__btn--reject:hover {

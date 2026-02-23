@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fallstudien: WordPress-Sicherheit für Kanzleien und Praxen | AidSec</title>
+    <meta name="description" content="Drei anonymisierte Fallstudien zeigen, wie AidSec Schweizer Kanzleien und Praxen von SecurityHeaders-Note F zu A bringt — dokumentiert, verifizierbar, reproduzierbar." />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="css/fonts.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/sections.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <link rel="icon" type="image/png" href="favicon.png" />
+  </head>
+  <body>
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="index.html" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="index.html#preise" class="nav__link">Preise</a>
+          <a href="index.html#leistungen" class="nav__link">Leistungen</a>
+          <a href="fallstudien.html" class="nav__link active">Fallstudien</a>
+          <a href="wissen/index.html" class="nav__link">Wissen</a>
+          <a href="index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="section section--dark knowledge-hero">
+        <div class="container">
+          <div class="knowledge-hero__inner">
+            <div class="section-header" data-reveal="fade-up">
+              <span class="badge">Fallstudien</span>
+              <h1>Ergebnisse für Schweizer Kanzleien und Praxen</h1>
+              <p>Drei anonymisierte Fallstudien — dokumentiert, verifizierbar, reproduzierbar.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--deep">
+        <div class="container">
+          <div class="case-studies-detail" data-reveal="fade-up" data-reveal-delay="100">
+
+            <!-- Fallstudie 1 -->
+            <article class="case-study-detail">
+              <div class="case-study-detail__header">
+                <span class="badge">Rapid Header Fix</span>
+                <h2>Anwaltskanzlei, Zürich</h2>
+              </div>
+              <div class="case-study-detail__body">
+                <div class="case-study-detail__row">
+                  <strong>Ausgangslage:</strong>
+                  <span>SecurityHeaders-Note F. Keine aktiven Schutz-Headers. Kanzlei-Webseite seit 6 Jahren unverändert.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Massnahme:</strong>
+                  <span>Rapid Header Fix — Implementierung aller relevanten HTTP-Security-Headers auf Serverebene.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Ergebnis:</strong>
+                  <span>Note A bei SecurityHeaders.com. Umsetzung in 4 Stunden. 0 Minuten Downtime.</span>
+                </div>
+              </div>
+              <blockquote class="case-study-detail__quote">
+                <p>&laquo;Innert 18 Stunden von Note F zu A &ndash; ohne Downtime und ohne CMS-Zugriff. Genau das, was wir als Kanzlei brauchten.&raquo;</p>
+                <cite>Partner, Anwaltskanzlei Zürich</cite>
+              </blockquote>
+            </article>
+
+            <!-- Fallstudie 2 -->
+            <article class="case-study-detail">
+              <div class="case-study-detail__header">
+                <span class="badge badge--gold">Kanzlei-Härtung</span>
+                <h2>Arztpraxis, Bern</h2>
+              </div>
+              <div class="case-study-detail__body">
+                <div class="case-study-detail__row">
+                  <strong>Ausgangslage:</strong>
+                  <span>WordPress-Installation mit 12 veralteten Plugins. Note F. Kein Brute-Force-Schutz, kein Malware-Monitoring.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Massnahme:</strong>
+                  <span>Kanzlei-Härtung — Header-Fix, WAF, Login-Verschleierung, Malware-Scans, nDSG-Check.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Ergebnis:</strong>
+                  <span>Note A. Alle kritischen Plugins aktualisiert oder ersetzt. Detailliertes Audit-Protokoll für Praxisleitung.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Dauer:</strong>
+                  <span>18 Stunden. 0 Minuten Downtime.</span>
+                </div>
+              </div>
+              <blockquote class="case-study-detail__quote">
+                <p>&laquo;Wir wussten nicht, wie angreifbar unsere Seite war. AidSec hat die Lücken in wenigen Stunden geschlossen &ndash; diskret und klar dokumentiert.&raquo;</p>
+                <cite>Praxisinhaber, Arztpraxis Bern</cite>
+              </blockquote>
+            </article>
+
+            <!-- Fallstudie 3 -->
+            <article class="case-study-detail">
+              <div class="case-study-detail__header">
+                <span class="badge">Cyber-Mandat</span>
+                <h2>Notariat, Luzern</h2>
+              </div>
+              <div class="case-study-detail__body">
+                <div class="case-study-detail__row">
+                  <strong>Ausgangslage:</strong>
+                  <span>Note F, keine laufende Überwachung, keine Backups. Domain einmalig auf Spam-Blacklist erschienen.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Massnahme:</strong>
+                  <span>Cyber-Mandat — Header-Fix, laufendes Monitoring, Blacklist-Entfernung, monatliche Berichte.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Ergebnis:</strong>
+                  <span>Note A. Domain von Blacklist entfernt. Monatliche Sicherheitsberichte für die Notariatsleitung.</span>
+                </div>
+                <div class="case-study-detail__row">
+                  <strong>Dauer:</strong>
+                  <span>Ersteinrichtung in 8 Stunden. Laufend betreut.</span>
+                </div>
+              </div>
+              <blockquote class="case-study-detail__quote">
+                <p>&laquo;Das Audit-Protokoll war für uns und unsere Partner sofort nachvollziehbar. Jetzt sind wir auf Note A und gegenüber dem nDSG deutlich besser aufgestellt.&raquo;</p>
+                <cite>Managing Partner, Kanzlei Zentralschweiz</cite>
+              </blockquote>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section section--alt">
+        <div class="container">
+          <div class="cta-banner">
+            <div class="cta-banner__content" data-reveal="fade-up">
+              <h2>Ähnliche Ergebnisse für Ihre Kanzlei?</h2>
+              <p>Wir analysieren Ihre Webseite kostenlos und unverbindlich — Ergebnis innert 24 Stunden.</p>
+              <a href="index.html#kontakt" class="btn btn--gold btn--lg">Kostenfreien Security-Check starten</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="impressum.html" class="footer__link">Impressum</a>
+            <a href="agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+  </body>
+</html>

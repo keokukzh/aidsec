@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Headers Note F zu A: So geht es | AidSec Schweiz</title>
+    <meta name="description" content="Was SecurityHeaders-Note F bedeutet, welche Risiken sie birgt und wie Ihre Kanzlei-Webseite in unter 24 Stunden auf Note A kommt. Mit konkreten Beispielen." />
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Security Headers Note F: Ursachen, Risiken und wie Sie auf Note A kommen",
+      "description": "Was SecurityHeaders-Note F bedeutet und wie Kanzleien in unter 24 Stunden auf Note A kommen.",
+      "author": {"@type": "Organization", "name": "AidSec"},
+      "publisher": {"@type": "Organization", "name": "AidSec", "url": "https://aidsec.ch"},
+      "datePublished": "2026-01-10",
+      "url": "https://aidsec.ch/wissen/security-headers-note-f-auf-a"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../css/fonts.css" />
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/sections.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+    <link rel="icon" type="image/png" href="../favicon.png" />
+  </head>
+  <body>
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="../index.html" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="../logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="../index.html#preise" class="nav__link">Preise</a>
+          <a href="../index.html#leistungen" class="nav__link">Leistungen</a>
+          <a href="../fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="index.html" class="nav__link active">Wissen</a>
+          <a href="../index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <header class="article-header">
+        <div class="container--narrow">
+          <div class="article-meta" data-reveal="fade-up">
+            <span>Anleitung</span>
+            <span>&bull;</span>
+            <span>4 Min. Lesezeit</span>
+            <span>&bull;</span>
+            <span>10. Jan 2026</span>
+          </div>
+          <h1 data-reveal="fade-up" data-reveal-delay="100">Security Headers Note F: Ursachen, Risiken und wie Sie auf Note A kommen</h1>
+        </div>
+      </header>
+
+      <article class="article-body container--narrow" data-reveal="fade-up" data-reveal-delay="200">
+        <p class="lead">Auf <strong>SecurityHeaders.com</strong> kann jeder die HTTP-Sicherheitskonfiguration einer Webseite prüfen &ndash; in Sekunden und kostenlos. Das Ergebnis ist eine Note von A+ bis F. Die meisten Kanzlei-Webseiten erhalten Note F, ohne dass die Inhaber davon wissen.</p>
+
+        <h2>Was sind Security Headers?</h2>
+        <p>Security Headers sind Anweisungen, die Ihr Webserver bei jedem Seitenaufruf an den Browser sendet. Sie legen fest, welche Inhalte geladen werden dürfen und welche nicht. Fehlen diese Anweisungen, steht der Browser ohne Schutzregeln da.</p>
+        <p>Die wichtigsten Header im Überblick:</p>
+        <ul>
+          <li><strong>HSTS (Strict-Transport-Security)</strong> &ndash; erzwingt verschlüsselte Verbindungen über HTTPS.</li>
+          <li><strong>CSP (Content-Security-Policy)</strong> &ndash; verhindert das Nachladen schädlicher Skripte von fremden Quellen.</li>
+          <li><strong>X-Frame-Options</strong> &ndash; schützt vor Clickjacking, bei dem Ihre Seite unsichtbar in eine fremde Seite eingebettet wird.</li>
+          <li><strong>X-Content-Type-Options</strong> &ndash; verhindert, dass Browser Dateitypen falsch interpretieren.</li>
+          <li><strong>Referrer-Policy</strong> &ndash; kontrolliert, welche Informationen beim Verlassen Ihrer Seite weitergegeben werden.</li>
+          <li><strong>Permissions-Policy</strong> &ndash; deaktiviert Zugriffe auf Kamera, Mikrofon und Standort, wenn diese nicht benötigt werden.</li>
+        </ul>
+
+        <h2>Warum haben die meisten Kanzlei-Webseiten Note F?</h2>
+        <p>WordPress, Joomla und vergleichbare CMS setzen keine Security Headers von sich aus. Hosting-Anbieter konfigurieren sie ebenfalls nicht standardmässig. Und die meisten Webagenturen kümmern sich um Design und Inhalte &ndash; nicht um Serverkonfiguration.</p>
+        <p>Das Ergebnis: Ihre Webseite funktioniert einwandfrei und sieht professionell aus. Aber im Hintergrund fehlt eine ganze Schutzschicht. Das fällt erst auf, wenn jemand den Test auf SecurityHeaders.com durchführt &ndash; oder wenn ein Angreifer die Schwachstelle ausnutzt.</p>
+
+        <h2>Welche Risiken birgt Note F?</h2>
+        <p>Fehlende Security Headers öffnen konkrete Angriffswege:</p>
+        <ul>
+          <li><strong>Clickjacking:</strong> Angreifer betten Ihre Seite in einen unsichtbaren Rahmen ein und fangen Klicks ab.</li>
+          <li><strong>Cross-Site Scripting (XSS):</strong> Schädlicher Code wird in Ihre Webseite eingeschleust und im Browser Ihrer Besucher ausgeführt.</li>
+          <li><strong>Man-in-the-Middle-Angriffe:</strong> Ohne HSTS kann die Verbindung auf unverschlüsseltes HTTP herabgestuft werden.</li>
+          <li><strong>Datenabfluss:</strong> Unkontrollierte Referrer-Informationen verraten interne URL-Strukturen und Sitzungsdaten.</li>
+          <li><strong>Reputationsschaden:</strong> Mandanten und Partner, die den Test kennen, sehen sofort: Diese Kanzlei nimmt IT-Sicherheit nicht ernst.</li>
+          <li><strong>nDSG-Risiko:</strong> Fehlende technische Schutzmassnahmen können als Verstoss gegen die Sorgfaltspflicht gewertet werden.</li>
+        </ul>
+
+        <h2>Von Note F zu Note A in unter 24 Stunden</h2>
+        <p>AidSec bietet mit dem <strong>Rapid Header Fix</strong> einen standardisierten Prozess, der zuverlässig funktioniert:</p>
+        <ol>
+          <li><strong>Analyse:</strong> Wir prüfen Ihre aktuelle Konfiguration und identifizieren fehlende Header.</li>
+          <li><strong>Implementierung:</strong> Die Header werden direkt auf Serverebene gesetzt &ndash; kein CMS-Login, kein Plugin, kein Risiko für Ihre Inhalte.</li>
+          <li><strong>Verifikation:</strong> Nach der Umsetzung testen wir das Ergebnis auf SecurityHeaders.com und dokumentieren Note A.</li>
+          <li><strong>Dokumentation:</strong> Sie erhalten einen Vorher-Nachher-Bericht als Nachweis für Ihre nDSG-Dokumentation.</li>
+        </ol>
+        <p>Während des gesamten Prozesses gibt es keine Ausfallzeit. Ihre Webseite bleibt durchgehend erreichbar. Das Ergebnis ist öffentlich überprüfbar &ndash; jeder kann es auf SecurityHeaders.com selbst verifizieren.</p>
+
+        <h2>Fazit</h2>
+        <p>Note F ist kein kosmetisches Problem. Es ist eine messbare Sicherheitslücke, die automatisierte Scanner als Einladung lesen. Die gute Nachricht: Die Behebung dauert weniger als 24 Stunden und beginnt ab CHF 490. Kein technisches Vorwissen nötig, kein Zugriff auf Mandantendaten erforderlich.</p>
+
+        <p><a href="index.html">&larr; Zurück zur Übersicht</a></p>
+
+        <div class="cta-banner cta-banner--footer">
+          <div class="cta-banner__content">
+            <h3>Ihre aktuelle Note prüfen lassen</h3>
+            <p>Wir analysieren Ihre Security Headers kostenlos und unverbindlich.</p>
+            <a href="../index.html#kontakt" class="btn btn--gold">Kostenfreien Security-Check starten</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="../logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>

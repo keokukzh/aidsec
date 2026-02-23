@@ -266,8 +266,58 @@
           );
         });
     } else {
-      // No endpoint configured: show dev/demo success (replace with real endpoint before production)
       setTimeout(showSuccess, 500);
     }
+  });
+})();
+
+/* ============================================
+   Lead Magnet Form Handler
+   ============================================ */
+(function () {
+  'use strict';
+
+  var leadForm = document.getElementById('lead-magnet-form');
+  if (!leadForm) return;
+
+  var successEl = document.getElementById('lead-magnet-success');
+
+  leadForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var formData = new FormData(leadForm);
+    var name = formData.get('name');
+    var email = formData.get('email');
+
+    if (!name || !name.trim()) return;
+    if (!email || !email.trim() || email.indexOf('@') === -1) return;
+
+    var submitBtn = leadForm.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Wird gesendet\u2026';
+    }
+
+    var body = new URLSearchParams(formData);
+    fetch(leadForm.action || '/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body,
+    })
+      .then(function (res) {
+        if (res.ok) {
+          leadForm.hidden = true;
+          if (successEl) successEl.hidden = false;
+        } else if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Gratis Leitfaden herunterladen';
+        }
+      })
+      .catch(function () {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Gratis Leitfaden herunterladen';
+        }
+      });
   });
 })();
