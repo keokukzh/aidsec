@@ -1396,14 +1396,17 @@ body .nav.scrolled {
 }
 
 .whatsapp-cta__link {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 56px;
   height: 56px;
+  border: 0;
   border-radius: 50%;
   background: #25d366;
   color: #fff;
+  cursor: pointer;
   box-shadow:
     0 4px 16px rgba(37, 211, 102, 0.35),
     0 2px 6px rgba(0, 0, 0, 0.2);
@@ -1428,6 +1431,30 @@ body .nav.scrolled {
   flex-shrink: 0;
 }
 
+.whatsapp-cta__popup {
+  position: absolute;
+  right: 68px;
+  bottom: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gold);
+  background: var(--navy);
+  color: var(--white);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.whatsapp-cta__popup.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Pulse ring effect */
 .whatsapp-cta__link::before {
   content: '';
@@ -1450,5 +1477,9 @@ body .nav.scrolled {
   .whatsapp-cta {
     bottom: 140px;
     right: 16px;
+  }
+
+  .whatsapp-cta__popup {
+    right: 64px;
   }
 }
