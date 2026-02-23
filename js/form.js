@@ -1,8 +1,9 @@
 /* ============================================
    AidSec Form JS — Validation & Submission
+   ES6 Refactored, nDSG Consent-aware
    ============================================ */
 
-(function () {
+(() => {
   'use strict';
 
   const form = document.getElementById('contact-form');
@@ -14,9 +15,9 @@
 
   // Pre-fill website field from security check widget
   try {
-    var savedUrl = sessionStorage.getItem('aidsec_checked_url');
+    const savedUrl = sessionStorage.getItem('aidsec_checked_url');
     if (savedUrl) {
-      var websiteField = form.querySelector('#website');
+      const websiteField = form.querySelector('#website');
       if (websiteField && !websiteField.value) {
         websiteField.value = savedUrl;
       }
@@ -29,20 +30,47 @@
   const useHcaptcha =
     hcaptchaSiteKey && hcaptchaSiteKey.length > 0 && !hcaptchaSiteKey.includes('PLATZHALTER');
 
-  // ── hCaptcha (optional) ──
-  if (useHcaptcha && hcaptchaContainer) {
+  // ── hCaptcha (consent-gated via consent.js) ──
+  function initHcaptcha() {
+    if (!useHcaptcha || !hcaptchaContainer) return;
+    if (!window.hcaptcha) return;
+
     hcaptchaContainer.hidden = false;
     hcaptchaContainer.setAttribute('aria-hidden', 'false');
-    const script = document.createElement('script');
-    script.src = 'https://js.hcaptcha.com/1/api.js';
-    script.async = true;
-    script.defer = true;
-    script.onload = function () {
+    window.hcaptcha.render('hcaptcha-container', {
+      sitekey: hcaptchaSiteKey,
+      theme: 'dark',
+    });
+  }
+
+  // Listen for consent — hCaptcha script is loaded by consent.js
+  document.addEventListener('aidsec:consent-granted', () => {
+    // hCaptcha script may take time to load; poll briefly
+    const checkHcaptcha = setInterval(() => {
       if (window.hcaptcha) {
-        window.hcaptcha.render('hcaptcha-container', { sitekey: hcaptchaSiteKey, theme: 'dark' });
+        clearInterval(checkHcaptcha);
+        initHcaptcha();
       }
-    };
-    document.head.appendChild(script);
+    }, 200);
+    // Stop polling after 10s
+    setTimeout(() => clearInterval(checkHcaptcha), 10000);
+  });
+
+  // If consent was already granted before page load, init immediately when hCaptcha is ready
+  if (window.aidsecConsent && window.aidsecConsent.hasConsent()) {
+    if (window.hcaptcha) {
+      initHcaptcha();
+    } else {
+      document.addEventListener('aidsec:consent-granted', () => {
+        const check = setInterval(() => {
+          if (window.hcaptcha) {
+            clearInterval(check);
+            initHcaptcha();
+          }
+        }, 200);
+        setTimeout(() => clearInterval(check), 10000);
+      });
+    }
   }
 
   // ── Validation Rules ──
@@ -50,25 +78,21 @@
     name: {
       required: true,
       message: 'Bitte geben Sie Ihren Namen ein.',
-      validate: function (value) {
-        return value.trim().length >= 2;
-      },
+      validate: (value) => value.trim().length >= 2,
     },
     email: {
       required: true,
       message: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
-      validate: function (value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-      },
+      validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
     },
     website: {
       required: true,
       message: 'Bitte geben Sie eine gültige Website-URL ein (z.B. https://www.beispiel.ch).',
-      validate: function (value) {
+      validate: (value) => {
         if (!value.trim()) return false;
         let url = value.trim();
         if (!/^https?:\/\//i.test(url)) {
-          url = 'https://' + url;
+          url = `https://${url}`;
         }
         try {
           new URL(url);
@@ -81,21 +105,17 @@
     company: {
       required: false,
       message: '',
-      validate: function () {
-        return true;
-      },
+      validate: () => true,
     },
     agb: {
       required: true,
       message: 'Bitte bestätigen Sie die AGB, um fortzufahren.',
-      validate: function (value, input) {
-        return input && input.checked;
-      },
+      validate: (_value, input) => input && input.checked,
     },
   };
 
   // ── Show/Clear Errors ──
-  function showError(input, message) {
+  const showError = (input, message) => {
     input.classList.add('error');
     const group = input.closest('.contact-form__group');
     const errorEl = group
@@ -104,9 +124,9 @@
     if (errorEl) {
       errorEl.textContent = message;
     }
-  }
+  };
 
-  function clearError(input) {
+  const clearError = (input) => {
     input.classList.remove('error');
     const group = input.closest('.contact-form__group');
     const errorEl = group
@@ -115,10 +135,10 @@
     if (errorEl) {
       errorEl.textContent = '';
     }
-  }
+  };
 
   // ── Validate Single Field ──
-  function validateField(input) {
+  const validateField = (input) => {
     const name = input.getAttribute('name');
     const validator = validators[name];
 
@@ -147,14 +167,14 @@
     }
 
     return true;
-  }
+  };
 
   // ── Validate All Fields ──
-  function validateForm() {
+  const validateForm = () => {
     let isValid = true;
     let firstInvalid = null;
 
-    form.querySelectorAll('.contact-form__input').forEach(function (input) {
+    form.querySelectorAll('.contact-form__input').forEach((input) => {
       if (!validateField(input)) {
         isValid = false;
         if (!firstInvalid) firstInvalid = input;
@@ -172,15 +192,14 @@
     }
 
     return isValid;
-  }
+  };
 
   // ── Real-time Validation on Blur ──
-  form.querySelectorAll('.contact-form__input').forEach(function (input) {
+  form.querySelectorAll('.contact-form__input').forEach((input) => {
     input.addEventListener('blur', function () {
       validateField(this);
     });
 
-    // Clear error on input
     input.addEventListener('input', function () {
       if (this.classList.contains('error')) {
         clearError(this);
@@ -199,7 +218,7 @@
   }
 
   // ── Form Submission ──
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -223,16 +242,16 @@
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
 
-    function showSuccess() {
+    const showSuccess = () => {
       submitBtn.classList.remove('loading');
       submitBtn.disabled = false;
       form.style.display = 'none';
       successMsg.hidden = false;
       successMsg.removeAttribute('hidden');
       successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    };
 
-    function showErrorMsg(message) {
+    const showErrorMsg = (message) => {
       submitBtn.classList.remove('loading');
       submitBtn.disabled = false;
       const errorEl = document.getElementById('form-submit-error');
@@ -242,16 +261,16 @@
         errorEl.hidden = false;
         errorEl.removeAttribute('hidden');
       }
-    }
+    };
 
     if (formAction) {
       const body = new URLSearchParams(formData);
       fetch(formAction, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body,
+        body,
       })
-        .then(function (res) {
+        .then((res) => {
           if (res.ok) {
             showSuccess();
           } else {
@@ -260,7 +279,7 @@
             );
           }
         })
-        .catch(function () {
+        .catch(() => {
           showErrorMsg(
             'Netzwerkfehler. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.'
           );
@@ -274,37 +293,37 @@
 /* ============================================
    Lead Magnet Form Handler
    ============================================ */
-(function () {
+(() => {
   'use strict';
 
-  var leadForm = document.getElementById('lead-magnet-form');
+  const leadForm = document.getElementById('lead-magnet-form');
   if (!leadForm) return;
 
-  var successEl = document.getElementById('lead-magnet-success');
+  const successEl = document.getElementById('lead-magnet-success');
 
-  leadForm.addEventListener('submit', function (e) {
+  leadForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    var formData = new FormData(leadForm);
-    var name = formData.get('name');
-    var email = formData.get('email');
+    const formData = new FormData(leadForm);
+    const name = formData.get('name');
+    const email = formData.get('email');
 
     if (!name || !name.trim()) return;
     if (!email || !email.trim() || email.indexOf('@') === -1) return;
 
-    var submitBtn = leadForm.querySelector('button[type="submit"]');
+    const submitBtn = leadForm.querySelector('button[type="submit"]');
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Wird gesendet\u2026';
     }
 
-    var body = new URLSearchParams(formData);
+    const body = new URLSearchParams(formData);
     fetch(leadForm.action || '/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body,
+      body,
     })
-      .then(function (res) {
+      .then((res) => {
         if (res.ok) {
           leadForm.hidden = true;
           if (successEl) successEl.hidden = false;
@@ -313,7 +332,7 @@
           submitBtn.textContent = 'Gratis Leitfaden herunterladen';
         }
       })
-      .catch(function () {
+      .catch(() => {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Gratis Leitfaden herunterladen';

@@ -67,7 +67,7 @@ exports.handler = async (event) => {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 6000);
+    const timeout = setTimeout(() => controller.abort(), 8000);
 
     const fetchOpts = {
       signal: controller.signal,
@@ -106,7 +106,7 @@ exports.handler = async (event) => {
   } catch (err) {
     if (err.name === 'AbortError') {
       return jsonResponse(504, {
-        error: 'Zeitueberschreitung: Die Website hat nicht rechtzeitig geantwortet.',
+        error: 'Zielserver antwortet nicht rechtzeitig. Bitte versuchen Sie es spaeter erneut.',
       });
     }
     return jsonResponse(502, {
