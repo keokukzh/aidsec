@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanzlei-Härtung buchen – AidSec</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/onboarding/onboarding.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="/logowhite.png" type="image/png">
+</head>
+<body class="ob-page" data-package="kanzlei-haertung" data-package-name="Kanzlei-Härtung" data-package-price="CHF 599.–" data-package-period="">
+
+  <!-- Header -->
+  <header class="ob-header">
+    <div class="ob-header__inner">
+      <a href="/" class="ob-header__brand">
+        <img src="/logowhite.png" alt="AidSec" class="ob-header__logo">
+      </a>
+      <a href="/" class="ob-header__brand">Aid<strong>SEC</strong></a>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="ob-main">
+    <div class="ob-container">
+
+      <!-- Package Badge -->
+      <div class="ob-package">
+        <span class="ob-package__badge">Kanzlei-Härtung – CHF 599.–</span>
+      </div>
+
+      <!-- Progress -->
+      <div class="ob-progress">
+        <span class="ob-progress__label">Schritt <span id="step-num">1</span> von 4</span>
+        <span class="ob-progress__dot ob-progress__dot--active"></span>
+        <span class="ob-progress__line"></span>
+        <span class="ob-progress__dot"></span>
+        <span class="ob-progress__line"></span>
+        <span class="ob-progress__dot"></span>
+        <span class="ob-progress__line"></span>
+        <span class="ob-progress__dot"></span>
+      </div>
+
+      <!-- Netlify Form -->
+      <form id="ob-form" name="onboarding-kanzlei-haertung" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="onboarding-kanzlei-haertung">
+        <input type="hidden" name="package" value="Kanzlei-Härtung – CHF 599.–">
+        <input type="hidden" name="payment-method" id="ob-payment-method" value="">
+        <p hidden><label>Nicht ausfüllen: <input name="bot-field"></label></p>
+
+        <!-- STEP 1: Webseite & Zugang -->
+        <div class="ob-step ob-step--active" data-step="1">
+          <h2 class="ob-step__title">Ihre Webseite absichern</h2>
+          <p class="ob-step__subtitle">Damit wir sofort starten können, benötigen wir Ihre WordPress-Admin-Zugangsdaten.</p>
+
+          <div class="ob-form-group">
+            <label class="ob-label" for="ob-url">Website-URL *</label>
+            <input type="url" id="ob-url" name="website-url" class="ob-input" placeholder="https://ihre-kanzlei.ch" required>
+            <p class="ob-hint">Die Adresse Ihrer WordPress-Webseite.</p>
+            <p class="ob-error">Bitte geben Sie Ihre Website-URL ein.</p>
+          </div>
+
+          <div class="ob-option-selector">
+            <div class="ob-option-card ob-option-card--active">
+              <input type="radio" name="access-option" value="a" id="opt-a" checked>
+              <label for="opt-a" class="ob-option-card__title">Option A: Jetzt Zugangsdaten angeben</label>
+              <span class="ob-option-card__sub">Schnellste Abwicklung – wir legen sofort los.</span>
+            </div>
+            <div class="ob-option-card">
+              <input type="radio" name="access-option" value="b" id="opt-b">
+              <label for="opt-b" class="ob-option-card__title">Option B: Später mitteilen</label>
+              <span class="ob-option-card__sub">Wir kontaktieren Sie nach dem Auftrag für die Details.</span>
+            </div>
+          </div>
+
+          <!-- Section A: Credentials -->
+          <div id="ob-credentials-section">
+            <div class="ob-form-group">
+              <label class="ob-label" for="ob-wp-user">WordPress-Benutzername oder E-Mail</label>
+              <input type="text" id="ob-wp-user" name="wp-user" class="ob-input" placeholder="admin">
+            </div>
+            <div class="ob-form-group">
+              <label class="ob-label" for="ob-wp-pass">WordPress-Passwort</label>
+              <input type="password" id="ob-wp-pass" name="wp-pass" class="ob-input" placeholder="••••••••••••">
+              
+              <a href="#" class="ob-login-helper-toggle" id="ob-helper-toggle">Passwort vergessen oder Daten nicht auffindbar?</a>
+              
+              <div class="ob-login-helper" id="ob-login-helper">
+                <div class="ob-login-helper__group">
+                  <span class="ob-login-helper__title">Setzen Sie Ihr WordPress-Passwort direkt hier zurück:</span>
+                  <a href="#" target="_blank" rel="noopener" class="ob-login-btn" id="ob-reset-link">Passwort zurücksetzen</a>
+                </div>
+                <div class="ob-login-helper__group">
+                  <span class="ob-login-helper__title">Hier sind die Logins der häufigsten Schweizer Hoster:</span>
+                  <div class="ob-hoster-grid">
+                    <a href="https://admin.hostpoint.ch/" target="_blank" rel="noopener" class="ob-hoster-pill">Hostpoint</a>
+                    <a href="https://my.cyon.ch/" target="_blank" rel="noopener" class="ob-hoster-pill">Cyon</a>
+                    <a href="https://manager.infomaniak.com/" target="_blank" rel="noopener" class="ob-hoster-pill">Infomaniak</a>
+                    <a href="https://myhosttech.ch/" target="_blank" rel="noopener" class="ob-hoster-pill">Hosttech</a>
+                    <a href="https://login.swisscom.ch/" target="_blank" rel="noopener" class="ob-hoster-pill">Swisscom</a>
+                    <a href="https://www.hoststar.ch/de/login" target="_blank" rel="noopener" class="ob-hoster-pill">Hoststar</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-actions">
+            <button type="button" class="ob-btn ob-btn--primary" data-ob-next>Weiter →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Angaben -->
+        <div class="ob-step" data-step="2">
+          <h2 class="ob-step__title">Damit wir Sie über den Fortschritt informieren können:</h2>
+          <p class="ob-step__subtitle">Wenige Angaben genügen – alles Weitere klären wir persönlich.</p>
+
+          <div class="ob-form-group">
+            <label class="ob-label" for="ob-name">Vor- und Nachname *</label>
+            <input type="text" id="ob-name" name="name" class="ob-input" placeholder="Dr. Max Muster" required autocomplete="name">
+            <p class="ob-error">Bitte geben Sie Ihren Namen ein.</p>
+          </div>
+
+          <div class="ob-form-group">
+            <label class="ob-label ob-label--optional" for="ob-company">Kanzlei / Praxis</label>
+            <input type="text" id="ob-company" name="company" class="ob-input" placeholder="Muster & Partner Rechtsanwälte" autocomplete="organization">
+          </div>
+
+          <div class="ob-form-group">
+            <label class="ob-label" for="ob-email">E-Mail-Adresse *</label>
+            <input type="email" id="ob-email" name="email" class="ob-input" placeholder="m.muster@kanzlei.ch" required autocomplete="email">
+            <p class="ob-hint">An diese Adresse senden wir Bestätigung und Protokoll.</p>
+            <p class="ob-error">Bitte geben Sie Ihre E-Mail-Adresse ein.</p>
+          </div>
+
+          <div class="ob-form-group">
+            <label class="ob-label ob-label--optional" for="ob-phone">Telefon</label>
+            <input type="tel" id="ob-phone" name="phone" class="ob-input" placeholder="+41 44 000 00 00" autocomplete="tel">
+            <p class="ob-hint">Nur bei Rückfragen.</p>
+          </div>
+
+          <div class="ob-actions">
+            <button type="button" class="ob-btn ob-btn--secondary" data-ob-prev>← Zurück</button>
+            <button type="button" class="ob-btn ob-btn--primary" data-ob-next>Weiter →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Bestätigung -->
+        <div class="ob-step" data-step="3">
+          <h2 class="ob-step__title">Fast geschafft – bitte kurz bestätigen:</h2>
+          <p class="ob-step__subtitle">Prüfen Sie Ihre Angaben und bestätigen Sie die Bedingungen.</p>
+
+          <div class="ob-summary">
+            <div class="ob-summary__row">
+              <span class="ob-summary__label">Paket</span>
+              <span class="ob-summary__value" id="sum-package">Kanzlei-Härtung</span>
+            </div>
+            <div class="ob-summary__row">
+              <span class="ob-summary__label">Webseite</span>
+              <span class="ob-summary__value" id="sum-url">–</span>
+            </div>
+            <div class="ob-summary__row">
+              <span class="ob-summary__label">Name</span>
+              <span class="ob-summary__value" id="sum-name">–</span>
+            </div>
+            <div class="ob-summary__row">
+              <span class="ob-summary__label">E-Mail</span>
+              <span class="ob-summary__value" id="sum-email">–</span>
+            </div>
+          </div>
+
+          <label class="ob-checkbox">
+            <input type="checkbox" name="auth-check" required>
+            <span>Ich bestätige, dass ich berechtigt bin, einen Sicherheitstest an der oben angegebenen Webseite durchführen zu lassen. <a href="/agb.html" target="_blank" rel="noopener">AGB lesen</a></span>
+            <p class="ob-error">Bitte bestätigen.</p>
+          </label>
+
+          <label class="ob-checkbox">
+            <input type="checkbox" name="privacy-check" required>
+            <span>Ich habe die <a href="/datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und bin einverstanden.</span>
+            <p class="ob-error">Bitte bestätigen.</p>
+          </label>
+
+          <label class="ob-checkbox">
+            <input type="checkbox" name="access-check" required>
+            <span>Ich bin einverstanden, dass AidSec für die Umsetzung Zugang zur Server-Konfiguration benötigt. Ich erhalte nach Auftragseingang eine einfache Anleitung per E-Mail – kein technisches Wissen nötig.</span>
+            <p class="ob-error">Bitte bestätigen.</p>
+          </label>
+
+          <div class="ob-actions">
+            <button type="button" class="ob-btn ob-btn--secondary" data-ob-prev>← Zurück</button>
+            <button type="button" class="ob-btn ob-btn--primary" data-ob-next>Weiter zur Zahlung →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Zahlung -->
+        <div class="ob-step" data-step="4">
+          <h2 class="ob-step__title">Zahlung</h2>
+
+          <div class="ob-price">
+            <span class="ob-price__amount">CHF 599.–</span>
+            <span class="ob-price__period">Einmalige Zahlung</span>
+          </div>
+
+          <div class="ob-payment-cards">
+            <div class="ob-payment-card" data-method="twint">
+              <h3 class="ob-payment-card__title">Sofort zahlen mit TWINT</h3>
+              <p class="ob-payment-card__sub">Scannen Sie den QR-Code mit Ihrer TWINT-App.</p>
+              <div class="ob-twint-qr" id="twint-qr">
+                <img src="" alt="TWINT QR-Code" width="200" height="200">
+                <p class="ob-twint-qr__hint">Öffnen Sie die TWINT-App und scannen Sie diesen Code.</p>
+              </div>
+            </div>
+
+            <div class="ob-payment-card" data-method="rechnung">
+              <h3 class="ob-payment-card__title">Zahlung per Rechnung</h3>
+              <p class="ob-payment-card__sub">Wir senden Ihnen nach Auftragseingang eine Rechnung per E-Mail. Zahlungsfrist 14 Tage. Wir starten nach Zahlungseingang.</p>
+            </div>
+
+            <div class="ob-payment-card ob-payment-card--disabled">
+              <h3 class="ob-payment-card__title">Kreditkarte</h3>
+              <p class="ob-payment-card__sub">Folgt in Kürze.</p>
+              <span class="ob-payment-card__badge">Demnächst verfügbar</span>
+            </div>
+          </div>
+
+          <div class="ob-actions">
+            <button type="button" class="ob-btn ob-btn--secondary" data-ob-prev>← Zurück</button>
+            <button type="submit" id="ob-submit" class="ob-btn ob-btn--primary" disabled>Auftrag erteilen</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="ob-footer">
+    <p class="ob-footer__text">
+      © 2026 AidSec · <a href="/datenschutz.html">Datenschutz</a> · <a href="/agb.html">AGB</a> · <a href="/impressum.html">Impressum</a>
+    </p>
+  </footer>
+
+  <script src="/onboarding/onboarding.js"></script>
+</body>
+</html>

@@ -1,0 +1,731 @@
+/* ═══════════════════════════════════════════
+   ONBOARDING FLOW – SHARED STYLES
+   ═══════════════════════════════════════════ */
+
+:root {
+  --ob-bg: #0b1120;
+  --ob-surface: #111827;
+  --ob-surface-2: #1a2332;
+  --ob-border: rgba(212, 175, 55, 0.15);
+  --ob-gold: #d4af37;
+  --ob-gold-light: #f0d060;
+  --ob-text: #e2e8f0;
+  --ob-text-muted: #94a3b8;
+  --ob-radius: 12px;
+  --ob-max-w: 680px;
+}
+
+/* ── Layout ─────────────────────────────── */
+.ob-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ob-bg);
+  color: var(--ob-text);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.ob-header {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--ob-border);
+}
+
+.ob-header__inner {
+  max-width: var(--ob-max-w);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ob-header__logo {
+  height: 48px;
+  width: auto;
+}
+
+.ob-header__brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.ob-header__brand strong {
+  color: var(--ob-gold);
+}
+
+.ob-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.ob-container {
+  width: 100%;
+  max-width: var(--ob-max-w);
+}
+
+/* ── Progress Dots ──────────────────────── */
+.ob-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.ob-progress__label {
+  font-size: 0.85rem;
+  color: var(--ob-text-muted);
+  margin-right: 0.75rem;
+}
+
+.ob-progress__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ob-surface-2);
+  border: 2px solid var(--ob-border);
+  transition: all 0.3s ease;
+}
+
+.ob-progress__dot--active {
+  background: var(--ob-gold);
+  border-color: var(--ob-gold);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.ob-progress__dot--done {
+  background: var(--ob-gold);
+  border-color: var(--ob-gold);
+  opacity: 0.5;
+}
+
+.ob-progress__line {
+  width: 32px;
+  height: 2px;
+  background: var(--ob-border);
+  transition: background 0.3s ease;
+}
+
+.ob-progress__line--done {
+  background: var(--ob-gold);
+}
+
+/* ── Package Badge ──────────────────────── */
+.ob-package {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ob-package__badge {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+  border: 1px solid var(--ob-border);
+  border-radius: 999px;
+  color: var(--ob-gold-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ── Step Card ──────────────────────────── */
+.ob-step {
+  display: none;
+  animation: obFadeIn 0.35s ease;
+}
+
+.ob-step--active {
+  display: block;
+}
+
+@keyframes obFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ob-step__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.ob-step__subtitle {
+  font-size: 0.95rem;
+  color: var(--ob-text-muted);
+  margin: 0 0 2rem;
+  line-height: 1.5;
+}
+
+/* ── Form Fields ────────────────────────── */
+.ob-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.ob-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ob-text);
+  margin-bottom: 0.4rem;
+}
+
+.ob-label--optional::after {
+  content: ' (optional)';
+  font-weight: 400;
+  color: var(--ob-text-muted);
+  font-size: 0.8rem;
+}
+
+.ob-input,
+.ob-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--ob-surface);
+  border: 1px solid var(--ob-border);
+  border-radius: 8px;
+  color: var(--ob-text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.ob-input:focus,
+.ob-select:focus {
+  outline: none;
+  border-color: var(--ob-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.ob-input::placeholder {
+  color: var(--ob-text-muted);
+  opacity: 0.6;
+}
+
+.ob-hint {
+  font-size: 0.78rem;
+  color: var(--ob-text-muted);
+  margin-top: 0.3rem;
+  line-height: 1.4;
+}
+
+.ob-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ── Checkboxes ─────────────────────────── */
+.ob-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ob-text-muted);
+}
+
+.ob-checkbox input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid var(--ob-border);
+  border-radius: 4px;
+  background: var(--ob-surface);
+  cursor: pointer;
+  margin-top: 2px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.ob-checkbox input[type="checkbox"]:checked {
+  background: var(--ob-gold);
+  border-color: var(--ob-gold);
+}
+
+.ob-checkbox input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 3px;
+  color: #0b1120;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ob-checkbox a {
+  color: var(--ob-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ob-checkbox a:hover {
+  color: var(--ob-gold-light);
+}
+
+/* ── Login Helper ───────────────────────── */
+.ob-login-helper-toggle {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ob-gold);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.ob-login-helper-toggle:hover {
+  color: var(--ob-gold-light);
+  text-decoration: underline;
+}
+
+.ob-login-helper {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--ob-surface-2);
+  border: 1px solid var(--ob-border);
+  border-radius: 8px;
+  margin-top: 0.75rem;
+}
+
+.ob-login-helper.is-visible {
+  max-height: 600px;
+  opacity: 1;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.ob-login-helper__group {
+  margin-bottom: 1.5rem;
+}
+
+.ob-login-helper__group:last-child {
+  margin-bottom: 0;
+}
+
+.ob-login-helper__title {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.ob-login-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--ob-gold);
+  border-radius: 6px;
+  color: var(--ob-gold);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.ob-login-btn:hover {
+  background: var(--ob-gold);
+  color: #0b1120;
+}
+
+.ob-hoster-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.ob-hoster-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: var(--ob-surface);
+  border: 1px solid var(--ob-border);
+  border-radius: 6px;
+  color: var(--ob-text-muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.ob-hoster-pill:hover {
+  border-color: var(--ob-gold);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Option Selector ────────────────────── */
+.ob-option-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.ob-option-card {
+  position: relative;
+  background: var(--ob-surface);
+  border: 2px solid var(--ob-border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ob-option-card:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.ob-option-card input[type="radio"] {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.ob-option-card--active {
+  border-color: var(--ob-gold);
+  background: rgba(212, 175, 55, 0.03);
+}
+
+.ob-option-card__title {
+  display: block;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.ob-option-card__sub {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ob-text-muted);
+}
+
+/* ── Summary (Step 3) ───────────────────── */
+.ob-summary {
+  background: var(--ob-surface);
+  border: 1px solid var(--ob-border);
+  border-radius: var(--ob-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ob-summary__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.9rem;
+}
+
+.ob-summary__row:last-child {
+  border-bottom: none;
+}
+
+.ob-summary__label {
+  color: var(--ob-text-muted);
+}
+
+.ob-summary__value {
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ── Payment Cards (Step 4) ─────────────── */
+.ob-payment-cards {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ob-payment-card {
+  background: var(--ob-surface);
+  border: 2px solid var(--ob-border);
+  border-radius: var(--ob-radius);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.ob-payment-card:hover:not(.ob-payment-card--disabled) {
+  border-color: var(--ob-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ob-payment-card--active {
+  border-color: var(--ob-gold);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
+}
+
+.ob-payment-card--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ob-payment-card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.25rem;
+}
+
+.ob-payment-card__sub {
+  font-size: 0.85rem;
+  color: var(--ob-text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.ob-payment-card__badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--ob-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* TWINT QR reveal */
+.ob-twint-qr {
+  display: none;
+  text-align: center;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ob-border);
+}
+
+.ob-twint-qr--visible {
+  display: block;
+  animation: obFadeIn 0.3s ease;
+}
+
+.ob-twint-qr img {
+  max-width: 200px;
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px;
+}
+
+.ob-twint-qr__hint {
+  font-size: 0.8rem;
+  color: var(--ob-text-muted);
+  margin-top: 0.75rem;
+}
+
+/* ── Price Display ──────────────────────── */
+.ob-price {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ob-price__amount {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--ob-gold);
+  display: block;
+  line-height: 1.1;
+}
+
+.ob-price__period {
+  font-size: 1rem;
+  color: var(--ob-text-muted);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* ── Buttons ────────────────────────────── */
+.ob-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.ob-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.ob-btn--primary {
+  flex: 1;
+  background: linear-gradient(135deg, var(--ob-gold), var(--ob-gold-light));
+  color: #0b1120;
+}
+
+.ob-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+}
+
+.ob-btn--secondary {
+  background: transparent;
+  border: 1px solid var(--ob-border);
+  color: var(--ob-text-muted);
+}
+
+.ob-btn--secondary:hover {
+  border-color: var(--ob-text-muted);
+  color: var(--ob-text);
+}
+
+.ob-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Error State ────────────────────────── */
+.ob-input--error {
+  border-color: #ef4444;
+}
+
+.ob-error {
+  font-size: 0.78rem;
+  color: #ef4444;
+  margin-top: 0.25rem;
+  display: none;
+}
+
+.ob-error--visible {
+  display: block;
+}
+
+/* ── Confirmation Page ──────────────────── */
+.ob-confirm {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.ob-confirm__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ob-confirm__icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--ob-gold);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ob-confirm__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 1rem;
+}
+
+.ob-confirm__text {
+  font-size: 1rem;
+  color: var(--ob-text-muted);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto 0.75rem;
+}
+
+.ob-confirm__email {
+  font-size: 0.85rem;
+  color: var(--ob-text-muted);
+  margin-top: 1.5rem;
+}
+
+.ob-confirm__email a {
+  color: var(--ob-gold);
+}
+
+.ob-confirm__btn {
+  margin-top: 2rem;
+}
+
+/* ── Footer ─────────────────────────────── */
+.ob-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--ob-border);
+  text-align: center;
+}
+
+.ob-footer__text {
+  font-size: 0.78rem;
+  color: var(--ob-text-muted);
+  margin: 0;
+}
+
+.ob-footer__text a {
+  color: var(--ob-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 600px) {
+  .ob-main {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .ob-step__title {
+    font-size: 1.25rem;
+  }
+
+  .ob-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ob-price__amount {
+    font-size: 2.5rem;
+  }
+
+  .ob-actions {
+    flex-direction: column;
+  }
+
+  .ob-btn--secondary {
+    order: 1;
+  }
+
+  .ob-payment-card {
+    padding: 1.25rem;
+  }
+
+  .ob-progress__label {
+    display: none;
+  }
+}

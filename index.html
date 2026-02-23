@@ -6,7 +6,7 @@
     <title>WordPress Sicherheit für Kanzleien | Security Headers Note A in 24h</title>
     <meta
       name="description"
-      content="AidSec schützt WordPress-Webseiten von Schweizer Kanzleien und Arztpraxen: Security Headers Note A in 24h, nDSG-konform, 0 Min. Downtime. Ab CHF 490. Kostenfreier Check."
+      content="AidSec schützt WordPress-Webseiten von Schweizer Kanzleien und Arztpraxen: Security Headers Note A in 24h, nDSG-konform, 0 Min. Downtime. Ab CHF 299. Kostenfreier Check."
     />
     <meta
       name="keywords"
@@ -23,7 +23,7 @@
     />
     <meta
       property="og:description"
-      content="AidSec bringt Ihre Kanzlei-Webseite von Note F zu A in unter 24 Stunden – nDSG-konform, ohne Downtime, ohne Zugriff auf Mandantendaten. Ab CHF 490."
+      content="AidSec bringt Ihre Kanzlei-Webseite von Note F zu A in unter 24 Stunden – nDSG-konform, ohne Downtime, ohne Zugriff auf Mandantendaten. Ab CHF 299."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://aidsec.ch" />
@@ -39,8 +39,22 @@
     <meta name="twitter:title" content="WordPress Sicherheit für Kanzleien | AidSec Schweiz" />
     <meta
       name="twitter:description"
-      content="Von Security Headers Note F zu A in 24h – nDSG-konform, 0 Min. Downtime. Für Schweizer Kanzleien und Praxen."
-    />
+      content="Von Security Headers Note F zu A in 24h — nDSG-konform, 0 Min. Downtime. Für Schweizer Kanzleien und Praxen." />
+
+    <!-- Constants and Global Helpers -->
+    <script>
+      window.WHATSAPP_NUMBER = "41XXXXXXXXXX";
+      window.CALENDLY_URL = "https://calendly.com/aidsec";
+      
+      window.openWhatsApp = function() {
+        const text = encodeURIComponent("Hallo AidSec, ich interessiere mich für einen Security-Check.");
+        window.open(`https://wa.me/${window.WHATSAPP_NUMBER}?text=${text}`, '_blank');
+      };
+      
+      window.openCalendly = function() {
+        window.open(window.CALENDLY_URL, '_blank');
+      };
+    </script>
     <meta name="twitter:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
 
     <!-- Schema.org JSON-LD -->
@@ -65,7 +79,7 @@
           "Cybersicherheit für Kanzleien",
           "Domain Reputation Monitoring"
         ],
-        "priceRange": "CHF 490 – CHF 950 einmalig, ab CHF 89/Monat",
+        "priceRange": "CHF 299 – CHF 950 einmalig, ab CHF 59/Monat",
         "knowsLanguage": ["de", "de-CH"],
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
@@ -75,21 +89,21 @@
               "@type": "Offer",
               "name": "Rapid Header Fix",
               "description": "Security Headers Note F → A in unter 24 Stunden. Ohne Downtime, ohne CMS-Login.",
-              "price": "490",
+              "price": "299",
               "priceCurrency": "CHF"
             },
             {
               "@type": "Offer",
               "name": "Kanzlei-Härtung",
               "description": "Vollständige WordPress-Härtung inkl. Firewall, Login-Schutz und nDSG-Audit-Protokoll.",
-              "price": "950",
+              "price": "599",
               "priceCurrency": "CHF"
             },
             {
               "@type": "Offer",
               "name": "Cyber-Mandat",
               "description": "Laufendes Sicherheits-Monitoring, monatliche Berichte, Notfall-Support.",
-              "price": "89",
+              "price": "59",
               "priceCurrency": "CHF"
             }
           ]
@@ -124,7 +138,7 @@
             "name": "Was kostet ein Cyberangriff im Vergleich zu einer präventiven Härtung?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei CHF 1.04 Millionen. Unsere präventive Härtung kostet ab CHF 490 — das entspricht 0.05% der durchschnittlichen Schadenskosten."
+              "text": "Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei CHF 1.04 Millionen. Unsere präventive Härtung kostet ab CHF 299 — das entspricht 0.03% der durchschnittlichen Schadenskosten."
             }
           },
           {
@@ -225,7 +239,7 @@
           "Penetration Testing",
           "Web Application Security"
         ],
-        "priceRange": "CHF 490 - 950",
+        "priceRange": "CHF 299 – CHF 950 einmalig, ab CHF 59/Monat",
         "sameAs": []
       }
     </script>
@@ -410,7 +424,7 @@
         <nav class="nav__links" aria-label="Hauptnavigation">
           <a href="#preise" class="nav__link">Preise</a>
           <a href="#leistungen" class="nav__link">Leistungen</a>
-          <a href="#fallstudien" class="nav__link">Zahlen &amp; Fakten</a>
+          <a href="#fallstudien" class="nav__link">Bedrohungslage</a>
           <a href="fallstudien.html" class="nav__link">Fallstudien</a>
           <a href="#sicherheits-audit" class="nav__link">Sicherheits-Audit</a>
           <a href="wissen/index.html" class="nav__link">Wissen</a>
@@ -447,7 +461,7 @@
         <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
           <a href="#preise" class="mobile-menu__link">Preise</a>
           <a href="#leistungen" class="mobile-menu__link">Leistungen</a>
-          <a href="#fallstudien" class="mobile-menu__link">Zahlen &amp; Fakten</a>
+          <a href="#fallstudien" class="mobile-menu__link">Bedrohungslage</a>
           <a href="fallstudien.html" class="mobile-menu__link">Fallstudien</a>
           <a href="#sicherheits-audit" class="mobile-menu__link">Sicherheits-Audit</a>
           <a href="wissen/index.html" class="mobile-menu__link">Wissen</a>
@@ -645,11 +659,11 @@
             >
           </div>
           <p class="hero__benefit" data-reveal="fade-up" data-reveal-delay="220">
-            Ab CHF 490 statt rund CHF 1 Mio. Wiederherstellungskosten &ndash; so wenig kostet es,
+            Ab CHF 299 statt rund CHF 1 Mio. Wiederherstellungskosten &ndash; so wenig kostet es,
             Ihre Kanzlei vor dem Ernstfall zu sch&uuml;tzen.
           </p>
           <p class="hero__cta-trust" data-reveal="fade-up" data-reveal-delay="250">
-            Keine Kreditkarte &middot; Keine Installation &middot; Resultat in 24h
+            Keine Kreditkarte &middot; Keine Installation &middot; Resultat in 24h &middot; Ab CHF 299
           </p>
 
           <!-- Trust Bar -->
@@ -1976,7 +1990,7 @@
               >
               <div class="pricing-card__price">
                 <span class="pricing-card__currency">CHF</span>
-                <span class="pricing-card__amount">490.&ndash;</span>
+                <span class="pricing-card__amount">299.&ndash;</span>
               </div>
               <ul class="pricing-card__features">
                 <li>SecurityHeaders-Note F &rarr; A in weniger als 24 Stunden.</li>
@@ -1990,15 +2004,14 @@
               </p>
               <div class="pricing-card__roi">
                 <span class="pricing-card__roi-compare"
-                  >= 0.05% der Ø Ransomware-Kosten (CHF 1 Mio.)</span
+                  >= 0.03% der Ø Ransomware-Kosten (CHF 1 Mio.)</span
                 >
               </div>
               <a
-                href="#kontakt"
+                href="/onboarding/rapid-header-fix/"
                 class="btn btn--outline pricing-card__cta"
                 data-track="pricing-header-fix"
-                >Kostenfreien Security-Check starten</a
-              >
+              >Jetzt absichern &amp; buchen</a>
             </article>
 
             <!-- Card 2: Kanzlei-Härtung (Featured) -->
@@ -2017,7 +2030,7 @@
               >
               <div class="pricing-card__price">
                 <span class="pricing-card__currency">CHF</span>
-                <span class="pricing-card__amount">950.&ndash;</span>
+                <span class="pricing-card__amount">599.&ndash;</span>
               </div>
               <ul class="pricing-card__features">
                 <li>
@@ -2035,15 +2048,14 @@
               </p>
               <div class="pricing-card__roi">
                 <span class="pricing-card__roi-compare"
-                  >= 0.1% der Ø Ransomware-Kosten (CHF 1 Mio.)</span
+                  >= 0.06% der Ø Ransomware-Kosten (CHF 1 Mio.)</span
                 >
               </div>
               <a
-                href="#kontakt"
+                href="/onboarding/kanzlei-haertung/"
                 class="btn btn--gold pricing-card__cta"
                 data-track="pricing-kanzlei"
-                >Kostenfreien Security-Check starten</a
-              >
+              >Jetzt absichern &amp; buchen</a>
             </article>
 
             <!-- Card 3: Cyber-Mandat -->
@@ -2057,32 +2069,28 @@
               >
               <div class="pricing-card__price">
                 <span class="pricing-card__currency">CHF</span>
-                <span class="pricing-card__amount">ab 89.&ndash;</span>
-                <span class="pricing-card__period">/ Mt.</span>
+                <span class="pricing-card__amount">59.&ndash;</span>
+                <span class="pricing-card__period">/ Monat (CHF 708.– / Jahr)</span>
               </div>
+              <p class="pricing-card__mandat-note">Abrechnung einmal jährlich — CHF 708.– / Jahr. Monatlich kündbar nach Jahr 1.</p>
               <ul class="pricing-card__features">
-                <li>Kontinuierliches Sicherheits- und Domain-Reputations-Monitoring</li>
-                <li>
-                  Monatlicher Sicherheitsbericht in verst&auml;ndlicher Sprache f&uuml;r Partner
-                </li>
-                <li>Priorisierter Notfall-Support bei Verdachtsf&auml;llen und Angriffen</li>
-                <li>
-                  Cloud-Backups auf Schweizer Servern mit definierter Wiederherstellungsstrategie
-                </li>
-                <li>
-                  Optional kombinierbar mit regelm&auml;ssigen Re-Audits der WordPress-Installation
-                </li>
+                <li>24/7-Überwachung Ihrer WordPress-Installation auf Angriffe und Anomalien.</li>
+                <li>Sofortige Benachrichtigung und Eingriff bei Sicherheitsvorfällen — Sie müssen nichts tun.</li>
+                <li>Monatlicher Sicherheitsbericht in verständlicher Sprache für Partner und Inhaber. Kein Technik-Jargon.</li>
+                <li>Domain- und Blacklist-Monitoring: Ihre E-Mails erreichen Gerichte und Klienten zuverlässig.</li>
+                <li>Tägliche Cloud-Backups auf Schweizer Servern, 30 Tage Aufbewahrung.</li>
+                <li>Priorisierter Notfall-Support: Wir sind erreichbar, wenn Sie uns brauchen.</li>
+                <li>Jährliches Re-Audit der WordPress-Konfiguration inklusive.</li>
               </ul>
               <p class="pricing-card__value">Laufende Absicherung statt punktueller Reaktion.</p>
               <div class="pricing-card__roi">
                 <span class="pricing-card__roi-compare">= weniger als ein Arbeitstag pro Jahr</span>
               </div>
               <a
-                href="#kontakt"
+                href="/onboarding/cyber-mandat/"
                 class="btn btn--outline pricing-card__cta"
                 data-track="pricing-cyber-mandat"
-                >Kostenfreien Security-Check starten</a
-              >
+              >Jetzt absichern &amp; buchen</a>
             </article>
           </div>
 
@@ -2749,7 +2757,7 @@
                 <p>
                   Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz
                   liegen bei CHF 1.04 Millionen (Sophos/IT-Markt 2025). 54% der Schweizer
-                  Unternehmen zahlen Lösegeld. Unsere präventive Härtung kostet ab CHF 490.
+                  Unternehmen zahlen Lösegeld. Unsere präventive Härtung kostet ab CHF 299.
                 </p>
               </div>
             </div>
@@ -2886,8 +2894,8 @@
                 data-netlify="true"
                 data-netlify-honeypot="bot-field"
                 novalidate
-                data-hcaptcha-sitekey="a4ba1564-f7a8-433c-a5a8-d7c046d469ba"
               >
+                <input type="hidden" name="source" value="lead-magnet-pdf">
                 <input type="hidden" name="form-name" value="contact" />
                 <p class="contact-form__hidden" aria-hidden="true">
                   <label>Bitte leer lassen: <input name="bot-field" /></label>
@@ -3034,14 +3042,13 @@
                   live, wo Ihre Webseite steht.
                 </p>
                 <a
-                  href="https://calendly.com/aidsec"
-                  target="_blank"
-                  rel="noopener"
-                  class="btn btn--outline"
-                  data-calendly-url="https://calendly.com/aidsec"
-                  data-track="calendly-cta"
-                  >Termin buchen</a
+                  href="javascript:void(0)"
+                  onclick="window.openCalendly()"
+                  class="btn btn--gold contact__btn"
+                  data-track="contact-calendly"
                 >
+                  Termin vereinbaren
+                </a>
               </div>
 
               <!-- Success Message -->
@@ -3151,7 +3158,8 @@
     <!-- WhatsApp Business CTA (lazy-loaded to avoid blocking initial paint) -->
     <div id="whatsapp-cta" class="whatsapp-cta" style="display:none" aria-label="WhatsApp Kontakt">
       <a
-        href="https://wa.me/41XXXXXXXXXX?text=Hallo%20AidSec%2C%20ich%20interessiere%20mich%20f%C3%BCr%20einen%20Security-Check."
+        href="javascript:void(0)"
+        onclick="window.openWhatsApp()"
         target="_blank"
         rel="noopener noreferrer"
         class="whatsapp-cta__link"
