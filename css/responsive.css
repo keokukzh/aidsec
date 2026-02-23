@@ -348,6 +348,14 @@
     padding: var(--space-3) var(--space-4);
   }
 
+  .hero__check-btn-text--full {
+    display: none;
+  }
+
+  .hero__check-btn-text--short {
+    display: inline;
+  }
+
   .hero__check-headers {
     grid-template-columns: 1fr;
   }

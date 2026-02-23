@@ -278,6 +278,10 @@
   gap: var(--space-2);
 }
 
+.hero__check-btn-text--short {
+  display: none;
+}
+
 .hero__check-btn-spinner {
   display: none;
   width: 16px;
