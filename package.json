@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run prepare-fonts && vite build",
     "fill": "node scripts/fill-placeholders.js",
     "prepare-fonts": "node scripts/prepare-fonts.js",
     "verify-headers": "node scripts/verify-security-headers.js",
