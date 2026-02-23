@@ -2477,27 +2477,3 @@
   color: var(--white);
   margin-bottom: var(--space-4);
 }
-
-/* ═══ CALENDLY CTA ═══ */
-
-.calendly-cta {
-  text-align: center;
-  padding: var(--space-12) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  margin-top: var(--space-12);
-}
-
-.calendly-cta h3 {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  color: var(--white);
-  margin-bottom: var(--space-4);
-}
-
-.calendly-cta p {
-  color: var(--gray-300);
-  margin-bottom: var(--space-6);
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-}
