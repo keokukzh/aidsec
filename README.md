@@ -91,6 +91,14 @@ aidsec.ch/
 └── package.json
 ```
 
+## File Organization Rules
+
+- Keep root-level HTML pages in place for static hosting compatibility.
+- Keep runtime assets under `css/`, `js/`, `onboarding/`, and `assets/`.
+- Keep operational notes and audits in `docs/plans/`.
+- Keep local one-off helper scripts out of git (already ignored in `.gitignore`).
+- Before pushing: run `git status --short`, `npm run lint`, and `npm run build`.
+
 ## License
 
 Proprietary. © 2026 AidSec.
