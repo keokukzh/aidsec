@@ -529,17 +529,17 @@
     var cost;
     var costLabel;
     if (!isWP) {
-      cost = 490;
-      costLabel = 'Einmalige Header-Optimierung';
-    } else if (mitarbeiter <= 5) {
-      cost = 490;
-      costLabel = 'Einmaliger Rapid Header Fix';
-    } else if (mitarbeiter <= 20) {
-      cost = 950;
-      costLabel = 'Einmalige Kanzlei-Härtung';
-    } else {
-      cost = 89 * 12;
-      costLabel = 'Cyber-Mandat (jährlich)';
+    cost = 299;
+    costLabel = 'Einmalige Header-Optimierung';
+  } else if (mitarbeiter <= 5) {
+    cost = 299;
+    costLabel = 'Einmaliger Rapid Header Fix';
+  } else if (mitarbeiter <= 20) {
+    cost = 599;
+    costLabel = 'Einmalige Kanzlei-Härtung';
+  } else {
+    cost = 59 * 12;
+    costLabel = 'Cyber-Mandat (jährlich)';
     }
 
     var roiPercent = Math.round(((annualRisk - cost) / cost) * 100);
