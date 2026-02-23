@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════
-   AidSec Contact Form Logic (Netlify)
-   ═══════════════════════════════════════════ */
+  AidSec Contact Form Logic (API)
+  ═══════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -41,36 +41,43 @@
     setSubmitting(true);
 
     var formData = new FormData(form);
+    var payload = {
+      name: (formData.get('name') || '').toString().trim(),
+      company: (formData.get('company') || '').toString().trim(),
+      websiteUrl: (formData.get('website') || '').toString().trim(),
+      email: (formData.get('email') || '').toString().trim(),
+      agb: formData.get('agb') ? 'on' : '',
+      botField: (formData.get('bot-field') || '').toString().trim(),
+      source: (formData.get('source') || '').toString().trim(),
+      sourcePath: window.location.pathname,
+    };
 
     // Diagnostic: Warn if on localhost
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.warn(
-        'Form-E-Mails funktionieren nur auf dem Live-System (Netlify). Lokal wird nur die Weiterleitung simuliert.'
-      );
+      console.warn('Form-E-Mails werden lokal nicht versendet. Weiterleitung wird simuliert.');
       setTimeout(function () {
         window.location.href = '/onboarding/bestaetigung/';
       }, 500);
       return;
     }
 
-    // Netlify requires form-name to be present in AJAX body
-    var body = new URLSearchParams();
-    body.append('form-name', form.getAttribute('name'));
-    for (var pair of formData.entries()) {
-      body.append(pair[0], pair[1]);
-    }
-
-    // Submit via fetch to Netlify
-    fetch('/', {
+    fetch('/api/contact-submit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString(),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     })
       .then(function (response) {
         if (response.ok) {
           window.location.href = '/onboarding/bestaetigung/';
         } else {
-          throw new Error('Server-Antwort war nicht ok');
+          return response
+            .json()
+            .catch(function () {
+              return { error: 'Server-Fehler' };
+            })
+            .then(function (data) {
+              throw new Error(data.error || 'Server-Fehler');
+            });
         }
       })
       .catch(function (error) {
