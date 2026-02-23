@@ -41,6 +41,8 @@ export default [
       sourceType: 'module',
       globals: {
         fetch: 'readonly',
+        console: 'readonly',
+        process: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
         AbortController: 'readonly',

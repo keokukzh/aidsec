@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rapid Header Fix buchen – AidSec</title>
   <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/onboarding/onboarding.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" href="/logowhite.png" type="image/png">
 </head>
 <body class="ob-page" data-package="rapid-header-fix" data-package-name="Rapid Header Fix" data-package-price="CHF 299.–" data-package-period="">
@@ -44,9 +42,7 @@
         <span class="ob-progress__dot"></span>
       </div>
 
-      <!-- Netlify Form -->
-      <form id="ob-form" name="onboarding-rapid-header-fix" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="onboarding-rapid-header-fix">
+      <form id="ob-form" name="onboarding-rapid-header-fix" method="POST" action="/api/onboarding-submit" novalidate>
         <input type="hidden" name="subject" value="Neuer Auftrag: Rapid Header Fix von {{name}}">
         <input type="hidden" name="package" value="Rapid Header Fix – CHF 299.–">
         <input type="hidden" name="payment-method" id="ob-payment-method" value="">

@@ -22,7 +22,7 @@
   flex-direction: column;
   background: var(--ob-bg);
   color: var(--ob-text);
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 .ob-header {

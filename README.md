@@ -41,7 +41,16 @@ npm run format  # Prettier
 
 ## Form Backend
 
-The contact form uses **Netlify Forms** (native form handling). Add `data-netlify="true"` and `name` to the form; submissions appear in the Netlify dashboard.
+Onboarding forms (`/onboarding/*`) submit to `POST /api/onboarding-submit` (Vercel Serverless Function) and send internal notifications via SMTP.
+
+Required Vercel Environment Variables:
+
+- `SMTP_HOST`
+- `SMTP_PORT` (e.g. `587`)
+- `SMTP_USER`
+- `SMTP_PASS`
+- `ONBOARDING_TO_EMAIL` (defaults to `aid.destani@aidsec.ch`)
+- `ONBOARDING_FROM_EMAIL` (optional, defaults to `SMTP_USER`)
 
 **Vor dem Go-Live:** Siehe `PLATZHALTER.md` für optionale Platzhalter (Plausible, hCaptcha).
 
@@ -52,7 +61,7 @@ The contact form uses **Netlify Forms** (native form handling). Add `data-netlif
 3. `npm run prepare-fonts` — Fonts für Self-Hosting vorbereiten (einmalig)
 4. `npm run build` — React Hero bauen
 5. Projekt-Root deployen (`index.html`, `css/`, `js/`, `js/dist/`, `css/fonts/`)
-6. **Netlify:** `_headers` und `netlify.toml` werden automatisch verwendet
+6. **Vercel:** `vercel.json` enthält Security Headers/CSP und Cache-Regeln
 7. Nach Deployment: `npm run verify-headers` — Security Headers prüfen
 
 ## Project Structure
@@ -60,8 +69,7 @@ The contact form uses **Netlify Forms** (native form handling). Add `data-netlif
 ```
 aidsec.ch/
 ├── index.html, 404.html, impressum.html, agb.html, datenschutz.html
-├── netlify.toml       # Netlify build & redirects
-├── _headers           # Netlify security headers
+├── vercel.json        # Security headers + cache config
 ├── robots.txt, sitemap.xml
 ├── PLATZHALTER.md     # Deploy-Anleitung
 ├── css/               # Styles, fonts
@@ -70,8 +78,8 @@ aidsec.ch/
 │   ├── hero-app.jsx, BlurText.jsx
 │   └── dist/          # Vite build output
 ├── scripts/           # fill-placeholders, prepare-fonts, verify-headers
-├── netlify/functions/ # check-headers (Security-Check API)
-├── api/               # Vite dev proxy for /api/check-headers
+├── netlify/functions/ # legacy lambda source (kept for parity)
+├── api/               # Vercel serverless endpoints + Vite dev middleware target
 ├── docs/templates/    # Angebotsvorlagen (intern)
 ├── vite.config.js
 └── package.json

@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cyber-Mandat buchen – AidSec</title>
   <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/onboarding/onboarding.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" href="/logowhite.png" type="image/png">
 </head>
 <body class="ob-page" data-package="cyber-mandat" data-package-name="Cyber-Mandat" data-package-price="CHF 59.–/Monat" data-package-period="CHF 708.– / Jahr">
@@ -44,9 +42,7 @@
         <span class="ob-progress__dot"></span>
       </div>
 
-      <!-- Netlify Form -->
-      <form id="ob-form" name="onboarding-cyber-mandat" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="onboarding-cyber-mandat">
+      <form id="ob-form" name="onboarding-cyber-mandat" method="POST" action="/api/onboarding-submit" novalidate>
         <input type="hidden" name="subject" value="Neuer Auftrag: Cyber-Mandat von {{name}}">
         <input type="hidden" name="package" value="Cyber-Mandat – CHF 59.–/Monat (CHF 708.– / Jahr)">
         <input type="hidden" name="payment-method" id="ob-payment-method" value="">

@@ -193,6 +193,14 @@
     });
   });
 
+  function formDataToObject(formData) {
+    var obj = {};
+    formData.forEach(function (value, key) {
+      obj[key] = value;
+    });
+    return obj;
+  }
+
   /* ── Form Submission ───────────────────── */
   if (form) {
     form.addEventListener('submit', function (e) {
@@ -205,48 +213,47 @@
 
       if (!validateStep(currentStep)) return;
 
-      // Collect form data
       var formData = new FormData(form);
 
-      // Diagnostic: Warn if on localhost (Netlify tools don't run locally)
+      var payload = formDataToObject(formData);
+      payload.packageSlug = packageSlug;
+      payload.packageName = packageName;
+      payload.packagePrice = packagePrice;
+      payload.packagePeriod = packagePeriod;
+      payload.sourcePath = window.location.pathname;
+
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         console.warn(
-          'Form-E-Mails funktionieren nur auf dem Live-System (Netlify). Lokal wird nur die Weiterleitung simuliert.'
+          'Onboarding-Mail wird lokal nicht versendet. Weiterleitung zur Bestätigungsseite wird simuliert.'
         );
-        // Still redirect for local testing UX
         setTimeout(function () {
           window.location.href = '/onboarding/bestaetigung/';
-        }, 500);
+        }, 350);
         return;
       }
 
-      // Netlify requires form-name to be present in AJAX body
-      var body = new URLSearchParams();
-      // Ensure form-name is first
-      body.append('form-name', form.getAttribute('name'));
-      // Add all other fields
-      for (var pair of formData.entries()) {
-        body.append(pair[0], pair[1]);
-      }
-
-      // Submit via fetch to Netlify
-      fetch('/', {
+      fetch('/api/onboarding-submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       })
         .then(function (response) {
           if (response.ok) {
             window.location.href = '/onboarding/bestaetigung/';
           } else {
-            throw new Error('Server-Fehler');
+            return response
+              .json()
+              .catch(function () {
+                return { error: 'Server-Fehler' };
+              })
+              .then(function (data) {
+                throw new Error(data.error || 'Server-Fehler');
+              });
           }
         })
         .catch(function (error) {
           console.error('Submission error:', error);
-          alert(
-            'Es gab ein Problem beim Senden Ihrer Daten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt per E-Mail.'
-          );
+          alert(error.message || 'Es gab ein Problem beim Senden Ihrer Daten. Bitte versuchen Sie es erneut.');
           goToStep(currentStep); // Stay on current step
         });
     });
