@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     var controller = new AbortController();
     var timeout = setTimeout(function () {
       controller.abort();
-    }, 6000);
+    }, 8000);
 
     var fetchOpts = {
       signal: controller.signal,
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
   } catch (err) {
     if (err.name === 'AbortError') {
       return res.status(504).json({
-        error: 'Zeitueberschreitung: Die Website hat nicht rechtzeitig geantwortet.',
+        error: 'Zielserver antwortet nicht rechtzeitig. Bitte versuchen Sie es spaeter erneut.',
       });
     }
     return res.status(502).json({
