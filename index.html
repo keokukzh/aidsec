@@ -44,7 +44,6 @@
     <!-- Constants and Global Helpers -->
     <script>
       window.WHATSAPP_NUMBER = "41XXXXXXXXXX";
-      window.CALENDLY_URL = "https://calendly.com/aidsec";
       
       window.openWhatsApp = function(event) {
         if (event) {
@@ -60,10 +59,6 @@
         window.__whatsappPopupTimer = setTimeout(function() {
           popup.classList.remove('is-visible');
         }, 1800);
-      };
-      
-      window.openCalendly = function() {
-        window.open(window.CALENDLY_URL, '_blank');
       };
     </script>
     <meta name="twitter:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
@@ -3041,23 +3036,6 @@
                   <a href="datenschutz.html">Datenschutzerklärung</a> zu. Verarbeitung gemäss nDSG.
                 </p>
               </form>
-
-              <!-- Calendly CTA -->
-              <div class="calendly-cta" data-reveal="fade-up">
-                <h3>Lieber direkt sprechen?</h3>
-                <p>
-                  Buchen Sie ein kostenfreies 15-Minuten-Gespr&auml;ch &ndash; wir zeigen Ihnen
-                  live, wo Ihre Webseite steht.
-                </p>
-                <a
-                  href="javascript:void(0)"
-                  onclick="window.openCalendly()"
-                  class="btn btn--gold contact__btn"
-                  data-track="contact-calendly"
-                >
-                  Termin vereinbaren
-                </a>
-              </div>
 
               <!-- Success Message -->
               <div class="contact-form__success" id="form-success" hidden>
