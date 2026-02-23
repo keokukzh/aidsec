@@ -1378,7 +1378,7 @@ body .nav.scrolled {
 /* ── WhatsApp Floating CTA ── */
 .whatsapp-cta {
   position: fixed;
-  bottom: 24px;
+  bottom: 90px;
   right: 24px;
   z-index: 900;
   animation: whatsapp-fadein 0.4s var(--ease-out) forwards;
@@ -1448,7 +1448,7 @@ body .nav.scrolled {
 /* On mobile: position above sticky CTA bar if present */
 @media (max-width: 768px) {
   .whatsapp-cta {
-    bottom: 80px;
+    bottom: 140px;
     right: 16px;
   }
 }
