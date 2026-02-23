@@ -479,18 +479,19 @@
         <div class="hero__overlay" aria-hidden="true"></div>
 
         <div class="container hero__content">
+          <h1 class="hero__title hero__title--fallback">
+            Ihre Kanzlei-Webseite: Von Note F zu A
+            <span class="text-gold">in 24 Stunden.</span>
+          </h1>
+
           <!-- Animated Rotating Headlines (React Island) -->
           <div id="hero-react-root" class="hero__rotator-wrap">
-            <!-- Fallback while React loads -->
-            <h1 class="hero__title hero__title--fallback">
-              Ihre Kanzlei-Webseite: Von Note F zu A
-              <span class="text-gold">in 24 Stunden.</span>
-            </h1>
+            <!-- React replaces this with animated stats rotator -->
           </div>
 
           <p class="hero__subtitle" data-reveal="fade-up" data-reveal-delay="100">
             Wir sichern WordPress-Seiten von Kanzleien und Praxen in der Schweiz gegen Ransomware,
-            nDSG-Strafen und Reputationssch&auml;den &ndash; ohne Downtime, ohne Zugriff auf Mandantendaten.
+            nDSG-Strafen (neues Schweizer Datenschutzgesetz) und Reputationssch&auml;den &ndash; ohne Downtime, ohne Zugriff auf Mandantendaten.
           </p>
 
           <!-- Inline Security Check Widget -->
@@ -513,9 +514,10 @@
                 id="hero-url-btn"
                 class="btn btn--gold hero__check-btn"
                 data-track="security-check"
-                aria-label="Website-Sicherheit jetzt prüfen"
+                aria-label="Kostenfreien Security-Check starten"
               >
-                <span class="hero__check-btn-text">Jetzt pr&uuml;fen</span>
+                <span class="hero__check-btn-text hero__check-btn-text--full">Kostenfreien Security-Check starten</span>
+                <span class="hero__check-btn-text hero__check-btn-text--short">Security-Check starten</span>
                 <svg
                   class="hero__check-btn-icon"
                   width="18"
