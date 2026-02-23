@@ -12,3 +12,6 @@ config.json
 .cursor/
 .agent/
 scripts/
+.vercel
+.env*.local
+.env.vercel*
