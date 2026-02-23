@@ -10,3 +10,5 @@ css/fonts/
 .env.local
 config.json
 .cursor/
+.agent/
+scripts/
