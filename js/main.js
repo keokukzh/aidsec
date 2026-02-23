@@ -322,6 +322,36 @@
     return 'red';
   }
 
+  function createCheckIconSvg(isPresent) {
+    var svgNs = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNs, 'svg');
+    svg.setAttribute('width', '14');
+    svg.setAttribute('height', '14');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+
+    if (isPresent) {
+      var okPath = document.createElementNS(svgNs, 'path');
+      okPath.setAttribute('d', 'M20 6L9 17l-5-5');
+      svg.appendChild(okPath);
+    } else {
+      var failPathOne = document.createElementNS(svgNs, 'path');
+      failPathOne.setAttribute('d', 'M18 6L6 18');
+      svg.appendChild(failPathOne);
+
+      var failPathTwo = document.createElementNS(svgNs, 'path');
+      failPathTwo.setAttribute('d', 'M6 6l12 12');
+      svg.appendChild(failPathTwo);
+    }
+
+    return svg;
+  }
+
   function renderCheckResult(data) {
     if (!heroCheckResult) return;
 
@@ -344,7 +374,9 @@
     }
 
     if (headersEl) {
-      headersEl.innerHTML = '';
+      while (headersEl.firstChild) {
+        headersEl.removeChild(headersEl.firstChild);
+      }
       var keys = Object.keys(data.headers);
       for (var i = 0; i < keys.length; i++) {
         var h = data.headers[keys[i]];
@@ -352,16 +384,17 @@
         li.className =
           'hero__check-header-item' +
           (h.present ? ' hero__check-header-item--ok' : ' hero__check-header-item--fail');
-        var iconSvg = h.present
-          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'
-          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
-        li.innerHTML =
-          '<span class="hero__check-header-icon">' +
-          iconSvg +
-          '</span>' +
-          '<span class="hero__check-header-name">' +
-          h.label +
-          '</span>';
+
+        var iconSpan = document.createElement('span');
+        iconSpan.className = 'hero__check-header-icon';
+        iconSpan.appendChild(createCheckIconSvg(Boolean(h.present)));
+
+        var labelSpan = document.createElement('span');
+        labelSpan.className = 'hero__check-header-name';
+        labelSpan.textContent = h.label;
+
+        li.appendChild(iconSpan);
+        li.appendChild(labelSpan);
         headersEl.appendChild(li);
       }
     }

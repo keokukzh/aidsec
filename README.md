@@ -52,6 +52,12 @@ Required Vercel Environment Variables:
 - `ONBOARDING_TO_EMAIL` (defaults to `aid.destani@aidsec.ch`)
 - `ONBOARDING_FROM_EMAIL` (optional, defaults to `SMTP_USER`)
 
+Optional durable rate-limiting (recommended for production):
+
+- `ONBOARDING_RATE_LIMIT_MODE` = `upstash` (default is in-memory fallback)
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+
 **Vor dem Go-Live:** Siehe `PLATZHALTER.md` für optionale Platzhalter (Plausible, hCaptcha).
 
 ## Deploy

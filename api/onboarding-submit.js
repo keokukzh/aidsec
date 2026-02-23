@@ -1,8 +1,16 @@
 import nodemailer from 'nodemailer';
+import { createHash } from 'crypto';
 
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_MAX_REQUESTS = 8;
 const rateMap = new Map();
+const RATE_LIMIT_PREFIX = 'onboarding:rate';
+const ALLOWED_ORIGINS = [
+  'https://aidsec.ch',
+  'https://www.aidsec.ch',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+];
 
 function getClientIp(req) {
   const header = req.headers['x-forwarded-for'];
@@ -25,6 +33,77 @@ function isRateLimited(ip) {
   recent.push(now);
   rateMap.set(ip, recent);
   return false;
+}
+
+function hashIdentifier(value) {
+  return createHash('sha256').update(value || 'unknown').digest('hex').slice(0, 24);
+}
+
+function getRateLimitMode() {
+  const mode = getEnvFirst(['ONBOARDING_RATE_LIMIT_MODE']).toLowerCase();
+  return mode || 'memory';
+}
+
+function parseUpstashResult(data) {
+  if (data && typeof data.result !== 'undefined') return Number(data.result);
+  return Number.NaN;
+}
+
+async function isRateLimitedUpstash(ip) {
+  const upstashUrl = getEnvFirst(['UPSTASH_REDIS_REST_URL']);
+  const upstashToken = getEnvFirst(['UPSTASH_REDIS_REST_TOKEN']);
+
+  if (!upstashUrl || !upstashToken) {
+    return null;
+  }
+
+  const ttlSeconds = Math.ceil(RATE_WINDOW_MS / 1000);
+  const bucket = Math.floor(Date.now() / RATE_WINDOW_MS);
+  const key = `${RATE_LIMIT_PREFIX}:${hashIdentifier(ip)}:${bucket}`;
+  const encodedKey = encodeURIComponent(key);
+
+  const incrRes = await fetch(`${upstashUrl}/incr/${encodedKey}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${upstashToken}`,
+    },
+  });
+
+  if (!incrRes.ok) {
+    throw new Error('Upstash INCR failed');
+  }
+
+  const incrJson = await incrRes.json();
+  const count = parseUpstashResult(incrJson);
+
+  if (!Number.isFinite(count)) {
+    throw new Error('Upstash INCR result invalid');
+  }
+
+  if (count === 1) {
+    await fetch(`${upstashUrl}/expire/${encodedKey}/${ttlSeconds}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${upstashToken}`,
+      },
+    });
+  }
+
+  return count > RATE_MAX_REQUESTS;
+}
+
+async function isRateLimitedSafe(ip) {
+  if (getRateLimitMode() === 'upstash') {
+    try {
+      const limited = await isRateLimitedUpstash(ip);
+      if (limited !== null) return limited;
+      console.warn('Rate limit mode upstash is enabled but Upstash credentials are missing; fallback to memory');
+    } catch (error) {
+      console.error('Upstash rate limit failed, fallback to memory', error);
+    }
+  }
+
+  return isRateLimited(ip);
 }
 
 function trimValue(value) {
@@ -99,6 +178,21 @@ function hasValue(value) {
   return value === 'true' || value === 'on' || value === '1' || value === 'yes';
 }
 
+function getAllowedOrigin(req) {
+  const origin = req.headers?.origin;
+  if (!origin || typeof origin !== 'string') return '';
+
+  const configured = getEnvFirst(['ONBOARDING_ALLOWED_ORIGINS']);
+  const allowlist = configured
+    ? configured
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : ALLOWED_ORIGINS;
+
+  return allowlist.includes(origin) ? origin : '';
+}
+
 function buildSubject(payload) {
   const packageLabel = payload.packageName || payload.packageSlug || 'Onboarding-Auftrag';
   const customerName = payload.name || 'Unbekannt';
@@ -108,6 +202,7 @@ function buildSubject(payload) {
 function buildMailBody(payload, meta) {
   const payment = payload.paymentMethod || 'nicht angegeben';
   const accessLabel = payload.accessOption === 'a' ? 'Jetzt Zugangsdaten angegeben' : 'Später mitteilen';
+  const hasWpCredentials = Boolean(payload.wpUser || payload.wpPass);
   const periodLine = payload.packagePeriod ? `\n- Intervall: ${payload.packagePeriod}` : '';
 
   return [
@@ -128,8 +223,7 @@ function buildMailBody(payload, meta) {
     'Auftragsdetails',
     `- Zahlungsart: ${payment}`,
     `- Zugangsoption: ${accessLabel}`,
-    `- WP Benutzer: ${payload.wpUser || '-'}`,
-    `- WP Passwort: ${payload.wpPass || '-'}`,
+    `- Zugangsdaten Status: ${hasWpCredentials ? 'übermittelt (nicht per E-Mail weitergeleitet)' : 'nicht übermittelt'}`,
     `- AGB/Berechtigung bestätigt: ${hasValue(payload.authCheck) ? 'Ja' : 'Nein'}`,
     `- Datenschutz bestätigt: ${hasValue(payload.privacyCheck) ? 'Ja' : 'Nein'}`,
     `- Access-Hinweis bestätigt: ${hasValue(payload.accessCheck) ? 'Ja' : 'Nein'}`,
@@ -169,11 +263,18 @@ function getTransportConfig() {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  }
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
+    if (req.headers?.origin && !allowedOrigin) {
+      return res.status(403).json({ error: 'Origin not allowed' });
+    }
     return res.status(204).end();
   }
 
@@ -181,8 +282,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  if (req.headers?.origin && !allowedOrigin) {
+    return res.status(403).json({ error: 'Origin not allowed' });
+  }
+
   const ip = getClientIp(req);
-  if (isRateLimited(ip)) {
+  if (await isRateLimitedSafe(ip)) {
     return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
   }
 
@@ -207,13 +312,12 @@ export default async function handler(req, res) {
   const transportConfig = getTransportConfig();
   if (!transportConfig.ok) {
     const visible = listVisibleSmtpEnvKeys();
+    console.error('SMTP configuration missing', {
+      missing: transportConfig.missing,
+      visibleKeys: visible,
+    });
     return res.status(500).json({
-      error:
-        'SMTP ist nicht konfiguriert. Fehlende Variablen in Vercel: ' +
-        transportConfig.missing.join(', ') +
-        (visible.length > 0
-          ? '. Laufzeit sieht aktuell diese Mail-Keys: ' + visible.join(', ')
-          : '. Laufzeit sieht aktuell keine SMTP/Mail-Variablen.'),
+      error: 'Serverseitige E-Mail-Konfiguration ist derzeit nicht verfügbar.',
     });
   }
 
