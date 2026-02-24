@@ -10,7 +10,12 @@
   right: 0;
   z-index: var(--z-sticky);
   height: 116px;
-  background: rgba(11, 29, 58, 0.95); /* High opacity for guaranteed readability on all backgrounds */
+  background: rgba(
+    11,
+    29,
+    58,
+    0.95
+  ); /* High opacity for guaranteed readability on all backgrounds */
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   transition:
@@ -594,7 +599,174 @@ body .nav.scrolled {
   color: var(--green-safe);
 }
 
-/* ── Grade Badge (Hero) ── */
+/* ── Risk Calculator (React Island) ── */
+.risk-calc {
+  padding: var(--space-8);
+  max-width: 600px;
+  margin: var(--space-12) auto;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-xl);
+  text-align: left;
+}
+
+.risk-calc__title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  color: var(--white);
+  margin-bottom: var(--space-2);
+}
+
+.risk-calc__intro {
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+  margin-bottom: var(--space-8);
+}
+
+.risk-calc__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--white);
+}
+
+.risk-calc__value-badge {
+  background: var(--navy-light);
+  color: var(--gold);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-family: monospace;
+}
+
+.risk-calc__range {
+  width: 100%;
+  height: 6px;
+  background: var(--navy-light);
+  border-radius: var(--radius-full);
+  appearance: none;
+  cursor: pointer;
+  margin-bottom: var(--space-10);
+}
+
+.risk-calc__range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--gold);
+  border: 4px solid var(--navy-deep);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(200, 168, 76, 0.4);
+}
+
+.risk-calc__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  background: rgba(0, 0, 0, 0.2);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-8);
+}
+
+.risk-calc__result-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.risk-calc__result-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--gray-500);
+}
+
+.risk-calc__result-value {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.risk-calc__result-item--danger .risk-calc__result-value {
+  color: #ff4d4d;
+}
+
+.risk-calc__result-item--safe .risk-calc__result-value {
+  color: var(--green-safe);
+}
+
+.risk-calc__divider {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--gray-600);
+  font-weight: 700;
+  position: relative;
+}
+
+.risk-calc__divider::before,
+.risk-calc__divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: var(--glass-border);
+}
+
+.risk-calc__divider::before {
+  left: 0;
+}
+.risk-calc__divider::after {
+  right: 0;
+}
+
+.risk-calc__footer {
+  border-top: 1px solid var(--glass-border);
+  padding-top: var(--space-6);
+}
+
+.risk-calc__roi {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--glass-white);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.risk-calc__roi-circle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-gold);
+}
+
+.risk-calc__roi-multiplier {
+  color: var(--navy);
+  font-weight: 800;
+  font-size: var(--text-xl);
+}
+
+.risk-calc__roi-text {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-sm);
+}
+
+.risk-calc__roi-text strong {
+  color: var(--white);
+}
+
+.risk-calc__roi-text span {
+  color: var(--gray-400);
+}
 .grade-badge--hero {
   position: relative;
   display: flex;
@@ -1165,7 +1337,7 @@ body .nav.scrolled {
 }
 
 /* Show banner if no consent decision */
-.cookie-banner[data-show="true"] {
+.cookie-banner[data-show='true'] {
   display: block;
 }
 
@@ -1301,7 +1473,9 @@ body .nav.scrolled {
   padding: var(--space-4);
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--duration-normal), visibility var(--duration-normal);
+  transition:
+    opacity var(--duration-normal),
+    visibility var(--duration-normal);
 }
 
 .modal.visible {
@@ -1468,8 +1642,15 @@ body .nav.scrolled {
 }
 
 @keyframes whatsapp-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.35); opacity: 0; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
 }
 
 /* On mobile: position above sticky CTA bar if present */

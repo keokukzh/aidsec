@@ -68,12 +68,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         'hero-app': resolve(__dirname, 'js/hero-app.jsx'),
+        'risk-calculator': resolve(__dirname, 'js/RiskCalculator.jsx'),
       },
       output: {
         // Output as ES module, keep the name clean
         entryFileNames: '[name].js',
-        // No chunk splitting -- single file
-        inlineDynamicImports: true,
+        // No chunk splitting -- single file per entry
+        inlineDynamicImports: false,
         format: 'es',
       },
     },
