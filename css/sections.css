@@ -2124,6 +2124,22 @@
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
 }
 
+.article-card--featured {
+  grid-column: span 2;
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #112240 0%, #060f1f 100%);
+}
+
+.article-card--featured .article-card__title {
+  font-size: var(--text-3xl);
+}
+
+@media (max-width: 768px) {
+  .article-card--featured {
+    grid-column: span 1;
+  }
+}
+
 .article-card__image-placeholder {
   height: 160px;
   background: linear-gradient(135deg, #0f2547 0%, #060f1f 100%);
@@ -2288,6 +2304,25 @@
   margin-bottom: var(--space-6);
   font-weight: 500;
   letter-spacing: var(--tracking-wide);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  margin-bottom: var(--space-4);
+}
+
+.badge--gold {
+  background: rgba(200, 168, 76, 0.15);
+  border-color: var(--gold);
+  color: var(--gold-light);
 }
 
 .article-body {
