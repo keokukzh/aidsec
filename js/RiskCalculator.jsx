@@ -99,12 +99,10 @@ const RiskCalculator = () => {
 };
 
 // Mount the island
-document.addEventListener('DOMContentLoaded', () => {
-    const rootElement = document.getElementById('risk-calculator-root');
-    if (rootElement) {
-        const root = createRoot(rootElement);
-        root.render(<RiskCalculator />);
-    }
-});
+const rootElement = document.getElementById('risk-calculator-root');
+if (rootElement) {
+    const root = createRoot(rootElement);
+    root.render(<RiskCalculator />);
+}
 
 export default RiskCalculator;
