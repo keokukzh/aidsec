@@ -523,81 +523,51 @@
     }
   });
 
-  // ── ROI Calculator ──
-  var roiBranche = document.getElementById('roi-branche');
-  var roiMitarbeiter = document.getElementById('roi-mitarbeiter');
-  var roiMitarbeiterOut = document.getElementById('roi-mitarbeiter-output');
-  var roiWordpress = document.getElementById('roi-wordpress');
-  var roiRisk = document.getElementById('roi-risk');
-  var roiCost = document.getElementById('roi-cost');
-  var roiRoi = document.getElementById('roi-roi');
+  // ── ROI Calculator (Static Version) ──
+  const roiRecordsSlider = document.getElementById('roi-records-slider');
+  const roiRecordsValue = document.getElementById('roi-records-value');
+  const roiTotalDamage = document.getElementById('roi-total-damage');
+  const roiFactor = document.getElementById('roi-factor');
+  const roiFactorText = document.getElementById('roi-factor-text');
 
-  function chf(num) {
-    return 'CHF ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
-  }
+  function updateROI() {
+    if (!roiRecordsSlider) return;
 
-  function calcROI() {
-    if (!roiBranche || !roiMitarbeiter) return;
+    const records = parseInt(roiRecordsSlider.value, 10);
+    if (roiRecordsValue) roiRecordsValue.textContent = records.toLocaleString('de-CH');
 
-    var branche = roiBranche.value;
-    var mitarbeiter = parseInt(roiMitarbeiter.value, 10);
-    var isWP = roiWordpress && roiWordpress.checked;
+    // Logic matching RiskCalculator.jsx
+    const costPerRecord = 245;
+    const fixFee = 490;
+    const totalRisk = records * costPerRecord;
+    const potentialFine = Math.min(totalRisk * 0.1, 250000);
+    const totalPotentialDamage = totalRisk + potentialFine;
 
-    if (roiMitarbeiterOut) roiMitarbeiterOut.textContent = mitarbeiter;
+    const formattedDamage = new Intl.NumberFormat('de-CH', {
+      style: 'currency',
+      currency: 'CHF',
+      maximumFractionDigits: 0,
+    }).format(totalPotentialDamage);
 
-    // Base risk: CHF 1.04M avg recovery cost * attack probability by sector
-    var brancheRisk = { kanzlei: 0.12, arztpraxis: 0.15, notariat: 0.10 };
-    var baseProbability = brancheRisk[branche] || 0.12;
+    const factor = Math.round(totalPotentialDamage / fixFee);
 
-    // Size multiplier: larger firms = higher target value
-    var sizeFactor = 1 + (mitarbeiter - 1) * 0.08;
-    if (sizeFactor > 5) sizeFactor = 5;
+    if (roiTotalDamage) roiTotalDamage.textContent = formattedDamage;
+    if (roiFactor) roiFactor.textContent = factor + 'x';
+    if (roiFactorText) roiFactorText.textContent = factor;
 
-    // WordPress multiplier: adds 40% more risk
-    var wpFactor = isWP ? 1.4 : 1.0;
-
-    var annualRisk = Math.round(1040000 * baseProbability * sizeFactor * wpFactor / 100) * 100;
-
-    // AidSec cost recommendation
-    var cost;
-    var costLabel;
-    if (!isWP) {
-    cost = 299;
-    costLabel = 'Einmalige Header-Optimierung';
-  } else if (mitarbeiter <= 5) {
-    cost = 299;
-    costLabel = 'Einmaliger Rapid Header Fix';
-  } else if (mitarbeiter <= 20) {
-    cost = 599;
-    costLabel = 'Einmalige Kanzlei-Härtung';
-  } else {
-    cost = 59 * 12;
-    costLabel = 'Cyber-Mandat (jährlich)';
-    }
-
-    var roiPercent = Math.round(((annualRisk - cost) / cost) * 100);
-
-    if (roiRisk) roiRisk.textContent = chf(annualRisk);
-    if (roiCost) {
-      roiCost.textContent = chf(cost);
-      var costSub = roiCost.parentElement && roiCost.parentElement.querySelector('.roi__result-sub');
-      if (costSub) costSub.textContent = costLabel;
-    }
-    if (roiRoi) roiRoi.textContent = roiPercent.toLocaleString('de-CH') + '%';
-
-    // Pulse animation on value change
-    [roiRisk, roiCost, roiRoi].forEach(function (el) {
+    // Pulse effect
+    [roiTotalDamage, roiFactor].forEach((el) => {
       if (!el) return;
       el.classList.remove('updated');
-      void el.offsetWidth; // force reflow
+      void el.offsetWidth;
       el.classList.add('updated');
     });
   }
 
-  if (roiBranche) roiBranche.addEventListener('change', calcROI);
-  if (roiMitarbeiter) roiMitarbeiter.addEventListener('input', calcROI);
-  if (roiWordpress) roiWordpress.addEventListener('change', calcROI);
-  calcROI();
+  if (roiRecordsSlider) {
+    roiRecordsSlider.addEventListener('input', updateROI);
+    updateROI(); // Init
+  }
 
   // ── Scroll-to-top Button ──
   var scrollTopBtn = document.getElementById('scroll-top');
@@ -619,7 +589,5 @@
     });
   }
 
-
   // ── Knowledge Base Search Logic removed as per structural simplification ──
-
 })();
