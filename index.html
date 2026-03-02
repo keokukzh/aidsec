@@ -815,10 +815,63 @@
         </div>
       </section>
 
-      <!-- ── Cyber-Risk ROI Calculator (React Island) ── -->
+      <!-- ── Cyber-Risk ROI Calculator (Static Version) ── -->
       <section class="section section--dark risk-calculator-section">
         <div class="container">
-          <div id="risk-calculator-root"></div>
+          <div class="risk-calc card card--glass" data-reveal="fade-up">
+            <div class="risk-calc__header">
+              <h3 class="risk-calc__title">Cyber-Risiko & <span class="text-gold">ROI Rechner</span></h3>
+              <p class="risk-calc__intro">Schätzen Sie das finanzielle Risiko Ihrer Kanzlei bei einem Datenverlust.</p>
+            </div>
+
+            <div class="risk-calc__body">
+              <div class="risk-calc__input-group">
+                <div class="risk-calc__label-row">
+                  <label for="roi-records-slider">Anzahl Mandanten / Datensätze</label>
+                  <span class="risk-calc__value-badge" id="roi-records-value">500</span>
+                </div>
+                <input
+                  id="roi-records-slider"
+                  type="range"
+                  min="100"
+                  max="10000"
+                  step="100"
+                  value="500"
+                  class="risk-calc__range"
+                />
+              </div>
+
+              <div class="risk-calc__results">
+                <div class="risk-calc__result-item risk-calc__result-item--danger">
+                  <span class="risk-calc__result-label">Potenzieller Gesamtschaden (inkl. nDSG Bussen)</span>
+                  <span class="risk-calc__result-value" id="roi-total-damage">CHF 134'750</span>
+                </div>
+
+                <div class="risk-calc__divider">vs.</div>
+
+                <div class="risk-calc__result-item risk-calc__result-item--safe">
+                  <span class="risk-calc__result-label">Einmalige AidSec Investition (ab)</span>
+                  <span class="risk-calc__result-value">CHF 490</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="risk-calc__footer">
+              <div class="risk-calc__roi">
+                <div class="risk-calc__roi-circle">
+                  <span class="risk-calc__roi-multiplier" id="roi-factor">275x</span>
+                </div>
+                <div class="risk-calc__roi-text">
+                  <strong>Effektiver Schutz-Hebel</strong>
+                  <span>Jeder investierte Franken schützt vor <span id="roi-factor-text">275</span> CHF potenziellem Schaden.</span>
+                </div>
+              </div>
+              
+              <a href="#kontakt" class="btn btn--gold btn--full mt-lg">
+                Kostenloses Audit vereinbaren
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -3078,7 +3131,6 @@
     <script src="js/main.js" defer></script>
     <script src="js/form.js" defer></script>
     <script type="module" src="js/dist/hero-app.js"></script>
-    <script type="module" src="js/dist/risk-calculator.js"></script>
 
     <!-- WhatsApp Business CTA (lazy-loaded to avoid blocking initial paint) -->
     <div id="whatsapp-cta" class="whatsapp-cta" style="display:none" aria-label="WhatsApp Kontakt">

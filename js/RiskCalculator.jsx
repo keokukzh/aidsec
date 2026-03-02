@@ -33,7 +33,13 @@ const RiskCalculator = () => {
   const roiFactor = Math.round(totalPotentialDamage / FIX_FEE);
 
   return (
-    <div className="risk-calc card card--glass" data-reveal="fade-up">
+    <motion.div 
+      className="risk-calc card card--glass" 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <div className="risk-calc__header">
         <h3 className="risk-calc__title">Cyber-Risiko & <span className="text-gold">ROI Rechner</span></h3>
         <p className="risk-calc__intro">Schätzen Sie das finanzielle Risiko Ihrer Kanzlei bei einem Datenverlust.</p>
@@ -94,7 +100,7 @@ const RiskCalculator = () => {
           Kostenloses Audit vereinbaren
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
