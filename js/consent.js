@@ -44,7 +44,8 @@
     const script = document.createElement('script');
     script.async = true;
     script.defer = true;
-    script.src = '/js/plausible.js';
+    script.src = 'https://plausible.io/js/script.js';
+    script.setAttribute('data-domain', 'aidsec.ch');
     document.head.appendChild(script);
 
     // Plausible queue fallback
