@@ -75,7 +75,7 @@ body .nav.scrolled {
 }
 
 .nav__link {
-  font-size: 0.75rem; /* 12px */
+  font-size: var(--text-xs);
   font-weight: 500;
   color: var(--white);
   text-decoration: none;
@@ -83,7 +83,7 @@ body .nav.scrolled {
   text-transform: uppercase;
   position: relative;
   padding: var(--space-2) var(--space-2);
-  min-height: 36px;
+  min-height: 44px; /* WCAG 2.1 tap target */
   display: inline-flex;
   align-items: center;
   cursor: pointer;
@@ -233,8 +233,9 @@ body .nav.scrolled {
 
 .nav__cta {
   flex-shrink: 0;
-  font-size: 0.75rem !important; /* 12px */
+  font-size: var(--text-xs) !important;
   padding: var(--space-2) var(--space-4) !important;
+  min-height: 44px;
 }
 
 .nav__cta .btn__badge {
@@ -247,7 +248,10 @@ body .nav.scrolled {
   display: none;
   flex-direction: column;
   gap: 5px;
-  padding: var(--space-2);
+  padding: var(--space-3);
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
   z-index: calc(var(--z-overlay) + 1);
 }
 
@@ -357,6 +361,7 @@ body .nav.scrolled {
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
+  min-height: 44px; /* WCAG 2.1 tap target */
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
