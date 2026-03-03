@@ -211,6 +211,73 @@ table {
   color: var(--white) !important;
 }
 
+/* Restore dark text inside white-background cards on dark sections */
+.section--dark .service-card .service-card__title,
+.section--dark .service-card h3 {
+  color: var(--navy) !important;
+}
+
+.section--dark .service-card .service-card__desc {
+  color: var(--gray-600) !important;
+}
+
+.section--dark .service-card .service-card__features li {
+  color: var(--gray-500) !important;
+}
+
+.section--dark .service-card .service-card__price {
+  color: var(--gray-600) !important;
+}
+
+.section--dark .service-card .service-card__price strong {
+  color: var(--gold-text) !important;
+}
+
+.section--dark .service-card .btn--outline {
+  color: var(--navy) !important;
+  border-color: var(--navy) !important;
+}
+
+.section--dark .service-card .btn--outline:hover {
+  background: var(--navy) !important;
+  color: var(--white) !important;
+}
+
+/* Fix h2 in section--deep (ultra-dark sections) */
+.section--deep h2,
+.section--deep h3 {
+  color: var(--white);
+}
+
+.section--deep .section-header p {
+  color: var(--gray-400);
+}
+
+/* Outline buttons on dark backgrounds */
+.section--dark .btn--outline,
+.section--deep .btn--outline {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.section--dark .btn--outline:hover,
+.section--deep .btn--outline:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+/* Knowledge filter buttons on dark backgrounds */
+.knowledge-filter .btn--outline {
+  color: var(--gray-300);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.knowledge-filter .btn--outline:hover {
+  color: var(--white);
+  border-color: var(--gold);
+  background: rgba(200, 168, 76, 0.1);
+}
+
 .article-header h1 {
   color: var(--white) !important;
 }

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Mail-Sicherheit für Kanzleien: SPF, DKIM und DMARC erklärt — AidSec</title>
+    <meta name="description" content="SPF, DKIM und DMARC verständlich erklärt für Schweizer Anwaltskanzleien. Warum E-Mail-Authentifizierung Ihre Korrespondenz mit Gerichten und Mandanten schützt." />
+    <link rel="canonical" href="https://aidsec.ch/wissen/email-sicherheit-kanzlei.html" />
+
+    <link rel="stylesheet" href="../css/fonts.css" />
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/sections.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+    <link rel="icon" type="image/png" href="../favicon.png" />
+  </head>
+  <body>
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="../index.html" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="../logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="../index.html#preise" class="nav__link">Preise</a>
+          <a href="../index.html#leistungen" class="nav__link">Leistungen</a>
+          <a href="../fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="index.html" class="nav__link active">Wissen</a>
+          <a href="../index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <header class="article-header">
+        <div class="container--narrow">
+          <div class="article-meta" data-reveal="fade-up">
+            <span>Praxistipp</span>
+            <span>&bull;</span>
+            <span>8 Min. Lesezeit</span>
+            <span>&bull;</span>
+            <span>3. März 2026</span>
+          </div>
+          <h1 data-reveal="fade-up" data-reveal-delay="100">E-Mail-Sicherheit für Kanzleien: SPF, DKIM und DMARC verständlich erklärt</h1>
+        </div>
+      </header>
+
+      <article class="article-body container--narrow" data-reveal="fade-up" data-reveal-delay="200">
+        <p class="lead">Ihre Kanzlei kommuniziert täglich per E-Mail mit Gerichten, Mandanten und Gegenparteien. Doch ohne SPF, DKIM und DMARC kann jeder E-Mails in Ihrem Namen versenden — und Ihre echten Nachrichten landen im Spam.</p>
+
+        <h2>Warum E-Mail-Authentifizierung für Kanzleien unverzichtbar ist</h2>
+        <p>Kanzleien übertragen per E-Mail regelmässig vertrauliche Dokumente: Verträge, Schriftsätze, Fristen-Mitteilungen. Wenn ein Dritter Ihre Domain fälscht und Phishing-Mails verschickt, schadet das nicht nur Ihrem Ruf — es kann dazu führen, dass Ihre echten E-Mails von Gerichten und Ämtern nicht mehr zugestellt werden.</p>
+
+        <h2>Die drei Protokolle im Detail</h2>
+
+        <h3>SPF (Sender Policy Framework)</h3>
+        <p>Ein DNS-Eintrag, der festlegt, welche Server E-Mails für Ihre Domain versenden dürfen. Empfangende Mailserver prüfen, ob die Absender-IP autorisiert ist.</p>
+        <ul>
+          <li><strong>Ohne SPF:</strong> Jeder kann E-Mails als @ihrekanzlei.ch versenden</li>
+          <li><strong>Mit SPF:</strong> Nur Ihre autorisierten Mailserver werden akzeptiert</li>
+        </ul>
+
+        <h3>DKIM (DomainKeys Identified Mail)</h3>
+        <p>Eine digitale Signatur, die jede ausgehende E-Mail mit einem kryptografischen Schlüssel versieht. Der Empfänger kann verifizieren, dass die Nachricht tatsächlich von Ihrem Server stammt und unterwegs nicht verändert wurde.</p>
+
+        <h3>DMARC (Domain-based Message Authentication)</h3>
+        <p>DMARC verbindet SPF und DKIM und legt fest, was mit E-Mails passieren soll, die die Prüfung nicht bestehen: nichts tun, in Quarantäne verschieben, oder ablehnen. Zusätzlich erhalten Sie Berichte über alle E-Mail-Aktivitäten Ihrer Domain.</p>
+
+        <div class="cta-banner">
+          <div class="cta-banner__content">
+            <span class="badge">Praxistipp</span>
+            <h3>Ihre E-Mail-Konfiguration prüfen</h3>
+            <p>Wir analysieren SPF, DKIM und DMARC Ihrer Kanzlei-Domain kostenlos — und zeigen Ihnen, wie viele unautorisierte E-Mails im Umlauf sind.</p>
+            <a href="../index.html#kontakt" class="btn btn--gold">Jetzt kostenlos prüfen</a>
+          </div>
+        </div>
+
+        <h2>Die häufigsten Fehler bei Kanzlei-E-Mails</h2>
+        <ul class="checklist">
+          <li>
+            <strong>Kein SPF-Eintrag vorhanden</strong>
+            <span>Ohne SPF kann jeder Server E-Mails in Ihrem Namen versenden — ein Einladungsschild für Phishing-Angriffe.</span>
+          </li>
+          <li>
+            <strong>SPF mit ~all statt -all</strong>
+            <span>Der Softfail (~all) ist nur eine Empfehlung. Erst der Hardfail (-all) weist unautorisierte Absender konsequent ab.</span>
+          </li>
+          <li>
+            <strong>DMARC auf p=none belassen</strong>
+            <span>Viele Kanzleien haben DMARC zwar eingerichtet, die Policy aber auf „none" belassen. Das ist so, als hätten Sie ein Schloss an der Tür, das nie abgeschlossen wird.</span>
+          </li>
+          <li>
+            <strong>Subdomains nicht gesichert</strong>
+            <span>Angreifer nutzen oft Subdomains (z.B. mail.ihrekanzlei.ch), die nicht in SPF/DMARC geschützt sind.</span>
+          </li>
+        </ul>
+
+        <h2>Was AidSec für Sie tut</h2>
+        <p>Im Rahmen unseres <a href="../leistungen/cyber-mandat.html" style="color: var(--gold);">Cyber-Mandats</a> überwachen wir Ihre Domain-Reputation rund um die Uhr:</p>
+        <ul>
+          <li>SPF-, DKIM- und DMARC-Konfiguration und laufende Überwachung</li>
+          <li>Blacklist-Monitoring auf über 100 Listen</li>
+          <li>Monatlicher Zustellbarkeits-Report für die Kanzleileitung</li>
+          <li>Sofortige Benachrichtigung bei auffälligem E-Mail-Verkehr</li>
+        </ul>
+
+        <h2>Fazit</h2>
+        <p>E-Mail-Authentifizierung ist keine technische Spielerei — sie ist eine grundlegende Schutzmassnahme für jede Kanzlei, die digital kommuniziert. In Kombination mit Security Headers und WordPress-Härtung bildet sie das Fundament einer sicheren digitalen Präsenz.</p>
+
+        <div class="cta-banner cta-banner--footer">
+          <div class="cta-banner__content">
+            <h3>E-Mail-Sicherheit für Ihre Kanzlei</h3>
+            <p>Wir konfigurieren SPF, DKIM und DMARC für Sie — und überwachen Ihre Domain laufend.</p>
+            <a href="../index.html#kontakt" class="btn btn--gold">Security-Check starten</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="../logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>

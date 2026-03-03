@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Headers Optimierung für Kanzleien | Note A in 24h – AidSec</title>
+    <meta
+      name="description"
+      content="Security Headers Note F → A in unter 24 Stunden. Ohne CMS-Login, ohne Downtime. AidSec implementiert alle sicherheitsrelevanten HTTP-Headers für Schweizer Kanzleien und Praxen. Ab CHF 299."
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Security Headers Optimierung | Note A in 24h – AidSec" />
+    <meta
+      property="og:description"
+      content="Fehlende HTTP-Security-Headers sind das erste, was Angreifer sehen. Wir bringen Ihre Kanzlei-Webseite auf Note A — in unter 24 Stunden."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aidsec.ch/leistungen/header-optimierung.html" />
+    <meta property="og:locale" content="de_CH" />
+    <meta property="og:site_name" content="AidSec" />
+    <meta property="og:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
+
+    <link rel="canonical" href="https://aidsec.ch/leistungen/header-optimierung.html" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../css/fonts.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/sections.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <link rel="icon" type="image/png" href="../favicon.png" />
+
+    <!-- Schema.org Service -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Security Headers Optimierung (Rapid Header Fix)",
+        "provider": {
+          "@type": "Organization",
+          "name": "AidSec",
+          "url": "https://aidsec.ch"
+        },
+        "description": "Implementierung aller sicherheitsrelevanten HTTP-Security-Headers. Von Note F zu Note A in unter 24 Stunden — ohne Downtime, ohne CMS-Login.",
+        "areaServed": { "@type": "Country", "name": "Switzerland" },
+        "offers": {
+          "@type": "Offer",
+          "price": "299",
+          "priceCurrency": "CHF",
+          "priceValidUntil": "2026-12-31"
+        }
+      }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Was sind Security Headers und warum brauche ich sie?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Security Headers sind HTTP-Antwort-Header, die den Browser anweisen, bestimmte Sicherheitsrichtlinien durchzusetzen. Sie schützen vor Clickjacking, Cross-Site Scripting (XSS), MIME-Sniffing und Man-in-the-Middle-Angriffen. Ohne diese Headers ist Ihre Webseite deutlich anfälliger für automatisierte Angriffe."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Benötigen Sie Zugriff auf mein CMS oder meine Mandantendaten?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Für die Header-Optimierung arbeiten wir ausschliesslich auf Server-/Header-Ebene. Wir benötigen weder CMS-Login noch Zugriff auf gespeicherte Mandantendaten. Ihre Schweigepflicht bleibt vollständig gewahrt."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ist meine Webseite während der Optimierung offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Alle Massnahmen werden im laufenden Betrieb durchgeführt. Unsere Kunden verzeichnen 0 Minuten Downtime."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie lange dauert die Optimierung?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In der Regel ist die vollständige Header-Optimierung in unter 24 Stunden abgeschlossen. Sie erhalten anschliessend ein schriftliches Audit-Protokoll mit dem verifizierten Ergebnis."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="../index.html" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="../logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="../index.html#preise" class="nav__link">Preise</a>
+          <a href="../index.html#leistungen" class="nav__link active">Leistungen</a>
+          <a href="../fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="../wissen/index.html" class="nav__link">Wissen</a>
+          <a href="../index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Hero -->
+      <section class="section section--dark knowledge-hero">
+        <div class="container">
+          <div class="knowledge-hero__inner">
+            <div class="section-header" data-reveal="fade-up">
+              <span class="badge badge--gold">Rapid Header Fix</span>
+              <h1>Security Headers <span class="text-gold">Note A in 24h</span></h1>
+              <p>Fehlende HTTP-Security-Headers sind das erste, was Angreifer und Aufsichtsbehörden sehen. Wir implementieren alle sicherheitsrelevanten Headers — ohne Downtime, ohne CMS-Login.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Problem Statement -->
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Das Problem: <span class="text-gold">78% mit Note F</span></h2>
+            <p>Die Mehrheit der Schweizer Kanzlei-Webseiten hat Security Headers Note F bei SecurityHeaders.com — ohne es zu wissen. Das bedeutet: kein Schutz vor Clickjacking, kein XSS-Schutz, keine Content-Security-Policy.</p>
+          </div>
+
+          <div class="alert-cards" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Clickjacking-Angriffe</h3>
+              <p class="alert-card__desc">Ohne X-Frame-Options können Angreifer Ihre Webseite in einen unsichtbaren Frame einbetten und Mandanten auf gefälschte Formulare umleiten.</p>
+            </div>
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Cross-Site Scripting (XSS)</h3>
+              <p class="alert-card__desc">Ohne Content-Security-Policy können Schadskripte injectiert werden, die Sitzungsdaten und Login-Informationen Ihrer Mandanten abgreifen.</p>
+            </div>
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">nDSG-Verstösse</h3>
+              <p class="alert-card__desc">Art. 8 nDSG verlangt technische Schutzmassnahmen. Fehlende Security Headers können als Organisationsmangel gewertet werden — mit Bussen bis CHF 250'000.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Was wir implementieren -->
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>6 Security Headers — <span class="text-gold">vollständig implementiert</span></h2>
+            <p>Jeder Header erfüllt eine spezifische Schutzfunktion. Zusammen bilden sie die erste Verteidigungslinie Ihrer Kanzlei-Webseite.</p>
+          </div>
+
+          <div class="services" data-reveal="fade-up" data-reveal-delay="100">
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Strict-Transport-Security</h3>
+              <p class="service-card__desc">Erzwingt verschlüsselte HTTPS-Verbindungen und verhindert SSL-Stripping-Angriffe. Schützt die Vertraulichkeit der Kommunikation zwischen Browser und Server.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Content-Security-Policy</h3>
+              <p class="service-card__desc">Definiert, welche Ressourcen Ihr Browser laden darf. Blockiert unerlaubte Skripte und verhindert Cross-Site-Scripting-Angriffe (XSS) zuverlässig.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">X-Frame-Options</h3>
+              <p class="service-card__desc">Verhindert, dass Ihre Webseite in fremde Frames eingebettet wird. Schützt Mandanten vor Clickjacking-Angriffen und gefälschten Eingabeformularen.</p>
+            </article>
+          </div>
+
+          <div class="services" data-reveal="fade-up" data-reveal-delay="200">
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">X-Content-Type-Options</h3>
+              <p class="service-card__desc">Verhindert MIME-Sniffing. Der Browser interpretiert Dateien nur noch gemäss ihrem deklarierten Typ — keine Code-Ausführung durch getarnte Dateien.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Referrer-Policy</h3>
+              <p class="service-card__desc">Kontrolliert, welche URL-Informationen bei Links weitergegeben werden. Schützt interne Seitenstrukturen und mandantenspezifische Pfade vor Offenlegung.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                  <line x1="4" y1="22" x2="4" y2="15"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Permissions-Policy</h3>
+              <p class="service-card__desc">Beschränkt Browser-APIs wie Kamera, Mikrofon und Geolocation. Verhindert unerlaubtes Tracking und schützt die Privatsphäre Ihrer Besucher — nDSG-konform.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- So funktioniert es -->
+      <section class="section section--dark">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>So funktioniert der <span class="text-gold">Rapid Header Fix</span></h2>
+            <p>Von der Analyse bis zur verifizierten Note A — transparent, diskret und ohne Downtime.</p>
+          </div>
+
+          <div class="process" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="process__steps">
+              <div class="process__step">
+                <span class="process__step-number">1</span>
+                <h3 class="process__step-title">Kostenlose Analyse</h3>
+                <p class="process__step-desc">Wir prüfen Ihre Security Headers über SecurityHeaders.com — diskret und ohne jeglichen Zugriff auf Ihr System.</p>
+              </div>
+              <div class="process__step">
+                <span class="process__step-number">2</span>
+                <h3 class="process__step-title">Konfiguration</h3>
+                <p class="process__step-desc">Wir implementieren alle 6 sicherheitsrelevanten Headers auf Serverebene — angepasst an Ihre spezifische Hosting-Infrastruktur.</p>
+              </div>
+              <div class="process__step">
+                <span class="process__step-number">3</span>
+                <h3 class="process__step-title">Verifikation</h3>
+                <p class="process__step-desc">Unabhängige Prüfung bei SecurityHeaders.com. Das Ergebnis: Note A. Verifizierbar, reproduzierbar, dokumentiert.</p>
+              </div>
+              <div class="process__step">
+                <span class="process__step-number">4</span>
+                <h3 class="process__step-title">Audit-Protokoll</h3>
+                <p class="process__step-desc">Sie erhalten ein schriftliches Sicherheitsprotokoll mit allen implementierten Massnahmen — ideal für Ihre nDSG-Dokumentation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Investition</h2>
+          </div>
+
+          <div class="card card--glass" data-reveal="fade-up" data-reveal-delay="100" style="max-width: 520px; margin: 0 auto; padding: var(--space-8); text-align: center;">
+            <span class="badge badge--gold" style="margin-bottom: var(--space-4); display: inline-block;">Rapid Header Fix</span>
+            <div style="font-family: var(--font-display); font-size: var(--text-5xl); color: var(--white); margin-bottom: var(--space-2);">
+              CHF <span class="text-gold">299.–</span>
+            </div>
+            <p style="color: var(--gray-400); font-size: var(--text-sm); margin-bottom: var(--space-6);">Einmalige Investition. Kein Abo. Keine versteckten Kosten.</p>
+
+            <ul style="text-align: left; list-style: none; padding: 0; margin-bottom: var(--space-8);">
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Alle 6 Security Headers implementiert
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Note A bei SecurityHeaders.com
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                0 Minuten Downtime
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Kein CMS-Login erforderlich
+              </li>
+              <li style="padding: var(--space-3) 0; color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Schriftliches Audit-Protokoll
+              </li>
+            </ul>
+
+            <a href="../onboarding/rapid-header-fix/index.html" class="btn btn--gold btn--lg btn--full" data-track="header-fix-cta">
+              Jetzt Rapid Header Fix buchen
+            </a>
+            <p style="margin-top: var(--space-4); color: var(--gray-500); font-size: var(--text-xs);">
+              Oder: <a href="../index.html#kontakt" style="color: var(--gold);">Kostenlose Analyse anfordern</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Häufige Fragen</h2>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <details class="faq__item">
+              <summary class="faq__question">
+                Was sind Security Headers und warum brauche ich sie?
+              </summary>
+              <div class="faq__answer">
+                <p>Security Headers sind HTTP-Antwort-Header, die den Browser anweisen, bestimmte Sicherheitsrichtlinien durchzusetzen. Sie schützen vor Clickjacking, Cross-Site Scripting (XSS), MIME-Sniffing und Man-in-the-Middle-Angriffen.</p>
+                <p>Ohne diese Headers ist Ihre Webseite deutlich anfälliger — und SecurityHeaders.com bewertet sie mit Note F. Das ist für Angreifer ein öffentlich sichtbares Signal, dass Ihre Seite ein leichtes Ziel ist.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">
+                Benötigen Sie Zugriff auf mein CMS oder meine Mandantendaten?
+              </summary>
+              <div class="faq__answer">
+                <p>Nein. Für die Header-Optimierung arbeiten wir ausschliesslich auf Server-/Header-Ebene. Wir benötigen weder CMS-Login noch Zugriff auf gespeicherte Mandantendaten. Ihre Schweigepflicht bleibt vollständig gewahrt.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">
+                Ist meine Webseite während der Optimierung offline?
+              </summary>
+              <div class="faq__answer">
+                <p>Nein. Alle Massnahmen werden im laufenden Betrieb durchgeführt. Unsere Kunden verzeichnen 0 Minuten Downtime.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">
+                Wie lange dauert die Optimierung?
+              </summary>
+              <div class="faq__answer">
+                <p>In der Regel ist die vollständige Header-Optimierung in unter 24 Stunden abgeschlossen. Sie erhalten anschliessend ein schriftliches Audit-Protokoll mit dem verifizierten Ergebnis.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">
+                Genügt ein SSL-Zertifikat nicht als Schutz?
+              </summary>
+              <div class="faq__answer">
+                <p>SSL/TLS verschlüsselt die Verbindung, schützt aber nicht vor Clickjacking, XSS oder fehlender Content-Security-Policy. Security Headers sind die zweite Verteidigungslinie — und die am häufigsten vergessene.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">
+                Was passiert nach der Optimierung? Muss ich etwas tun?
+              </summary>
+              <div class="faq__answer">
+                <p>Nein. Die implementierten Headers bleiben dauerhaft aktiv, solange Ihre Server-Konfiguration nicht geändert wird. Bei einem Hosting-Wechsel empfehlen wir eine erneute Prüfung.</p>
+                <p>Für laufende Überwachung und automatische Benachrichtigungen bei Änderungen empfehlen wir unser <a href="cyber-mandat.html" style="color: var(--gold);">Cyber-Mandat</a>.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section section--dark">
+        <div class="container">
+          <div class="cta-banner">
+            <div class="cta-banner__content" data-reveal="fade-up">
+              <h2>Ihre Webseite auf Note A — <span class="text-gold">in unter 24 Stunden</span></h2>
+              <p>Kostenloser Security-Check zeigt Ihren aktuellen Status. Ohne Verpflichtung.</p>
+              <a href="../index.html#kontakt" class="btn btn--gold btn--lg">Kostenfreien Security-Check starten</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="../logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>
