@@ -3102,3 +3102,65 @@
   }
 }
 
+/* ═══ DOWNLOAD PAGE ═══ */
+.download-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.download-page__container {
+  max-width: 600px;
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-16);
+  text-align: center;
+}
+
+.download-page__icon-wrap {
+  margin-bottom: var(--space-6);
+}
+
+.download-page__icon {
+  margin: 0 auto;
+}
+
+.download-page__title {
+  margin-bottom: var(--space-4);
+  color: var(--white);
+}
+
+.download-page__desc {
+  font-size: var(--text-lg);
+  color: var(--gray-400);
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+
+.download-page__card {
+  background-color: var(--navy-deep);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-8);
+}
+
+.download-page__card-title {
+  color: var(--white);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.download-page__card-meta {
+  color: var(--gray-400);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-6);
+}
+
+.download-page__btn-icon {
+  margin-right: 8px;
+}
+
+.download-page__footer {
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+}
