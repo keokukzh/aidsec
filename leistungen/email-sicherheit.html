@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Mail-Sicherheits-Audit: SPF, DKIM & DMARC | AidSec</title>
+    <meta name="description" content="E-Mail-Sicherheit für Schweizer Kanzleien und Praxen. SPF, DKIM und DMARC Konfiguration. Stellt sicher, dass Ihre E-Mails Gerichte und Klienten erreichen. CHF 149." />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="E-Mail-Sicherheits-Audit | AidSec Schweiz" />
+    <meta property="og:description" content="SPF, DKIM, DMARC korrekt konfiguriert? E-Mails, die im Spam landen, kosten Vertrauen und Mandate." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aidsec.ch/leistungen/email-sicherheit.html" />
+    <meta property="og:locale" content="de_CH" />
+    <meta property="og:site_name" content="AidSec" />
+    <meta property="og:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
+    <link rel="canonical" href="https://aidsec.ch/leistungen/email-sicherheit.html" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/sections.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+    <link rel="icon" type="image/png" href="/logowhite.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "E-Mail-Sicherheits-Audit",
+        "provider": { "@type": "Organization", "name": "AidSec", "url": "https://aidsec.ch" },
+        "description": "SPF, DKIM und DMARC Konfiguration für Schweizer Kanzleien und Praxen. Stellt sicher, dass geschäftskritische E-Mails Gerichte, Klienten und Partner zuverlässig erreichen.",
+        "areaServed": { "@type": "Country", "name": "Switzerland" },
+        "offers": { "@type": "Offer", "price": "149", "priceCurrency": "CHF", "priceValidUntil": "2026-12-31" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Was sind SPF, DKIM und DMARC?",
+            "acceptedAnswer": { "@type": "Answer", "text": "SPF (Sender Policy Framework) verifiziert, welche Server E-Mails für Ihre Domain senden dürfen. DKIM (DomainKeys Identified Mail) signiert E-Mails kryptografisch. DMARC (Domain-based Message Authentication) verbindet beide und definiert, was mit fehlgeschlagenen E-Mails passiert. Zusammen verhindern sie E-Mail-Fälschung und Spam-Blockierung." }
+          },
+          {
+            "@type": "Question",
+            "name": "Warum landen meine E-Mails im Spam?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Ohne korrekte SPF-, DKIM- und DMARC-Konfiguration behandeln Empfänger-Server Ihre E-Mails als potenziell gefälscht. Dies führt zu Spam-Klassifizierung oder direkter Ablehnung — besonders bei sensiblen Empfängern wie Gerichten und Behörden." }
+          }
+        ]
+      }
+    </script>
+    <script src="/js/consent.js"></script>
+  </head>
+  <body>
+    <header class="nav" id="nav" role="banner">
+      <div class="container nav__inner">
+        <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="/logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" decoding="async" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link">Leistungen</a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html">Cyber-Mandat</a>
+              <a href="/leistungen/ndsg-compliance-pack.html">nDSG Compliance Pack</a>
+              <a href="/leistungen/notfall-intervention.html">Notfall-Intervention</a>
+              <a href="/leistungen/email-sicherheit.html">E-Mail-Sicherheit</a>
+            </div>
+          </div>
+          <div class="nav__item has-dropdown">
+            <span class="nav__link" tabindex="0">Branchen</span>
+            <div class="nav__dropdown">
+              <a href="/branchen/anwaltskanzleien.html">Anwaltskanzleien</a>
+              <a href="/branchen/arztpraxen.html">Arztpraxen</a>
+              <a href="/branchen/notariate.html">Notariate</a>
+            </div>
+          </div>
+          <a href="/fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="/index.html#preise" class="nav__link">Preise</a>
+          <div class="nav__item has-dropdown">
+            <a href="/wissen/index.html" class="nav__link">Wissen</a>
+            <div class="nav__dropdown">
+              <a href="/wissen/index.html">Alle Artikel</a>
+              <a href="/wissen/ultimate-ndsg-checklist-2025.html">nDSG Compliance Guide</a>
+              <a href="/wissen/security-headers-note-f-auf-a.html">Security Headers Note F</a>
+            </div>
+          </div>
+        </nav>
+        <a href="/index.html#kontakt" class="btn btn--gold nav__cta desktop-only" data-track="nav-cta" aria-label="Kostenfreien Security-Check starten">Kostenfreien Security-Check <span class="btn__badge">24h</span></a>
+        <button class="nav__toggle" id="nav-toggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="nav__toggle-bar"></span><span class="nav__toggle-bar"></span><span class="nav__toggle-bar"></span>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link mobile-menu__link">Leistungen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html" class="mobile-menu__link">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html" class="mobile-menu__link">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html" class="mobile-menu__link">Cyber-Mandat</a>
+              <a href="/leistungen/ndsg-compliance-pack.html" class="mobile-menu__link">nDSG Compliance</a>
+              <a href="/leistungen/notfall-intervention.html" class="mobile-menu__link">Notfall-Intervention</a>
+              <a href="/leistungen/email-sicherheit.html" class="mobile-menu__link">E-Mail-Sicherheit</a>
+            </div>
+          </div>
+          <div class="nav__item has-dropdown">
+            <span class="nav__link mobile-menu__link">Branchen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+            <div class="nav__dropdown">
+              <a href="/branchen/anwaltskanzleien.html" class="mobile-menu__link">Anwaltskanzleien</a>
+              <a href="/branchen/arztpraxen.html" class="mobile-menu__link">Arztpraxen</a>
+              <a href="/branchen/notariate.html" class="mobile-menu__link">Notariate</a>
+            </div>
+          </div>
+          <a href="/fallstudien.html" class="mobile-menu__link">Fallstudien</a>
+          <a href="/index.html#preise" class="mobile-menu__link">Preise</a>
+          <div class="nav__item has-dropdown">
+            <a href="/wissen/index.html" class="nav__link mobile-menu__link">Wissen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+            <div class="nav__dropdown">
+              <a href="/wissen/index.html" class="mobile-menu__link">Alle Artikel</a>
+              <a href="/wissen/ultimate-ndsg-checklist-2025.html" class="mobile-menu__link">nDSG Guide 2025</a>
+            </div>
+          </div>
+          <a href="/index.html#kontakt" class="btn btn--gold mobile-menu__cta" data-track="mobile-cta">Gratis Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="section section--dark knowledge-hero">
+        <div class="container">
+          <div class="knowledge-hero__inner">
+            <div class="section-header" data-reveal="fade-up">
+              <span class="badge badge--gold">E-Mail-Sicherheit</span>
+              <h1>Ihre E-Mails <span class="text-gold">erreichen ihr Ziel</span></h1>
+              <p>E-Mails an Gerichte, Klienten und Behörden, die im Spam landen, kosten Vertrauen und Mandate. Wir konfigurieren SPF, DKIM und DMARC — einmalig CHF 149.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Warum E-Mail-Sicherheit <span class="text-gold">geschäftskritisch</span> ist</h2>
+          </div>
+          <div class="alert-cards" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Spam-Klassifizierung</h3>
+              <p class="alert-card__desc">Ohne SPF/DKIM/DMARC behandeln Empfänger-Server Ihre E-Mails als verdächtig. Schriftsätze, Verträge und Terminbestätigungen landen im Spam.</p>
+            </div>
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Domain-Spoofing</h3>
+              <p class="alert-card__desc">Ohne DMARC können Angreifer E-Mails im Namen Ihrer Kanzlei versenden — an Ihre Mandanten. Phishing-Angriffe, die Ihren Namen missbrauchen, sind kaum erkennbar.</p>
+            </div>
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Reputationsschaden</h3>
+              <p class="alert-card__desc">Wenn Ihre Domain auf einer Blacklist landet, werden alle E-Mails Ihrer Kanzlei blockiert — nicht nur Spam, sondern auch legitime Korrespondenz.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Was wir <span class="text-gold">konfigurieren</span></h2>
+          </div>
+          <div class="services" data-reveal="fade-up" data-reveal-delay="100">
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">SPF (Sender Policy Framework)</h3>
+              <p class="service-card__desc">Definiert, welche Server berechtigt sind, E-Mails für Ihre Domain zu senden. Verhindert, dass Dritte Ihre Domain für Spam oder Phishing missbrauchen.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">DKIM (DomainKeys Identified Mail)</h3>
+              <p class="service-card__desc">Signiert jede ausgehende E-Mail kryptografisch. Empfänger können verifizieren, dass die E-Mail tatsächlich von Ihrer Kanzlei stammt und nicht manipuliert wurde.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">DMARC (Domain-based Message Authentication)</h3>
+              <p class="service-card__desc">Verbindet SPF und DKIM und definiert eine Richtlinie: Was passiert mit E-Mails, die die Prüfung nicht bestehen? Inklusive Reporting für volle Transparenz.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up"><h2>Investition</h2></div>
+          <div class="card card--glass" data-reveal="fade-up" data-reveal-delay="100" style="max-width: 520px; margin: 0 auto; padding: var(--space-8); text-align: center;">
+            <span class="badge badge--gold" style="margin-bottom: var(--space-4); display: inline-block;">E-Mail-Sicherheits-Audit</span>
+            <div style="font-family: var(--font-display); font-size: var(--text-5xl); color: var(--white); margin-bottom: var(--space-2);">
+              CHF <span class="text-gold">149.–</span>
+            </div>
+            <p style="color: var(--gray-400); font-size: var(--text-sm); margin-bottom: var(--space-6);">Einmalig. SPF + DKIM + DMARC konfiguriert.</p>
+            <ul style="text-align: left; list-style: none; padding: 0; margin-bottom: var(--space-8);">
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                SPF-Record Analyse + Konfiguration
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                DKIM-Schlüssel Generierung + Einrichtung
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                DMARC-Policy Implementierung + Reporting
+              </li>
+              <li style="padding: var(--space-3) 0; color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Schriftliche Dokumentation + Zustellbarkeitstest
+              </li>
+            </ul>
+            <a href="/index.html#kontakt" class="btn btn--gold btn--lg btn--full" data-track="email-audit-cta">E-Mail-Sicherheit anfragen</a>
+            <p style="margin-top: var(--space-4); color: var(--gray-500); font-size: var(--text-xs);">
+              Für laufende Überwachung: <a href="/leistungen/cyber-mandat.html" style="color: var(--gold);">Cyber-Mandat</a> (CHF 89/Mo)
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up"><h2>Häufige Fragen</h2></div>
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <details class="faq__item">
+              <summary class="faq__question">Was sind SPF, DKIM und DMARC?</summary>
+              <div class="faq__answer"><p>SPF verifiziert, welche Server E-Mails für Ihre Domain senden dürfen. DKIM signiert E-Mails kryptografisch. DMARC verbindet beide und definiert, was mit fehlgeschlagenen E-Mails passiert. Zusammen verhindern sie E-Mail-Fälschung und Spam-Blockierung.</p></div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">Warum landen meine E-Mails im Spam?</summary>
+              <div class="faq__answer"><p>Ohne korrekte SPF, DKIM und DMARC Konfiguration behandeln Empfänger-Server Ihre E-Mails als potenziell gefälscht. Besonders strenge Server — wie die von Gerichten und Behörden — blockieren solche E-Mails direkt.</p></div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">Brauche ich das, wenn ich Microsoft 365 / Google Workspace nutze?</summary>
+              <div class="faq__answer"><p>Gerade dann. Microsoft 365 und Google Workspace setzen SPF/DKIM/DMARC voraus, konfigurieren sie aber nicht automatisch vollständig. Besonders DMARC mit Reporting wird oft vergessen.</p></div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--dark">
+        <div class="container">
+          <div class="cta-banner">
+            <div class="cta-banner__content" data-reveal="fade-up">
+              <h2>E-Mails, die ankommen — <span class="text-gold">garantiert.</span></h2>
+              <p>SPF, DKIM, DMARC — einmalig CHF 149. Ihre Kanzlei-Korrespondenz verdient Zustellsicherheit.</p>
+              <a href="/index.html#kontakt" class="btn btn--gold btn--lg">Jetzt E-Mail-Sicherheit prüfen</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="/logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="/datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="/impressum.html" class="footer__link">Impressum</a>
+            <a href="/agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="/js/main.js" defer></script>
+  </body>
+</html>
