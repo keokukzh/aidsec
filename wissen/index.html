@@ -51,6 +51,17 @@
 
       <section class="section section--deep">
         <div class="container">
+          <!-- Category Filter -->
+          <div class="knowledge-filter" data-reveal="fade-up" data-reveal-delay="100" style="display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; margin-bottom: var(--space-8);">
+            <button class="btn btn--gold knowledge-filter__btn active" data-filter="all">Alle</button>
+            <button class="btn btn--outline knowledge-filter__btn" data-filter="Grundlagen">Grundlagen</button>
+            <button class="btn btn--outline knowledge-filter__btn" data-filter="Recht &amp; Compliance">Recht &amp; Compliance</button>
+            <button class="btn btn--outline knowledge-filter__btn" data-filter="Bedrohungslage">Bedrohungslage</button>
+            <button class="btn btn--outline knowledge-filter__btn" data-filter="Praxistipp">Praxistipp</button>
+            <button class="btn btn--outline knowledge-filter__btn" data-filter="Strategie">Strategie</button>
+            <button class="btn btn--outline knowledge-filter__btn" data-filter="Analyse">Analyse</button>
+          </div>
+
           <div class="knowledge-grid" data-reveal="fade-up" data-reveal-delay="200">
 
             <!-- FEATURED PILLAR: nDSG Ultimate Guide (NEU) -->
@@ -215,6 +226,78 @@
               </div>
             </article>
 
+            <!-- Artikel 9: E-Mail-Sicherheit (NEU) -->
+            <article class="article-card">
+              <div class="article-card__image-placeholder">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+              </div>
+              <div class="article-card__content">
+                <span class="article-card__tag">Praxistipp</span>
+                <h2 class="article-card__title">E-Mail-Sicherheit für Kanzleien: SPF, DKIM und DMARC erklärt</h2>
+                <p class="article-card__excerpt">Warum Ihre Kanzlei-E-Mails im Spam landen könnten — und wie SPF, DKIM und DMARC Ihre Korrespondenz mit Gerichten und Mandanten schützen.</p>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">8 Min. &bull; März 2026</span>
+                  <a href="email-sicherheit-kanzlei.html" class="article-card__link">Artikel lesen &rarr;</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Artikel 10: Datenverlust-Kosten (NEU) -->
+            <article class="article-card">
+              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+              </div>
+              <div class="article-card__content">
+                <span class="article-card__tag">Analyse</span>
+                <h2 class="article-card__title">Was kostet ein Datenverlust? Zahlen für Schweizer Kanzleien</h2>
+                <p class="article-card__excerpt">Ein Cybervorfall kostet Schweizer Kanzleien durchschnittlich CHF 695'000. Wir schlüsseln die tatsächlichen Kosten auf — und zeigen, warum Prävention 0.1% davon kostet.</p>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">7 Min. &bull; März 2026</span>
+                  <a href="datenverlust-kosten-schweiz.html" class="article-card__link">Artikel lesen &rarr;</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Artikel 11: WordPress-Plugins (NEU) -->
+            <article class="article-card">
+              <div class="article-card__image-placeholder">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+              </div>
+              <div class="article-card__content">
+                <span class="article-card__tag">Bedrohungslage</span>
+                <h2 class="article-card__title">22 neue WordPress-Schwachstellen pro Tag: Warum Plugins das grösste Risiko sind</h2>
+                <p class="article-card__excerpt">96% aller WordPress-Schwachstellen stecken in Plugins — nicht im Core. Die gefährlichsten Kategorien und 5 Sofortmassnahmen für Kanzleien.</p>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">6 Min. &bull; März 2026</span>
+                  <a href="wordpress-plugins-sicherheitsrisiko.html" class="article-card__link">Artikel lesen &rarr;</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Artikel 12: Cyber-Versicherung vs. Härtung (NEU) -->
+            <article class="article-card">
+              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
+                <div class="article-card__icon-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                </div>
+              </div>
+              <div class="article-card__content">
+                <span class="article-card__tag">Strategie</span>
+                <h2 class="article-card__title">Cyber-Versicherung oder Härtung? Was für Kanzleien sinnvoller ist</h2>
+                <p class="article-card__excerpt">Die meisten Cyber-Policen zahlen nicht, wenn Grundschutz fehlt. Warum IT-Härtung günstiger ist — und trotzdem die bessere Voraussetzung für den Versicherungsschutz.</p>
+                <div class="article-card__footer">
+                  <span class="article-card__meta">9 Min. &bull; März 2026</span>
+                  <a href="cyber-versicherung-vs-haertung.html" class="article-card__link">Artikel lesen &rarr;</a>
+                </div>
+              </div>
+            </article>
+
           </div>
         </div>
       </section>
@@ -252,5 +335,36 @@
     </footer>
 
     <script src="../js/main.js" defer></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const filterBtns = document.querySelectorAll('.knowledge-filter__btn');
+        const cards = document.querySelectorAll('.article-card');
+
+        filterBtns.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            filterBtns.forEach(function(b) {
+              b.classList.remove('active');
+              b.classList.remove('btn--gold');
+              b.classList.add('btn--outline');
+            });
+            btn.classList.add('active');
+            btn.classList.remove('btn--outline');
+            btn.classList.add('btn--gold');
+
+            var filter = btn.getAttribute('data-filter');
+            cards.forEach(function(card) {
+              var tag = card.querySelector('.article-card__tag');
+              if (!tag) { card.style.display = ''; return; }
+              var tagText = tag.textContent.trim();
+              if (filter === 'all' || tagText === filter) {
+                card.style.display = '';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          });
+        });
+      });
+    </script>
   </body>
 </html>

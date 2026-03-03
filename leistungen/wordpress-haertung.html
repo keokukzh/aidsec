@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WordPress-Härtung für Kanzleien und Praxen | AidSec Schweiz</title>
+    <meta
+      name="description"
+      content="Vollständige WordPress-Härtung für Schweizer Kanzleien und Arztpraxen. WAF, Brute-Force-Schutz, Malware-Scans und nDSG-Audit-Protokoll. Ab CHF 599, 0 Min. Downtime."
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="WordPress-Härtung für Kanzleien | AidSec Schweiz" />
+    <meta property="og:description" content="WAF, Login-Schutz, Malware-Scans, nDSG-Audit — alles aus einer Hand. Ohne Zugriff auf Mandantendaten." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aidsec.ch/leistungen/wordpress-haertung.html" />
+    <meta property="og:locale" content="de_CH" />
+    <meta property="og:site_name" content="AidSec" />
+    <meta property="og:image" content="https://aidsec.ch/VeniceAI_poster.jpg" />
+
+    <link rel="canonical" href="https://aidsec.ch/leistungen/wordpress-haertung.html" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../css/fonts.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/sections.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <link rel="icon" type="image/png" href="../favicon.png" />
+
+    <!-- Schema.org Service -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "WordPress Kanzlei-Härtung",
+        "provider": {
+          "@type": "Organization",
+          "name": "AidSec",
+          "url": "https://aidsec.ch"
+        },
+        "description": "Vollständige WordPress-Härtung inkl. Firewall, Login-Schutz, Malware-Scans und nDSG-Audit-Protokoll. Für Schweizer Kanzleien und Arztpraxen.",
+        "areaServed": { "@type": "Country", "name": "Switzerland" },
+        "offers": {
+          "@type": "Offer",
+          "price": "599",
+          "priceCurrency": "CHF",
+          "priceValidUntil": "2026-12-31"
+        }
+      }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Warum ist WordPress besonders gefährdet?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WordPress betreibt über 40% aller Webseiten weltweit und ist damit das Hauptziel automatisierter Angriffe. 2024 wurden 7'966 neue WordPress-Schwachstellen entdeckt — 22 pro Tag. Die meisten Angriffe zielen auf veraltete Plugins und schwache Login-Konfigurationen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Benötigen Sie Zugriff auf Mandantendaten?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Für die WordPress-Härtung benötigen wir SSH- oder Panel-Zugang zum Server, jedoch nie Zugriff auf gespeicherte Mandantendaten. Wir arbeiten auf Infrastruktur- und Konfigurationsebene."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was ist der Unterschied zum Rapid Header Fix?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Der Rapid Header Fix optimiert ausschliesslich HTTP-Security-Headers (Serverantworten). Die Kanzlei-Härtung geht deutlich tiefer: Sie umfasst WAF, Brute-Force-Schutz, Login-Härtung, Malware-Scans, Datei-Integritätsprüfung und ein vollständiges nDSG-Audit-Protokoll. Der Header Fix ist im Härtungspaket enthalten."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was umfasst das nDSG-Audit-Protokoll?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Das Audit-Protokoll dokumentiert alle geprüften Sicherheitsbereiche, identifizierten Schwachstellen und implementierten Massnahmen. Es dient als Nachweis der technischen Datensicherheit gemäss Art. 8 nDSG und kann bei Behördenanfragen vorgelegt werden."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="nav" id="navbar">
+      <div class="container nav__inner">
+        <a href="../index.html" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="../logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <a href="../index.html#preise" class="nav__link">Preise</a>
+          <a href="../index.html#leistungen" class="nav__link active">Leistungen</a>
+          <a href="../fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="../wissen/index.html" class="nav__link">Wissen</a>
+          <a href="../index.html#kontakt" class="btn btn--gold nav__cta" data-track="nav-cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Hero -->
+      <section class="section section--dark knowledge-hero">
+        <div class="container">
+          <div class="knowledge-hero__inner">
+            <div class="section-header" data-reveal="fade-up">
+              <span class="badge badge--gold">Kanzlei-Härtung</span>
+              <h1>WordPress-Härtung <span class="text-gold">für Kanzleien</span></h1>
+              <p>WordPress betreibt über 40% aller Webseiten — und ist Ziel Nr. 1 für automatisierte Angriffe. Wir härten Ihre Installation auf Serverebene, ohne Zugriff auf Mandantendaten.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bedrohungslage -->
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Die Bedrohung: <span class="text-gold">22 neue Schwachstellen pro Tag</span></h2>
+            <p>2024 wurden 7'966 neue WordPress-Schwachstellen entdeckt. Die meisten Angriffe treffen Kanzleien und Praxen zuerst — oft unbemerkt, über veraltete Plugins und schwache Login-Konfigurationen.</p>
+          </div>
+
+          <div class="alert-cards" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Brute-Force-Angriffe</h3>
+              <p class="alert-card__desc">Automatisierte Bots testen tausende Passwort-Kombinationen pro Stunde auf Ihrem wp-login.php. Ohne Schutz ist es nur eine Frage der Zeit.</p>
+            </div>
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Plugin-Exploits</h3>
+              <p class="alert-card__desc">Veraltete Plugins sind das Einfallstor Nr. 1. Ein einziges ungepatchtes Plugin reicht aus, um die gesamte Webseite zu kompromittieren.</p>
+            </div>
+            <div class="alert-card">
+              <div class="alert-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="alert-card__title">Datenverlust & nDSG-Bussen</h3>
+              <p class="alert-card__desc">Ein kompromittiertes WordPress gefährdet Mandantendaten, Berufsgeheimnis und Reputation. nDSG-Bussen bis CHF 250'000 drohen bei unzureichenden Schutzmassnahmen.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12-Punkte Härtung -->
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>12-Punkte <span class="text-gold">Härtungsprogramm</span></h2>
+            <p>Unsere Kanzlei-Härtung deckt alle kritischen Angriffsflächen Ihrer WordPress-Installation ab — systematisch und vollständig dokumentiert.</p>
+          </div>
+
+          <div class="services" data-reveal="fade-up" data-reveal-delay="100">
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Security Headers (Note A)</h3>
+              <p class="service-card__desc">Alle 6 sicherheitsrelevanten HTTP-Headers — HSTS, CSP, X-Frame-Options, X-Content-Type, Referrer-Policy und Permissions-Policy.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="3" y1="9" x2="21" y2="9"/>
+                  <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Web Application Firewall</h3>
+              <p class="service-card__desc">Serverbasierte WAF-Regeln filtern bekannte Angriffsmuster (SQL-Injection, XSS, File-Inclusion) bevor sie WordPress erreichen.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  <circle cx="12" cy="16" r="1"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Login-Härtung</h3>
+              <p class="service-card__desc">Brute-Force-Schutz, Login-URL-Verschleierung, IP-Beschränkung und 2FA-Empfehlung. Keine Bot-Armee kommt mehr durch.</p>
+            </article>
+          </div>
+
+          <div class="services" data-reveal="fade-up" data-reveal-delay="200">
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Datei-Integritäts&shy;überwachung</h3>
+              <p class="service-card__desc">Erkennung unerlaubter Dateiänderungen. Jede Modifikation an WordPress Core, Themes oder Plugins wird protokolliert.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">Malware-Scans</h3>
+              <p class="service-card__desc">Automatisierte Scans erkennen Backdoors, Injektionen und versteckte Skripte in Ihrem WordPress-Dateisystem.</p>
+            </article>
+            <article class="service-card">
+              <div class="service-card__icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <h3 class="service-card__title">nDSG-Audit-Protokoll</h3>
+              <p class="service-card__desc">Vollständige Dokumentation aller geprüften Bereiche und implementierten Massnahmen. Vorlagebereit für Behörden und Partner.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Investition</h2>
+          </div>
+
+          <div class="card card--glass" data-reveal="fade-up" data-reveal-delay="100" style="max-width: 520px; margin: 0 auto; padding: var(--space-8); text-align: center;">
+            <span class="badge badge--gold" style="margin-bottom: var(--space-4); display: inline-block;">Kanzlei-Härtung</span>
+            <div style="font-family: var(--font-display); font-size: var(--text-5xl); color: var(--white); margin-bottom: var(--space-2);">
+              CHF <span class="text-gold">599.–</span>
+            </div>
+            <p style="color: var(--gray-400); font-size: var(--text-sm); margin-bottom: var(--space-6);">Einmalige Investition. Inkl. Rapid Header Fix. Inkl. nDSG-Audit.</p>
+
+            <ul style="text-align: left; list-style: none; padding: 0; margin-bottom: var(--space-8);">
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Security Headers Note A (inkl.)
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Web Application Firewall (WAF)
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Brute-Force-Schutz &amp; Login-Härtung
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Malware-Scans &amp; Datei-Integritätsprüfung
+              </li>
+              <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--glass-border); color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                0 Minuten Downtime
+              </li>
+              <li style="padding: var(--space-3) 0; color: var(--gray-300); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Schriftliches nDSG-Audit-Protokoll
+              </li>
+            </ul>
+
+            <a href="../onboarding/kanzlei-haertung/index.html" class="btn btn--gold btn--lg btn--full" data-track="haertung-cta">
+              Jetzt Kanzlei-Härtung buchen
+            </a>
+            <p style="margin-top: var(--space-4); color: var(--gray-500); font-size: var(--text-xs);">
+              Oder: <a href="../index.html#kontakt" style="color: var(--gold);">Kostenlose Analyse anfordern</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Häufige Fragen</h2>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <details class="faq__item">
+              <summary class="faq__question">Warum ist WordPress besonders gefährdet?</summary>
+              <div class="faq__answer">
+                <p>WordPress betreibt über 40% aller Webseiten weltweit und ist damit das Hauptziel automatisierter Angriffe. 2024 wurden 7'966 neue WordPress-Schwachstellen entdeckt — 22 pro Tag. Die meisten Angriffe zielen auf veraltete Plugins und schwache Login-Konfigurationen.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">Benötigen Sie Zugriff auf Mandantendaten?</summary>
+              <div class="faq__answer">
+                <p>Nein. Für die WordPress-Härtung benötigen wir SSH- oder Panel-Zugang zum Server, jedoch nie Zugriff auf gespeicherte Mandantendaten. Wir arbeiten auf Infrastruktur- und Konfigurationsebene.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">Was ist der Unterschied zum Rapid Header Fix?</summary>
+              <div class="faq__answer">
+                <p>Der Rapid Header Fix optimiert ausschliesslich HTTP-Security-Headers (CHF 299). Die Kanzlei-Härtung geht deutlich tiefer: WAF, Brute-Force-Schutz, Login-Härtung, Malware-Scans, Datei-Integritätsprüfung und ein vollständiges nDSG-Audit-Protokoll. Der Header Fix ist im Härtungspaket enthalten.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">Was umfasst das nDSG-Audit-Protokoll?</summary>
+              <div class="faq__answer">
+                <p>Das Audit-Protokoll dokumentiert alle geprüften Sicherheitsbereiche, identifizierten Schwachstellen und implementierten Massnahmen. Es dient als Nachweis der technischen Datensicherheit gemäss Art. 8 nDSG und kann bei Behördenanfragen vorgelegt werden.</p>
+              </div>
+            </details>
+            <details class="faq__item">
+              <summary class="faq__question">Kann ich danach zum Cyber-Mandat upgraden?</summary>
+              <div class="faq__answer">
+                <p>Ja. Viele Kunden beginnen mit der einmaligen Kanzlei-Härtung und wechseln anschliessend zum <a href="cyber-mandat.html" style="color: var(--gold);">Cyber-Mandat</a> (CHF 59/Monat) für laufende Überwachung, monatliche Berichte und Notfall-Support.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section section--dark">
+        <div class="container">
+          <div class="cta-banner">
+            <div class="cta-banner__content" data-reveal="fade-up">
+              <h2>Ihre WordPress-Seite — <span class="text-gold">vollständig gehärtet</span></h2>
+              <p>Kostenloser Security-Check zeigt Ihre Schwachstellen. Ohne Verpflichtung.</p>
+              <a href="../index.html#kontakt" class="btn btn--gold btn--lg">Kostenfreien Security-Check starten</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="../logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="../datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="../impressum.html" class="footer__link">Impressum</a>
+            <a href="../agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>

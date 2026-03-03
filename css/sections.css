@@ -2523,3 +2523,316 @@
   color: var(--white);
   margin-bottom: var(--space-4);
 }
+
+/* ═══ LAYOUT CONTAINERS ═══ */
+.container--narrow {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+.container--medium {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ═══ ALERT CARDS (Branchen Pages) ═══ */
+.alert-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.alert-card {
+  padding: var(--space-8);
+}
+
+.alert-card__icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-5);
+}
+
+.alert-card__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-snug);
+}
+
+.alert-card__desc {
+  font-size: var(--text-sm);
+  color: var(--gray-300);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+/* ═══ STATS SECTION (Branchen Pages) ═══ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-8);
+  text-align: center;
+}
+
+.stats__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal);
+}
+
+.stats__item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.stats__number {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats__label {
+  font-size: var(--text-sm);
+  color: var(--gray-600);
+  line-height: var(--leading-normal);
+}
+
+/* ═══ SERVICE CARD PRICE (Branchen Pages) ═══ */
+.service-card__price {
+  font-size: var(--text-base);
+  color: var(--gray-300);
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+/* ═══ ARTICLE BODY ENHANCEMENTS ═══ */
+
+/* h3 headings inside article body */
+.article-body h3 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--navy);
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-body);
+}
+
+/* Ordered lists */
+.article-body ol {
+  list-style: none;
+  counter-reset: steps;
+  padding-left: 0;
+  margin-bottom: var(--space-12);
+}
+
+.article-body ol li {
+  position: relative;
+  padding-left: var(--space-10);
+  margin-bottom: var(--space-6);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  counter-increment: steps;
+}
+
+.article-body ol li::before {
+  content: counter(steps);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 28px;
+  height: 28px;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Tables inside article body */
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-8) 0;
+  font-size: var(--text-base);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--gray-200);
+}
+
+.article-body table thead {
+  background: var(--navy);
+}
+
+.article-body table th {
+  padding: var(--space-4) var(--space-5);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--white);
+  text-align: left;
+  border-bottom: 2px solid var(--gold);
+}
+
+.article-body table td {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--gray-200);
+  color: var(--navy-deep);
+  line-height: var(--leading-normal);
+}
+
+.article-body table tbody tr:nth-child(even) {
+  background: var(--gray-50);
+}
+
+.article-body table tbody tr:hover {
+  background: rgba(200, 168, 76, 0.06);
+}
+
+.article-body table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Lead paragraph */
+.article-body .lead,
+.lead {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  color: var(--gray-700);
+  font-weight: 400;
+  border-left: 3px solid var(--gold);
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+/* CTA banner h3 inside articles */
+.article-body .cta-banner h3 {
+  color: var(--white) !important;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-4);
+}
+
+/* Inline links in article body */
+.article-body a {
+  color: var(--gold-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast);
+}
+
+.article-body a:hover {
+  color: var(--gold);
+}
+
+/* ═══ TRUST FEATURES (Branchen Pages) ═══ */
+.trust__features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-8);
+}
+
+.trust__feature {
+  display: flex;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal);
+}
+
+.trust__feature:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.trust__feature-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(200, 168, 76, 0.1);
+  border: 1px solid rgba(200, 168, 76, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.trust__feature-title {
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: var(--space-1);
+}
+
+.trust__feature-desc {
+  font-size: var(--text-sm);
+  color: var(--gray-600);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+/* ═══ RESPONSIVE: BRANCHEN PAGES ═══ */
+@media (max-width: 768px) {
+  .alert-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .stats__number {
+    font-size: var(--text-2xl);
+  }
+
+  .trust__features {
+    grid-template-columns: 1fr;
+  }
+
+  .article-body table {
+    font-size: var(--text-sm);
+  }
+
+  .article-body table th,
+  .article-body table td {
+    padding: var(--space-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
