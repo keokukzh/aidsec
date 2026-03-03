@@ -64,10 +64,35 @@
       isOpen ? closeMobileMenu() : openMobileMenu();
     });
 
-    // Close on link click
-    mobileMenu.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', closeMobileMenu);
+    // Handle Mobile Menu Dropdowns (Accordion)
+    const mobileDropdowns = mobileMenu.querySelectorAll(
+      '.nav__item.has-dropdown > .nav__link, .nav__item.has-dropdown > span'
+    );
+    mobileDropdowns.forEach(function (trigger) {
+      trigger.addEventListener('click', function (e) {
+        // Prevent default link behavior if it's just meant to open the dropdown
+        // On desktop it works via hover, on mobile we click it to expand
+        e.preventDefault();
+        const parentItem = this.parentElement;
+
+        // Close others
+        mobileMenu.querySelectorAll('.nav__item.has-dropdown').forEach(function (item) {
+          if (item !== parentItem) {
+            item.classList.remove('is-open');
+          }
+        });
+
+        // Toggle current
+        parentItem.classList.toggle('is-open');
+      });
     });
+
+    // Close on regular link click (not dropdown triggers)
+    mobileMenu
+      .querySelectorAll('a:not(.nav__item.has-dropdown > .nav__link)')
+      .forEach(function (link) {
+        link.addEventListener('click', closeMobileMenu);
+      });
 
     // Close on Escape
     document.addEventListener('keydown', function (e) {
