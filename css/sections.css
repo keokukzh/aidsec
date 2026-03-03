@@ -753,6 +753,12 @@
   white-space: nowrap;
 }
 
+.pricing-card__title-badge {
+  font-size: 0.5em;
+  vertical-align: top;
+  margin-left: var(--space-2);
+}
+
 .pricing-card__title {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
@@ -796,6 +802,21 @@
   font-weight: 700;
   color: var(--navy);
   letter-spacing: -0.02em;
+}
+
+.pricing-card__features-list {
+  list-style: none;
+  padding: 0;
+}
+
+.pricing-card__features-item {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.pricing-card__icon {
+  flex-shrink: 0;
 }
 
 .pricing-card__period {
