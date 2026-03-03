@@ -9,19 +9,19 @@
   var packageInfo = {
     'rapid-header': {
       name: 'Rapid Header Fix',
-      price: 'CHF 299.\u2013',
-      type: 'einmalig'
+      price: 'CHF 390.\u2013',
+      type: 'einmalig',
     },
     'kanzlei-haertung': {
       name: 'Kanzlei-H\u00e4rtung',
-      price: 'CHF 599.\u2013',
-      type: 'einmalig'
+      price: 'CHF 790.\u2013',
+      type: 'einmalig',
     },
     'cyber-mandat': {
       name: 'Cyber-Mandat',
-      price: 'CHF 59.\u2013 / Monat (CHF 708.\u2013 / Jahr)',
-      type: 'j\u00e4hrlich'
-    }
+      price: "CHF 89.\u2013 / Monat (CHF 1'068.\u2013 / Jahr)",
+      type: 'j\u00e4hrlich',
+    },
   };
 
   // ── DOM References ──
@@ -48,10 +48,14 @@
 
     // Set package display
     if (packageDisplay) {
-      packageDisplay.textContent = pkgName || (packageInfo[pkg] ? packageInfo[pkg].name + ' \u2013 ' + packageInfo[pkg].price : pkg);
+      packageDisplay.textContent =
+        pkgName ||
+        (packageInfo[pkg] ? packageInfo[pkg].name + ' \u2013 ' + packageInfo[pkg].price : pkg);
     }
     if (packageInput) {
-      packageInput.value = pkgName || (packageInfo[pkg] ? packageInfo[pkg].name + ' \u2013 ' + packageInfo[pkg].price : pkg);
+      packageInput.value =
+        pkgName ||
+        (packageInfo[pkg] ? packageInfo[pkg].name + ' \u2013 ' + packageInfo[pkg].price : pkg);
     }
 
     // Reset to step 1
@@ -65,7 +69,9 @@
 
     // Focus first input
     setTimeout(function () {
-      var firstInput = steps[0] && steps[0].querySelector('input:not([type="hidden"]):not([readonly]), select, textarea');
+      var firstInput =
+        steps[0] &&
+        steps[0].querySelector('input:not([type="hidden"]):not([readonly]), select, textarea');
       if (firstInput) firstInput.focus();
     }, 300);
   }
@@ -184,5 +190,4 @@
 
   // ── Expose openModal globally ──
   window.openOnboardingModal = openModal;
-
 })();
