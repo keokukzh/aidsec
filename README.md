@@ -59,13 +59,18 @@ Optional separate target/sender for Sicherheits-Check:
 - `CONTACT_TO_EMAIL` (fallback: `ONBOARDING_TO_EMAIL` → `MAIL_TO` → `aid.destani@aidsec.ch`)
 - `CONTACT_FROM_EMAIL` (fallback: `ONBOARDING_FROM_EMAIL` → `MAIL_FROM` → `SMTP_USER`)
 
-Optional durable rate-limiting (recommended for production):
+Durable rate-limiting for deployed environments:
 
-- `ONBOARDING_RATE_LIMIT_MODE` = `upstash` (default is in-memory fallback)
+- `ONBOARDING_RATE_LIMIT_MODE` = `upstash`
+- `CONTACT_RATE_LIMIT_MODE` = `upstash` (optional, otherwise deployed env still requires Upstash)
 - `UPSTASH_REDIS_REST_URL`
 - `UPSTASH_REDIS_REST_TOKEN`
 
-**Vor dem Go-Live:** Siehe `PLATZHALTER.md` für optionale Platzhalter (Plausible, hCaptcha).
+Local development and Vercel Preview may fall back to in-memory rate limiting. Production remains strict and returns `503` if Upstash is unavailable.
+
+Allowed origins for form endpoints include the primary domain, localhost dev origins, and the current Vercel deployment URL via `VERCEL_URL`. Custom allowlists from `ONBOARDING_ALLOWED_ORIGINS` or `CONTACT_ALLOWED_ORIGINS` are merged on top.
+
+**Vor dem Go-Live:** Siehe `config.example.json` und `scripts/fill-placeholders.js` für optionale Platzhalter (Plausible, hCaptcha).
 
 ## Deploy
 
@@ -82,16 +87,17 @@ Optional durable rate-limiting (recommended for production):
 ```text
 aidsec.ch/
 ├── index.html, 404.html, impressum.html, agb.html, datenschutz.html
+├── proof-center.html  # AidSec Verified / Proof Center demo
 ├── vercel.json        # Security headers + cache config
 ├── robots.txt, sitemap.xml
-├── PLATZHALTER.md     # Deploy-Anleitung
 ├── css/               # Styles, fonts
+├── data/              # Shared package and proof data
 ├── js/
-│   ├── main.js, form.js
+│   ├── main.js, form.js, proof-center.js
 │   ├── hero-app.jsx, BlurText.jsx
 │   └── dist/          # Vite build output
+├── onboarding/        # Dedicated onboarding pages + shared assets
 ├── scripts/           # fill-placeholders, prepare-fonts, verify-headers
-├── netlify/functions/ # legacy lambda source (kept for parity)
 ├── api/               # Vercel serverless endpoints + Vite dev middleware target
 ├── docs/templates/    # Angebotsvorlagen (intern)
 ├── vite.config.js
@@ -103,7 +109,7 @@ aidsec.ch/
 - Keep root-level HTML pages in place for static hosting compatibility.
 - Keep runtime assets under `css/`, `js/`, `onboarding/`, and `assets/`.
 - Keep operational notes and audits in `docs/plans/`.
-- Keep local one-off helper scripts out of git (already ignored in `.gitignore`).
+- Keep local one-off helper scripts out of git.
 - Before pushing: run `git status --short`, `npm run lint`, and `npm run build`.
 
 ## License

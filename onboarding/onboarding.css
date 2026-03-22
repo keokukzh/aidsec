@@ -206,6 +206,11 @@
   opacity: 0.6;
 }
 
+.ob-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
 .ob-hint {
   font-size: 0.78rem;
   color: var(--ob-text-muted);
@@ -269,6 +274,28 @@
 
 .ob-checkbox a:hover {
   color: var(--ob-gold-light);
+}
+
+.ob-security-note {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.1rem;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+}
+
+.ob-security-note__title {
+  display: block;
+  color: #fff;
+  margin-bottom: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.ob-security-note__text {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--ob-text-muted);
 }
 
 /* ── Login Helper ───────────────────────── */

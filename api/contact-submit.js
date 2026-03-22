@@ -12,6 +12,20 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:5173',
 ];
 
+function isLocalOrigin(origin) {
+  return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin || '');
+}
+
+function requiresDurableRateLimiting() {
+  const vercelEnv = getEnvFirst(['VERCEL_ENV']).toLowerCase();
+
+  if (vercelEnv) {
+    return vercelEnv === 'production';
+  }
+
+  return getEnvFirst(['NODE_ENV']) === 'production';
+}
+
 function trimValue(value) {
   if (typeof value === 'string') return value.trim();
   if (value === null || value === undefined) return '';
@@ -72,6 +86,17 @@ function getEnvFirst(names) {
   }
 
   return '';
+}
+
+function getDefaultAllowedOrigins() {
+  const origins = ALLOWED_ORIGINS.slice();
+  const vercelUrl = getEnvFirst(['VERCEL_URL']);
+
+  if (vercelUrl) {
+    origins.push(`https://${vercelUrl}`);
+  }
+
+  return Array.from(new Set(origins));
 }
 
 function getRateLimitMode() {
@@ -143,12 +168,20 @@ async function isRateLimitedUpstash(ip) {
 }
 
 async function isRateLimitedSafe(ip) {
-  if (getRateLimitMode() === 'upstash') {
+  const requireDurable = requiresDurableRateLimiting();
+
+  if (getRateLimitMode() === 'upstash' || requireDurable) {
     try {
       const limited = await isRateLimitedUpstash(ip);
       if (limited !== null) return limited;
+      if (requireDurable) {
+        throw new Error('Durable rate limiting is required in managed runtime');
+      }
       console.warn('Rate limit mode upstash is enabled but Upstash credentials are missing; fallback to memory');
     } catch (error) {
+      if (requireDurable) {
+        throw error;
+      }
       console.error('Upstash rate limit failed, fallback to memory', error);
     }
   }
@@ -174,14 +207,16 @@ function getAllowedOrigin(req) {
   if (!origin || typeof origin !== 'string') return '';
 
   const configured = getEnvFirst(['CONTACT_ALLOWED_ORIGINS', 'ONBOARDING_ALLOWED_ORIGINS']);
-  const allowlist = configured
+  const configuredList = configured
     ? configured
         .split(',')
         .map((item) => item.trim())
         .filter(Boolean)
-    : ALLOWED_ORIGINS;
+    : [];
+  const allowlist = Array.from(new Set(getDefaultAllowedOrigins().concat(configuredList)));
 
-  return allowlist.includes(origin) ? origin : '';
+  if (allowlist.includes(origin) || isLocalOrigin(origin)) return origin;
+  return '';
 }
 
 function normalizePayload(body) {
@@ -275,8 +310,13 @@ export default async function handler(req, res) {
   }
 
   const ip = getClientIp(req);
-  if (await isRateLimitedSafe(ip)) {
-    return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
+  try {
+    if (await isRateLimitedSafe(ip)) {
+      return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
+    }
+  } catch (error) {
+    console.error('Durable rate limiting unavailable for contact-submit', error);
+    return res.status(503).json({ error: 'Formularschutz derzeit nicht verfuegbar. Bitte spaeter erneut versuchen.' });
   }
 
   const payload = normalizePayload(req.body);

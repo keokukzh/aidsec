@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AidSec Verified Demo | Proof Center</title>
+    <meta
+      name="description"
+      content="AidSec Proof Center: Beispiel fuer Verified Badge, Monatsstatus, Re-Audit, Incident-Journal und Executive-Report fuer Schweizer Kanzleien und Praxen."
+    />
+
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/sections.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+
+    <link rel="icon" type="image/png" href="/logowhite.png" />
+    <script src="/js/consent.js"></script>
+  </head>
+  <body>
+    <header class="nav" id="nav" role="banner">
+      <div class="container nav__inner">
+        <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
+          <img
+            src="/logowhite.png"
+            alt="AidSec"
+            width="119"
+            height="109"
+            class="nav__logo-img"
+            loading="eager"
+            decoding="async"
+          />
+        </a>
+
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link">Leistungen</a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html">Cyber-Mandat Pro</a>
+              <a href="/leistungen/ndsg-compliance-pack.html">nDSG Compliance Pack</a>
+              <a href="/leistungen/notfall-intervention.html">Notfall-Intervention</a>
+              <a href="/leistungen/email-sicherheit.html">E-Mail-Sicherheit</a>
+            </div>
+          </div>
+
+          <div class="nav__item has-dropdown">
+            <span class="nav__link" tabindex="0">Branchen</span>
+            <div class="nav__dropdown">
+              <a href="/branchen/anwaltskanzleien.html">Anwaltskanzleien</a>
+              <a href="/branchen/arztpraxen.html">Arztpraxen</a>
+              <a href="/branchen/notariate.html">Notariate</a>
+            </div>
+          </div>
+
+          <a href="/fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="/index.html#preise" class="nav__link">Preise</a>
+
+          <div class="nav__item has-dropdown">
+            <a href="/wissen/index.html" class="nav__link">Wissen</a>
+            <div class="nav__dropdown">
+              <a href="/wissen/index.html">Alle Artikel</a>
+              <a href="/wissen/ultimate-ndsg-checklist-2025.html">nDSG Compliance Guide</a>
+              <a href="/wissen/security-headers-note-f-auf-a.html">Security Headers Note F</a>
+            </div>
+          </div>
+        </nav>
+
+        <a
+          href="/index.html#kontakt"
+          class="btn btn--gold nav__cta desktop-only"
+          data-track="nav-cta"
+          aria-label="Kostenfreien Security-Check starten"
+        >
+          Kostenfreien Security-Check
+          <span class="btn__badge">24h</span>
+        </a>
+
+        <button
+          class="nav__toggle"
+          id="nav-toggle"
+          aria-label="Menü öffnen"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link mobile-menu__link">Leistungen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html" class="mobile-menu__link">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html" class="mobile-menu__link">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html" class="mobile-menu__link">Cyber-Mandat Pro</a>
+            </div>
+          </div>
+          <a href="/fallstudien.html" class="mobile-menu__link">Fallstudien</a>
+          <a href="/wissen/index.html" class="mobile-menu__link">Wissen</a>
+          <a href="/index.html#kontakt" class="btn btn--gold mobile-menu__cta">Gratis Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="section section--dark knowledge-hero">
+        <div class="container">
+          <div class="knowledge-hero__inner" data-reveal="fade-up">
+            <div class="section-header">
+              <span class="badge badge--gold">AidSec Verified Demo</span>
+              <h1>So sieht <span class="text-gold">laufender Nachweis</span> aus</h1>
+              <p>
+                Dieses Proof Center zeigt, wie AidSec Verified, Monatsstatus, Re-Audits und
+                Executive-Reports fuer Kanzleien und Praxen sichtbar werden.
+              </p>
+            </div>
+            <div class="knowledge-hero__stats" data-reveal="fade-up" data-reveal-delay="100">
+              <span class="knowledge-hero__stat" id="pc-status-label">Monatsstatus: konform</span>
+              <span class="knowledge-hero__stat-divider"></span>
+              <span class="knowledge-hero__stat" id="pc-last-audit-label">Letztes Re-Audit: 18.03.2026</span>
+              <span class="knowledge-hero__stat-divider"></span>
+              <span class="knowledge-hero__stat" id="pc-incident-sla-label">Incident-SLA: &lt; 4h</span>
+            </div>
+            <p class="hero__cta-trust" data-reveal="fade-up" data-reveal-delay="120" id="pc-updated-at">Stand: 22.03.2026</p>
+            <div class="proof-actions" data-reveal="fade-up" data-reveal-delay="150">
+              <a href="/leistungen/cyber-mandat.html" class="btn btn--gold btn--lg" id="pc-package-cta">Cyber-Mandat Pro ansehen</a>
+              <a href="/index.html#kontakt" class="btn btn--outline btn--lg">Beispiel-Report anfragen</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--deep">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Verified-Status auf einen Blick</h2>
+            <p>Die sichtbare Produktlogik: nicht nur Schutz, sondern belegbarer Betriebsstatus.</p>
+          </div>
+
+          <div class="trust" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="trust__features">
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">AidSec Verified aktiv</h4>
+                  <p class="trust__feature-desc">Badge, Statusseite und letzter Prüfzeitpunkt bleiben nur aktiv, solange das laufende Monitoring und Re-Audit besteht.</p>
+                </div>
+              </div>
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">Executive-Report</h4>
+                  <p class="trust__feature-desc">Monatsreport fuer Partner oder Inhaber mit Status, Aenderungen, offenen Risiken und erledigten Massnahmen.</p>
+                </div>
+              </div>
+              <div class="trust__feature">
+                <div class="trust__feature-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="trust__feature-title">Incident-Journal</h4>
+                  <p class="trust__feature-desc">Jeder Vorfall, jede Reaktion und jedes Follow-up werden dokumentiert und bleiben exportierbar.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="trust__visual">
+              <div class="trust-badges">
+                <div class="trust-badges__seal">
+                  <div class="trust-badges__seal-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
+                      <path d="M9 12.5 11 14.5 15.5 10" />
+                    </svg>
+                  </div>
+                  <span class="trust-badges__seal-title" id="pc-badge-title">Verified</span>
+                  <span class="trust-badges__seal-subtitle" id="pc-badge-subtitle">Monatlich geprueft</span>
+                </div>
+                <a href="https://securityheaders.com/?q=https://aidsec.ch" target="_blank" rel="noopener noreferrer" class="trust-badges__link">
+                  <span class="trust-badges__link-grade">A</span>
+                  <span class="trust-badges__link-label">SecurityHeaders.com</span>
+                </a>
+                <a href="/leistungen/cyber-mandat.html" class="trust-badges__link" id="pc-report-link">
+                  <span class="trust-badges__link-grade">PDF</span>
+                  <span class="trust-badges__link-label">Executive-Report</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Beispiel: Monatsreport</h2>
+            <p>Eine einfache, vorlagebereite Struktur fuer Kanzleileitung, Partner oder Praxisinhaber.</p>
+          </div>
+
+          <div class="services" data-reveal="fade-up" data-reveal-delay="100">
+            <article class="service-card">
+              <h3 class="service-card__title">1. Status</h3>
+              <p class="service-card__desc" id="pc-report-status">Konform. Security Headers unveraendert auf Note A, WordPress-Konfiguration ohne kritische Rueckschritte, keine aktiven Blocklisten-Eintraege.</p>
+            </article>
+            <article class="service-card">
+              <h3 class="service-card__title">2. Aenderungen seit letztem Monat</h3>
+              <p class="service-card__desc" id="pc-report-changes">Ein Plugin ersetzt, DMARC-Richtlinie angezogen, Server-Header bereinigt, 2 Massnahmen abgeschlossen, 1 Empfehlung offen.</p>
+            </article>
+            <article class="service-card">
+              <h3 class="service-card__title">3. Offene Punkte</h3>
+              <p class="service-card__desc" id="pc-report-open-items">Empfohlen: Passwort-Rotation fuer Admin-Zugang, DNS-Dokumentation aktualisieren, Incident-Playbook fuer Stellvertretung hinterlegen.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--deep">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Was als Nächstes daraus wird</h2>
+            <p>Dieses Proof Center ist die erste Produktoberflaeche. Darauf koennen spaeter Badge-Status, Report-Exports, Incident-Desk und Watchtower aufbauen.</p>
+          </div>
+          <div class="services" data-reveal="fade-up" data-reveal-delay="100">
+            <article class="service-card">
+              <h3 class="service-card__title">AidSec Watchtower</h3>
+              <p class="service-card__desc">Status fuer Header, TLS, Reputation, WordPress-Risiken und letzte Pruefungen in einem Kundenportal.</p>
+            </article>
+            <article class="service-card">
+              <h3 class="service-card__title">AidSec Incident Desk</h3>
+              <p class="service-card__desc">Gefuehrter Vorfall-Workflow mit Dokumentation, Follow-up und Nachweis fuer die Reaktionsfaehigkeit.</p>
+            </article>
+            <article class="service-card">
+              <h3 class="service-card__title">AidSec Compliance Report</h3>
+              <p class="service-card__desc">Exportierbarer Executive-Report mit Statushistorie, Massnahmen, offenen Punkten und Art.-8-relevanten Hinweisen.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="/logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit fuer Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/proof-center.js"></script>
+  </body>
+</html>
