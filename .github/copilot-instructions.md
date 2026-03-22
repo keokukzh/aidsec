@@ -10,9 +10,9 @@ This repository is a **static marketing site** with a handful of interactive UX 
 3. **Client JavaScript** is under `js/`:
    * `main.js` – the only substantial script; it contains all DOM logic (navigation, scroll reveals, form handling, ROI calculator, the security‑header widget, etc.).  Sections are separated with comment headers in the file and rely on `id`/`data-` attributes in the markup.
    * `hero-app.jsx` + `BlurText.jsx` – a tiny React "island" built with Vite.  The build outputs a single ES module `js/dist/hero-app.js` which is then shipped with the site.
-4. **Serverless API** lives in `netlify/functions/check-headers.js` and is also exposed during development via a Vite middleware.  It performs the same header‑scoring logic the client uses for the inline widget.
+4. **Serverless API** lives in `api/` and is also exposed during development via a Vite middleware.  It performs the header-scoring logic for the inline widget and now also serves lightweight Proof Center data.
 5. **Build tooling** is Vite.  React plugin is enabled solely for the hero component; the rest of the site ships as plain JS/CSS.  The `vite.config.js` file also defines the dev‑server proxy for `/api/check-headers`.
-6. **Deployment targets**: Netlify (primary) and Vercel (alternate).  Security headers are declared in `_headers`/`netlify.toml` or `vercel.json`; changes here must match the CSP rules referenced in the HTML and scripts.
+6. **Deployment target**: Vercel is the active primary target.  Security headers are declared in `vercel.json`; changes here must match the CSP rules referenced in the HTML and scripts.
 
 ---
 ## Developer workflows
@@ -40,13 +40,13 @@ npm run verify-headers  # check production headers with securityheaders.com
 * DOM elements are selected once and cached at the top of `main.js` with `getElementById` or `querySelectorAll`.  Add new features in the same file, following the existing comment section style.
 * Data attributes drive behaviour (`data-reveal`, `data-count-to`, `data-track`).  When adding a new interactive element, add a corresponding selector or attribute check in `main.js`.
 * The React hero island is the only place `react`/`motion` are used; don't add React elsewhere unless a new island pattern is consciously adopted.
-* Netlify function handlers export a default `async (req,res) => {}` style compatible with Vite's dev middleware.  Use `fetch` instead of node‑only http libraries.
+* API handlers export a default `async (req,res) => {}` style compatible with Vite's dev middleware.  Use `fetch` instead of node‑only http libraries.
 
 ---
 ## Integration & external dependencies
 
-* **Netlify Forms**: native HTML forms with `data-netlify="true"`.  No backend required.
-* **Security header widget**: client calls `/api/check-headers?url=…` which hits the serverless function.  In dev, Vite middleware loads `netlify/functions/check-headers.js` via `ssrLoadModule`.
+* **Forms**: homepage and onboarding flows submit to Vercel-style endpoints under `api/`.
+* **Security header widget**: client calls `/api/check-headers?url=…`.  In dev, Vite middleware loads `api/check-headers.js` via `ssrLoadModule`.
 * **Analytics/tracking**.  Plausible integration is toggled by `config.json`.  There is also a simple `data-track` event emitter in `main.js` which fires a custom `aidsec:track` event and optionally calls `window.plausible()`.
 * **hCaptcha**: optional site key injected by `npm run fill`.
 
@@ -56,8 +56,8 @@ npm run verify-headers  # check production headers with securityheaders.com
 ```
 js/                # client scripts (see above)
 css/               # stylesheets; fonts.css generated
-api/               # Vite dev proxy modules (mirror of netlify/functions)
-netlify/functions/ # production lambda code
+api/               # Vercel-style serverless endpoints used in prod and via Vite dev middleware
+data/              # shared package and proof-center JSON data
 scripts/           # helper scripts (placeholder, fonts, headers, reorder)
 config.example.json# template for config.json
 .

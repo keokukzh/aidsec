@@ -1,0 +1,56 @@
+{
+  "updatedAt": "2026-03-22T12:00:00Z",
+  "packages": {
+    "rapid-header-fix": {
+      "slug": "rapid-header-fix",
+      "name": "Rapid Header Fix",
+      "shortName": "Rapid Header Fix",
+      "navName": "Rapid Header Fix",
+      "price": "CHF 390.–",
+      "priceAmount": "CHF 390.–",
+      "pricePeriod": "Einmalige Zahlung",
+      "annual": "",
+      "checkoutLabel": "Rapid Header Fix – CHF 390.–",
+      "type": "einmalig",
+      "href": "/onboarding/rapid-header-fix/"
+    },
+    "kanzlei-haertung": {
+      "slug": "kanzlei-haertung",
+      "name": "Kanzlei-Haertung",
+      "shortName": "Kanzlei-Haertung",
+      "navName": "Kanzlei-Haertung",
+      "price": "CHF 790.–",
+      "priceAmount": "CHF 790.–",
+      "pricePeriod": "Einmalige Zahlung",
+      "annual": "",
+      "checkoutLabel": "Kanzlei-Haertung – CHF 790.–",
+      "type": "einmalig",
+      "href": "/onboarding/kanzlei-haertung/"
+    },
+    "cyber-mandat": {
+      "slug": "cyber-mandat",
+      "name": "Cyber-Mandat Pro / ComplianceOps",
+      "shortName": "Cyber-Mandat Pro",
+      "navName": "Cyber-Mandat Pro",
+      "price": "CHF 89.–/Monat",
+      "priceAmount": "CHF 1'068.–",
+      "pricePeriod": "Jaehrliche Abrechnung (CHF 89.–/Monat) · Laufende Security- und Compliance-Begleitung",
+      "annual": "CHF 1'068.– / Jahr",
+      "checkoutLabel": "Cyber-Mandat Pro / ComplianceOps – CHF 89.–/Monat (CHF 1'068.– / Jahr)",
+      "type": "jaehrlich",
+      "href": "/onboarding/cyber-mandat/"
+    }
+  },
+  "proofCenter": {
+    "statusLabel": "konform",
+    "lastAuditLabel": "18.03.2026",
+    "incidentSlaLabel": "< 4h",
+    "badgeTitle": "Verified",
+    "badgeSubtitle": "Monatlich geprueft",
+    "report": {
+      "status": "Konform. Security Headers unveraendert auf Note A, WordPress-Konfiguration ohne kritische Rueckschritte, keine aktiven Blocklisten-Eintraege.",
+      "changes": "Ein Plugin ersetzt, DMARC-Richtlinie angezogen, Server-Header bereinigt, 2 Massnahmen abgeschlossen, 1 Empfehlung offen.",
+      "openItems": "Empfohlen: Passwort-Rotation fuer Admin-Zugang, DNS-Dokumentation aktualisieren, Incident-Playbook fuer Stellvertretung hinterlegen."
+    }
+  }
+}

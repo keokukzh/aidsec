@@ -546,6 +546,15 @@ body .nav.scrolled {
   border: 1px solid rgba(200, 168, 76, 0.25);
 }
 
+.service-card__cta-spaced {
+  margin-top: var(--space-4);
+}
+
+.knowledge-grid--narrow {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .service-card__features li::after {
   content: '';
   position: absolute;

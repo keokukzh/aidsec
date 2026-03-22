@@ -12,11 +12,11 @@ As a developer at AidSec, you are responsible for maintaining and enhancing our 
   - Semantic HTML & Vanilla CSS/JS.
   - React (specifically for the Hero animation).
   - Web Security (CSP, Security Headers).
-  - Netlify ecosystem (Forms, Functions, Redirects).
+  - Vercel serverless endpoints and static-site deployment.
 - **Milestone Expectations**:
   - **Day 1**: Local environment setup and successful dev build.
   - **Day 3**: Small CSS/HTML adjustment or placeholder update.
-  - **Week 1**: First feature update in the React Hero component or Netlify Function.
+  - **Week 1**: First feature update in the React Hero component or a serverless endpoint.
 
 ## 2. Development Environment Setup Guide
 
@@ -24,36 +24,11 @@ To get started, ensure you have **Node.js (v18+)** and **npm** installed.
 
 ### Step-by-Step Setup
 
-1. **Clone the Repository**:
-   ```bash
-   git clone [repository-url]
-   cd aidsec.ch
-   ```
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Configure Environment Variables**:
-   In this project, configuration is handled via `config.json`.
-
-   ```bash
-   cp config.example.json config.json
-   ```
-
-   _Edit `config.json` with your local or staging values._
-
-4. **Initialize Resources**:
-
-   ```bash
-   npm run prepare-fonts  # Download and prepare local fonts
-   npm run fill           # Replace placeholders in project files
-   ```
-
-5. **Start Dev Server**:
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:5173` to see the site.
+1. **Clone the repository**: `git clone [repository-url]` and `cd aidsec.ch`
+2. **Install dependencies**: `npm install`
+3. **Configure environment variables**: create `config.json` from `config.example.json`
+4. **Initialize resources**: run `npm run prepare-fonts` and `npm run fill`
+5. **Start the dev server**: run `npm run dev` and open `http://localhost:5173`
 
 ## 3. Project and Codebase Overview
 
@@ -64,13 +39,13 @@ AidSec.ch is a **hybrid static site**. While the main pages are static HTML, the
 - **Static Content**: `index.html`, `impressum.html`, etc.
 - **React Hero**: Located in `js/hero-app.jsx`. Built to `js/dist/hero-app.js`.
 - **Styles**: Categorized in `css/` (main, layout, components).
-- **Backend Logic**: Netlify Functions in `netlify/functions/`.
+- **Backend Logic**: Vercel-style endpoints in `api/` plus Vite dev middleware.
 
 ### Tech Stack
 
 - **Build Tool**: Vite
 - **Animations**: Motion (formerly Framer Motion)
-- **Deployment**: Netlify
+- **Deployment**: Vercel (primary), static hosting compatible
 
 ## 4. Development Workflow Documentation
 
@@ -92,7 +67,7 @@ AidSec.ch is a **hybrid static site**. While the main pages are static HTML, the
 
 - **React 19**: [Beta/New Docs](https://react.dev)
 - **Vite Documentation**: [vitejs.dev](https://vitejs.dev)
-- **Netlify Security Headers**: Read `_headers` to understand our strict CSP policy.
+- **Security Headers / CSP**: Read `vercel.json` to understand the current header and CSP policy.
 - **Motion API**: [motion.dev](https://motion.dev) for hero animations.
 
 ## 7. First Tasks and Milestones
@@ -116,7 +91,7 @@ Security is our product. Follow these rules:
 Ensure you have access to:
 
 - **GitHub Repository**
-- **Netlify Dashboard** (for form submissions and logs)
+- **Vercel Project** (for function logs and deployment settings)
 - **VPN** (if required for staging environments)
 
 ## 10. Feedback and Continuous Improvement

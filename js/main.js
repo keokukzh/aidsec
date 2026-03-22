@@ -5,6 +5,41 @@
 (function () {
   'use strict';
 
+  var siteDataPromise = null;
+
+  function loadSiteData() {
+    if (siteDataPromise) return siteDataPromise;
+
+    siteDataPromise = fetch('/data/site-data.json', {
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Site data unavailable');
+        return response.json();
+      })
+      .catch(function () {
+        return null;
+      });
+
+    return siteDataPromise;
+  }
+
+  function applySharedPackageLabels(siteData) {
+    var packages = siteData && siteData.packages;
+    var managedPackage = packages && packages['cyber-mandat'];
+
+    if (!managedPackage) return;
+
+    document.querySelectorAll('a[href="/leistungen/cyber-mandat.html"]').forEach(function (link) {
+      var text = link.textContent.trim();
+      if (text === 'Cyber-Mandat') {
+        link.textContent = managedPackage.navName || managedPackage.shortName || managedPackage.name;
+      }
+    });
+  }
+
   // ── DOM References ──
   const nav = document.getElementById('nav');
   const navToggle = document.getElementById('nav-toggle');
@@ -101,6 +136,12 @@
       }
     });
   }
+
+  loadSiteData().then(function (siteData) {
+    if (siteData) {
+      applySharedPackageLabels(siteData);
+    }
+  });
 
   // ── Scroll Reveal (Intersection Observer) ──
   if (revealElements.length > 0 && 'IntersectionObserver' in window) {

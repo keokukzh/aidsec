@@ -5,6 +5,48 @@
 (function () {
   'use strict';
 
+  var FALLBACK_PACKAGES = {
+    'rapid-header-fix': {
+      name: 'Rapid Header Fix',
+      price: 'CHF 390.–',
+      annual: '',
+      checkoutLabel: 'Rapid Header Fix – CHF 390.–',
+      priceAmount: 'CHF 390.–',
+      pricePeriod: 'Einmalige Zahlung',
+    },
+    'kanzlei-haertung': {
+      name: 'Kanzlei-Haertung',
+      price: 'CHF 790.–',
+      annual: '',
+      checkoutLabel: 'Kanzlei-Haertung – CHF 790.–',
+      priceAmount: 'CHF 790.–',
+      pricePeriod: 'Einmalige Zahlung',
+    },
+    'cyber-mandat': {
+      name: 'Cyber-Mandat Pro / ComplianceOps',
+      price: 'CHF 89.–/Monat',
+      annual: "CHF 1'068.– / Jahr",
+      checkoutLabel: "Cyber-Mandat Pro / ComplianceOps – CHF 89.–/Monat (CHF 1'068.– / Jahr)",
+      priceAmount: "CHF 1'068.–",
+      pricePeriod: 'Jaehrliche Abrechnung (CHF 89.–/Monat) · Laufende Security- und Compliance-Begleitung',
+    },
+  };
+
+  function loadSiteData() {
+    return fetch('/data/site-data.json', {
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Site data unavailable');
+        return response.json();
+      })
+      .catch(function () {
+        return { packages: FALLBACK_PACKAGES };
+      });
+  }
+
   /* ── Constants ─────────────────────────── */
   var TWINT_QR_RAPID = '/assets/twint-qr-rapid.png';
   var TWINT_QR_HAERTUNG = '/assets/twint-qr-haertung.png';
@@ -15,6 +57,40 @@
   var packageName = document.body.getAttribute('data-package-name') || '';
   var packagePrice = document.body.getAttribute('data-package-price') || '';
   var packagePeriod = document.body.getAttribute('data-package-period') || '';
+
+  function applyPackageConfig(packageConfig) {
+    if (!packageConfig) return;
+
+    packageName = packageConfig.name || packageName;
+    packagePrice = packageConfig.price || packagePrice;
+    packagePeriod = packageConfig.annual || packagePeriod;
+
+    document.body.setAttribute('data-package-name', packageName);
+    document.body.setAttribute('data-package-price', packagePrice);
+    document.body.setAttribute('data-package-period', packagePeriod);
+
+    var packageBadge = document.getElementById('ob-package-badge');
+    var packageInput = document.getElementById('ob-package-input');
+    var packageSummary = document.getElementById('sum-package');
+    var priceAmount = document.getElementById('ob-price-amount');
+    var pricePeriod = document.getElementById('ob-price-period');
+
+    if (packageBadge) {
+      packageBadge.textContent = packageConfig.checkoutLabel || packageName;
+    }
+    if (packageInput) {
+      packageInput.value = packageConfig.checkoutLabel || packageName;
+    }
+    if (packageSummary) {
+      packageSummary.textContent = packageName;
+    }
+    if (priceAmount) {
+      priceAmount.textContent = packageConfig.priceAmount || packagePrice;
+    }
+    if (pricePeriod) {
+      pricePeriod.textContent = packageConfig.pricePeriod || packagePeriod;
+    }
+  }
 
   var twintQrMap = {
     'rapid-header-fix': TWINT_QR_RAPID,
@@ -261,7 +337,7 @@
 
   /* ── Option Selector ────────────────────── */
   var optionCards = document.querySelectorAll('.ob-option-card');
-  var credentialsSection = document.getElementById('ob-credentials-section');
+  var accessHandoffSection = document.getElementById('ob-access-handoff-section');
 
   optionCards.forEach(function (card) {
     card.addEventListener('click', function () {
@@ -274,9 +350,9 @@
         });
         card.classList.add('ob-option-card--active');
 
-        // Show/Hide credentials
-        if (credentialsSection) {
-          credentialsSection.style.display = radio.value === 'a' ? 'block' : 'none';
+        // Show/Hide secure handoff helper
+        if (accessHandoffSection) {
+          accessHandoffSection.style.display = radio.value === 'a' ? 'block' : 'none';
         }
       }
     });
@@ -314,6 +390,28 @@
     });
   }
 
+  if (accessHandoffSection) {
+    var selectedAccessOption = document.querySelector('input[name="access-option"]:checked');
+    accessHandoffSection.style.display =
+      selectedAccessOption && selectedAccessOption.value === 'b' ? 'none' : 'block';
+  }
+
   /* ── Init ───────────────────────────────── */
+  loadSiteData().then(function (siteData) {
+    if (siteData && siteData.packages) {
+      if (siteData.packages[packageSlug]) {
+        applyPackageConfig(siteData.packages[packageSlug]);
+      }
+
+      if (siteData.packages['cyber-mandat']) {
+        document.querySelectorAll('a[href="/leistungen/cyber-mandat.html"]').forEach(function (link) {
+          if (link.textContent.trim() === 'Cyber-Mandat') {
+            link.textContent = siteData.packages['cyber-mandat'].shortName || 'Cyber-Mandat Pro';
+          }
+        });
+      }
+    }
+  });
+
   goToStep(0);
 })();

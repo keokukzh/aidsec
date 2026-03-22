@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/onboarding/onboarding.css">
   <link rel="icon" href="/logowhite.png" type="image/png">
 </head>
-<body class="ob-page" data-package="kanzlei-haertung" data-package-name="Kanzlei-Härtung" data-package-price="CHF 599.–" data-package-period="">
+<body class="ob-page" data-package="kanzlei-haertung">
     <header class="nav" id="nav" role="banner">
       <div class="container nav__inner">
         <!-- Logo -->
@@ -141,7 +141,7 @@
 
       <!-- Package Badge -->
       <div class="ob-package">
-        <span class="ob-package__badge">Kanzlei-Härtung – CHF 599.–</span>
+        <span class="ob-package__badge" id="ob-package-badge">Kanzlei-Härtung – CHF 790.–</span>
       </div>
 
       <!-- Progress -->
@@ -157,14 +157,14 @@
       </div>
 
       <form id="ob-form" name="onboarding-kanzlei-haertung" method="POST" action="/api/onboarding-submit" novalidate>
-        <input type="hidden" name="package" value="Kanzlei-Härtung – CHF 599.–">
+        <input type="hidden" name="package" id="ob-package-input" value="Kanzlei-Härtung – CHF 790.–">
         <input type="hidden" name="payment-method" id="ob-payment-method" value="">
         <p hidden><label>Nicht ausfüllen: <input name="bot-field"></label></p>
 
         <!-- STEP 1: Webseite & Zugang -->
         <div class="ob-step ob-step--active" data-step="1">
           <h2 class="ob-step__title">Ihre Webseite absichern</h2>
-          <p class="ob-step__subtitle">Damit wir sofort starten können, benötigen wir Ihre WordPress-Admin-Zugangsdaten.</p>
+          <p class="ob-step__subtitle">Damit wir die Haertung sauber umsetzen koennen, benoetigen wir Ihre Website-Angaben und einen sicheren Zugangshandoff, aber keine Passwoerter in diesem Formular.</p>
 
           <div class="ob-form-group">
             <label class="ob-label" for="ob-url">Website-URL *</label>
@@ -176,35 +176,37 @@
           <div class="ob-option-selector">
             <div class="ob-option-card ob-option-card--active">
               <input type="radio" name="access-option" value="a" id="opt-a" checked>
-              <label for="opt-a" class="ob-option-card__title">Option A: Jetzt Zugangsdaten angeben</label>
-              <span class="ob-option-card__sub">Schnellste Abwicklung – wir legen sofort los.</span>
+              <label for="opt-a" class="ob-option-card__title">Option A: Secure Handoff vorbereiten</label>
+              <span class="ob-option-card__sub">Schnellste Abwicklung: Sie legen einen temporaeren Admin an oder nutzen den Reset-Link und senden den Zugang separat nach der Bestaetigung.</span>
             </div>
             <div class="ob-option-card">
               <input type="radio" name="access-option" value="b" id="opt-b">
-              <label for="opt-b" class="ob-option-card__title">Option B: Später mitteilen</label>
-              <span class="ob-option-card__sub">Wir kontaktieren Sie nach dem Auftrag für die Details.</span>
+              <label for="opt-b" class="ob-option-card__title">Option B: Setup spaeter koordinieren</label>
+              <span class="ob-option-card__sub">Wir kontaktieren Sie nach dem Auftrag fuer Termin, Verantwortliche und sicheren Zugangskanal.</span>
             </div>
           </div>
 
-          <!-- Section A: Credentials -->
-          <div id="ob-credentials-section">
+          <div class="ob-security-note">
+            <strong class="ob-security-note__title">Wichtig: Keine Passwoerter hier eingeben</strong>
+            <p class="ob-security-note__text">Dieses Formular ist fuer Auftrags- und Handoff-Daten gedacht. Senden Sie WordPress-Passwoerter oder Live-Zugaenge erst nach Auftragsbestaetigung ueber einen separaten sicheren Kanal.</p>
+          </div>
+
+          <div id="ob-access-handoff-section">
             <div class="ob-form-group">
-              <label class="ob-label" for="ob-wp-user">WordPress-Benutzername oder E-Mail</label>
-              <input type="text" id="ob-wp-user" name="wp-user" class="ob-input" placeholder="admin">
+              <label class="ob-label ob-label--optional" for="ob-access-note">Zugangshinweis / Ansprechpartner</label>
+              <textarea id="ob-access-note" name="access-note" class="ob-input ob-textarea" rows="4" placeholder="z.B. temporaerer Admin wird nach Bestellbestaetigung erstellt, technische Ansprechperson ist Frau Muster, bevorzugter Kanal: Telefon oder verschluesselte E-Mail"></textarea>
+              <p class="ob-hint">Optional. Hilft uns, den sicheren Handoff ohne Rueckfragen zu organisieren.</p>
             </div>
             <div class="ob-form-group">
-              <label class="ob-label" for="ob-wp-pass">WordPress-Passwort</label>
-              <input type="password" id="ob-wp-pass" name="wp-pass" class="ob-input" placeholder="••••••••••••">
-              
-              <a href="#" class="ob-login-helper-toggle" id="ob-helper-toggle">Passwort vergessen oder Daten nicht auffindbar?</a>
-              
+              <a href="#" class="ob-login-helper-toggle" id="ob-helper-toggle">Reset-Link oder Hoster-Login oeffnen</a>
+
               <div class="ob-login-helper" id="ob-login-helper">
                 <div class="ob-login-helper__group">
-                  <span class="ob-login-helper__title">Setzen Sie Ihr WordPress-Passwort direkt hier zurück:</span>
-                  <a href="#" target="_blank" rel="noopener" class="ob-login-btn" id="ob-reset-link">Passwort zurücksetzen</a>
+                  <span class="ob-login-helper__title">Setzen Sie das WordPress-Passwort direkt auf Ihrer Website zurueck:</span>
+                  <a href="#" target="_blank" rel="noopener" class="ob-login-btn" id="ob-reset-link">Passwort zuruecksetzen</a>
                 </div>
                 <div class="ob-login-helper__group">
-                  <span class="ob-login-helper__title">Hier sind die Logins der häufigsten Schweizer Hoster:</span>
+                  <span class="ob-login-helper__title">Hier sind die Logins der haeufigsten Schweizer Hoster:</span>
                   <div class="ob-hoster-grid">
                     <a href="https://admin.hostpoint.ch/" target="_blank" rel="noopener" class="ob-hoster-pill">Hostpoint</a>
                     <a href="https://my.cyon.ch/" target="_blank" rel="noopener" class="ob-hoster-pill">Cyon</a>
@@ -311,8 +313,8 @@
           <h2 class="ob-step__title">Zahlung</h2>
 
           <div class="ob-price">
-            <span class="ob-price__amount">CHF 599.–</span>
-            <span class="ob-price__period">Einmalige Zahlung</span>
+            <span class="ob-price__amount" id="ob-price-amount">CHF 790.–</span>
+            <span class="ob-price__period" id="ob-price-period">Einmalige Zahlung</span>
           </div>
 
           <div class="ob-payment-cards">

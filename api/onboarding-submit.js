@@ -12,6 +12,10 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:5173',
 ];
 
+function isLocalOrigin(origin) {
+  return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin || '');
+}
+
 function getClientIp(req) {
   const header = req.headers['x-forwarded-for'];
   if (typeof header === 'string' && header.trim()) {
@@ -37,6 +41,16 @@ function isRateLimited(ip) {
 
 function hashIdentifier(value) {
   return createHash('sha256').update(value || 'unknown').digest('hex').slice(0, 24);
+}
+
+function requiresDurableRateLimiting() {
+  const vercelEnv = getEnvFirst(['VERCEL_ENV']).toLowerCase();
+
+  if (vercelEnv) {
+    return vercelEnv === 'production';
+  }
+
+  return getEnvFirst(['NODE_ENV']) === 'production';
 }
 
 function getRateLimitMode() {
@@ -93,12 +107,20 @@ async function isRateLimitedUpstash(ip) {
 }
 
 async function isRateLimitedSafe(ip) {
-  if (getRateLimitMode() === 'upstash') {
+  const requireDurable = requiresDurableRateLimiting();
+
+  if (getRateLimitMode() === 'upstash' || requireDurable) {
     try {
       const limited = await isRateLimitedUpstash(ip);
       if (limited !== null) return limited;
+      if (requireDurable) {
+        throw new Error('Durable rate limiting is required in managed runtime');
+      }
       console.warn('Rate limit mode upstash is enabled but Upstash credentials are missing; fallback to memory');
     } catch (error) {
+      if (requireDurable) {
+        throw error;
+      }
       console.error('Upstash rate limit failed, fallback to memory', error);
     }
   }
@@ -134,6 +156,17 @@ function getEnvFirst(names) {
   return '';
 }
 
+function getDefaultAllowedOrigins() {
+  const origins = ALLOWED_ORIGINS.slice();
+  const vercelUrl = getEnvFirst(['VERCEL_URL']);
+
+  if (vercelUrl) {
+    origins.push(`https://${vercelUrl}`);
+  }
+
+  return Array.from(new Set(origins));
+}
+
 function listVisibleSmtpEnvKeys() {
   return Object.keys(process.env || {}).filter((key) => {
     const k = key.toLowerCase();
@@ -158,9 +191,8 @@ function normalizePayload(body) {
     company: trimValue(data.company),
     email: trimValue(data.email),
     phone: trimValue(data.phone),
-    wpUser: trimValue(data['wp-user'] || data.wpUser),
-    wpPass: trimValue(data['wp-pass'] || data.wpPass),
     accessOption: trimValue(data['access-option'] || data.accessOption),
+    accessNote: trimValue(data['access-note'] || data.accessNote),
     paymentMethod: trimValue(data['payment-method'] || data.paymentMethod),
     authCheck: trimValue(data['auth-check'] || data.authCheck),
     privacyCheck: trimValue(data['privacy-check'] || data.privacyCheck),
@@ -168,6 +200,13 @@ function normalizePayload(body) {
     botField: trimValue(data['bot-field'] || data.botField),
     sourcePath: trimValue(data.sourcePath),
   };
+}
+
+function containsForbiddenSecrets(body) {
+  const data = body && typeof body === 'object' ? body : {};
+  const forbiddenKeys = ['wp-user', 'wpUser', 'wp-pass', 'wpPass', 'password', 'adminPassword'];
+
+  return forbiddenKeys.some((key) => trimValue(data[key]).length > 0);
 }
 
 function validateEmail(email) {
@@ -183,14 +222,16 @@ function getAllowedOrigin(req) {
   if (!origin || typeof origin !== 'string') return '';
 
   const configured = getEnvFirst(['ONBOARDING_ALLOWED_ORIGINS']);
-  const allowlist = configured
+  const configuredList = configured
     ? configured
         .split(',')
         .map((item) => item.trim())
         .filter(Boolean)
-    : ALLOWED_ORIGINS;
+    : [];
+  const allowlist = Array.from(new Set(getDefaultAllowedOrigins().concat(configuredList)));
 
-  return allowlist.includes(origin) ? origin : '';
+  if (allowlist.includes(origin) || isLocalOrigin(origin)) return origin;
+  return '';
 }
 
 function buildSubject(payload) {
@@ -201,9 +242,12 @@ function buildSubject(payload) {
 
 function buildMailBody(payload, meta) {
   const payment = payload.paymentMethod || 'nicht angegeben';
-  const accessLabel = payload.accessOption === 'a' ? 'Jetzt Zugangsdaten angegeben' : 'Später mitteilen';
-  const hasWpCredentials = Boolean(payload.wpUser || payload.wpPass);
+  const accessLabel =
+    payload.accessOption === 'a'
+      ? 'Secure Handoff vorbereitet'
+      : 'Setup spaeter koordinieren';
   const periodLine = payload.packagePeriod ? `\n- Intervall: ${payload.packagePeriod}` : '';
+  const accessNoteLine = payload.accessNote ? `- Zugangshinweis: ${payload.accessNote}` : '- Zugangshinweis: -';
 
   return [
     'Neuer Auftrag über das AidSec Onboarding',
@@ -223,7 +267,8 @@ function buildMailBody(payload, meta) {
     'Auftragsdetails',
     `- Zahlungsart: ${payment}`,
     `- Zugangsoption: ${accessLabel}`,
-    `- Zugangsdaten Status: ${hasWpCredentials ? 'übermittelt (nicht per E-Mail weitergeleitet)' : 'nicht übermittelt'}`,
+    accessNoteLine,
+    '- Passwortuebergabe: separat nach Auftragsbestaetigung ueber sicheren Kanal',
     `- AGB/Berechtigung bestätigt: ${hasValue(payload.authCheck) ? 'Ja' : 'Nein'}`,
     `- Datenschutz bestätigt: ${hasValue(payload.privacyCheck) ? 'Ja' : 'Nein'}`,
     `- Access-Hinweis bestätigt: ${hasValue(payload.accessCheck) ? 'Ja' : 'Nein'}`,
@@ -287,14 +332,25 @@ export default async function handler(req, res) {
   }
 
   const ip = getClientIp(req);
-  if (await isRateLimitedSafe(ip)) {
-    return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
+  try {
+    if (await isRateLimitedSafe(ip)) {
+      return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
+    }
+  } catch (error) {
+    console.error('Durable rate limiting unavailable for onboarding-submit', error);
+    return res.status(503).json({ error: 'Formularschutz derzeit nicht verfuegbar. Bitte spaeter erneut versuchen.' });
   }
 
   const payload = normalizePayload(req.body);
 
   if (payload.botField) {
     return res.status(200).json({ ok: true });
+  }
+
+  if (containsForbiddenSecrets(req.body)) {
+    return res.status(400).json({
+      error: 'Bitte keine Zugangsdaten oder Passwoerter ueber dieses Formular senden. Nutzen Sie den separaten sicheren Handoff nach der Bestaetigung.',
+    });
   }
 
   if (!payload.name || !payload.email || !payload.websiteUrl || !payload.paymentMethod) {
