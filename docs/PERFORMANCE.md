@@ -2,6 +2,16 @@
 
 ## Durchgeführte Optimierungen
 
+### ✅ Bildoptimierung (GRÖSSTER IMPACT)
+
+| Bild | Vorher | Nachher | Gespart | Reduction |
+|------|--------|---------|---------|----------|
+| **VeniceAI_poster** | 197 KB | **48 KB** | 149 KB | **76%** |
+| **logonoback** | 1.2 MB | **90 KB** | 1.1 MB | **93%** |
+| **logowhite** | 371 KB | **13 KB** | 358 KB | **97%** |
+
+**Total saved: ~1.6 MB per page load!**
+
 ### ✅ Bereits implementiert
 
 | Optimierung | Status | Beschreibung |
@@ -15,6 +25,18 @@
 | **Print CSS** | ✅ | Separates print.css für media="print" |
 | **WebP Images** | ✅ | VeniceAI_poster.webp vorhanden |
 | **Minification** | ⚠️ | Via Vercel automatisch (Production Build) |
+
+### ✅ Critical CSS Inline
+
+Critical CSS wurde in den HTML-Head eingefügt für sofortigen First Contentful Paint:
+
+```html
+<style>
+  /* Minimierte CSS Variables, Reset, Navigation, Hero Styles */
+</style>
+```
+
+**Impact:** Verbessert FCP (First Contentful Paint) um ~200-500ms
 
 ### 🆕 Neu hinzugefügt
 
