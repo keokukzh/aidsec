@@ -1146,6 +1146,23 @@
   font-weight: 500;
 }
 
+.trust-logos__item--highlight {
+  color: var(--gold);
+  font-size: var(--text-base);
+  font-weight: 600;
+  background: linear-gradient(135deg, rgba(200, 169, 10, 0.08) 0%, rgba(200, 169, 10, 0.03) 100%);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(200, 169, 10, 0.2);
+}
+
+.trust-logos__item--highlight svg {
+  color: var(--gold);
+  stroke: var(--gold);
+  width: 20px;
+  height: 20px;
+}
+
 .trust-logos__item svg {
   color: var(--gold);
   stroke: var(--gold);

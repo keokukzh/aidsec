@@ -86,6 +86,30 @@
               "@type": "Answer",
               "text": "SSL/TLS verschlüsselt die Verbindung, schützt aber nicht vor Clickjacking, XSS oder fehlender Content-Security-Policy. Security Headers sind die zweite Verteidigungslinie — und die am häufigsten vergessene."
             }
+          },
+          {
+            "@type": "Question",
+            "name": "Meine Website wurde bereits gehackt — was jetzt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sofortmaßnahmen: Website vom Netz trennen, alle Passwörter ändern, Hosting-Provider informieren, forensische Analyse durchführen. Unsere Notfall-Intervention umfasst Malware-Entfernung, Blacklist-Bereinigung und Wiederherstellung zu CHF 990 Pauschal."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was ist der Unterschied zwischen SPF, DKIM und DMARC?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SPF legt fest welche Server E-Mails senden dürfen, DKIM fügt eine digitale Signatur hinzu, DMARC kombiniert beide und legt fest was bei fehlgeschlagenen Prüfungen passiert. Alle drei sind für vollständigen E-Mail-Schutz notwendig."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Gilt das Anwaltsgeheimnis auch für meine Website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Indirekt, ja. Wenn Ihre Website gehackt wird und Angreifer Zugriff auf Mandantenlisten erhalten, kann das als Verletzung der Sorgfaltspflicht gewertet werden. Das nDSG verlangt technische Schutzmaßnahmen (Art. 8) — Security Headers sind ein wichtiger Teil davon."
+            }
           }
         ]
       }
@@ -484,6 +508,195 @@
                   </p>
                   <p>
                     Das nDSG kennt keine Ausnahme für "Ich wusste nicht, wie meine Webseite konfiguriert ist". Mit einer Härtung durch AidSec stellen Sie sicher, dass Sie Ihrer Sorgfaltspflicht nachgekommen sind.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-504" id="faq-q504">
+                  Meine Website wurde bereits gehackt — was jetzt?
+                </button>
+                <div class="faq__answer" id="faq-504" role="region" aria-labelledby="faq-q504">
+                  <p>
+                    <strong>Sofortmaßnahmen:</strong>
+                  </p>
+                  <ol>
+                    <li>Website vom Netz trennen (Wartungsmodus)</li>
+                    <li>Alle Passwörter ändern (CMS, FTP, Datenbank)</li>
+                    <li>Hosting-Provider informieren</li>
+                    <li>Forensische Analyse durchführen</li>
+                  </ol>
+                  <p>
+                    Unsere <a href="/leistungen/notfall-intervention.html">Notfall-Intervention</a> umfasst: Malware-Entfernung, Blacklist-Bereinigung, forensische Analyse und Backup-Wiederherstellung — alles zu einem Pauschalpreis von CHF 990.
+                  </p>
+                  <p>
+                    Nach der Wiederherstellung empfehlen wir eine vollständige WordPress-Härtung, um weitere Angriffe zu verhindern.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-505" id="faq-q505">
+                  Wie oft sollte ich WordPress und Plugins aktualisieren?
+                </button>
+                <div class="faq__answer" id="faq-505" role="region" aria-labelledby="faq-q505">
+                  <p>
+                    <strong>Mindestens monatlich, besser wöchentlich.</strong> Veraltete WordPress-Installationen sind eine der häufigsten Angriffsvektoren.
+                  </p>
+                  <p>
+                    Unsere Kanzlei-Härtung umfasst auch eine Update-Strategie:
+                  </p>
+                  <ul>
+                    <li>Automatische Plugin-Updates für Sicherheits-Patches</li>
+                    <li>Monitoring bei крупных Updates</li>
+                    <li>Test-Umgebung für größere Updates</li>
+                  </ul>
+                  <p>
+                    Cyber-Mandat Pro Kunden werden bei kritischen Sicherheitsupdates benachrichtigt.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-506" id="faq-q506">
+                  Was ist der Unterschied zwischen HTTP und HTTPS?
+                </button>
+                <div class="faq__answer" id="faq-506" role="region" aria-labelledby="faq-q506">
+                  <p>
+                    <strong>HTTPS = HTTP + Verschlüsselung (TLS/SSL).</strong> HTTPS schützt die Verbindung zwischen Browser und Server.
+                  </p>
+                  <p>
+                    <strong>Warum reicht das nicht?</strong>
+                  </p>
+                  <ul>
+                    <li>SSL verhindert nur Abhören der Verbindung</li>
+                    <li>Es schützt nicht vor XSS, Clickjacking oder CSRF</li>
+                    <li>Ein Angreifer kann trotzdem bösartigen Code einschleusen</li>
+                  </ul>
+                  <p>
+                    Security Headers (CSP, X-Frame-Options etc.) sind die notwendige Ergänzung zu HTTPS.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: E-Mail-Sicherheit -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">E-Mail-Sicherheit</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-601" id="faq-q601">
+                  Was ist der Unterschied zwischen SPF, DKIM und DMARC?
+                </button>
+                <div class="faq__answer" id="faq-601" role="region" aria-labelledby="faq-q601">
+                  <p>
+                    <strong>SPF (Sender Policy Framework):</strong> Legt fest, welche Server E-Mails für Ihre Domain senden dürfen.
+                  </p>
+                  <p>
+                    <strong>DKIM (DomainKeys Identified Mail):</strong> Fügt eine digitale Signatur hinzu, die die Echtheit der E-Mail bestätigt.
+                  </p>
+                  <p>
+                    <strong>DMARC:</strong> Kombiniert SPF und DKIM und legt fest, was bei fehlgeschlagenen Prüfungen passieren soll.
+                  </p>
+                  <p>
+                    Alle drei sind notwendig für vollständigen E-Mail-Schutz und werden von Gerichten und Behörden zunehmend gefordert.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-602" id="faq-q602">
+                  Warum erreichen meine E-Mails manche Empfänger nicht?
+                </button>
+                <div class="faq__answer" id="faq-602" role="region" aria-labelledby="faq-q602">
+                  <p>
+                    Oft liegt es an fehlender oder falscher E-Mail-Authentifizierung. Ohne SPF, DKIM und DMARC:
+                  </p>
+                  <ul>
+                    <li>E-Mails landen im Spam</li>
+                    <li>Manche Empfänger lehnen E-Mails komplett ab</li>
+                    <li>Spoofing möglich (jemand gibt sich als Sie aus)</li>
+                  </ul>
+                  <p>
+                    Unsere <a href="/leistungen/email-sicherheit.html">E-Mail-Sicherheit</a> (CHF 149) konfiguriert alle drei Protokolle korrekt.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-603" id="faq-q603">
+                  Können meine E-Mails mitgelesen werden?
+                </button>
+                <div class="faq__answer" id="faq-603" role="region" aria-labelledby="faq-q603">
+                  <p>
+                    <strong>Ohne Verschlüsselung: Ja.</strong> Unverschlüsselte E-Mails können auf jedem Knotenpunkt zwischen Absender und Empfänger gelesen werden.
+                  </p>
+                  <p>
+                    Für Kanzleien und Praxen ist das besonders problematisch:</n                  <ul>
+                    <li>Anwaltsgeheimnis (Art. 321 StGB)</li>
+                    <li>Patientengeheimnis</li>
+                    <li>Notariatsgeheimnis</li>
+                  </ul>
+                  <p>
+                    Wir empfehlen zusätzlich zu SPF/DKIM/DMARC auch Ende-zu-Ende-Verschlüsselung (PGP/S/MIME) für besonders sensitive Kommunikation.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Spezifisch für Anwälte -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">Für Anwälte & Notare</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-701" id="faq-q701">
+                  Gilt das Anwaltsgeheimnis auch für meine Website?
+                </button>
+                <div class="faq__answer" id="faq-701" role="region" aria-labelledby="faq-q701">
+                  <p>
+                    <strong>Indirekt, ja.</strong> Das Anwaltsgeheimnis (Art. 321 StGB) schützt Kommunikation. Wenn Ihre Website gehackt wird und Angreifer Zugriff auf Mandantenlisten oder Fallinformationen erhalten, kann das als Verletzung der Sorgfaltspflicht gewertet werden.
+                  </p>
+                  <p>
+                    Das nDSG verlangt zudem technische Schutzmaßnahmen (Art. 8). Security Headers sind ein wichtiger Teil davon — sie verhindern, dass Angreifer Code in Ihre Seite einschleusen können.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-702" id="faq-q702">
+                  Ich bin Notar — welche besonderen Anforderungen gibt es?
+                </button>
+                <div class="faq__answer" id="faq-702" role="region" aria-labelledby="faq-q702">
+                  <p>
+                    Notare unterliegen besonderen Verschwiegenheitspflichten. Für Ihre Website bedeutet das:
+                  </p>
+                  <ul>
+                    <li>Zusätzlicher Schutz vor Injection-Angriffen</li>
+                    <li>Sichere Formulare für Mandantenanfragen</li>
+                    <li>Keine Spuren von Mandantendaten in Logfiles</li>
+                    <li>nDSG-konforme Datenspeicherung</li>
+                  </ul>
+                  <p>
+                    Unsere <a href="/leistungen/kanzlei-haertung.html">Kanzlei-Härtung</a> ist speziell auf solche Anforderungen ausgelegt.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-703" id="faq-q703">
+                  Brauche ich als Anwalt eine Cyber-Versicherung?
+                </button>
+                <div class="faq__answer" id="faq-703" role="region" aria-labelledby="faq-q703">
+                  <p>
+                    <strong>Ja, dringend empfohlen.</strong> Aber präventiver Schutz ist besser als Versicherung:
+                  </p>
+                  <ul>
+                    <li>Prävention kostet einen Bruchteil der Versicherungsprämie</li>
+                    <li>Eine gehackte Kanzlei verliert Reputation und Mandanten</li>
+                    <li>Wiederherstellung kostet immer mehr als Prävention</li>
+                  </ul>
+                  <p>
+                    Unsere <a href="/leistungen/cyber-mandat.html">Cyber-Mandat Pro</a> liefert Ihnen auch den notwendigen Nachweis für Ihre Versicherung, dass Sie angemessene Schutzmaßnahmen getroffen haben.
                   </p>
                 </div>
               </div>
