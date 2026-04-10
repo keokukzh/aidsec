@@ -1,0 +1,59 @@
+[
+  {
+    "id": "ord_001",
+    "name": "Dr. Max Muster",
+    "email": "m.muster@muster-kanzlei.ch",
+    "company": "Muster & Partner Rechtsanwälte",
+    "website": {
+      "url": "https://muster-kanzlei.ch",
+      "ip": null,
+      "server": "Apache"
+    },
+    "package": "cyber-mandat-pro",
+    "startedAt": "2026-01-15",
+    "nextCheck": "2026-04-15",
+    "monitoring": {
+      "securityHeaders": true,
+      "blacklist": false,
+      "wordpress": true
+    }
+  },
+  {
+    "id": "ord_002",
+    "name": "Praxis Dr. Huber",
+    "email": "info@praxis-huber.ch",
+    "company": "Allgemeinmedizin AG",
+    "website": {
+      "url": "https://praxis-huber.ch",
+      "ip": null,
+      "server": "Nginx"
+    },
+    "package": "cyber-mandat-pro",
+    "startedAt": "2026-02-01",
+    "nextCheck": "2026-05-01",
+    "monitoring": {
+      "securityHeaders": true,
+      "blacklist": false,
+      "wordpress": true
+    }
+  },
+  {
+    "id": "ord_003",
+    "name": "Notariat Meier &partner",
+    "email": "kontakt@notariat-meier.ch",
+    "company": "Notariat Meier & Partner AG",
+    "website": {
+      "url": "https://notariat-meier.ch",
+      "ip": null,
+      "server": "Apache"
+    },
+    "package": "kanzlei-haertung",
+    "startedAt": "2026-03-01",
+    "nextCheck": "2026-06-01",
+    "monitoring": {
+      "securityHeaders": true,
+      "blacklist": false,
+      "wordpress": true
+    }
+  }
+]
