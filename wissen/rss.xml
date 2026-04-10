@@ -109,3 +109,35 @@
     </item>
   </channel>
 </rss>
+
+    <item>
+      <title>Die 5 gefährlichsten WordPress-Sicherheitslücken 2026</title>
+      <link>https://aidsec.ch/wissen/die-5-gefaehrlichsten-wordpress-sicherheitsluecken-2026.html</link>
+      <description>WordPress ist das beliebteste CMS weltweit — und deshalb auch das häufigste Ziel von Angreifern. Diese fünf Schwachstellen bedrohen besonders Schweizer Kanzleien.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Fri, 10 Apr 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/die-5-gefaehrlichsten-wordpress-sicherheitsluecken-2026.html</guid>
+      <category>WordPress</category>
+    </item>
+
+    <item>
+      <title>Warum SSL allein nicht genügt: Die zweite Verteidigungslinie</title>
+      <link>https://aidsec.ch/wissen/warum-ssl-allein-nicht-genuegt.html</link>
+      <description>SSL-Zertifikate verschlüsseln Daten, aber schützen nicht vor Clickjacking, XSS oder CSRF. Erfahren Sie, warum Security Headers für Ihre Website unverzichtbar sind.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Wed, 08 Apr 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/warum-ssl-allein-nicht-genuegt.html</guid>
+      <category>Security Headers</category>
+    </item>
+
+    <item>
+      <title>nDSG Bussen: Was droht bei einem Datenschutzvorfall</title>
+      <link>https://aidsec.ch/wissen/ndsg-bussen-datenschutzvorfall.html</link>
+      <description>Das neue Schweizer Datenschutzgesetz sieht empfindliche Bussen vor — bis zu CHF 250'000. Erfahren Sie, was genau droht und wie Sie sich schützen.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Sun, 05 Apr 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/ndsg-bussen-datenschutzvorfall.html</guid>
+      <category>nDSG Compliance</category>
+    </item>
+  </channel>
+</rss>

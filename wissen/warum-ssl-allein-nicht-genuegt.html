@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warum SSL allein nicht genügt: Die zweite Verteidigungslinie | AidSec</title>
+    <meta name="description" content="SSL-Zertifikate verschlüsseln Daten, aber schützen nicht vor Clickjacking, XSS oder CSRF. Erfahren Sie, warum Security Headers für Ihre Website unverzichtbar sind." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://aidsec.ch/wissen/warum-ssl-allein-nicht-genuegt.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Warum SSL allein nicht genügt: Die zweite Verteidigungslinie" />
+    <meta property="og:description" content="SSL-Zertifikate verschlüsseln Daten, aber schützen nicht vor Clickjacking, XSS oder CSRF." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://aidsec.ch/wissen/warum-ssl-allein-nicht-genuegt.html" />
+    <meta property="og:locale" content="de_CH" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/sections.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+
+    <link rel="icon" type="image/png" href="/logowhite.png" />
+    <script src="/js/consent.js"></script>
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Warum SSL allein nicht genügt: Die zweite Verteidigungslinie",
+        "description": "SSL-Zertifikate verschlüsseln Daten, aber schützen nicht vor Clickjacking, XSS oder CSRF.",
+        "author": { "@type": "Organization", "name": "AidSec", "url": "https://aidsec.ch" },
+        "publisher": { "@type": "Organization", "name": "AidSec", "url": "https://aidsec.ch" },
+        "datePublished": "2026-04-08",
+        "dateModified": "2026-04-08"
+      }
+    </script>
+  </head>
+  <body>
+    <header class="nav" id="nav" role="banner">
+      <div class="container nav__inner">
+        <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="/logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" />
+        </a>
+
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link">Leistungen</a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html">Cyber-Mandat</a>
+            </div>
+          </div>
+          <a href="/branchen/anwaltskanzleien.html" class="nav__link">Anwälte</a>
+          <a href="/branchen/arztpraxen.html" class="nav__link">Ärzte</a>
+          <a href="/wissen/index.html" class="nav__link nav__link--active">Wissen</a>
+        </nav>
+
+        <a href="/index.html#kontakt" class="btn btn--gold nav__cta desktop-only">Kostenfreien Security-Check</a>
+
+        <button class="nav__toggle" id="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav class="mobile-menu__nav">
+          <a href="/index.html#leistungen" class="mobile-menu__link">Leistungen</a>
+          <a href="/branchen/anwaltskanzleien.html" class="mobile-menu__link">Anwälte</a>
+          <a href="/branchen/arztpraxen.html" class="mobile-menu__link">Ärzte</a>
+          <a href="/wissen/index.html" class="mobile-menu__link">Wissen</a>
+          <a href="/index.html#kontakt" class="btn btn--gold mobile-menu__cta">Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <article class="article-page">
+        <!-- Hero -->
+        <section class="section section--dark article-hero">
+          <div class="container container--medium">
+            <div class="article-hero__meta">
+              <span class="article-hero__category">Security Headers</span>
+              <span class="article-hero__date">8. April 2026 · 6 Min. Lesezeit</span>
+            </div>
+            <h1 class="article-hero__title">Warum SSL allein nicht genügt: Die zweite Verteidigungslinie</h1>
+            <p class="article-hero__excerpt">
+              SSL-Verschlüsselung ist wichtig — aber sie ist nur der Anfang. Erfahren Sie, 
+              warum Security Headers für Ihre Website genauso unverzichtbar sind.
+            </p>
+          </div>
+        </section>
+
+        <!-- Content -->
+        <section class="section article-content">
+          <div class="container container--medium">
+            <p class="article-lead">
+              "Wir haben doch ein SSL-Zertifikat" — dieser Satz ist so häufig wie falsch. 
+              SSL (heute offiziell TLS genannt) verschlüsselt zwar die Verbindung zwischen 
+              Browser und Server, aber es schützt nicht vor einer ganzen Reihe von Angriffen, 
+              die täglich Tausende von Websites kompromittieren.
+            </p>
+
+            <h2>Was SSL wirklich macht</h2>
+            <p>
+              Ein SSL-Zertifikat stellt sicher, dass die Daten zwischen Ihrem Besucher und 
+              Ihrem Server verschlüsselt übertragen werden. Das ist wichtig und richtig:
+            </p>
+            <ul>
+              <li>Kein Abhören der Verbindung durch Dritte</li>
+              <li>Schutz vor Man-in-the-Middle-Angriffen</li>
+              <li>Authentifizierung: Der Server ist wirklich Ihrer</li>
+              <li>Das grüne Schloss in der Browserleiste</li>
+            </ul>
+            <p>
+              Aber — und das ist entscheidend — SSL endet an der Verschlüsselung. 
+              Was auf Ihrer Website passiert, wenn die Daten einmal angekommen sind, 
+              davon bekommt SSL nichts mit.
+            </p>
+
+            <h2>Was SSL nicht schützt</h2>
+            <p>
+              Hier sind die Angriffe, gegen die SSL machtlos ist:
+            </p>
+
+            <h3>Clickjacking</h3>
+            <p>
+              <strong>Was passiert:</strong> Ein Angreifer bettet Ihre Website in einen 
+              unsichtbaren iFrame ein. Der Besucher klickt auf etwas, das wie ein normaler 
+              Button aussieht — in Wirklichkeit klickt er auf Ihrer Website.
+            </p>
+            <p>
+              <strong>Beispiel:</strong> Ein Besucher sieht einen Link "Gewinnen Sie ein iPhone" 
+              und klickt darauf. In Wirklichkeit hat er gerade einen Kauf auf Ihrer Website 
+              bestätigt — in einem unsichtbaren Frame.
+            </p>
+            <p>
+              <strong>Die Lösung:</strong> X-Frame-Options Header
+            </p>
+
+            <h3>Cross-Site Scripting (XSS)</h3>
+            <p>
+              <strong>Was passiert:</strong> Ein Angreifer schleust bösartigen JavaScript-Code 
+              in Ihre Seite ein. Dieser Code kann dann Cookies stehlen, Tastatureingaben 
+              aufzeichnen oder den Besucher auf eine gefälschte Website umleiten.
+            </p>
+            <p>
+              <strong>Beispiel:</strong> Ein Kommentarfeld auf Ihrer Website akzeptiert 
+              ungefilterten HTML-Code. Ein Angreifer fügt ein Script ein, das die 
+              Session-Cookies aller Besucher stiehlt.
+            </p>
+            <p>
+              <strong>Die Lösung:</strong> Content-Security-Policy (CSP) Header
+            </p>
+
+            <h3>SSL-Stripping / Downgrade-Angriffe</h3>
+            <p>
+              <strong>Was passiert:</strong> Ein Angreifer in einem offenen WLAN sitzt 
+              zwischen Ihrem Besucher und dem Server. Er "strippt" das SSL-Zertifikat und 
+              leitet den Besucher auf eine unverschlüsselte Version weiter — ohne dass 
+              jemand es bemerkt.
+            </p>
+            <p>
+              <strong>Die Lösung:</strong> Strict-Transport-Security (HSTS) Header
+            </p>
+
+            <h2>Das HTTPS + Security Headers Prinzip</h2>
+            <p>
+              Die beste Verteidigung besteht aus zwei Schichten:
+            </p>
+            <ol>
+              <li><strong>Schicht 1:</strong> HTTPS (SSL/TLS) — Verschlüsselt die Verbindung</li>
+              <li><strong>Schicht 2:</strong> Security Headers — Schützen die Anwendung selbst</li>
+            </ol>
+            <p>
+              Beides zusammen ist wie eine Burg mit Mauern (HTTPS) und einem Burggraben 
+              (Security Headers). Nur zusammen sind Sie vollständig geschützt.
+            </p>
+
+            <div class="article-callout article-callout--info">
+              <strong>Fact:</strong> 78% der Schweizer Kanzlei-Webseiten haben ein SSL-Zertifikat — 
+              aber nur 22% haben Security Headers aktiviert. Das macht sie zu leichten Zielen.
+            </div>
+
+            <h2>Die sechs wichtigsten Security Headers</h2>
+            <p>
+              Für eine vollständige Absicherung Ihrer Website empfehlen wir diese Header:
+            </p>
+            <ul>
+              <li>
+                <strong>Strict-Transport-Security (HSTS)</strong><br />
+                Erzwingt HTTPS-Verbindungen und verhindert SSL-Stripping.
+              </li>
+              <li>
+                <strong>Content-Security-Policy (CSP)</strong><br />
+                Kontrolliert, welche Ressourcen auf Ihrer Seite geladen werden dürfen. 
+                Blockiert eingeschleustes JavaScript.
+              </li>
+              <li>
+                <strong>X-Frame-Options</strong><br />
+                Verhindert, dass Ihre Seite in Frames eingebettet wird.
+              </li>
+              <li>
+                <strong>X-Content-Type-Options</strong><br />
+                Verhindert, dass der Browser Dateien als etwas anderes interpretiert 
+                als sie tatsächlich sind (MIME-Sniffing).
+              </li>
+              <li>
+                <strong>Referrer-Policy</strong><br />
+                Kontrolliert, welche Referrer-Informationen beim Klick auf Links 
+                weitergegeben werden.
+              </li>
+              <li>
+                <strong>Permissions-Policy</strong><br />
+                Deaktiviert unnötige Browser-Features wie Geolocation oder Mikrofon, 
+                die von Angreifern missbraucht werden könnten.
+              </li>
+            </ul>
+
+            <h2>Wie Sie Ihre Website prüfen</h2>
+            <p>
+              Der einfachste Weg, den aktuellen Stand Ihrer Website zu prüfen:
+            </p>
+            <ol>
+              <li>Gehen Sie zu <a href="https://securityheaders.com" target="_blank" rel="noopener">securityheaders.com</a></li>
+              <li>Geben Sie Ihre Website-URL ein</li>
+              <li>Sie erhalten eine Note von F bis A</li>
+            </ol>
+            <p>
+              Ziel ist Note A. Das ist in der Regel innerhalb von 24 Stunden erreichbar — 
+              ohne Änderungen an Ihrem WordPress selbst.
+            </p>
+
+            <h2>Fazit</h2>
+            <p>
+              SSL ist wichtig — aber es ist nur der erste Schritt. Für echte Sicherheit 
+              brauchen Sie auch Security Headers. Together schützen sie Ihre Website — 
+              und damit Ihre Besucher, Mandanten und Patienten.
+            </p>
+            <p>
+              AidSec bringt Ihre Website in unter 24 Stunden von Note F zu A — 
+              ohne Downtime, ohne CMS-Änderungen.
+            </p>
+
+            <div class="article-cta">
+              <h3>Prüfen Sie Ihre Website jetzt</h3>
+              <p>Erhalten Sie in 24 Stunden Ihre Security Headers Bewertung — kostenlos.</p>
+              <a href="/index.html#kontakt" class="btn btn--gold btn--lg">Kostenlosen Security-Check starten</a>
+            </div>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="/logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten.</p>
+          <div class="footer__links">
+            <a href="/datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="/impressum.html" class="footer__link">Impressum</a>
+            <a href="/wissen/index.html" class="footer__link">Blog</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+  </body>
+</html>
