@@ -3,8 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sicherheitswissen für Kanzleien und Praxen | AidSec</title>
-    <meta name="description" content="Aktuelle Analysen, Handlungsempfehlungen und Hintergründe zu WordPress-Sicherheit, nDSG-Compliance und Cyberschutz für Schweizer Kanzleien und Arztpraxen." />
+    <title>Security Blog | WordPress Sicherheit & nDSG Tipps | AidSec</title>
+    <meta name="description" content="Aktuelle Tipps, Analysen und Handlungsempfehlungen zu WordPress-Sicherheit, nDSG-Compliance und Cyberschutz für Schweizer Kanzleien und Arztpraxen." />
+    <meta name="robots" content="index, follow" />
+    <link rel="alternate" type="application/rss+xml" title="AidSec Blog" href="/wissen/rss.xml" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Security Blog | AidSec" />
+    <meta property="og:description" content="Aktuelle Tipps und Analysen zu WordPress-Sicherheit und nDSG-Compliance." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aidsec.ch/wissen/" />
+    <meta property="og:locale" content="de_CH" />
 
     <!-- Fonts -->
     <link rel="stylesheet" href="/css/fonts.css" />
@@ -19,24 +28,30 @@
 
     <link rel="icon" type="image/png" href="/logowhite.png" />
     <script src="/js/consent.js"></script>
+
+    <!-- Blog Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "AidSec Security Blog",
+        "description": "Aktuelle Tipps und Analysen zu WordPress-Sicherheit und nDSG-Compliance für Schweizer Kanzleien und Arztpraxen.",
+        "url": "https://aidsec.ch/wissen/",
+        "publisher": {
+          "@type": "Organization",
+          "name": "AidSec",
+          "url": "https://aidsec.ch"
+        }
+      }
+    </script>
   </head>
   <body>
     <header class="nav" id="nav" role="banner">
       <div class="container nav__inner">
-        <!-- Logo -->
         <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
-          <img
-            src="/logowhite.png"
-            alt="AidSec"
-            width="119"
-            height="109"
-            class="nav__logo-img"
-            loading="eager"
-            decoding="async"
-          />
+          <img src="/logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" decoding="async" />
         </a>
 
-        <!-- Desktop Links -->
         <nav class="nav__links" aria-label="Hauptnavigation">
           <div class="nav__item has-dropdown">
             <a href="/index.html#leistungen" class="nav__link">Leistungen</a>
@@ -63,416 +78,432 @@
           <a href="/index.html#preise" class="nav__link">Preise</a>
           
           <div class="nav__item has-dropdown">
-            <a href="/wissen/index.html" class="nav__link">Wissen</a>
+            <a href="/wissen/index.html" class="nav__link nav__link--active">Blog</a>
             <div class="nav__dropdown">
               <a href="/wissen/index.html">Alle Artikel</a>
               <a href="/wissen/ultimate-ndsg-checklist-2025.html">nDSG Compliance Guide</a>
-              <a href="/wissen/security-headers-note-f-auf-a.html">Security Headers Note F</a>
+              <a href="/wissen/security-headers-note-f-auf-a.html">Security Headers</a>
             </div>
           </div>
         </nav>
 
-        <!-- CTA -->
-        <a
-          href="/index.html#kontakt"
-          class="btn btn--gold nav__cta desktop-only"
-          data-track="nav-cta"
-          aria-label="Kostenfreien Security-Check starten"
-        >
+        <a href="/index.html#kontakt" class="btn btn--gold nav__cta desktop-only" data-track="nav-cta">
           Kostenfreien Security-Check
           <span class="btn__badge">24h</span>
         </a>
 
-        <!-- Mobile Toggle -->
-        <button
-          class="nav__toggle"
-          id="nav-toggle"
-          aria-label="Menü öffnen"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-        >
+        <button class="nav__toggle" id="nav-toggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
           <span class="nav__toggle-bar"></span>
           <span class="nav__toggle-bar"></span>
           <span class="nav__toggle-bar"></span>
         </button>
       </div>
 
-      <!-- Mobile Menu -->
       <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
-          <div class="nav__item has-dropdown">
-            <a href="/index.html#leistungen" class="nav__link mobile-menu__link">Leistungen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
-            <div class="nav__dropdown">
-              <a href="/leistungen/header-optimierung.html" class="mobile-menu__link">Rapid Header Fix</a>
-              <a href="/leistungen/wordpress-haertung.html" class="mobile-menu__link">Kanzlei-Härtung</a>
-              <a href="/leistungen/cyber-mandat.html" class="mobile-menu__link">Cyber-Mandat</a>
-            </div>
-          </div>
-          <div class="nav__item has-dropdown">
-            <span class="nav__link mobile-menu__link">Branchen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-            <div class="nav__dropdown">
-              <a href="/branchen/anwaltskanzleien.html" class="mobile-menu__link">Anwaltskanzleien</a>
-              <a href="/branchen/arztpraxen.html" class="mobile-menu__link">Arztpraxen</a>
-              <a href="/branchen/notariate.html" class="mobile-menu__link">Notariate</a>
-            </div>
-          </div>
+          <a href="/index.html#leistungen" class="mobile-menu__link">Leistungen</a>
+          <a href="/branchen/anwaltskanzleien.html" class="mobile-menu__link">Branchen</a>
           <a href="/fallstudien.html" class="mobile-menu__link">Fallstudien</a>
           <a href="/index.html#preise" class="mobile-menu__link">Preise</a>
-          <div class="nav__item has-dropdown">
-            <a href="/wissen/index.html" class="nav__link mobile-menu__link">Wissen <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
-            <div class="nav__dropdown">
-              <a href="/wissen/index.html" class="mobile-menu__link">Alle Artikel</a>
-              <a href="/wissen/ultimate-ndsg-checklist-2025.html" class="mobile-menu__link">nDSG Guide 2025</a>
-            </div>
-          </div>
-          <a
-            href="/index.html#kontakt"
-            class="btn btn--gold mobile-menu__cta"
-            data-track="mobile-cta"
-            aria-label="Gratis Security-Check starten"
-            >Gratis Security-Check</a
-          >
+          <a href="/wissen/index.html" class="mobile-menu__link">Blog</a>
+          <a href="/index.html#kontakt" class="btn btn--gold mobile-menu__cta">Kostenfreien Security-Check</a>
         </nav>
       </div>
     </header>
 
     <main id="main-content">
-      <!-- Knowledge Hero -->
-      <section class="section section--dark knowledge-hero">
+      <!-- Hero: Featured Article -->
+      <section class="section section--blog-hero">
         <div class="container">
-          <div class="knowledge-hero__inner" data-reveal="fade-up">
-            <div class="section-header">
-              <span class="badge badge--gold">Wissensdatenbank</span>
-              <h1>Sicherheitswissen für <span class="text-gold">Kanzleien</span> und Praxen</h1>
-              <p>Aktuelle Analysen, Handlungsempfehlungen und Hintergründe — verständlich erklärt von Schweizer Security-Experten.</p>
+          <div class="blog-hero" data-reveal="fade-up">
+            <div class="blog-hero__content">
+              <span class="blog-hero__eyebrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                Neuester Artikel
+              </span>
+              <h1 class="blog-hero__title">WordPress Kanzlei gehackt: Sofortmassnahmen & Wiederherstellung</h1>
+              <p class="blog-hero__excerpt">
+                Was Sie tun müssen, wenn Ihre Kanzlei-Website gehackt wurde. Von der Sofortisolation 
+                über Malware-Entfernung bis zur forensischen Analyse — mit konkreten Schritten und Checklisten.
+              </p>
+              <div class="blog-hero__meta">
+                <span class="blog-hero__date">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  10. April 2026
+                </span>
+                <span class="blog-hero__read-time">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  8 Min. Lesezeit
+                </span>
+              </div>
+              <a href="/wissen/wordpress-kanzlei-gehackt-sofortmassnahmen.html" class="btn btn--gold blog-hero__cta">
+                Artikel lesen
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
             </div>
-            <div class="knowledge-hero__stats" data-reveal="fade-up" data-reveal-delay="100">
-              <span class="knowledge-hero__stat">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                12 Fachartikel
-              </span>
-              <span class="knowledge-hero__stat-divider"></span>
-              <span class="knowledge-hero__stat">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                6 Kategorien
-              </span>
-              <span class="knowledge-hero__stat-divider"></span>
-              <span class="knowledge-hero__stat">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                ~90 Min. Lesezeit
-              </span>
-            </div>
-            <div class="knowledge-search" data-reveal="fade-up" data-reveal-delay="200">
-              <div class="knowledge-search__box">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="knowledge-search" placeholder="Artikel durchsuchen…" autocomplete="off" />
+            <div class="blog-hero__visual">
+              <div class="blog-hero__image-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M12 8v4M12 16h.01"/>
+                </svg>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section section--deep">
+      <!-- Categories Filter -->
+      <section class="section section--blog-categories">
         <div class="container">
-          <!-- Category Filter -->
-          <div class="knowledge-filter" data-reveal="fade-up" data-reveal-delay="100">
-            <button class="knowledge-filter__btn active" data-filter="all">Alle</button>
-            <button class="knowledge-filter__btn" data-filter="Grundlagen">Grundlagen</button>
-            <button class="knowledge-filter__btn" data-filter="Recht &amp; Compliance">Recht &amp; Compliance</button>
-            <button class="knowledge-filter__btn" data-filter="Bedrohungslage">Bedrohungslage</button>
-            <button class="knowledge-filter__btn" data-filter="Praxistipp">Praxistipp</button>
-            <button class="knowledge-filter__btn" data-filter="Strategie">Strategie</button>
-            <button class="knowledge-filter__btn" data-filter="Analyse">Analyse</button>
-          </div>
-
-          <div class="knowledge-grid" data-reveal="fade-up" data-reveal-delay="200">
-
-            <!-- FEATURED PILLAR: nDSG Ultimate Guide -->
-            <article class="article-card article-card--featured" data-category="Pillar Content">
-              <div class="article-card__image-placeholder article-card__image-placeholder--gold">
-                <div class="article-card__icon-wrap">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Pillar Content</span>
-                <h2 class="article-card__title">Der ultimative nDSG Compliance Guide 2025</h2>
-                <p class="article-card__excerpt">Der definitive Leitfaden f&uuml;r Schweizer Kanzleien. Von technischen Maßnahmen bis hin zur organisatorischen H&auml;rtung. Alles, was Inhaber jetzt wissen m&uuml;ssen.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    12 Min. &bull; Februar 2026
-                  </span>
-                  <a href="ultimate-ndsg-checklist-2025.html" class="article-card__link">Expertenguide lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 1: WordPress Sicherheit -->
-            <article class="article-card" data-category="Grundlagen">
-              <div class="article-card__image-placeholder">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Grundlagen</span>
-                <h2 class="article-card__title">WordPress Sicherheit für Kanzleien: Was wirklich zählt</h2>
-                <p class="article-card__excerpt">Über 40% aller Webseiten laufen auf WordPress — und sind damit das Hauptziel automatisierter Angriffe. Was Kanzleien jetzt wissen und umsetzen müssen.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    5 Min. &bull; Februar 2026
-                  </span>
-                  <a href="wordpress-sicherheit-kanzleien.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 2: nDSG Art. 8 -->
-            <article class="article-card" data-category="Recht &amp; Compliance">
-              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Recht &amp; Compliance</span>
-                <h2 class="article-card__title">nDSG Art. 8: Was technische Datensicherheit für Ihre Kanzlei bedeutet</h2>
-                <p class="article-card__excerpt">Das neue Schweizer Datenschutzgesetz verlangt explizit technische Schutzmaßnahmen. Was das konkret für Ihre Webseite bedeutet — und was bei Verstössen droht.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    6 Min. &bull; Januar 2026
-                  </span>
-                  <a href="ndsg-artikel-8-technische-massnahmen.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 3: Security Headers -->
-            <article class="article-card" data-category="Praxistipp">
-              <div class="article-card__image-placeholder">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Praxistipp</span>
-                <h2 class="article-card__title">Security Headers Note F: Ursachen, Risiken und wie Sie auf Note A kommen</h2>
-                <p class="article-card__excerpt">Die meisten Kanzlei-Webseiten erhalten Note F bei SecurityHeaders.com — ohne es zu wissen. Eine klare Erklärung, was das bedeutet und wie es sich in unter 24 Stunden beheben lässt.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    4 Min. &bull; Januar 2026
-                  </span>
-                  <a href="security-headers-note-f-auf-a.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 4: Ransomware -->
-            <article class="article-card" data-category="Bedrohungslage">
-              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Bedrohungslage</span>
-                <h2 class="article-card__title">Ransomware trifft Schweizer Kanzleien: Zahlen, Fakten und Schutzstrategien</h2>
-                <p class="article-card__excerpt">35'727 Cybervorfälle im ersten Halbjahr 2025 — viele davon gezielt gegen Kanzleien und Praxen. Was hinter diesen Zahlen steckt und wie Sie sich schützen.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    7 Min. &bull; Dezember 2025
-                  </span>
-                  <a href="ransomware-schweizer-kanzleien.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 5: WordPress gehackt -->
-            <article class="article-card" data-category="Praxistipp">
-              <div class="article-card__image-placeholder">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Praxistipp</span>
-                <h2 class="article-card__title">WordPress-Kanzleiwebseite gehackt: Sofortmaßnahmen und Prävention</h2>
-                <p class="article-card__excerpt">Ein kompromittierter WordPress-Auftritt gefährdet Mandantendaten, Berufsgeheimnis und Reputation — oft ohne sichtbare Anzeichen. Was sofort zu tun ist.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    5 Min. &bull; November 2025
-                  </span>
-                  <a href="wordpress-kanzlei-gehackt-sofortmassnahmen.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 6: nDSG-Checkliste -->
-            <article class="article-card" data-category="Recht &amp; Compliance">
-              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Recht &amp; Compliance</span>
-                <h2 class="article-card__title">nDSG-Checkliste 2026: IT-Pflichten für Anwälte</h2>
-                <p class="article-card__excerpt">Die wichtigsten technischen Maßnahmen, um die Anforderungen des Schweizer Datenschutzgesetzes rechtssicher umzusetzen.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    8 Min. &bull; Februar 2026
-                  </span>
-                  <a href="ndsg-compliance-kanzlei.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 7: Ransomware-Schutz Strategie -->
-            <article class="article-card" data-category="Strategie">
-              <div class="article-card__image-placeholder">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Strategie</span>
-                <h2 class="article-card__title">Ransomware-Schutz: Strategie gegen Erpressung</h2>
-                <p class="article-card__excerpt">Warum Backups allein nicht reichen und wie eine &laquo;Defense-in-Depth&raquo; Strategie Ihre Mandantendaten schützt.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    10 Min. &bull; Februar 2026
-                  </span>
-                  <a href="ransomware-schutz-schweiz.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 8: Cloud-Sicherheit -->
-            <article class="article-card" data-category="Grundlagen">
-              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c.3 0 .5 0 .8-.2a3.5 3.5 0 0 0 1-5.9 5 5 0 0 0-9.8-1.4 3.5 3.5 0 0 0-1 6.8c.2.1.5.7.7.7h8.3Z"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Grundlagen</span>
-                <h2 class="article-card__title">Cloud-Sicherheit für Arztpraxen</h2>
-                <p class="article-card__excerpt">Patientendaten nDSG-konform in der Cloud verarbeiten — worauf Mediziner beim Serverstandort und Verschlüsselung achten müssen.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    12 Min. &bull; Februar 2026
-                  </span>
-                  <a href="cloud-sicherheit-arztpraxen.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 9: E-Mail-Sicherheit -->
-            <article class="article-card" data-category="Praxistipp">
-              <div class="article-card__image-placeholder">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Praxistipp</span>
-                <h2 class="article-card__title">E-Mail-Sicherheit für Kanzleien: SPF, DKIM und DMARC erklärt</h2>
-                <p class="article-card__excerpt">Warum Ihre Kanzlei-E-Mails im Spam landen könnten — und wie SPF, DKIM und DMARC Ihre Korrespondenz mit Gerichten und Mandanten schützen.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    8 Min. &bull; März 2026
-                  </span>
-                  <a href="email-sicherheit-kanzlei.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 10: Datenverlust-Kosten -->
-            <article class="article-card" data-category="Analyse">
-              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Analyse</span>
-                <h2 class="article-card__title">Was kostet ein Datenverlust? Zahlen für Schweizer Kanzleien</h2>
-                <p class="article-card__excerpt">Ein Cybervorfall kostet Schweizer Kanzleien durchschnittlich CHF 695'000. Wir schlüsseln die tatsächlichen Kosten auf — und zeigen, warum Prävention 0.1% davon kostet.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    7 Min. &bull; März 2026
-                  </span>
-                  <a href="datenverlust-kosten-schweiz.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 11: WordPress-Plugins -->
-            <article class="article-card" data-category="Bedrohungslage">
-              <div class="article-card__image-placeholder">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Bedrohungslage</span>
-                <h2 class="article-card__title">22 neue WordPress-Schwachstellen pro Tag: Warum Plugins das grösste Risiko sind</h2>
-                <p class="article-card__excerpt">96% aller WordPress-Schwachstellen stecken in Plugins — nicht im Core. Die gefährlichsten Kategorien und 5 Sofortmaßnahmen für Kanzleien.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    6 Min. &bull; März 2026
-                  </span>
-                  <a href="wordpress-plugins-sicherheitsrisiko.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Artikel 12: Cyber-Versicherung vs. Härtung -->
-            <article class="article-card" data-category="Strategie">
-              <div class="article-card__image-placeholder article-card__image-placeholder--alt">
-                <div class="article-card__icon-wrap">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                </div>
-              </div>
-              <div class="article-card__content">
-                <span class="article-card__tag">Strategie</span>
-                <h2 class="article-card__title">Cyber-Versicherung oder Härtung? Was für Kanzleien sinnvoller ist</h2>
-                <p class="article-card__excerpt">Die meisten Cyber-Policen zahlen nicht, wenn Grundschutz fehlt. Warum IT-Härtung günstiger ist — und trotzdem die bessere Voraussetzung für den Versicherungsschutz.</p>
-                <div class="article-card__footer">
-                  <span class="article-card__meta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    9 Min. &bull; März 2026
-                  </span>
-                  <a href="cyber-versicherung-vs-haertung.html" class="article-card__link">Artikel lesen &rarr;</a>
-                </div>
-              </div>
-            </article>
-
+          <div class="blog-categories" data-reveal="fade-up">
+            <button class="blog-category blog-category--active" data-category="all">
+              Alle Artikel
+            </button>
+            <button class="blog-category" data-category="ndsg">
+              nDSG Compliance
+            </button>
+            <button class="blog-category" data-category="security">
+              Security Headers
+            </button>
+            <button class="blog-category" data-category="wordpress">
+              WordPress
+            </button>
+            <button class="blog-category" data-category="ransomware">
+              Ransomware
+            </button>
+            <button class="blog-category" data-category="email">
+              E-Mail-Sicherheit
+            </button>
           </div>
         </div>
       </section>
 
-      <!-- CTA -->
-      <section class="section section--alt">
+      <!-- Articles Grid -->
+      <section class="section section--blog-grid">
         <div class="container">
-          <div class="cta-banner">
-            <div class="cta-banner__content" data-reveal="fade-up">
-              <h2>Wissen schützt — aber Handeln schützt mehr.</h2>
-              <p>Lassen Sie Ihre Webseite jetzt kostenlos prüfen.</p>
-              <a href="/index.html#kontakt" class="btn btn--gold btn--lg">Kostenfreien Security-Check starten</a>
+          <div class="blog-grid" id="blog-grid">
+            <!-- Article 1: Featured -->
+            <article class="blog-card blog-card--featured" data-category="wordpress" data-date="2026-04-10">
+              <div class="blog-card__image-placeholder blog-card__image-placeholder--gold">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">WordPress</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/wordpress-kanzlei-gehackt-sofortmassnahmen.html">
+                    WordPress Kanzlei gehackt: Sofortmassnahmen & Wiederherstellung
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Was Sie tun müssen, wenn Ihre Kanzlei-Website gehackt wurde. Von der Sofortisolation 
+                  über Malware-Entfernung bis zur forensischen Analyse.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">10. April 2026</span>
+                  <span class="blog-card__read-time">8 Min.</span>
+                  <a href="/wissen/wordpress-kanzlei-gehackt-sofortmassnahmen.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="blog-card" data-category="ndsg" data-date="2026-03-15">
+              <div class="blog-card__image-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">nDSG Compliance</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/ultimate-ndsg-checklist-2025.html">
+                    Der ultimative nDSG Compliance Guide 2025/2026
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Der definitive Leitfaden für Schweizer Kanzleien. Von technischen Maßnahmen bis 
+                  hin zur organisatorischen Härtung.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">15. März 2026</span>
+                  <span class="blog-card__read-time">12 Min.</span>
+                  <a href="/wissen/ultimate-ndsg-checklist-2025.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="blog-card" data-category="security" data-date="2026-03-01">
+              <div class="blog-card__image-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">Security Headers</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/security-headers-note-f-auf-a.html">
+                    Security Headers Note F auf A: Der komplette Guide
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Wie Sie Ihre Website von SecurityHeaders.com Note F zu A bringen. 
+                  Alle 6 wichtigen Header erklärt mit Konfigurationsbeispielen.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">1. März 2026</span>
+                  <span class="blog-card__read-time">10 Min.</span>
+                  <a href="/wissen/security-headers-note-f-auf-a.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 4 -->
+            <article class="blog-card" data-category="ransomware" data-date="2026-02-20">
+              <div class="blog-card__image-placeholder blog-card__image-placeholder--red">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">Ransomware</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/ransomware-schweizer-kanzleien.html">
+                    Ransomware: Wie Schweizer Kanzleien zur Zielscheibe werden
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Aktuelle Statistiken und Fallbeispiele zeigen: Kanzleien sind ein beliebtes 
+                  Ziel für Ransomware-Angriffe. Warum und was Sie tun können.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">20. Februar 2026</span>
+                  <span class="blog-card__read-time">7 Min.</span>
+                  <a href="/wissen/ransomware-schweizer-kanzleien.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 5 -->
+            <article class="blog-card" data-category="wordpress" data-date="2026-02-10">
+              <div class="blog-card__image-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">WordPress</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/wordpress-sicherheit-kanzleien.html">
+                    WordPress Sicherheit für Kanzleien: Was wirklich zählt
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Über 40% aller Webseiten laufen auf WordPress — und sind damit das Hauptziel 
+                  automatisierter Angriffe. Was Kanzleien wissen müssen.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">10. Februar 2026</span>
+                  <span class="blog-card__read-time">9 Min.</span>
+                  <a href="/wissen/wordpress-sicherheit-kanzleien.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 6 -->
+            <article class="blog-card" data-category="ndsg" data-date="2026-01-28">
+              <div class="blog-card__image-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">nDSG Compliance</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/ndsg-artikel-8-technische-massnahmen.html">
+                    nDSG Art. 8: Technische Schutzmassnahmen im Detail
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Was Art. 8 nDSG genau verlangt und wie Sie Ihre Kanzlei oder Praxis 
+                  compliant machen. Von Zugriffskontrollen bis Incident Response.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">28. Januar 2026</span>
+                  <span class="blog-card__read-time">11 Min.</span>
+                  <a href="/wissen/ndsg-artikel-8-technische-massnahmen.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 7 -->
+            <article class="blog-card" data-category="email" data-date="2026-01-15">
+              <div class="blog-card__image-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">E-Mail-Sicherheit</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/email-sicherheit-kanzlei.html">
+                    E-Mail-Sicherheit für Kanzleien: SPF, DKIM, DMARC
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Warum Ihre E-Mails ohne proper Authentifizierung im Spam landen — und wie 
+                  Sie das mit SPF, DKIM und DMARC beheben.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">15. Januar 2026</span>
+                  <span class="blog-card__read-time">6 Min.</span>
+                  <a href="/wissen/email-sicherheit-kanzlei.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 8 -->
+            <article class="blog-card" data-category="ransomware" data-date="2026-01-05">
+              <div class="blog-card__image-placeholder blog-card__image-placeholder--red">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v.01M12 8v4"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">Ransomware</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/ransomware-schutz-schweiz.html">
+                    Ransomware Schutz für Schweizer Unternehmen: Der complete Guide
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Prävention, Erkennung und Reaktion bei Ransomware-Angriffen. 
+                  Konkrete Massnahmen, die Sie heute umsetzen können.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">5. Januar 2026</span>
+                  <span class="blog-card__read-time">13 Min.</span>
+                  <a href="/wissen/ransomware-schutz-schweiz.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Article 9 -->
+            <article class="blog-card" data-category="wordpress" data-date="2025-12-20">
+              <div class="blog-card__image-placeholder">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="3" y1="9" x2="21" y2="9"/>
+                  <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+              </div>
+              <div class="blog-card__content">
+                <span class="blog-card__tag">WordPress</span>
+                <h2 class="blog-card__title">
+                  <a href="/wissen/wordpress-plugins-sicherheitsrisiko.html">
+                    WordPress Plugins: Das grösste Sicherheitsrisiko?
+                  </a>
+                </h2>
+                <p class="blog-card__excerpt">
+                  Veraltete Plugins sind für 97% der WordPress-Sicherheitslücken verantwortlich. 
+                  Wie Sie das Risiko minimieren.
+                </p>
+                <div class="blog-card__footer">
+                  <span class="blog-card__date">20. Dezember 2025</span>
+                  <span class="blog-card__read-time">8 Min.</span>
+                  <a href="/wissen/wordpress-plugins-sicherheitsrisiko.html" class="blog-card__link">
+                    Lesen →
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Load More -->
+          <div class="blog-load-more" data-reveal="fade-up">
+            <button class="btn btn--outline" id="load-more-btn">
+              Mehr Artikel laden
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter CTA -->
+      <section class="section section--blog-newsletter">
+        <div class="container">
+          <div class="blog-newsletter" data-reveal="fade-up">
+            <div class="blog-newsletter__content">
+              <h2 class="blog-newsletter__title">Bleiben Sie informiert</h2>
+              <p class="blog-newsletter__text">
+                Erhalten Sie monatlich aktuelle Tipps zu WordPress-Sicherheit und nDSG-Compliance — 
+                direkt in Ihr Postfach. Kein Spam, nur relevante Informationen.
+              </p>
             </div>
+            <form class="blog-newsletter__form" action="/api/newsletter" method="POST">
+              <div class="blog-newsletter__input-group">
+                <input 
+                  type="email" 
+                  name="email" 
+                  placeholder="ihre@email.ch" 
+                  required 
+                  class="blog-newsletter__input"
+                  aria-label="E-Mail-Adresse"
+                />
+                <button type="submit" class="btn btn--gold blog-newsletter__btn">
+                  Anmelden
+                </button>
+              </div>
+              <p class="blog-newsletter__privacy">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Kein Spam. Jederzeit abmeldbar.
+              </p>
+            </form>
           </div>
         </div>
       </section>
@@ -482,14 +513,7 @@
       <div class="container">
         <div class="footer__inner">
           <div class="footer__brand">
-            <img
-              src="/logowhite.png"
-              alt="AidSec"
-              width="36"
-              height="36"
-              class="footer__logo"
-              loading="lazy"
-            />
+            <img src="/logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
             <span class="footer__brand-text">Aid<strong>SEC</strong></span>
           </div>
           <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
@@ -498,6 +522,7 @@
             <a href="/datenschutz.html" class="footer__link">Datenschutz</a>
             <a href="/impressum.html" class="footer__link">Impressum</a>
             <a href="/agb.html" class="footer__link">AGB</a>
+            <a href="/wissen/index.html" class="footer__link">Blog</a>
           </div>
         </div>
       </div>
@@ -505,42 +530,24 @@
 
     <script src="/js/main.js" defer></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var filterBtns = document.querySelectorAll('.knowledge-filter__btn');
-        var cards = document.querySelectorAll('.article-card');
-        var searchInput = document.getElementById('knowledge-search');
-
-        // Category filter
-        filterBtns.forEach(function(btn) {
-          btn.addEventListener('click', function() {
-            filterBtns.forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            var filter = btn.getAttribute('data-filter');
-            cards.forEach(function(card) {
-              var cat = card.getAttribute('data-category') || '';
-              if (filter === 'all' || cat === filter) {
-                card.style.display = '';
-              } else {
-                card.style.display = 'none';
-              }
-            });
-            if (searchInput) searchInput.value = '';
+      // Category Filter
+      document.querySelectorAll('.blog-category').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.dataset.category;
+          
+          // Update active state
+          document.querySelectorAll('.blog-category').forEach(b => b.classList.remove('blog-category--active'));
+          btn.classList.add('blog-category--active');
+          
+          // Filter articles
+          document.querySelectorAll('.blog-card').forEach(card => {
+            if (category === 'all' || card.dataset.category === category) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
           });
         });
-
-        // Search
-        if (searchInput) {
-          searchInput.addEventListener('input', function() {
-            var q = this.value.toLowerCase().trim();
-            filterBtns.forEach(function(b) { b.classList.remove('active'); });
-            filterBtns[0].classList.add('active');
-            cards.forEach(function(card) {
-              if (!q) { card.style.display = ''; return; }
-              var text = (card.textContent || '').toLowerCase();
-              card.style.display = text.indexOf(q) !== -1 ? '' : 'none';
-            });
-          });
-        }
       });
     </script>
   </body>

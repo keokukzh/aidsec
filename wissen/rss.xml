@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>AidSec Security Blog</title>
+    <link>https://aidsec.ch/wissen/</link>
+    <description>Aktuelle Tipps, Analysen und Handlungsempfehlungen zu WordPress-Sicherheit, nDSG-Compliance und Cyberschutz für Schweizer Kanzleien und Arztpraxen.</description>
+    <language>de-CH</language>
+    <managingEditor>info@aidsec.ch (AidSec)</managingEditor>
+    <webMaster>info@aidsec.ch (AidSec)</webMaster>
+    <lastBuildDate>Thu, 10 Apr 2026 14:00:00 +0200</lastBuildDate>
+    <atom:link href="https://aidsec.ch/wissen/rss.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://aidsec.ch/logonoback.PNG</url>
+      <title>AidSec Security Blog</title>
+      <link>https://aidsec.ch/wissen/</link>
+    </image>
+
+    <item>
+      <title>WordPress Kanzlei gehackt: Sofortmassnahmen &amp; Wiederherstellung</title>
+      <link>https://aidsec.ch/wissen/wordpress-kanzlei-gehackt-sofortmassnahmen.html</link>
+      <description>Was Sie tun müssen, wenn Ihre Kanzlei-Website gehackt wurde. Von der Sofortisolation über Malware-Entfernung bis zur forensischen Analyse — mit konkreten Schritten und Checklisten.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Thu, 10 Apr 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/wordpress-kanzlei-gehackt-sofortmassnahmen.html</guid>
+      <category>WordPress</category>
+    </item>
+
+    <item>
+      <title>Der ultimative nDSG Compliance Guide 2025/2026</title>
+      <link>https://aidsec.ch/wissen/ultimate-ndsg-checklist-2025.html</link>
+      <description>Der definitive Leitfaden für Schweizer Kanzleien. Von technischen Maßnahmen bis hin zur organisatorischen Härtung. Alles, was Inhaber jetzt wissen müssen.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Sun, 15 Mar 2026 10:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/ultimate-ndsg-checklist-2025.html</guid>
+      <category>nDSG Compliance</category>
+    </item>
+
+    <item>
+      <title>Security Headers Note F auf A: Der komplette Guide</title>
+      <link>https://aidsec.ch/wissen/security-headers-note-f-auf-a.html</link>
+      <description>Wie Sie Ihre Website von SecurityHeaders.com Note F zu A bringen. Alle 6 wichtigen Header erklärt mit Konfigurationsbeispielen für Apache, Nginx und LiteSpeed.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Sat, 01 Mar 2026 08:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/security-headers-note-f-auf-a.html</guid>
+      <category>Security Headers</category>
+    </item>
+
+    <item>
+      <title>Ransomware: Wie Schweizer Kanzleien zur Zielscheibe werden</title>
+      <link>https://aidsec.ch/wissen/ransomware-schweizer-kanzleien.html</link>
+      <description>Aktuelle Statistiken und Fallbeispiele zeigen: Kanzleien sind ein beliebtes Ziel für Ransomware-Angriffe. Warum und was Sie tun können.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Fri, 20 Feb 2026 11:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/ransomware-schweizer-kanzleien.html</guid>
+      <category>Ransomware</category>
+    </item>
+
+    <item>
+      <title>WordPress Sicherheit für Kanzleien: Was wirklich zählt</title>
+      <link>https://aidsec.ch/wissen/wordpress-sicherheit-kanzleien.html</link>
+      <description>Über 40% aller Webseiten laufen auf WordPress — und sind damit das Hauptziel automatisierter Angriffe. Was Kanzleien jetzt wissen und umsetzen müssen.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Mon, 10 Feb 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/wordpress-sicherheit-kanzleien.html</guid>
+      <category>WordPress</category>
+    </item>
+
+    <item>
+      <title>nDSG Art. 8: Technische Schutzmassnahmen im Detail</title>
+      <link>https://aidsec.ch/wissen/ndsg-artikel-8-technische-massnahmen.html</link>
+      <description>Was Art. 8 nDSG genau verlangt und wie Sie Ihre Kanzlei oder Praxis compliant machen. Von Zugriffskontrollen bis Incident Response.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Tue, 28 Jan 2026 10:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/ndsg-artikel-8-technische-massnahmen.html</guid>
+      <category>nDSG Compliance</category>
+    </item>
+
+    <item>
+      <title>E-Mail-Sicherheit für Kanzleien: SPF, DKIM, DMARC</title>
+      <link>https://aidsec.ch/wissen/email-sicherheit-kanzlei.html</link>
+      <description>Warum Ihre E-Mails ohne proper Authentifizierung im Spam landen — und wie Sie das mit SPF, DKIM und DMARC beheben.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Wed, 15 Jan 2026 08:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/email-sicherheit-kanzlei.html</guid>
+      <category>E-Mail-Sicherheit</category>
+    </item>
+
+    <item>
+      <title>Ransomware Schutz für Schweizer Unternehmen: Der complete Guide</title>
+      <link>https://aidsec.ch/wissen/ransomware-schutz-schweiz.html</link>
+      <description>Prävention, Erkennung und Reaktion bei Ransomware-Angriffen. Konkrete Massnahmen, die Sie heute umsetzen können.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Mon, 05 Jan 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/ransomware-schutz-schweiz.html</guid>
+      <category>Ransomware</category>
+    </item>
+
+    <item>
+      <title>WordPress Plugins: Das grösste Sicherheitsrisiko?</title>
+      <link>https://aidsec.ch/wissen/wordpress-plugins-sicherheitsrisiko.html</link>
+      <description>Veraltete Plugins sind für 97% der WordPress-Sicherheitslücken verantwortlich. Wie Sie das Risiko minimieren.</description>
+      <dc:creator>AidSec</dc:creator>
+      <pubDate>Sat, 20 Dec 2025 10:00:00 +0200</pubDate>
+      <guid isPermaLink="true">https://aidsec.ch/wissen/wordpress-plugins-sicherheitsrisiko.html</guid>
+      <category>WordPress</category>
+    </item>
+  </channel>
+</rss>
