@@ -8,6 +8,11 @@
       name="description"
       content="AidSec schützt WordPress-Webseiten von Schweizer Kanzleien und Arztpraxen: Security Headers Note A in 24h, nDSG-konform und dauerhaft nachweisbar mit laufendem Security- und Compliance-Monitoring. Ab CHF 390."
     />
+
+    <!-- Critical CSS: Inlined for fastest First Contentful Paint -->
+    <style>
+      :root{--font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--font-display:'Instrument Serif',Georgia,serif;--gold:#c8a90a;--gold-dark:#a88a08;--navy:#0f172a;--white:#fff;--gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-300:#cbd5e1;--gray-500:#64748b;--gray-600:#475569;--gray-700:#334155;--gray-900:#0f172a;--radius-sm:.25rem;--radius-md:.5rem;--radius-lg:1rem;--text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;--text-4xl:2.25rem;--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-6:1.5rem;--space-8:2rem;--space-12:3rem;--space-16:4rem}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;color:var(--gray-900);background-color:var(--gray-50);-webkit-font-smoothing:antialiased}h1,h2,h3,h4,h5,h6{font-family:var(--font-display);font-weight:400;line-height:1.2;letter-spacing:-.02em}h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700}h2{font-size:clamp(2rem,4vw,3rem)}h3{font-size:clamp(1.5rem,3vw,2rem)}a{color:inherit;text-decoration:none}.container{max-width:1200px;margin:0 auto;padding:0 var(--space-6)}.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.1)}.nav__inner{display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 var(--space-6);max-width:1200px;margin:0 auto}.nav__logo-img{height:40px;width:auto}.hero{min-height:100vh;display:flex;align-items:center;padding-top:72px;background:linear-gradient(135deg,var(--navy) 0%,#1e293b 100%);color:var(--white)}.hero__title{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;line-height:1.1;margin-bottom:var(--space-6)}.hero__subtitle{font-size:var(--text-xl);color:var(--gray-300);margin-bottom:var(--space-8);max-width:600px}.hero__actions{display:flex;gap:var(--space-4);flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);padding:var(--space-3) var(--space-6);font-size:var(--text-base);font-weight:600;border-radius:var(--radius-md);border:2px solid transparent;cursor:pointer;transition:all .2s ease;text-decoration:none}.btn--gold{background:var(--gold);color:var(--navy);border-color:var(--gold)}.btn--gold:hover{background:var(--gold-dark);border-color:var(--gold-dark);transform:translateY(-2px)}.btn--outline{background:0 0;color:var(--white);border-color:var(--white)}.btn--lg{padding:var(--space-4) var(--space-8);font-size:var(--text-lg)}.text-gold{color:var(--gold)}.section{padding:var(--space-16) 0}.section--dark{background:var(--navy);color:var(--white)}
+    </style>
     <meta
       name="keywords"
       content="IT Sicherheit Anwalt Zürich, Cybersicherheit Anwalt, WordPress Sicherheit Schweiz, WordPress Sicherheit Arztpraxis, Security Headers Schweiz, WordPress Härtung, nDSG, Datenschutz Schweiz, BACS Cybervorfälle"
@@ -38,7 +43,7 @@
     <meta property="og:url" content="https://aidsec.ch" />
     <meta property="og:locale" content="de_CH" />
     <meta property="og:site_name" content="AidSec" />
-    <meta property="og:image" content="https://aidsec.ch/assets/images/VeniceAI_poster.jpg" />
+    <meta property="og:image" content="https://aidsec.ch/assets/images/VeniceAI_poster.webp" />
     <meta property="og:image:width" content="2048" />
     <meta property="og:image:height" content="2048" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -70,7 +75,7 @@
         }, 1800);
       };
     </script>
-    <meta name="twitter:image" content="https://aidsec.ch/assets/images/VeniceAI_poster.jpg" />
+    <meta name="twitter:image" content="https://aidsec.ch/assets/images/VeniceAI_poster.webp" />
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
@@ -226,8 +231,8 @@
         "@type": ["LocalBusiness", "Organization"],
         "name": "AidSec",
         "url": "https://aidsec.ch",
-        "logo": "https://aidsec.ch/logonoback.PNG",
-        "image": "https://aidsec.ch/VeniceAI_poster.webp",
+        "logo": "https://aidsec.ch/assets/images/logonoback.webp",
+        "image": "https://aidsec.ch/assets/images/VeniceAI_poster.webp",
         "email": "info@aidsec.ch",
         "description": "IT-Sicherheitsagentur f\u00fcr Schweizer Kanzleien und Arztpraxen. WordPress-H\u00e4rtung, Security-Header-Optimierung und nDSG-Compliance.",
         "foundingDate": "2024",
@@ -379,7 +384,7 @@
     <link rel="stylesheet" href="css/print.css" media="print" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/logowhite.png" />
+    <link rel="icon" type="image/webp" href="/assets/images/logowhite.webp" />
 
     <!-- nDSG-konformes Consent Management:
          Plausible Analytics ist cookieless & EU-gehostet → wird SOFORT geladen (kein Consent nötig).
@@ -425,15 +430,18 @@
       <div class="container nav__inner">
         <!-- Logo -->
         <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
-          <img
-            src="/logowhite.png"
-            alt="AidSec"
-            width="119"
-            height="109"
-            class="nav__logo-img"
-            loading="eager"
-            decoding="async"
-          />
+          <picture>
+            <source srcset="/assets/images/logowhite.webp" type="image/webp" />
+            <img
+              src="/logowhite.png"
+              alt="AidSec"
+              width="119"
+              height="109"
+              class="nav__logo-img"
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
         </a>
 
         <!-- Desktop Links -->
@@ -3289,14 +3297,17 @@
       <div class="container">
         <div class="footer__inner">
           <div class="footer__brand">
-            <img
-              src="/logowhite.png"
-              alt="AidSec"
-              width="36"
-              height="36"
-              class="footer__logo"
-              loading="lazy"
-            />
+            <picture>
+              <source srcset="/assets/images/logowhite.webp" type="image/webp" />
+              <img
+                src="/logowhite.png"
+                alt="AidSec"
+                width="36"
+                height="36"
+                class="footer__logo"
+                loading="lazy"
+              />
+            </picture>
             <span class="footer__brand-text">Aid<strong>SEC</strong></span>
           </div>
           <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>

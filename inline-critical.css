@@ -1,0 +1,182 @@
+/* AidSec Critical CSS - Inlined for Performance */
+/* This is the minimum CSS needed to render above-the-fold content */
+
+/* CSS Variables */
+:root {
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --gold: #c8a90a;
+  --gold-dark: #a88a08;
+  --navy: #0f172a;
+  --white: #ffffff;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--gray-900);
+  background-color: var(--gray-50);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; }
+h2 { font-size: clamp(2rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+a { color: inherit; text-decoration: none; }
+
+/* Layout */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-6); }
+.container--medium { max-width: 800px; }
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.nav__logo-img { height: 40px; width: auto; }
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 72px;
+  background: linear-gradient(135deg, var(--navy) 0%, #1e293b 100%);
+  color: var(--white);
+}
+.hero__title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--space-6);
+}
+.hero__subtitle {
+  font-size: var(--text-xl);
+  color: var(--gray-300);
+  margin-bottom: var(--space-8);
+  max-width: 600px;
+}
+.hero__actions {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.btn--gold {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+.btn--gold:hover {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+  transform: translateY(-2px);
+}
+.btn--outline {
+  background: transparent;
+  color: var(--white);
+  border-color: var(--white);
+}
+.btn--lg { padding: var(--space-4) var(--space-8); font-size: var(--text-lg); }
+
+/* Utility */
+.text-gold { color: var(--gold); }
+.text-white { color: var(--white); }
+.text-center { text-align: center; }
+.mt-8 { margin-top: var(--space-8); }
+.mb-8 { margin-bottom: var(--space-8); }
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--navy);
+  padding: var(--space-6);
+}
+.mobile-menu.is-open { display: block; }
+
+/* Section spacing */
+.section { padding: var(--space-16) 0; }
+.section--dark { background: var(--navy); color: var(--white); }
+.section--alt { background: var(--gray-100); }
+
+/* FOUC prevention */
+.nav { opacity: 1 !important; }
