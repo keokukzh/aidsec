@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Häufige Fragen zu WordPress-Sicherheit & nDSG | AidSec</title>
+    <meta
+      name="description"
+      content="Antworten auf häufige Fragen zu Security Headers, WordPress-Härtung, nDSG-Compliance und Cyber-Schutz für Schweizer Kanzleien und Praxen."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://aidsec.ch/faq.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Häufige Fragen | AidSec" />
+    <meta
+      property="og:description"
+      content="Antworten auf häufige Fragen zu Security Headers, WordPress-Härtung und nDSG-Compliance."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aidsec.ch/faq.html" />
+    <meta property="og:locale" content="de_CH" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/sections.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+
+    <link rel="icon" type="image/png" href="/logowhite.png" />
+    <script src="/js/consent.js"></script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Brauchen Sie Zugriff auf meine Mandantendaten?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Für den Header-Fix arbeiten wir ausschliesslich auf Server-/Header-Ebene — ohne CMS-Login. Bei der WordPress-Härtung benötigen wir SSH- oder Panel-Zugang zum Server, jedoch nie Zugriff auf gespeicherte Mandantendaten."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ist meine Webseite während der Härtung offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Alle Maßnahmen werden im laufenden Betrieb durchgeführt. Unsere Kunden verzeichnen 0 Minuten Downtime."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet ein Cyberangriff im Vergleich zu Ihren Leistungen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei CHF 1.04 Millionen. Unsere präventive Härtung kostet ab CHF 390 — das entspricht 0.04% der durchschnittlichen Schadenskosten."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was bedeutet Security Header Note F?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SecurityHeaders.com bewertet, ob Ihre Webseite die wichtigsten HTTP-Security-Headers sendet. Note F bedeutet: Kein einziger Schutz-Header ist aktiv. Clickjacking, XSS und Man-in-the-Middle-Angriffe werden dadurch deutlich einfacher."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Welche Strafen drohen bei Datenschutzverstössen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Das nDSG sieht Bussen bis CHF 250'000 für verantwortliche natürliche Personen vor (Art. 60ff. nDSG). Bei Verletzung der beruflichen Schweigepflicht (Art. 62 nDSG) drohen ebenfalls Bussen bis CHF 250'000 — besonders relevant für Anwälte und Ärzte."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Genügt ein SSL-Zertifikat nicht als Schutz?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SSL/TLS verschlüsselt die Verbindung, schützt aber nicht vor Clickjacking, XSS oder fehlender Content-Security-Policy. Security Headers sind die zweite Verteidigungslinie — und die am häufigsten vergessene."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+
+    <header class="nav" id="nav" role="banner">
+      <div class="container nav__inner">
+        <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
+          <img src="/logowhite.png" alt="AidSec" width="119" height="109" class="nav__logo-img" loading="eager" decoding="async" />
+        </a>
+
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link">Leistungen</a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html">Cyber-Mandat</a>
+              <a href="/leistungen/ndsg-compliance-pack.html">nDSG Compliance Pack</a>
+              <a href="/leistungen/notfall-intervention.html">Notfall-Intervention</a>
+              <a href="/leistungen/email-sicherheit.html">E-Mail-Sicherheit</a>
+            </div>
+          </div>
+          <div class="nav__item has-dropdown">
+            <span class="nav__link" tabindex="0">Branchen</span>
+            <div class="nav__dropdown">
+              <a href="/branchen/anwaltskanzleien.html">Anwaltskanzleien</a>
+              <a href="/branchen/arztpraxen.html">Arztpraxen</a>
+              <a href="/branchen/notariate.html">Notariate</a>
+            </div>
+          </div>
+          <a href="/fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="/index.html#preise" class="nav__link">Preise</a>
+          <div class="nav__item has-dropdown">
+            <a href="/wissen/index.html" class="nav__link">Wissen</a>
+            <div class="nav__dropdown">
+              <a href="/wissen/index.html">Alle Artikel</a>
+              <a href="/wissen/ultimate-ndsg-checklist-2025.html">nDSG Compliance Guide</a>
+            </div>
+          </div>
+        </nav>
+
+        <a href="/index.html#kontakt" class="btn btn--gold nav__cta desktop-only" data-track="nav-cta">
+          Kostenfreien Security-Check
+          <span class="btn__badge">24h</span>
+        </a>
+
+        <button class="nav__toggle" id="nav-toggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
+          <a href="/index.html#leistungen" class="mobile-menu__link">Leistungen</a>
+          <a href="/branchen/anwaltskanzleien.html" class="mobile-menu__link">Branchen</a>
+          <a href="/fallstudien.html" class="mobile-menu__link">Fallstudien</a>
+          <a href="/index.html#preise" class="mobile-menu__link">Preise</a>
+          <a href="/wissen/index.html" class="mobile-menu__link">Wissen</a>
+          <a href="/index.html#kontakt" class="btn btn--gold mobile-menu__cta">Kostenfreien Security-Check</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="section">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h1>Häufige Fragen</h1>
+            <p class="section-header__sub">Alles, was Sie über WordPress-Sicherheit und nDSG-Compliance wissen müssen</p>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <!-- Section: Grundlagen -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">Grundlagen</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-101" id="faq-q101">
+                  Was sind Security Headers und warum brauche ich sie?
+                </button>
+                <div class="faq__answer" id="faq-101" role="region" aria-labelledby="faq-q101">
+                  <p>
+                    Security Headers sind HTTP-Antwort-Header, die den Browser anweisen, bestimmte Sicherheitsrichtlinien durchzusetzen. Sie schützen vor:
+                  </p>
+                  <ul>
+                    <li><strong>Clickjacking:</strong> X-Frame-Options verhindert, dass Ihre Seite in einen fremden Frame eingebettet wird</li>
+                    <li><strong>Cross-Site Scripting (XSS):</strong> Content-Security-Policy blockiert eingeschleuste Schadskripte</li>
+                    <li><strong>MIME-Sniffing:</strong> X-Content-Type-Options verhindert, dass Dateien als Code interpretiert werden</li>
+                    <li><strong>SSL-Stripping:</strong> Strict-Transport-Security erzwingt HTTPS-Verbindungen</li>
+                  </ul>
+                  <p>
+                    Ohne diese Headers ist Ihre Webseite für Angreifer ein leichtes Ziel — und SecurityHeaders.com bewertet das mit Note F.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-102" id="faq-q102">
+                  Was bedeutet Security Header Note F?
+                </button>
+                <div class="faq__answer" id="faq-102" role="region" aria-labelledby="faq-q102">
+                  <p>
+                    <a href="https://securityheaders.com" target="_blank" rel="noopener">SecurityHeaders.com</a> bewertet, ob Ihre Webseite die wichtigsten HTTP-Security-Headers sendet (HSTS, CSP, X-Frame-Options u.a.). 
+                  </p>
+                  <p>
+                    <strong>Note F bedeutet:</strong> Kein einziger Schutz-Header ist aktiv. Clickjacking, XSS und Man-in-the-Middle-Angriffe werden dadurch deutlich einfacher. Das ist für Angreifer ein öffentlich sichtbares Signal, dass Ihre Seite ein leichtes Ziel ist.
+                  </p>
+                  <p>
+                    Die gute Nachricht: Note A ist in unter 24 Stunden erreichbar — ohne Downtime und ohne CMS-Login.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-103" id="faq-q103">
+                  Genügt ein SSL-Zertifikat nicht als Schutz?
+                </button>
+                <div class="faq__answer" id="faq-103" role="region" aria-labelledby="faq-q103">
+                  <p>
+                    <strong>Nein.</strong> SSL/TLS verschlüsselt die Verbindung zwischen Browser und Server — das ist wichtig, aber es schützt nicht vor:
+                  </p>
+                  <ul>
+                    <li>Clickjacking-Angriffen</li>
+                    <li>Cross-Site Scripting (XSS)</li>
+                    <li>Fehlender Content-Security-Policy</li>
+                  </ul>
+                  <p>
+                    Security Headers sind die zweite Verteidigungslinie — und werden am häufigsten vergessen. Beides zusammen (SSL + Security Headers) bietet umfassenden Schutz.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: WordPress Härtung -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">WordPress-Härtung</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-201" id="faq-q201">
+                  Brauchen Sie Zugriff auf meine Mandantendaten?
+                </button>
+                <div class="faq__answer" id="faq-201" role="region" aria-labelledby="faq-q201">
+                  <p>
+                    <strong>Nein.</strong> Für den Header-Fix arbeiten wir ausschliesslich auf Server-/Header-Ebene — ohne CMS-Login. 
+                  </p>
+                  <p>
+                    Bei der WordPress-Härtung benötigen wir SSH- oder Panel-Zugang zum Server, jedoch nie Zugriff auf gespeicherte Mandantendaten. Ihre Schweigepflicht bleibt vollständig gewahrt.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-202" id="faq-q202">
+                  Ist meine Webseite während der Härtung offline?
+                </button>
+                <div class="faq__answer" id="faq-202" role="region" aria-labelledby="faq-q202">
+                  <p>
+                    <strong>Nein.</strong> Alle Maßnahmen werden im laufenden Betrieb durchgeführt. Unsere Kunden verzeichnen <strong>0 Minuten Downtime</strong>.
+                  </p>
+                  <p>
+                    Die Header-Optimierung erfolgt auf Serverebene, ohne das CMS zu beeinflussen. Bei der WordPress-Härtung arbeiten wir so, dass Ihre Seite durchgehend erreichbar bleibt.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-203" id="faq-q203">
+                  Was passiert nach der Härtung? Muss ich etwas tun?
+                </button>
+                <div class="faq__answer" id="faq-203" role="region" aria-labelledby="faq-q203">
+                  <p>
+                    <strong>Nein.</strong> Die implementierten Headers bleiben dauerhaft aktiv, solange Ihre Server-Konfiguration nicht geändert wird.
+                  </p>
+                  <p>
+                    Bei einem Hosting-Wechsel empfehlen wir eine erneute Prüfung. Für laufende Überwachung, Re-Audits und automatische Benachrichtigungen bei Änderungen empfehlen wir <a href="/leistungen/cyber-mandat.html">Cyber-Mandat Pro</a>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-204" id="faq-q204">
+                  Ich habe schon ein SSL-Zertifikat — reicht das nicht?
+                </button>
+                <div class="faq__answer" id="faq-204" role="region" aria-labelledby="faq-q204">
+                  <p>
+                    Leider nein. SSL/TLS verschlüsselt die Verbindung, schützt aber nicht vor:
+                  </p>
+                  <ul>
+                    <li><strong>Clickjacking:</strong> Ohne X-Frame-Options kann Ihre Seite in bösartige Frames eingebettet werden</li>
+                    <li><strong>XSS-Angriffen:</strong> Ohne CSP können Schadskripte injiziert werden</li>
+                    <li><strong>Man-in-the-Middle:</strong> Ohne HSTS können SSL-Verbindungen auf HTTP herabgestuft werden</li>
+                  </ul>
+                  <p>
+                    Security Headers und SSL ergänzen sich — beides zusammen ist notwendig.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Kosten & Nutzen -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">Kosten & Nutzen</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-301" id="faq-q301">
+                  Was kostet ein Cyberangriff im Vergleich zu Ihren Leistungen?
+                </button>
+                <div class="faq__answer" id="faq-301" role="region" aria-labelledby="faq-q301">
+                  <p>
+                    Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei <strong>CHF 1.04 Millionen</strong> (Sophos/IT-Markt 2025). 54% der Schweizer Unternehmen zahlen Lösegeld.
+                  </p>
+                  <p>
+                    Unsere präventive Härtung kostet <strong>ab CHF 390</strong> — das entspricht 0.04% der durchschnittlichen Schadenskosten.
+                  </p>
+                  <p>
+                    Eine verhinderte Ransomware-Anfrage rechtfertigt die Investition.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-302" id="faq-q302">
+                  Was ist der Unterschied zwischen Rapid Header Fix und Kanzlei-Härtung?
+                </button>
+                <div class="faq__answer" id="faq-302" role="region" aria-labelledby="faq-q302">
+                  <p>
+                    <strong>Rapid Header Fix (CHF 390):</strong>
+                  </p>
+                  <ul>
+                    <li>Nur Security Headers (Note F → A)</li>
+                    <li>Header-Optimierung auf Serverebene</li>
+                    <li>Ohne CMS-Login</li>
+                    <li>In unter 24 Stunden</li>
+                  </ul>
+                  <p>
+                    <strong>Kanzlei-Härtung (CHF 790):</strong>
+                  </p>
+                  <ul>
+                    <li>Vollständige WordPress-Härtung inkl. Firewall</li>
+                    <li>Login-Verschleierung & Brute-Force-Schutz</li>
+                    <li>Professionelle Firewall-Konfiguration</li>
+                    <li>nDSG-Konformitäts-Check</li>
+                    <li>Schriftliches Audit-Protokoll</li>
+                  </ul>
+                  <p>
+                    Für Kanzleien mit sensiblen Mandantendaten empfehlen wir die Kanzlei-Härtung.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-303" id="faq-q303">
+                  Lohnt sich Cyber-Mandat Pro wirklich?
+                </button>
+                <div class="faq__answer" id="faq-303" role="region" aria-labelledby="faq-q303">
+                  <p>
+                    Wenn Sie Schutz, Nachweise und Re-Audits nicht intern koordinieren wollen — ja.
+                  </p>
+                  <p>
+                    <strong>Cyber-Mandat Pro (CHF 89/Monat)</strong> enthält:
+                  </p>
+                  <ul>
+                    <li>Monatlicher Compliance-Status für Partner und Inhaber</li>
+                    <li>Re-Audit der Security Headers und WordPress-Konfiguration</li>
+                    <li>Nachweisarchiv und exportierbare Reports</li>
+                    <li>Vorfall- und Maßnahmenjournal</li>
+                    <li>Domain-Reputation & Blacklist-Monitoring</li>
+                  </ul>
+                  <p>
+                    Das entspricht weniger als einem Arbeitstag pro Jahr für Status, Nachweise und Re-Audits — und gibt Ihnen rechtssichere Nachweise für das nDSG.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: nDSG & Compliance -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">nDSG & Compliance</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-401" id="faq-q401">
+                  Welche Strafen drohen bei Datenschutzverstössen?
+                </button>
+                <div class="faq__answer" id="faq-401" role="region" aria-labelledby="faq-q401">
+                  <p>
+                    Das nDSG sieht <strong>Bussen bis CHF 250'000</strong> für verantwortliche natürliche Personen vor (Art. 60ff. nDSG).
+                  </p>
+                  <p>
+                    Bei Verletzung der beruflichen Schweigepflicht (Art. 62 nDSG) drohen ebenfalls Bussen bis CHF 250'000 — besonders relevant für:
+                  </p>
+                  <ul>
+                    <li>Anwälte (Anwaltsgeheimnis nach Art. 321 StGB)</li>
+                    <li>Ärzte (Patientengeheimnis)</li>
+                    <li>Notare (Notariatsgeheimnis)</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-402" id="faq-q402">
+                  Was fordert Art. 8 nDSG genau?
+                </button>
+                <div class="faq__answer" id="faq-402" role="region" aria-labelledby="faq-q402">
+                  <p>
+                    Art. 8 nDSG verlangt <strong>technische Schutzmassnahmen</strong> für Personendaten:
+                  </p>
+                  <ul>
+                    <li>Zugriffskontrollen und Authentifizierung</li>
+                    <li>Verschlüsselung und Pseudonymisierung</li>
+                    <li>Datensicherung und Wiederherstellung</li>
+                    <li>IT-Sicherheitskonzept und Incident-Response</li>
+                  </ul>
+                  <p>
+                    Fehlende Security Headers können als Organisationsmangel gewertet werden — mit entsprechenden Konsequenzen bei Datenschutzverletzungen.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-403" id="faq-q403">
+                  Brauche ich auch als kleiner Kanzlei Cyber-Mandat Pro?
+                </button>
+                <div class="faq__answer" id="faq-403" role="region" aria-labelledby="faq-q403">
+                  <p>
+                    Das nDSG unterscheidet nicht nach Unternehmensgröße. Auch kleine Kanzleien müssen:
+                  </p>
+                  <ul>
+                    <li>Nachweise über getroffene Schutzmassnahmen erbringen</li>
+                    <li>Bei Datenschutzverletzungen die Aufsichtsbehörde informieren</li>
+                    <li>Rechtssichere Dokumentation führen</li>
+                  </ul>
+                  <p>
+                    Cyber-Mandat Pro macht diese Nachweispflichten einfach und automatisiert — ohne dass Sie IT-Experte sein müssen.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Technisches -->
+            <div class="faq__category">
+              <h2 class="faq__category-title">Technisches</h2>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-501" id="faq-q501">
+                  Wie verifiziere ich das Ergebnis selber?
+                </button>
+                <div class="faq__answer" id="faq-501" role="region" aria-labelledby="faq-q501">
+                  <p>
+                    Nach der Umsetzung können Sie das Ergebnis selbst prüfen:
+                  </p>
+                  <ol>
+                    <li>Gehen Sie zu <a href="https://securityheaders.com" target="_blank" rel="noopener">securityheaders.com</a></li>
+                    <li>Geben Sie Ihre Webseiten-URL ein</li>
+                    <li>Sie sollten Note A sehen</li>
+                  </ol>
+                  <p>
+                    Zusätzlich erhalten Sie von uns ein schriftliches Audit-Protokoll mit allen implementierten Massnahmen — ideal für Ihre nDSG-Dokumentation.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-502" id="faq-q502">
+                  Was ist, wenn ich den Hosting-Anbieter wechsle?
+                </button>
+                <div class="faq__answer" id="faq-202" role="region" aria-labelledby="faq-q502">
+                  <p>
+                    Bei einem Hosting-Wechsel bleiben die Security Headers in der Regel nicht automatisch erhalten — sie sind serverseitig konfiguriert.
+                  </p>
+                  <p>
+                    Nach einem Hosting-Wechsel empfehlen wir:
+                  </p>
+                  <ol>
+                    <li>Prüfung auf <a href="https://securityheaders.com" target="_blank" rel="noopener">securityheaders.com</a></li>
+                    <li>Bei Bedarf: Erneute Header-Optimierung</li>
+                  </ol>
+                  <p>
+                    Cyber-Mandat Pro Kunden werden automatisch benachrichtigt, wenn ihre Seite nicht mehr Note A ist.
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq__item">
+                <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-503" id="faq-q503">
+                  Ich habe WordPress nicht selbst installiert — bin ich trotzdem verantwortlich?
+                </button>
+                <div class="faq__answer" id="faq-503" role="region" aria-labelledby="faq-q503">
+                  <p>
+                    <strong>Ja.</strong> Als Betreiberin oder Betreiber einer Webseite sind Sie verantwortlich für den Datenschutz — unabhängig davon, wer WordPress installiert hat.
+                  </p>
+                  <p>
+                    Das nDSG kennt keine Ausnahme für "Ich wusste nicht, wie meine Webseite konfiguriert ist". Mit einer Härtung durch AidSec stellen Sie sicher, dass Sie Ihrer Sorgfaltspflicht nachgekommen sind.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section__micro-cta" data-reveal="fade-up" data-reveal-delay="150" style="text-align: center; margin-top: var(--space-16);">
+            <p style="margin-bottom: var(--space-6);">Haben Sie weitere Fragen?</p>
+            <a href="/index.html#kontakt" class="btn btn--gold">Kostenfreie Analyse starten</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img src="/logowhite.png" alt="AidSec" width="36" height="36" class="footer__logo" loading="lazy" />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="/datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="/impressum.html" class="footer__link">Impressum</a>
+            <a href="/agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+  </body>
+</html>
