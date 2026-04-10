@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mein Status – AidSec</title>
+  
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/sections.css">
+  <link rel="icon" type="image/png" href="/logowhite.png">
+  
+  <style>
+    :root {
+      --gold: #C9A227;
+      --gold-dark: #8B7019;
+      --dark: #1a1a2e;
+      --gray-900: #111827;
+      --gray-700: #374151;
+      --gray-500: #6B7280;
+      --gray-200: #E5E7EB;
+      --gray-100: #F3F4F6;
+      --success: #059669;
+      --warning: #D97706;
+      --danger: #DC2626;
+    }
+    
+    body {
+      background: var(--gray-100);
+      min-height: 100vh;
+    }
+    
+    .dashboard {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    /* Header */
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .dashboard-header__logo {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 16px;
+    }
+    
+    .dashboard-header__title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+    
+    .dashboard-header__subtitle {
+      color: var(--gray-500);
+    }
+    
+    /* Order Lookup */
+    .order-lookup {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+    }
+    
+    .order-lookup__title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    .order-lookup__form {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .order-lookup__input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    
+    .order-lookup__input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    .order-lookup__btn {
+      padding: 14px 28px;
+      background: var(--gold);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .order-lookup__btn:hover {
+      background: var(--gold-dark);
+    }
+    
+    /* Status Card */
+    .status-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      display: none;
+    }
+    
+    .status-card.is-visible {
+      display: block;
+    }
+    
+    .status-card__header {
+      background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+      color: white;
+      padding: 24px 32px;
+    }
+    
+    .status-card__badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    
+    .status-card__badge--pending {
+      background: var(--warning);
+    }
+    
+    .status-card__badge--active {
+      background: var(--gold);
+    }
+    
+    .status-card__badge--complete {
+      background: var(--success);
+    }
+    
+    .status-card__badge--error {
+      background: var(--danger);
+    }
+    
+    .status-card__title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .status-card__order-id {
+      font-size: 14px;
+      opacity: 0.8;
+      font-family: monospace;
+    }
+    
+    /* Timeline */
+    .timeline {
+      padding: 32px;
+    }
+    
+    .timeline__title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--gray-900);
+    }
+    
+    .timeline__steps {
+      position: relative;
+      padding-left: 40px;
+    }
+    
+    .timeline__steps::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--gray-200);
+    }
+    
+    .timeline__step {
+      position: relative;
+      padding-bottom: 28px;
+    }
+    
+    .timeline__step:last-child {
+      padding-bottom: 0;
+    }
+    
+    .timeline__step-icon {
+      position: absolute;
+      left: -40px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--gray-500);
+    }
+    
+    .timeline__step--complete .timeline__step-icon {
+      background: var(--success);
+      color: white;
+    }
+    
+    .timeline__step--active .timeline__step-icon {
+      background: var(--gold);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .timeline__step-title {
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    
+    .timeline__step--pending .timeline__step-title {
+      color: var(--gray-500);
+    }
+    
+    .timeline__step-time {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    
+    /* Results */
+    .results {
+      background: var(--gray-100);
+      padding: 32px;
+      border-top: 1px solid var(--gray-200);
+    }
+    
+    .results__title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--gray-900);
+    }
+    
+    .results__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .result-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .result-box__label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+    
+    .result-box__value {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .result-box__value--before {
+      color: var(--danger);
+    }
+    
+    .result-box__value--after {
+      color: var(--success);
+    }
+    
+    .result-box__arrow {
+      font-size: 24px;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    
+    /* Actions */
+    .actions {
+      padding: 24px 32px;
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      gap: 12px;
+    }
+    
+    .actions__btn {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .actions__btn--primary {
+      background: var(--gold);
+      color: white;
+    }
+    
+    .actions__btn--primary:hover {
+      background: var(--gold-dark);
+    }
+    
+    .actions__btn--secondary {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    
+    .actions__btn--secondary:hover {
+      background: var(--gray-200);
+    }
+    
+    /* Error State */
+    .error-state {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      display: none;
+    }
+    
+    .error-state.is-visible {
+      display: block;
+    }
+    
+    .error-state__icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .error-state__title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .error-state__text {
+      color: var(--gray-500);
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 48px;
+      display: none;
+    }
+    
+    .loading.is-visible {
+      display: block;
+    }
+    
+    .loading__spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <img src="/logowhite.png" alt="AidSec" class="dashboard-header__logo">
+      <h1 class="dashboard-header__title">Mein AidSec Status</h1>
+      <p class="dashboard-header__subtitle">Verfolgen Sie den Status Ihrer Sicherheits-Optimierung</p>
+    </header>
+    
+    <!-- Order Lookup -->
+    <div class="order-lookup">
+      <h2 class="order-lookup__title">Auftrag suchen</h2>
+      <form class="order-lookup__form" id="lookup-form">
+        <input 
+          type="text" 
+          class="order-lookup__input" 
+          id="order-input"
+          placeholder="Auftrags-Nr. eingeben (z.B. ord_abc123)"
+          required
+        >
+        <button type="submit" class="order-lookup__btn">Suchen</button>
+      </form>
+    </div>
+    
+    <!-- Loading State -->
+    <div class="loading" id="loading">
+      <div class="loading__spinner"></div>
+      <p>Lade Auftrag...</p>
+    </div>
+    
+    <!-- Error State -->
+    <div class="error-state" id="error-state">
+      <div class="error-state__icon">🔍</div>
+      <h3 class="error-state__title">Auftrag nicht gefunden</h3>
+      <p class="error-state__text">Die eingegebene Auftrags-Nr. wurde nicht gefunden. Bitte überprüfen Sie Ihre Eingabe.</p>
+    </div>
+    
+    <!-- Status Card -->
+    <div class="status-card" id="status-card">
+      <div class="status-card__header">
+        <span class="status-card__badge" id="status-badge">In Bearbeitung</span>
+        <h2 class="status-card__title" id="customer-name">Dr. Max Muster</h2>
+        <p class="status-card__order-id" id="order-id">ord_xxx</p>
+      </div>
+      
+      <div class="timeline">
+        <h3 class="timeline__title">Ablauf</h3>
+        <div class="timeline__steps">
+          <div class="timeline__step timeline__step--complete" id="step-ordered">
+            <div class="timeline__step-icon">✓</div>
+            <div class="timeline__step-title">Auftrag erteilt</div>
+            <div class="timeline__step-time" id="time-ordered">10. April 2026, 14:00</div>
+          </div>
+          
+          <div class="timeline__step timeline__step--complete" id="step-analysis">
+            <div class="timeline__step-icon">✓</div>
+            <div class="timeline__step-title">Analyse abgeschlossen</div>
+            <div class="timeline__step-time" id="time-analysis">10. April 2026, 14:05</div>
+          </div>
+          
+          <div class="timeline__step timeline__step--active" id="step-implementation">
+            <div class="timeline__step-icon">⚙</div>
+            <div class="timeline__step-title">Headers werden implementiert</div>
+            <div class="timeline__step-time" id="time-implementation">In Bearbeitung...</div>
+          </div>
+          
+          <div class="timeline__step timeline__step--pending" id="step-verification">
+            <div class="timeline__step-icon">3</div>
+            <div class="timeline__step-title">Verifizierung</div>
+            <div class="timeline__step-time" id="time-verification">Ausstehend</div>
+          </div>
+          
+          <div class="timeline__step timeline__step--pending" id="step-complete">
+            <div class="timeline__step-icon">5</div>
+            <div class="timeline__step-title">Abgeschlossen</div>
+            <div class="timeline__step-time" id="time-complete">Ausstehend</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="results" id="results-section">
+        <h3 class="results__title">Ergebnis</h3>
+        <div class="results__grid">
+          <div class="result-box">
+            <div class="result-box__label">Vorher</div>
+            <div class="result-box__value result-box__value--before" id="grade-before">F</div>
+          </div>
+          <div class="result-box">
+            <div class="result-box__label">Nachher</div>
+            <div class="result-box__value result-box__value--after" id="grade-after">A</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="actions">
+        <a href="#" class="actions__btn actions__btn--primary" id="btn-report">📄 Report herunterladen</a>
+        <a href="/" class="actions__btn actions__btn--secondary">← Zurück zu AidSec</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // API URL (Vercel oder lokal)
+    const API_BASE = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3000' 
+      : '';
+    
+    // DOM Elemente
+    const form = document.getElementById('lookup-form');
+    const orderInput = document.getElementById('order-input');
+    const statusCard = document.getElementById('status-card');
+    const errorState = document.getElementById('error-state');
+    const loading = document.getElementById('loading');
+    const resultsSection = document.getElementById('results-section');
+    
+    // Status aktualisieren
+    function updateStatus(order) {
+      // Header
+      document.getElementById('customer-name').textContent = order.customer?.name || 'Kunde';
+      document.getElementById('order-id').textContent = order.orderId;
+      
+      // Badge
+      const badge = document.getElementById('status-badge');
+      badge.textContent = order.statusLabel || order.status;
+      badge.className = 'status-card__badge status-card__badge--' + order.status;
+      
+      // Timeline formatieren
+      const timelineMap = {};
+      (order.timeline || []).forEach(t => {
+        timelineMap[t.key] = t.time ? new Date(t.time).toLocaleString('de-CH', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }) : null;
+      });
+      
+      document.getElementById('time-ordered').textContent = timelineMap.ordered || '-';
+      document.getElementById('time-analysis').textContent = timelineMap.analysis || 'In Bearbeitung...';
+      document.getElementById('time-implementation').textContent = timelineMap.implementation || 'Ausstehend';
+      document.getElementById('time-verification').textContent = timelineMap.verification || 'Ausstehend';
+      document.getElementById('time-complete').textContent = timelineMap.complete || 'Ausstehend';
+      
+      // Timeline Steps
+      const steps = ['ordered', 'analysis', 'implementation', 'verification', 'complete'];
+      const stepElements = steps.map(s => document.getElementById('step-' + s));
+      
+      const statusOrder = { pending: 0, active: 2, complete: 4 };
+      const currentStep = statusOrder[order.status] ?? 0;
+      
+      steps.forEach((step, index) => {
+        const el = stepElements[index];
+        el.classList.remove('timeline__step--complete', 'timeline__step--active', 'timeline__step--pending');
+        
+        if (index < currentStep) {
+          el.classList.add('timeline__step--complete');
+        } else if (index === currentStep) {
+          el.classList.add('timeline__step--active');
+        } else {
+          el.classList.add('timeline__step--pending');
+        }
+      });
+      
+      // Results
+      if (order.results) {
+        document.getElementById('grade-before').textContent = order.results.gradeBefore || '-';
+        
+        if (order.results.gradeAfter) {
+          document.getElementById('grade-after').textContent = order.results.gradeAfter;
+          resultsSection.style.display = 'grid';
+        } else {
+          resultsSection.style.display = 'none';
+        }
+      } else {
+        resultsSection.style.display = 'none';
+      }
+    }
+    
+    // API Call
+    async function fetchOrder(orderId) {
+      const response = await fetch(`${API_BASE}/api/order-status?orderId=${encodeURIComponent(orderId)}`);
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          return { error: 'not_found' };
+        }
+        throw new Error('API Error: ' + response.status);
+      }
+      
+      const data = await response.json();
+      return data;
+    }
+    
+    // Form Submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const orderId = orderInput.value.trim();
+      
+      if (!orderId) return;
+      
+      // UI States
+      statusCard.classList.remove('is-visible');
+      errorState.classList.remove('is-visible');
+      loading.classList.add('is-visible');
+      
+      try {
+        const result = await fetchOrder(orderId);
+        
+        loading.classList.remove('is-visible');
+        
+        if (result.error === 'not_found') {
+          errorState.classList.add('is-visible');
+        } else if (result.success && result.order) {
+          updateStatus(result.order);
+          statusCard.classList.add('is-visible');
+        } else {
+          errorState.classList.add('is-visible');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        loading.classList.remove('is-visible');
+        errorState.classList.add('is-visible');
+      }
+    });
+    
+    // Demo: Automatisch Demo-Order laden wenn URL param exists
+    const urlParams = new URLSearchParams(window.location.search);
+    const demoParam = urlParams.get('demo');
+    if (demoParam) {
+      orderInput.value = demoParam;
+      loading.classList.add('is-visible');
+      
+      fetchOrder(demoParam)
+        .then(result => {
+          loading.classList.remove('is-visible');
+          if (result.success && result.order) {
+            updateStatus(result.order);
+            statusCard.classList.add('is-visible');
+          } else {
+            errorState.classList.add('is-visible');
+          }
+        })
+        .catch(() => {
+          loading.classList.remove('is-visible');
+          errorState.classList.add('is-visible');
+        });
+    }
+  </script>
+</body>
+</html>
