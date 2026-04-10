@@ -46,6 +46,40 @@
         "serviceType": ["Cybersicherheit für Anwaltskanzleien", "WordPress-Härtung", "nDSG-Compliance"]
       }
     </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Gilt das Anwaltsgeheimnis auch für meine Website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Indirekt, ja. Wenn Ihre Website gehackt wird und Angreifer Zugriff auf Mandantenlisten erhalten, kann das als Verletzung der Sorgfaltspflicht gewertet werden. Das nDSG verlangt technische Schutzmaßnahmen (Art. 8)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Brauche ich als Anwalt eine Cyber-Versicherung?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja, dringend empfohlen. Aber präventiver Schutz ist besser als Versicherung: Prävention kostet einen Bruchteil der Versicherungsprämie und eine gehackte Kanzlei verliert Reputation und Mandanten."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was passiert wenn meine Kanzlei-Website gehackt wird?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sofortmaßnahmen: Website vom Netz trennen, alle Passwörter ändern, Hosting-Provider informieren, forensische Analyse durchführen. Unsere Notfall-Intervention umfasst alles zu CHF 990 Pauschal."
+            }
+          }
+        ]
+      }
+    </script>
       <script src="/js/consent.js"></script>
   </head>
   <body>
@@ -393,6 +427,84 @@
               <div>
                 <h4 class="trust__feature-title">0 Minuten Downtime</h4>
                 <p class="trust__feature-desc">Alle Maßnahmen im laufenden Betrieb. Kein Kanzleitag verloren, keine Mandanten beeinträchtigt.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Häufige Fragen <span class="text-gold">zu Anwaltskanzleien</span></h2>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-lp-01" id="faq-lp-q01">
+                Gilt das Anwaltsgeheimnis auch für meine Website?
+              </button>
+              <div class="faq__answer" id="faq-lp-01" role="region" aria-labelledby="faq-lp-q01">
+                <p>
+                  <strong>Indirekt, ja.</strong> Wenn Ihre Website gehackt wird und Angreifer Zugriff auf Mandantenlisten oder Fallinformationen erhalten, kann das als Verletzung der Sorgfaltspflicht gewertet werden.
+                </p>
+                <p>
+                  Das nDSG verlangt technische Schutzmaßnahmen (Art. 8). Security Headers sind ein wichtiger Teil davon — sie verhindern, dass Angreifer Code in Ihre Seite einschleusen können.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-lp-02" id="faq-lp-q02">
+                Brauche ich als Anwalt eine Cyber-Versicherung?
+              </button>
+              <div class="faq__answer" id="faq-lp-02" role="region" aria-labelledby="faq-lp-q02">
+                <p>
+                  <strong>Ja, dringend empfohlen.</strong> Aber präventiver Schutz ist besser als Versicherung:
+                </p>
+                <ul>
+                  <li>Prävention kostet einen Bruchteil der Versicherungsprämie</li>
+                  <li>Eine gehackte Kanzlei verliert Reputation und Mandanten</li>
+                  <li>Wiederherstellung kostet immer mehr als Prävention</li>
+                </ul>
+                <p>
+                  Cyber-Mandat Pro liefert Ihnen auch den notwendigen Nachweis für Ihre Versicherung, dass Sie angemessene Schutzmaßnahmen getroffen haben.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-lp-03" id="faq-lp-q03">
+                Was passiert, wenn meine Kanzlei-Website gehackt wird?
+              </button>
+              <div class="faq__answer" id="faq-lp-03" role="region" aria-labelledby="faq-lp-q03">
+                <p>
+                  <strong>Sofortmaßnahmen erforderlich:</strong>
+                </p>
+                <ol>
+                  <li>Website vom Netz trennen (Wartungsmodus)</li>
+                  <li>Alle Passwörter ändern (CMS, FTP, Datenbank)</li>
+                  <li>Hosting-Provider informieren</li>
+                  <li>Forensische Analyse durchführen</li>
+                </ol>
+                <p>
+                  Unsere Notfall-Intervention umfasst alles zu CHF 990 Pauschal.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-lp-04" id="faq-lp-q04">
+                Ich bin neu in WordPress — muss ich mich um Sicherheit kümmern?
+              </button>
+              <div class="faq__answer" id="faq-lp-04" role="region" aria-labelledby="faq-lp-q04">
+                <p>
+                  <strong>Ja.</strong> Als Betreiberin oder Betreiber einer Webseite sind Sie verantwortlich für den Datenschutz — unabhängig davon, wer WordPress installiert hat.
+                </p>
+                <p>
+                  Das nDSG kennt keine Ausnahme für "Ich wusste nicht, wie meine Webseite konfiguriert ist".
+                </p>
               </div>
             </div>
           </div>

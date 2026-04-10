@@ -46,6 +46,40 @@
         "serviceType": ["Cybersicherheit für Notariate", "Domain-Reputation-Monitoring", "nDSG-Compliance"]
       }
     </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Ich bin Notar — welche besonderen Anforderungen gibt es?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Notare unterliegen besonderen Verschwiegenheitspflichten. Für Ihre Website: Zusätzlicher Schutz vor Injection-Angriffen, sichere Formulare, nDSG-konforme Datenspeicherung."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet ein Cyberangriff auf ein Notariat?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die durchschnittlichen Wiederherstellungskosten nach Ransomware liegen bei CHF 1.04 Millionen. Für Notariate besonders problematisch: Notariatsgeheimnis könnte verletzt werden, Vertrauensverlust."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ich bin in einer kleinen Kanzlei — brauche ich wirklich Cyber-Mandat Pro?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Das nDSG unterscheidet nicht nach Unternehmensgröße. Auch kleine Notariate müssen Nachweise über Schutzmaßnahmen erbringen und bei Datenschutzverletzungen die Aufsichtsbehörde informieren."
+            }
+          }
+        ]
+      }
+    </script>
       <script src="/js/consent.js"></script>
   </head>
   <body>
@@ -375,6 +409,99 @@
                 <cite>Managing Partner, Kanzlei Zentralschweiz</cite>
               </blockquote>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section section--alt">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Häufige Fragen <span class="text-gold">zu Notariaten</span></h2>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-not-01" id="faq-not-q01">
+                Ich bin Notar — welche besonderen Anforderungen gibt es?
+              </button>
+              <div class="faq__answer" id="faq-not-01" role="region" aria-labelledby="faq-not-q01">
+                <p>
+                  Notare unterliegen besonderen Verschwiegenheitspflichten. Für Ihre Website bedeutet das:
+                </p>
+                <ul>
+                  <li>Zusätzlicher Schutz vor Injection-Angriffen</li>
+                  <li>Sichere Formulare für Mandantenanfragen</li>
+                  <li>Keine Spuren von Mandantendaten in Logfiles</li>
+                  <li>nDSG-konforme Datenspeicherung</li>
+                </ul>
+                <p>
+                  Unsere Kanzlei-Härtung ist speziell auf solche Anforderungen ausgelegt.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-not-02" id="faq-not-q02">
+                Was kostet ein Cyberangriff auf ein Notariat?
+              </button>
+              <div class="faq__answer" id="faq-not-02" role="region" aria-labelledby="faq-not-q02">
+                <p>
+                  Die durchschnittlichen Wiederherstellungskosten nach Ransomware liegen bei <strong>CHF 1.04 Millionen</strong>.
+                </p>
+                <p>
+                  Für Notariate besonders problematisch:
+                </p>
+                <ul>
+                  <li>Notariatsgeheimnis könnte verletzt werden</li>
+                  <li>Vertrauensverlust bei Mandanten</li>
+                  <li>Reputation als sicherer Ort für Beurkundungen</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-not-03" id="faq-not-q03">
+                Ich bin in einer kleinen Kanzlei — brauche ich wirklich Cyber-Mandat Pro?
+              </button>
+              <div class="faq__answer" id="faq-not-03" role="region" aria-labelledby="faq-not-q03">
+                <p>
+                  Das nDSG unterscheidet nicht nach Unternehmensgröße. Auch kleine Notariate müssen:
+                </p>
+                <ul>
+                  <li>Nachweise über getroffene Schutzmaßnahmen erbringen</li>
+                  <li>Bei Datenschutzverletzungen die Aufsichtsbehörde informieren</li>
+                  <li>Rechtssichere Dokumentation führen</li>
+                </ul>
+                <p>
+                  Cyber-Mandat Pro macht diese Nachweispflichten einfach und automatisiert.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-not-04" id="faq-not-q04">
+                Was ist der Unterschied zwischen Rapid Header Fix und Kanzlei-Härtung?
+              </button>
+              <div class="faq__answer" id="faq-not-04" role="region" aria-labelledby="faq-not-q04">
+                <p>
+                  <strong>Rapid Header Fix (CHF 390):</strong>
+                </p>
+                <ul>
+                  <li>Nur Security Headers (Note F → A)</li>
+                  <li>In unter 24 Stunden</li>
+                </ul>
+                <p>
+                  <strong>Kanzlei-Härtung (CHF 790):</strong>
+                </p>
+                <ul>
+                  <li>Vollständige WordPress-Härtung inkl. Firewall</li>
+                  <li>Login-Verschleierung & Brute-Force-Schutz</li>
+                  <li>nDSG-Konformitäts-Check</li>
+                  <li>Audit-Protokoll</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

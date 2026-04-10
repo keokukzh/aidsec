@@ -46,6 +46,40 @@
         "serviceType": ["Cybersicherheit für Arztpraxen", "Patientendatenschutz", "nDSG-Compliance"]
       }
     </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Gilt das Patientengeheimnis auch für meine Website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Als Arzt oder Therapeut sind Sie an das Berufsgeheimnis gebunden. Wenn Ihre Website gehackt wird und Patientendaten kompromittiert werden, kann das schwerwiegende Konsequenzen haben."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet ein Cyberangriff auf meine Praxis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei CHF 1.04 Millionen. Für Arztpraxen kommen Reputationsverlust und mögliche Meldung an den Kantonsarzt hinzu."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ich nutze nur eine einfache Praxis-Website — bin ich trotzdem gefährdet?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Die meisten Angriffe sind automatisiert und suchen nach bekannten Schwachstellen — unabhängig von der Seitengröße. Über 40% aller Websites weltweit laufen auf WordPress und sind Ziele für automatisierte Angriffe."
+            }
+          }
+        ]
+      }
+    </script>
       <script src="/js/consent.js"></script>
   </head>
   <body>
@@ -374,6 +408,81 @@
                 </div>
               </div>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section section--deep">
+        <div class="container container--medium">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Häufige Fragen <span class="text-gold">zu Arztpraxen</span></h2>
+          </div>
+
+          <div class="faq" data-reveal="fade-up" data-reveal-delay="100">
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-med-01" id="faq-med-q01">
+                Gilt das Patientengeheimnis auch für meine Website?
+              </button>
+              <div class="faq__answer" id="faq-med-01" role="region" aria-labelledby="faq-med-q01">
+                <p>
+                  <strong>Ja.</strong> Als Arzt oder Therapeut sind Sie an das Berufsgeheimnis gebunden. Wenn Ihre Website gehackt wird und Patientendaten kompromittiert werden, kann das schwerwiegende Konsequenzen haben.
+                </p>
+                <p>
+                  Das nDSG verlangt technische Schutzmaßnahmen (Art. 8). Security Headers sind ein wichtiger Teil davon — sie verhindern, dass Angreifer Schadcode einschleusen können.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-med-02" id="faq-med-q02">
+                Was kostet ein Cyberangriff auf meine Praxis?
+              </button>
+              <div class="faq__answer" id="faq-med-02" role="region" aria-labelledby="faq-med-q02">
+                <p>
+                  Die durchschnittlichen Wiederherstellungskosten nach Ransomware in der Schweiz liegen bei <strong>CHF 1.04 Millionen</strong>.
+                </p>
+                <p>
+                  Für Arztpraxen kommen hinzu:
+                </p>
+                <ul>
+                  <li>Reputationsverlust bei Patienten</li>
+                  <li>Mögliche Meldung an Kantonsarzt</li>
+                  <li>Versicherungskonsequenzen</li>
+                </ul>
+                <p>
+                  Unsere präventive Härtung kostet <strong>ab CHF 390</strong> — ein Bruchteil davon.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-med-03" id="faq-med-q03">
+                Ich nutze nur eine einfache Praxis-Website — bin ich trotzdem gefährdet?
+              </button>
+              <div class="faq__answer" id="faq-med-03" role="region" aria-labelledby="faq-med-q03">
+                <p>
+                  <strong>Ja.</strong> Die meisten Angriffe sind automatisiert und suchen nach bekannten Schwachstellen — unabhängig von der Seitengröße.
+                </p>
+                <p>
+                  Über 40% aller Websites weltweit laufen auf WordPress. Das macht sie zum Ziel für automatisierte Angriffe.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq__item">
+              <button type="button" class="faq__question" aria-expanded="false" aria-controls="faq-med-04" id="faq-med-q04">
+                Wie lange dauert die Absicherung?
+              </button>
+              <div class="faq__answer" id="faq-med-04" role="region" aria-labelledby="faq-med-q04">
+                <p>
+                  Der <strong>Rapid Header Fix</strong> dauert typischerweise 4-8 Stunden und ist am nächsten Tag abgeschlossen. Ihre Praxis-Website bleibt währenddessen online.
+                </p>
+                <p>
+                  Bei der vollständigen WordPress-Härtung planen wir 1-2 Tage ein, inklusive Tests und Dokumentation.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
