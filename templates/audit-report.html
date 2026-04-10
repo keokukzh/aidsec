@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit-Protokoll – AidSec</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --gold: #C9A227;
+      --gold-dark: #8B7019;
+      --dark: #1a1a2e;
+      --gray-900: #111827;
+      --gray-700: #374151;
+      --gray-500: #6B7280;
+      --gray-200: #E5E7EB;
+      --gray-100: #F3F4F6;
+      --white: #FFFFFF;
+      --success: #059669;
+      --danger: #DC2626;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--gray-700);
+      background: var(--gray-100);
+    }
+    
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--white);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+      color: var(--white);
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .header__logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 16px;
+    }
+    
+    .header__title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+    
+    .header__subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    .header__date {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 16px;
+    }
+    
+    /* Grade Badge */
+    .grade-section {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 32px 40px;
+      background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .grade-card {
+      text-align: center;
+      padding: 24px 32px;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      min-width: 160px;
+    }
+    
+    .grade-card--before {
+      border-top: 4px solid var(--danger);
+    }
+    
+    .grade-card--after {
+      border-top: 4px solid var(--success);
+    }
+    
+    .grade-card__label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+    
+    .grade-card__value {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .grade-card--before .grade-card__value {
+      color: var(--danger);
+    }
+    
+    .grade-card--after .grade-card__value {
+      color: var(--success);
+    }
+    
+    .grade-card__desc {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 8px;
+    }
+    
+    .grade-card__arrow {
+      display: flex;
+      align-items: center;
+      font-size: 32px;
+      color: var(--gold);
+    }
+    
+    /* Main Content */
+    .content {
+      padding: 40px;
+    }
+    
+    /* Customer Info */
+    .customer-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .info-box {
+      background: var(--gray-100);
+      padding: 20px;
+      border-radius: 8px;
+    }
+    
+    .info-box__title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    
+    .info-box__row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .info-box__row:last-child {
+      border-bottom: none;
+    }
+    
+    .info-box__label {
+      color: var(--gray-500);
+      font-size: 13px;
+    }
+    
+    .info-box__value {
+      font-weight: 500;
+      color: var(--gray-900);
+      font-size: 13px;
+    }
+    
+    /* Section */
+    .section {
+      margin-bottom: 32px;
+    }
+    
+    .section__title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gold);
+    }
+    
+    /* Headers Table */
+    .headers-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    
+    .headers-table th {
+      background: var(--gray-900);
+      color: var(--white);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 500;
+    }
+    
+    .headers-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .headers-table tr:nth-child(even) {
+      background: var(--gray-100);
+    }
+    
+    .headers-table__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    .headers-table__status--yes {
+      background: #D1FAE5;
+      color: var(--success);
+    }
+    
+    .headers-table__status--no {
+      background: #FEE2E2;
+      color: var(--danger);
+    }
+    
+    .headers-table__value {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--gray-500);
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    /* Compliance Badge */
+    .compliance-box {
+      background: linear-gradient(135deg, var(--success) 0%, #047857 100%);
+      color: var(--white);
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .compliance-box__icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    
+    .compliance-box__title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .compliance-box__desc {
+      opacity: 0.9;
+      font-size: 13px;
+    }
+    
+    /* Actions */
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    .action-card {
+      background: var(--gray-100);
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid var(--gold);
+    }
+    
+    .action-card__title {
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+    
+    .action-card__desc {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    
+    /* Footer */
+    .footer {
+      background: var(--gray-900);
+      color: var(--white);
+      padding: 32px 40px;
+      text-align: center;
+    }
+    
+    .footer__logo {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+    
+    .footer__text {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+    
+    .footer__contact {
+      font-size: 12px;
+    }
+    
+    .footer__contact a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+      }
+      .page {
+        box-shadow: none;
+      }
+      .grade-card {
+        break-inside: avoid;
+      }
+      .section {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="header">
+      <img src="https://aidsec.ch/logowhite.png" alt="AidSec" class="header__logo">
+      <h1 class="header__title">Audit-Protokoll</h1>
+      <p class="header__subtitle">WordPress Security Header Optimierung</p>
+      <p class="header__date">Erstellt am {{DATE}} | Auftrags-Nr. {{ORDER_ID}}</p>
+    </header>
+    
+    <!-- Grade Comparison -->
+    <section class="grade-section">
+      <div class="grade-card grade-card--before">
+        <div class="grade-card__label">Vorher</div>
+        <div class="grade-card__value">{{GRADE_BEFORE}}</div>
+        <div class="grade-card__desc">SecurityHeaders.com Bewertung</div>
+      </div>
+      
+      <div class="grade-card__arrow">→</div>
+      
+      <div class="grade-card grade-card--after">
+        <div class="grade-card__label">Nachher</div>
+        <div class="grade-card__value">{{GRADE_AFTER}}</div>
+        <div class="grade-card__desc">SecurityHeaders.com Bewertung</div>
+      </div>
+    </section>
+    
+    <!-- Content -->
+    <main class="content">
+      <!-- Customer Information -->
+      <section class="section">
+        <h2 class="section__title">Auftragsdaten</h2>
+        <div class="customer-info">
+          <div class="info-box">
+            <div class="info-box__title">Kunde</div>
+            <div class="info-box__row">
+              <span class="info-box__label">Name</span>
+              <span class="info-box__value">{{CUSTOMER_NAME}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Unternehmen</span>
+              <span class="info-box__value">{{CUSTOMER_COMPANY}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">E-Mail</span>
+              <span class="info-box__value">{{CUSTOMER_EMAIL}}</span>
+            </div>
+          </div>
+          <div class="info-box">
+            <div class="info-box__title">Website</div>
+            <div class="info-box__row">
+              <span class="info-box__label">URL</span>
+              <span class="info-box__value">{{WEBSITE_URL}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Server</span>
+              <span class="info-box__value">{{SERVER_TYPE}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Paket</span>
+              <span class="info-box__value">{{PACKAGE_NAME}}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Timeline -->
+      <section class="section">
+        <h2 class="section__title">Ablauf</h2>
+        <div class="customer-info">
+          <div class="info-box">
+            <div class="info-box__title">Zeitplan</div>
+            <div class="info-box__row">
+              <span class="info-box__label">Auftrag erteilt</span>
+              <span class="info-box__value">{{DATE_ORDERED}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Headers implementiert</span>
+              <span class="info-box__value">{{DATE_IMPLEMENTED}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Verifiziert</span>
+              <span class="info-box__value">{{DATE_VERIFIED}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Dauer</span>
+              <span class="info-box__value">{{DURATION}}</span>
+            </div>
+          </div>
+          <div class="info-box">
+            <div class="info-box__title">Resultat</div>
+            <div class="info-box__row">
+              <span class="info-box__label">Score</span>
+              <span class="info-box__value">{{SCORE_BEFORE}}/6 → {{SCORE_AFTER}}/6</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Headers verbessert</span>
+              <span class="info-box__value">{{HEADERS_IMPROVED}}</span>
+            </div>
+            <div class="info-box__row">
+              <span class="info-box__label">Downtime</span>
+              <span class="info-box__value">{{DOWNTIME}}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Implemented Headers -->
+      <section class="section">
+        <h2 class="section__title">Implementierte Security Headers</h2>
+        <table class="headers-table">
+          <thead>
+            <tr>
+              <th>Header</th>
+              <th>Status</th>
+              <th>Wert</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#HEADERS}}
+            <tr>
+              <td><strong>{{NAME}}</strong></td>
+              <td>
+                <span class="headers-table__status headers-table__status--{{STATUS}}">
+                  {{STATUS_ICON}} {{STATUS_TEXT}}
+                </span>
+              </td>
+              <td class="headers-table__value">{{VALUE}}</td>
+            </tr>
+            {{/HEADERS}}
+          </tbody>
+        </table>
+      </section>
+      
+      <!-- Compliance -->
+      <section class="section">
+        <div class="compliance-box">
+          <div class="compliance-box__icon">✓</div>
+          <div class="compliance-box__title">nDSG-konform gemäss Art. 8</div>
+          <div class="compliance-box__desc">
+            Die implementierten technischen Schutzmassnahmen entsprechen den Anforderungen des neuen Schweizer Datenschutzgesetzes (nDSG).
+          </div>
+        </div>
+      </section>
+      
+      <!-- Next Steps -->
+      <section class="section">
+        <h2 class="section__title">Empfehlungen</h2>
+        <div class="actions">
+          <div class="action-card">
+            <div class="action-card__title">Monatliches Monitoring</div>
+            <div class="action-card__desc">
+              Für laufende Verifizierung und Nachweise empfehlen wir Cyber-Mandat Pro.
+            </div>
+          </div>
+          <div class="action-card">
+            <div class="action-card__title">Hosting-Änderungen</div>
+            <div class="action-card__desc">
+              Bei einem Hosting-Wechsel sollten die Headers erneut geprüft werden.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <img src="https://aidsec.ch/logowhite.png" alt="AidSec" class="footer__logo">
+      <p class="footer__text">
+        AidSec – Digitale Sicherheit für Schweizer Kanzleien und Praxen<br>
+        Gegründet 2024 | info@aidsec.ch | aidsec.ch
+      </p>
+      <p class="footer__contact">
+        Fragen? <a href="mailto:info@aidsec.ch">info@aidsec.ch</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
