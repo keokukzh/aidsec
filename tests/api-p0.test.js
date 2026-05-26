@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import test from 'node:test';
 
 function createResponse() {
@@ -344,4 +345,13 @@ test('magic-link request is enumeration-safe in production for unknown orders', 
   assert.equal(res.statusCode, 202);
   assert.equal(res.body.sent, true);
   assert.equal(res.body.token, undefined);
+});
+
+test('vercel API rewrites target function routes instead of static js files', () => {
+  const config = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+  const checkoutWebhook = config.rewrites.find((rewrite) => rewrite.source === '/api/checkout/webhook');
+  const pluginRelay = config.rewrites.find((rewrite) => rewrite.source === '/api/plugin-webhook-relay/(.*)');
+
+  assert.equal(checkoutWebhook.destination, '/api/checkout-webhook');
+  assert.equal(pluginRelay.destination, '/api/plugin-webhook-relay');
 });

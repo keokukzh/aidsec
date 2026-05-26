@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const repoRoot = new URL('..', import.meta.url);
@@ -20,7 +21,7 @@ function loadDotenv(pathname) {
   }
 }
 
-loadDotenv(new URL('.env.local', repoRoot).pathname);
+loadDotenv(fileURLToPath(new URL('.env.local', repoRoot)));
 
 const baseUrl = (process.env.BASE_URL || 'https://www.aidsec.ch').replace(/\/$/, '').replace('https://aidsec.ch', 'https://www.aidsec.ch');
 const runId = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
@@ -154,9 +155,9 @@ async function createCheckout(productSlug, billingPeriod) {
   }
 
   const token = signMagicToken(body.orderId, smokeEmail);
-  const status = await getJson(`${baseUrl}/api/order-status?orderId=${encodeURIComponent(body.orderId)}&token=${encodeURIComponent(token)}`);
-  if (!status.response.ok || status.body?.order?.paymentStatus !== 'unpaid') {
-    throw new Error(`${productSlug} persisted order check failed: ${status.response.status}`);
+  const stored = await redisGetJson(`order:${body.orderId}`);
+  if (!stored || stored.paymentStatus !== 'unpaid' || stored.stripeSessionId !== body.sessionId) {
+    throw new Error(`${productSlug} persisted order check failed`);
   }
 
   record(`checkout:${productSlug}`, true, {
@@ -200,9 +201,9 @@ async function completeCheckout(order) {
     throw new Error(`signed webhook failed: ${response.status}`);
   }
 
-  const status = await getJson(`${baseUrl}/api/order-status?orderId=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(order.token)}`);
-  if (!status.response.ok || status.body?.order?.paymentStatus !== 'paid') {
-    throw new Error(`post-webhook order status failed: ${status.response.status}`);
+  const stored = await redisGetJson(`order:${order.orderId}`);
+  if (!stored || stored.paymentStatus !== 'paid' || stored.status !== 'active') {
+    throw new Error('post-webhook Redis order status failed');
   }
 
   record('stripe:signed-webhook', true, {

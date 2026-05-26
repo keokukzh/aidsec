@@ -80,7 +80,7 @@
   "rewrites": [
     {
       "source": "/api/checkout/webhook",
-      "destination": "/api/checkout-webhook.js"
+      "destination": "/api/checkout-webhook"
     },
     {
       "source": "/api/checkout/(.*)",
@@ -88,7 +88,7 @@
     },
     {
       "source": "/api/plugin-webhook-relay/(.*)",
-      "destination": "/api/plugin-webhook-relay.js"
+      "destination": "/api/plugin-webhook-relay"
     },
     {
       "source": "/api/crm-lead-scoring",
