@@ -5,8 +5,31 @@ import { resolve } from 'path';
 function apiDevMiddleware() {
   const apiRoutes = {
     '/api/check-headers': '/api/check-headers.js',
+    '/api/checkout/webhook': '/api/checkout-webhook.js',
+    '/api/checkout': '/api/checkout.js',
+    '/api/order-status': '/api/order-status.js',
     '/api/proof-center-status': '/api/proof-center-status.js',
   };
+
+  function readRequestBody(nodeReq) {
+    return new Promise((resolve, reject) => {
+      const chunks = [];
+      nodeReq.on('data', (chunk) => chunks.push(chunk));
+      nodeReq.on('error', reject);
+      nodeReq.on('end', () => {
+        const raw = Buffer.concat(chunks).toString('utf8');
+        if (!raw) {
+          resolve(undefined);
+          return;
+        }
+        try {
+          resolve(JSON.parse(raw));
+        } catch (_) {
+          resolve(raw);
+        }
+      });
+    });
+  }
 
   function createMockResponse(nodeRes) {
     let responded = false;
@@ -52,6 +75,8 @@ function apiDevMiddleware() {
             method: nodeReq.method,
             query: query,
             headers: nodeReq.headers,
+            url: route,
+            body: await readRequestBody(nodeReq),
           };
 
           const mockRes = createMockResponse(nodeRes);

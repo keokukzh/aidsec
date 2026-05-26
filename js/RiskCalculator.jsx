@@ -12,7 +12,7 @@ const RiskCalculator = () => {
 
   // Constants based on Swiss industry averages (Sophos/BACS 2024 reports)
   const COST_PER_RECORD = 245; // CHF per compromised record
-  const FIX_FEE = 490; // Starting AidSec fee
+  const FIX_FEE = 790; // AidSec Kanzlei-Härtung — CHF 790 (FIXED: was 490)
 
   const totalRisk = dataRecords * COST_PER_RECORD;
   const potentialFine = Math.min(totalRisk * 0.1, 250000); // nDSG caps at 250k for individuals but practices face huge liability

@@ -75,5 +75,25 @@
       "destination": "/",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/checkout/webhook",
+      "destination": "/api/checkout-webhook.js"
+    },
+    {
+      "source": "/api/checkout/(.*)",
+      "destination": "/api/checkout.js"
+    },
+    {
+      "source": "/api/plugin-webhook-relay/(.*)",
+      "destination": "/api/plugin-webhook-relay.js"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/monitoring",
+      "schedule": "0 7 1 * *"
+    }
   ]
 }

@@ -1,226 +1,154 @@
 /**
  * AidSec Order Status API
- * Gibt den aktuellen Status einer Bestellung zurück
- * 
- * GET /api/order-status?orderId=ord_xxx
+ *
+ * GET is customer-facing and always requires a signed magic-link token.
+ * POST is internal/dev-only; checkout creates persistent orders directly.
  */
 
-import crypto from 'crypto';
+import { getEnvFirst, isProduction } from './lib/env.js';
+import { createOrder, getOrder } from './lib/order-store.js';
+import { generateMagicToken, verifyDemoMagicToken, verifyMagicToken } from './lib/order-token.js';
 
-// In-Memory Store (ersetzt durch Redis in Produktion)
-const orderStore = new Map();
+function formatTimeline(timeline = {}) {
+  return Object.entries(timeline).map(([key, value]) => ({ key, ...value }));
+}
 
-// Demo-Daten für Testing
-const demoOrders = {
-  'ord_demo_001': {
-    orderId: 'ord_demo_001',
-    customer: {
-      name: 'Dr. Max Muster',
-      company: 'Muster & Partner Rechtsanwälte',
-      email: 'm.muster@muster-kanzlei.ch'
-    },
-    website: {
-      url: 'https://muster-kanzlei.ch',
-      server: 'Apache (Cloudflare)',
-      package: 'Rapid Header Fix'
-    },
-    status: 'complete',
-    timeline: {
-      ordered: { time: '2026-04-10T12:00:00Z', label: 'Auftrag erteilt', step: 1 },
-      analysis: { time: '2026-04-10T12:05:00Z', label: 'Analyse abgeschlossen', step: 2 },
-      implementation: { time: '2026-04-10T12:30:00Z', label: 'Headers implementiert', step: 3 },
-      verification: { time: '2026-04-10T12:35:00Z', label: 'Verifizierung', step: 4 },
-      complete: { time: '2026-04-10T12:40:00Z', label: 'Abgeschlossen', step: 5 }
-    },
-    results: {
-      gradeBefore: 'F',
-      gradeAfter: 'A',
-      scoreBefore: 0,
-      scoreAfter: 6,
-      headersImproved: 6,
-      downtime: '0 Minuten'
-    },
-    reportUrl: null,
-    createdAt: '2026-04-10T12:00:00Z'
-  },
-  'ord_demo_002': {
-    orderId: 'ord_demo_002',
-    customer: {
-      name: 'Praxis Dr. Huber',
-      company: 'Allgemeinmedizin',
-      email: 'info@praxis-huber.ch'
-    },
-    website: {
-      url: 'https://praxis-huber.ch',
-      server: 'Nginx',
-      package: 'Kanzlei-Härtung'
-    },
-    status: 'active',
-    timeline: {
-      ordered: { time: '2026-04-10T11:00:00Z', label: 'Auftrag erteilt', step: 1 },
-      analysis: { time: '2026-04-10T11:10:00Z', label: 'Analyse abgeschlossen', step: 2 },
-      implementation: { time: null, label: 'Headers werden implementiert', step: 3 },
-      verification: { time: null, label: 'Verifizierung', step: 4 },
-      complete: { time: null, label: 'Abgeschlossen', step: 5 }
-    },
-    results: {
-      gradeBefore: 'F',
-      gradeAfter: null,
-      scoreBefore: 0,
-      scoreAfter: null
-    },
-    reportUrl: null,
-    createdAt: '2026-04-10T11:00:00Z'
-  }
-};
-
-// Order erstellen (würde normalerweise beim Kauf aufgerufen)
-function createOrder(data) {
-  const orderId = 'ord_' + crypto.randomBytes(8).toString('hex');
-  
-  const order = {
-    orderId,
-    customer: data.customer,
-    website: data.website,
-    package: data.package,
-    status: 'pending',
-    timeline: {
-      ordered: { time: new Date().toISOString(), label: 'Auftrag erteilt', step: 1 },
-      analysis: { time: null, label: 'Analyse läuft', step: 2 },
-      implementation: { time: null, label: 'Headers werden implementiert', step: 3 },
-      verification: { time: null, label: 'Verifizierung', step: 4 },
-      complete: { time: null, label: 'Abgeschlossen', step: 5 }
-    },
-    results: {
-      gradeBefore: null,
-      gradeAfter: null,
-      scoreBefore: null,
-      scoreAfter: null
-    },
-    reportUrl: null,
-    createdAt: new Date().toISOString()
+function publicOrder(order) {
+  return {
+    orderId: order.orderId,
+    status: order.status,
+    statusLabel:
+      {
+        pending_payment: 'Zahlung ausstehend',
+        pending: 'Ausstehend',
+        active: 'In Bearbeitung',
+        complete: 'Abgeschlossen',
+        expired: 'Abgelaufen',
+        error: 'Fehler',
+      }[order.status] || order.status,
+    website: order.website,
+    package: order.package || order.productSlug,
+    productSlug: order.productSlug,
+    billingPeriod: order.billingPeriod,
+    timeline: formatTimeline(order.timeline),
+    results: order.results,
+    reportUrl: order.reportUrl,
+    licenseId: order.licenseId || null,
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt,
   };
-  
-  orderStore.set(orderId, order);
-  return order;
 }
 
-// Order aktualisieren
-function updateOrder(orderId, updates) {
-  const order = orderStore.get(orderId);
-  if (!order) return null;
-  
-  Object.assign(order, updates);
-  order.updatedAt = new Date().toISOString();
-  
-  return order;
+function validateInternalPost(req) {
+  if (!isProduction()) return true;
+  const expected = getEnvFirst(['INTERNAL_API_SECRET']);
+  const provided = req.headers?.['x-aidsec-internal-secret'];
+  return !!expected && provided === expected;
 }
 
-// Order abrufen
-function getOrder(orderId) {
-  // Erst im Store suchen
-  let order = orderStore.get(orderId);
-  
-  // Dann in Demo-Daten
-  if (!order && demoOrders[orderId]) {
-    order = demoOrders[orderId];
-  }
-  
-  return order;
-}
-
-// Timeline für API-Response formatieren
-function formatTimeline(timeline) {
-  return Object.entries(timeline).map(([key, value]) => ({
-    key,
-    ...value
-  }));
-}
-
-// API Handler
 export default async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
 
   if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', getEnvFirst(['ALLOWED_ORIGIN']) || 'https://aidsec.ch');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-AidSec-Internal-Secret');
     return res.status(204).end();
   }
 
-  const { orderId } = req.query;
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
   if (req.method === 'GET') {
-    // Order Status abrufen
+    const { orderId, token, email } = req.query || {};
     if (!orderId) {
       return res.status(400).json({
         error: 'orderId Parameter erforderlich',
-        example: '/api/order-status?orderId=ord_demo_001'
+        hint: 'Nutzen Sie den Link aus Ihrer Bestaetigungs-E-Mail',
+      });
+    }
+    if (!token) {
+      return res.status(401).json({
+        error: 'Authentifizierung erforderlich',
+        hint: 'Bitte nutzen Sie den Link aus Ihrer Bestaetigungs-E-Mail',
       });
     }
 
-    const order = getOrder(orderId);
+    let authResult = verifyDemoMagicToken(token, email || null);
+    if (!authResult.valid) authResult = verifyMagicToken(token, email || null);
 
-    if (!order) {
-      return res.status(404).json({
-        error: 'Auftrag nicht gefunden',
-        orderId,
-        hint: 'Bitte überprüfen Sie die Auftrags-Nr.'
+    if (!authResult.valid) {
+      return res.status(401).json({
+        error: 'Ungueltiger oder abgelaufener Link',
+        reason: authResult.reason,
       });
     }
 
-    // Response formatieren
+    if (authResult.orderId !== orderId) {
+      return res.status(403).json({ error: 'Token und Auftrags-ID stimmen nicht ueberein' });
+    }
+
+    const order = await getOrder(orderId);
+    if (!order) return res.status(404).json({ error: 'Auftrag nicht gefunden', orderId });
+
     return res.status(200).json({
       success: true,
-      order: {
-        orderId: order.orderId,
-        customer: order.customer,
-        website: order.website,
-        package: order.package,
-        status: order.status,
-        statusLabel: {
-          pending: 'Ausstehend',
-          active: 'In Bearbeitung',
-          complete: 'Abgeschlossen',
-          error: 'Fehler'
-        }[order.status],
-        timeline: formatTimeline(order.timeline),
-        results: order.results,
-        reportUrl: order.reportUrl,
-        createdAt: order.createdAt
-      }
+      order: publicOrder(order),
+      _meta: {
+        checkedAt: new Date().toISOString(),
+        apiVersion: '3.0.0-magiclink-persistent',
+      },
     });
   }
 
-  if (req.method === 'POST') {
-    // Neue Order erstellen
-    try {
-      const data = req.body || {};
-      
-      if (!data.customer?.email || !data.website?.url || !data.package) {
-        return res.status(400).json({
-          error: 'Pflichtfelder fehlen',
-          required: ['customer.email', 'website.url', 'package']
-        });
-      }
-      
-      const order = createOrder(data);
-      
-      return res.status(201).json({
-        success: true,
-        order: {
-          orderId: order.orderId,
-          status: order.status,
-          message: 'Auftrag erfolgreich erstellt'
-        }
-      });
-    } catch (error) {
-      return res.status(500).json({
-        error: 'Fehler beim Erstellen des Auftrags'
-      });
-    }
+  if (!validateInternalPost(req)) {
+    return res.status(403).json({ error: 'Internal endpoint only' });
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  try {
+    const data = req.body || {};
+    const email = data.customer?.email || data.email;
+    const websiteUrl = data.website?.url || data.websiteUrl;
+    const productSlug = data.productSlug || data.package;
+
+    if (!email || !websiteUrl || !productSlug) {
+      return res.status(400).json({
+        error: 'Pflichtfelder fehlen',
+        required: ['customer.email', 'website.url', 'productSlug'],
+      });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Ungueltige E-Mail-Adresse' });
+    }
+
+    const order = await createOrder({
+      productSlug,
+      package: data.package,
+      customer: {
+        name: data.customer?.name || data.name || '',
+        email,
+        company: data.customer?.company || data.company || '',
+      },
+      website: { url: websiteUrl },
+      status: 'pending',
+    });
+    const token = generateMagicToken(order.orderId, email);
+    const magicLink = `${getEnvFirst(['BASE_URL']) || 'https://aidsec.ch'}/auftrag/${order.orderId}?token=${token}`;
+
+    return res.status(201).json({
+      success: true,
+      order: {
+        orderId: order.orderId,
+        status: order.status,
+        message: 'Auftrag erfolgreich erstellt',
+      },
+      ...(isProduction() ? {} : { _dev: { magicLink, token } }),
+    });
+  } catch (error) {
+    console.error('[order-status] Create order error:', error);
+    return res.status(500).json({ error: 'Fehler beim Erstellen des Auftrags' });
+  }
 }

@@ -1,3 +1,5 @@
+import { fetchWithSSRFProtection, validateTargetUrlForSSRF } from './lib/ssrf.js';
+
 const SECURITY_HEADERS = [
   { 
     key: 'strict-transport-security', 
@@ -165,6 +167,15 @@ export default async function handler(req, res) {
     });
   }
 
+  // ── SSRF Protection ──
+  var ssrfCheck = await validateTargetUrlForSSRF(url);
+  if (!ssrfCheck.safe) {
+    return res.status(403).json({
+      error: 'Diese URL ist aus Sicherheitsgründen nicht erlaubt: ' + ssrfCheck.reason,
+      code: 'SSRF_BLOCKED'
+    });
+  }
+
   try {
     var controller = new AbortController();
     var timeout = setTimeout(function () {
@@ -173,7 +184,6 @@ export default async function handler(req, res) {
 
     var fetchOpts = {
       signal: controller.signal,
-      redirect: 'follow',
       headers: {
         'User-Agent': 'AidSec-SecurityCheck/2.0 (+https://aidsec.ch)',
         'Accept': 'text/html,application/xhtml+xml'
@@ -185,9 +195,9 @@ export default async function handler(req, res) {
     var fetchError;
     
     try {
-      response = await fetch(url, Object.assign({ method: 'HEAD' }, fetchOpts));
+      response = await fetchWithSSRFProtection(url, Object.assign({ method: 'HEAD' }, fetchOpts));
       if (response.status === 405 || response.status === 501) {
-        response = await fetch(url, Object.assign({ method: 'GET' }, fetchOpts));
+        response = await fetchWithSSRFProtection(url, Object.assign({ method: 'GET' }, fetchOpts));
       }
     } catch (e) {
       fetchError = e.message;
@@ -254,6 +264,14 @@ export default async function handler(req, res) {
     return res.status(200).json(result);
 
   } catch (err) {
+    if (err.code === 'SSRF_BLOCKED') {
+      return res.status(403).json({
+        error: 'Diese URL ist aus Sicherheitsgruenden nicht erlaubt: ' + (err.message || 'Redirect blockiert'),
+        code: 'SSRF_BLOCKED',
+        url: url
+      });
+    }
+
     if (err.name === 'AbortError') {
       return res.status(504).json({
         error: 'Zielserver antwortet nicht rechtzeitig (Timeout nach 10s). Bitte versuchen Sie es später erneut.',
@@ -263,8 +281,8 @@ export default async function handler(req, res) {
     }
     
     return res.status(502).json({
-      error: 'Die Website konnte nicht erreicht werden: ' + (err.message || 'Unbekannter Fehler'),
-      code: 'FETCH_ERROR',
+        error: 'Die Website konnte nicht erreicht werden: ' + (err.message || 'Unbekannter Fehler'),
+        code: 'FETCH_ERROR',
       url: url
     });
   }

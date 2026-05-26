@@ -98,6 +98,21 @@
     'cyber-mandat': TWINT_QR_MANDAT,
   };
 
+  // ── Stripe Checkout Integration ──
+  var stripeCard = document.getElementById('stripe-card');
+  if (stripeCard) {
+    stripeCard.addEventListener('click', function () {
+      paymentCards.forEach(function (c) {
+        c.classList.remove('ob-payment-card--active');
+      });
+      stripeCard.classList.add('ob-payment-card--active');
+      selectedPayment = 'stripe';
+      if (paymentInput) paymentInput.value = 'stripe';
+      var submitBtn = document.getElementById('ob-submit');
+      if (submitBtn) submitBtn.disabled = false;
+    });
+  }
+
   /* ── DOM refs ──────────────────────────── */
   var steps = document.querySelectorAll('.ob-step');
   var dots = document.querySelectorAll('.ob-progress__dot');
@@ -298,7 +313,10 @@
       payload.packagePeriod = packagePeriod;
       payload.sourcePath = window.location.pathname;
 
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      if (
+        selectedPayment !== 'stripe' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ) {
         console.warn(
           'Onboarding-Mail wird lokal nicht versendet. Weiterleitung zur Bestätigungsseite wird simuliert.'
         );
@@ -308,6 +326,48 @@
         return;
       }
 
+      // ── Stripe Checkout Flow ──
+      if (selectedPayment === 'stripe') {
+        var checkoutPayload = {
+          productSlug: packageSlug,
+          name: payload.name,
+          email: payload.email,
+          company: payload.company,
+          websiteUrl: payload['website-url'],
+          accessOption: payload['access-option'],
+          accessNote: payload['access-note']
+        };
+
+        fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(checkoutPayload)
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              return response.json().then(function (d) {
+                throw new Error(d.error || 'Checkout-Fehler');
+              });
+            }
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.url) {
+              // Redirect to Stripe Checkout
+              window.location.href = data.url;
+            } else {
+              throw new Error('Keine Checkout-URL erhalten');
+            }
+          })
+          .catch(function (error) {
+            console.error('Checkout error:', error);
+            alert(error.message || 'Checkout konnte nicht gestartet werden. Bitte versuchen Sie es erneut.');
+            goToStep(currentStep);
+          });
+        return;
+      }
+
+      // ── TWINT / Rechnung Flow (original) ──
       fetch('/api/onboarding-submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

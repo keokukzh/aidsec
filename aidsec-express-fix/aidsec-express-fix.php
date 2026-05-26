@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AidSec Express Fix
  * Description: Injiziert sichere HTTP-Headers (HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) und meldet den Erfolg an AidSec.
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: AidSec
  * Author URI: https://aidsec.ch
  * License: GPL2
@@ -15,8 +15,9 @@ if (!defined('ABSPATH')) {
 }
 
 // Konfiguration
-define('AIDSEC_VERSION', '2.0.0');
-define('AIDSEC_WEBHOOK_URL', 'https://hook.eu1.make.com/h6sbfnewo9cf03j3lk8umcyxnlkabk8c');
+define('AIDSEC_VERSION', '2.1.0');
+define('AIDSEC_TOKEN_VERSION', 1);
+define('AIDSEC_WEBHOOK_URL', 'https://aidsec.ch/api/plugin-webhook-relay'); // SECURE relay
 define('AIDSEC_API_ENDPOINT', 'https://aidsec.ch/api/check-headers');
 
 // ============================================================
@@ -137,18 +138,35 @@ function aidsec_verify_headers_after_activation() {
 // ============================================================
 // 4. WEBHOOK BEI AKTIVIERUNG
 // ============================================================
+function aidsec_get_license_id() {
+    return trim((string) get_option('aidsec_license_id', ''));
+}
+
+function aidsec_get_install_secret() {
+    return trim((string) get_option('aidsec_install_secret', ''));
+}
+
 register_activation_hook(__FILE__, 'aidsec_activation_webhook');
 function aidsec_activation_webhook() {
     $webhook_url = AIDSEC_WEBHOOK_URL;
-    
+    $license_id = aidsec_get_license_id();
+    $install_secret = aidsec_get_install_secret();
+
+    if (!$license_id || !$install_secret) {
+        set_transient('aidsec_activation_error', 'Bitte AidSec Lizenz-ID und Installationssecret unter Einstellungen > AidSec Express Fix hinterlegen.', 120);
+        return false;
+    }
+
     $site_url = get_site_url();
     $admin_email = get_option('admin_email');
     $site_name = get_bloginfo('name');
     $server = aidsec_detect_server();
-    
-    $body = json_encode([
+
+    $payload = [
         'event' => 'plugin_activated',
         'plugin_version' => AIDSEC_VERSION,
+        'tokenVersion' => AIDSEC_TOKEN_VERSION,
+        'licenseId' => $license_id,
         'site_url' => $site_url,
         'site_name' => $site_name,
         'admin_email' => $admin_email,
@@ -157,29 +175,90 @@ function aidsec_activation_webhook() {
         'cloudflare' => $server['cloudflare'],
         'timestamp' => current_time('mysql'),
         'aidsec_version' => AIDSEC_VERSION
-    ], JSON_UNESCAPED_UNICODE);
-    
+    ];
+
+    $body = json_encode($payload, JSON_UNESCAPED_UNICODE);
+
+    // ── SECURE: HMAC-SHA256 Signing ──
+    $ts = time();
+    $sig_payload = $body . $ts;
+    $sig = base64_encode(hash_hmac('sha256', $sig_payload, $install_secret, true));
+
     $response = wp_remote_post($webhook_url, [
         'method' => 'POST',
         'headers' => [
             'Content-Type' => 'application/json',
-            'X-AidSec-Auth' => 'express-fix-v2',
-            'X-AidSec-Version' => AIDSEC_VERSION
+            'X-AidSec-Sig' => $sig,
+            'X-AidSec-Ts' => (string)$ts,
+            'X-AidSec-Version' => AIDSEC_VERSION,
+            'X-AidSec-TokenV' => (string)AIDSEC_TOKEN_VERSION
         ],
         'body' => $body,
         'blocking' => false
     ]);
-    
+
     // Erfolgsmeldung setzen
     set_transient('aidsec_activation_success', true, 60);
     set_transient('aidsec_server_type', $server['detected'], 60);
-    
+
     return $response;
 }
 
 // ============================================================
 // 5. ADMIN NOTICE
 // ============================================================
+add_action('admin_menu', 'aidsec_register_settings_page');
+add_action('admin_init', 'aidsec_register_settings');
+
+function aidsec_register_settings_page() {
+    add_options_page(
+        'AidSec Express Fix',
+        'AidSec Express Fix',
+        'manage_options',
+        'aidsec-express-fix',
+        'aidsec_render_settings_page'
+    );
+}
+
+function aidsec_register_settings() {
+    register_setting('aidsec_express_fix', 'aidsec_license_id', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => ''
+    ]);
+    register_setting('aidsec_express_fix', 'aidsec_install_secret', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => ''
+    ]);
+}
+
+function aidsec_render_settings_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    ?>
+    <div class="wrap">
+        <h1>AidSec Express Fix</h1>
+        <p>Hinterlegen Sie die Lizenzdaten aus Ihrer AidSec-Bestellbestätigung. Diese Werte werden für signierte Statusmeldungen an AidSec verwendet.</p>
+        <form action="options.php" method="post">
+            <?php settings_fields('aidsec_express_fix'); ?>
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row"><label for="aidsec_license_id">Lizenz-ID</label></th>
+                    <td><input name="aidsec_license_id" id="aidsec_license_id" type="text" class="regular-text" value="<?php echo esc_attr(aidsec_get_license_id()); ?>" autocomplete="off"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="aidsec_install_secret">Installationssecret</label></th>
+                    <td><input name="aidsec_install_secret" id="aidsec_install_secret" type="password" class="regular-text" value="<?php echo esc_attr(aidsec_get_install_secret()); ?>" autocomplete="off"></td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
 add_action('admin_notices', 'aidsec_admin_notice');
 function aidsec_admin_notice() {
     // Erfolgreiche Aktivierung

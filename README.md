@@ -66,6 +66,28 @@ Durable rate-limiting for deployed environments:
 - `UPSTASH_REDIS_REST_URL`
 - `UPSTASH_REDIS_REST_TOKEN`
 
+P0 production hardening also requires:
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_PRICE_RAPID`
+- `STRIPE_PRICE_HAERTUNG`
+- `STRIPE_PRICE_MANDAT_MONTHLY`
+- `STRIPE_PRICE_MANDAT_YEARLY` (optional)
+- `ORDER_TOKEN_SECRET`
+- `PLUGIN_TOKEN_VERSION`
+- `PLUGIN_MAKE_WEBHOOK_URL`
+- `R2_ACCOUNT_ID`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_BUCKET`
+- `CRON_SECRET`
+- `INTERNAL_API_SECRET`
+- `BASE_URL`
+- `ALLOWED_ORIGIN`
+
+Plugin install secrets are generated per order/license and stored in Upstash. Do not configure or ship a global plugin shared secret.
+
 Local development and Vercel Preview may fall back to in-memory rate limiting. Production remains strict and returns `503` if Upstash is unavailable.
 
 Allowed origins for form endpoints include the primary domain, localhost dev origins, and the current Vercel deployment URL via `VERCEL_URL`. Custom allowlists from `ONBOARDING_ALLOWED_ORIGINS` or `CONTACT_ALLOWED_ORIGINS` are merged on top.
