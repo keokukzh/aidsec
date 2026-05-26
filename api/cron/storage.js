@@ -108,20 +108,26 @@ class S3Storage {
   constructor(config) {
     this.config = config;
     this.bucket = config.bucket;
+    this.client = null;
+  }
+
+  getClient() {
+    if (this.client) return this.client;
     this.client = new S3Client({
-      region: config.region,
-      endpoint: config.endpoint,
+      region: this.config.region,
+      endpoint: this.config.endpoint,
       credentials: {
-        accessKeyId: config.accessKeyId,
-        secretAccessKey: config.secretAccessKey,
+        accessKeyId: this.config.accessKeyId,
+        secretAccessKey: this.config.secretAccessKey,
       },
       forcePathStyle: true,
     });
+    return this.client;
   }
 
   async putJson(key, data) {
     const body = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-    await this.client.send(
+    await this.getClient().send(
       new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
@@ -134,7 +140,7 @@ class S3Storage {
 
   async getJson(key) {
     try {
-      const result = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
+      const result = await this.getClient().send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
       const body = await result.Body.transformToString();
       return JSON.parse(body);
     } catch (error) {
@@ -144,7 +150,7 @@ class S3Storage {
   }
 
   async list(prefix = '') {
-    const result = await this.client.send(
+    const result = await this.getClient().send(
       new ListObjectsV2Command({
         Bucket: this.bucket,
         Prefix: prefix,
