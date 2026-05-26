@@ -93,6 +93,10 @@
     {
       "source": "/api/crm-lead-scoring",
       "destination": "/api/crm-lead-scoring.js"
+    },
+    {
+      "source": "/api/admin/crm-lookup",
+      "destination": "/api/admin/crm-lookup.js"
     }
   ],
   "crons": [

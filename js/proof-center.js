@@ -94,6 +94,86 @@
       cta.href = '/leistungen/cyber-mandat.html';
       cta.textContent = 'Schutzstatus ansehen';
     }
+
+    var extSection = document.getElementById('pc-portal-extensions');
+    if (extSection) extSection.style.display = 'block';
+
+    var trendList = document.getElementById('pc-trend-list');
+    if (trendList && Array.isArray(portal.monitoringHistory)) {
+      trendList.innerHTML = '';
+      if (portal.monitoringHistory.length === 0) {
+        trendList.innerHTML = '<div style="color: var(--gray-500); padding: 12px; font-style: italic;">Noch keine Scans durchgeführt.</div>';
+      } else {
+        portal.monitoringHistory.forEach(function (entry) {
+          var date = new Date(entry.checkedAt).toLocaleDateString('de-CH', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          var gradeClass = 'trend-grade--' + String(entry.grade || 'f').toLowerCase();
+          
+          var item = document.createElement('div');
+          item.className = 'trend-item';
+          item.innerHTML = 
+            '<span class="trend-date">' + date + '</span>' +
+            '<div class="trend-meta">' +
+              (entry.score !== null && entry.score !== undefined ? '<span class="trend-score">Score: ' + entry.score + '/6</span>' : '') +
+              '<span class="trend-grade ' + gradeClass + '">' + (entry.grade || 'F') + '</span>' +
+            '</div>';
+          trendList.appendChild(item);
+        });
+      }
+    }
+
+    var eventTimeline = document.getElementById('pc-event-timeline');
+    if (eventTimeline && Array.isArray(portal.events)) {
+      eventTimeline.innerHTML = '';
+      if (portal.events.length === 0) {
+        eventTimeline.innerHTML = '<div style="color: var(--gray-500); padding: 12px; font-style: italic;">Noch keine Ereignisse erfasst.</div>';
+      } else {
+        portal.events.forEach(function (evt) {
+          var date = new Date(evt.createdAt).toLocaleString('de-CH', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          var title = evt.type;
+          var desc = '';
+          if (evt.type === 'checkout.session.completed') {
+            title = 'Zahlung erhalten & Schutz aktiv';
+            desc = 'Die Bezahlung wurde erfolgreich per Stripe abgewickelt und das Kundenportal initiiert.';
+          } else if (evt.type === 'monitoring.completed') {
+            title = 'Laufendes Audit abgeschlossen';
+            desc = 'Security-Audit der Website wurde erfolgreich abgeschlossen. Note: ' + (evt.payload?.grade || 'A');
+          } else if (evt.type === 'email.payment_confirmation') {
+            title = 'Bestätigungs-E-Mail versendet';
+            desc = 'Zahlungsbestätigung wurde an den Kunden zugestellt.';
+          } else if (evt.type === 'email.delivery') {
+            title = 'Liefer-E-Mail versendet';
+            desc = 'Kundenportal-Zugangslink und Installationsanleitung wurden versendet.';
+          } else if (evt.type.startsWith('email.delivery_failed')) {
+            title = 'E-Mail-Versand fehlgeschlagen';
+            desc = evt.payload?.message || '';
+          }
+          
+          var item = document.createElement('div');
+          item.className = 'event-item';
+          item.innerHTML = 
+            '<div class="event-icon"></div>' +
+            '<div class="event-content">' +
+              '<span class="event-title">' + title + '</span>' +
+              '<span class="event-time">' + date + '</span>' +
+              (desc ? '<span class="event-desc">' + desc + '</span>' : '') +
+            '</div>';
+          eventTimeline.appendChild(item);
+        });
+      }
+    }
   }
 
   var params = new URLSearchParams(window.location.search);

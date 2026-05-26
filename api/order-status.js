@@ -6,7 +6,7 @@
  */
 
 import { getEnvFirst, isProduction } from './lib/env.js';
-import { createOrder, getOrder } from './lib/order-store.js';
+import { createOrder, getOrder, upsertCustomerForOrder } from './lib/order-store.js';
 import { generateMagicToken, verifyDemoMagicToken, verifyMagicToken } from './lib/order-token.js';
 import { sendMagicLinkEmail } from './lib/mailer.js';
 
@@ -124,8 +124,13 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Token und Auftrags-ID stimmen nicht ueberein' });
     }
 
-    const order = await getOrder(orderId);
+    let order = await getOrder(orderId);
     if (!order) return res.status(404).json({ error: 'Auftrag nicht gefunden', orderId });
+
+    if (order.paymentStatus === 'paid' && !order.customerId && order.customer?.email) {
+      await upsertCustomerForOrder(order);
+      order = await getOrder(orderId);
+    }
 
     return res.status(200).json({
       success: true,

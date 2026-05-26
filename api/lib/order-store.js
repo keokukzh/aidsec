@@ -346,11 +346,16 @@ export async function getCustomerPortalByOrderId(orderId) {
   const order = await getOrder(orderId);
   if (!order) return null;
 
-  const customer = order.customerId
-    ? getEnvFirst(['UPSTASH_REDIS_REST_URL'])
+  let customer = null;
+  if (order.customerId) {
+    customer = getEnvFirst(['UPSTASH_REDIS_REST_URL'])
       ? await redisGetJson(`customer:${order.customerId}`)
-      : localCustomers.get(order.customerId)
-    : await upsertCustomerForOrder(order);
+      : localCustomers.get(order.customerId);
+  }
+
+  if (!customer) {
+    customer = await upsertCustomerForOrder(order);
+  }
 
   if (!customer) return null;
   const orders = (await Promise.all((customer.orderIds || []).map((id) => getOrder(id)))).filter(Boolean);
@@ -578,6 +583,19 @@ export async function getLicense(licenseId) {
   return localLicenses.get(licenseId) || null;
 }
 
+export async function getCustomer(customerId) {
+  if (!customerId) return null;
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) return redisGetJson(`customer:${customerId}`);
+  return localCustomers.get(customerId) || null;
+}
+
+export async function getCustomerIdByEmail(email) {
+  if (!email) return null;
+  const normalized = email.trim().toLowerCase();
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) return upstashCommand(['GET', `customer-email:${normalized}`]);
+  return localCustomerEmailIndex.get(normalized) || null;
+}
+
 export const orderStore = {
   createOrder,
   getOrder,
@@ -593,4 +611,6 @@ export const orderStore = {
   listCustomerMonitoringTargets,
   getWebsiteRecordByUrl,
   getReportRecord,
+  getCustomer,
+  getCustomerIdByEmail,
 };

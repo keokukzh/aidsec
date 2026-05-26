@@ -766,3 +766,111 @@ test('proof center returns chronological report and monitoring history', async (
   assert.equal(res.body.portal.monitoringHistory[1].score, 4);
   assert.equal(res.body.portal.monitoringHistory[0].websiteUrl, 'https://history.example.ch');
 });
+
+test('order-status lazily migrates legacy paid orders on access', async () => {
+  const previousSecret = process.env.ORDER_TOKEN_SECRET;
+  process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';
+  
+  const { createOrder, getOrder, getCustomerPortalByOrderId } = await import('../api/lib/order-store.js');
+  const { generateMagicToken } = await import('../api/lib/order-token.js');
+  const { default: handler } = await import('../api/order-status.js?lazy-migration-test');
+
+  const order = await createOrder({
+    productSlug: 'kanzlei-haertung',
+    customer: { name: 'Legacy Migrant', email: 'legacy@example.ch', company: 'Legacy GmbH' },
+    website: { url: 'https://legacy.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+
+  assert.equal(order.customerId, null);
+
+  const token = generateMagicToken(order.orderId, 'legacy@example.ch');
+  const res = createResponse();
+
+  await handler(
+    {
+      method: 'GET',
+      headers: {},
+      query: {
+        orderId: order.orderId,
+        token: token,
+      },
+    },
+    res,
+  );
+
+  process.env.ORDER_TOKEN_SECRET = previousSecret;
+
+  assert.equal(res.statusCode, 200);
+  
+  const reloaded = await getOrder(order.orderId);
+  assert.match(reloaded.customerId, /^cus_/);
+
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+  assert.equal(portal.customer.email, 'legacy@example.ch');
+  assert.equal(portal.websites[0].url, 'https://legacy.example.ch');
+});
+
+test('crm-lookup API requires internal secret and returns customer details by email/website/orderId', async () => {
+  const previousSecret = process.env.INTERNAL_API_SECRET;
+  const previousOrderSecret = process.env.ORDER_TOKEN_SECRET;
+  const previousVercelEnv = process.env.VERCEL_ENV;
+  process.env.INTERNAL_API_SECRET = 'crm-secret-token';
+  process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';
+
+  const { createOrder, upsertCustomerForOrder } = await import('../api/lib/order-store.js');
+  const { default: handler } = await import('../api/admin/crm-lookup.js');
+
+  const order = await createOrder({
+    productSlug: 'rapid-header-fix',
+    customer: { name: 'CRM Query User', email: 'crmquery@example.ch', company: 'CRM Query AG' },
+    website: { url: 'https://crmquery.example.ch' },
+    status: 'complete',
+    paymentStatus: 'paid',
+  });
+  await upsertCustomerForOrder(order);
+
+  // Set VERCEL_ENV to production to force secret checks in validateInternalRequest
+  process.env.VERCEL_ENV = 'production';
+
+  const res1 = createResponse();
+  await handler({ method: 'GET', headers: {}, query: { email: 'crmquery@example.ch' } }, res1);
+  assert.equal(res1.statusCode, 401);
+
+  const res2 = createResponse();
+  await handler({
+    method: 'GET',
+    headers: { 'x-aidsec-internal-secret': 'crm-secret-token' },
+    query: { email: 'crmquery@example.ch' }
+  }, res2);
+  assert.equal(res2.statusCode, 200);
+  assert.equal(res2.body.customer.email, 'crmquery@example.ch');
+  assert.match(res2.body.portalLinks[0].portalUrl, /proof-center\.html/);
+
+  const res3 = createResponse();
+  await handler({
+    method: 'GET',
+    headers: { 'x-aidsec-internal-secret': 'crm-secret-token' },
+    query: { website: 'https://crmquery.example.ch' }
+  }, res3);
+  assert.equal(res3.statusCode, 200);
+  assert.equal(res3.body.customer.email, 'crmquery@example.ch');
+
+  const res4 = createResponse();
+  await handler({
+    method: 'GET',
+    headers: { 'x-aidsec-internal-secret': 'crm-secret-token' },
+    query: { orderId: order.orderId }
+  }, res4);
+  assert.equal(res4.statusCode, 200);
+  assert.equal(res4.body.customer.email, 'crmquery@example.ch');
+
+  process.env.INTERNAL_API_SECRET = previousSecret;
+  process.env.ORDER_TOKEN_SECRET = previousOrderSecret;
+  if (previousVercelEnv === undefined) {
+    delete process.env.VERCEL_ENV;
+  } else {
+    process.env.VERCEL_ENV = previousVercelEnv;
+  }
+});

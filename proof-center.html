@@ -19,6 +19,144 @@
 
     <link rel="icon" type="image/webp" href="/logowhite.png" />
     <script src="/js/consent.js"></script>
+    <style>
+      .portal-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+        margin-top: var(--space-8);
+      }
+      @media (max-width: 768px) {
+        .portal-grid {
+          grid-template-columns: 1fr;
+          gap: var(--space-6);
+        }
+      }
+      .portal-card {
+        background: var(--navy-deep);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-xl);
+        padding: var(--space-6);
+        box-shadow: var(--shadow-xl);
+        height: 100%;
+      }
+      .portal-card__title {
+        font-family: var(--font-display);
+        font-size: var(--text-xl);
+        color: var(--white);
+        margin-bottom: var(--space-4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: var(--space-2);
+      }
+      .trend-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .trend-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-3) var(--space-4);
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: var(--radius-lg);
+      }
+      .trend-date {
+        color: var(--gray-400);
+        font-size: var(--text-sm);
+      }
+      .trend-meta {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+      }
+      .trend-score {
+        font-family: monospace;
+        font-size: var(--text-xs);
+        color: var(--gray-500);
+      }
+      .trend-grade {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-md);
+        font-weight: 700;
+        font-size: var(--text-sm);
+      }
+      .trend-grade--a {
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--green-safe);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+      .trend-grade--b, .trend-grade--c, .trend-grade--d {
+        background: rgba(200, 168, 76, 0.15);
+        color: var(--gold);
+        border: 1px solid rgba(200, 168, 76, 0.3);
+      }
+      .trend-grade--e, .trend-grade--f {
+        background: rgba(239, 68, 68, 0.15);
+        color: var(--red-danger);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .event-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: var(--space-2);
+      }
+      .event-timeline::-webkit-scrollbar {
+        width: 4px;
+      }
+      .event-timeline::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: var(--radius-full);
+      }
+      .event-item {
+        display: flex;
+        gap: var(--space-3);
+        position: relative;
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .event-item:last-child {
+        border-bottom: none;
+      }
+      .event-icon {
+        width: 12px;
+        height: 12px;
+        border-radius: var(--radius-full);
+        background: var(--gold);
+        margin-top: 4px;
+        flex-shrink: 0;
+        box-shadow: 0 0 8px var(--gold);
+      }
+      .event-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .event-title {
+        font-weight: 600;
+        font-size: var(--text-sm);
+        color: var(--white);
+      }
+      .event-time {
+        font-size: var(--text-xs);
+        color: var(--gray-500);
+      }
+      .event-desc {
+        font-size: var(--text-xs);
+        color: var(--gray-400);
+        line-height: 1.4;
+      }
+    </style>
   </head>
   <body>
     <header class="nav" id="nav" role="banner">
@@ -205,6 +343,38 @@
                   <span class="trust-badges__link-grade">PDF</span>
                   <span class="trust-badges__link-label">Executive-Report</span>
                 </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Monitoring History Trend & Activity Log (Authenticated Portal only) -->
+      <section class="section section--alt" id="pc-portal-extensions" style="display: none;">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2>Laufender Betrieb &amp; Nachweis-Historie</h2>
+            <p>Echtzeit-Scans und dokumentierte Ereignisse für Ihr nDSG-Compliance-Audit.</p>
+          </div>
+
+          <div class="portal-grid">
+            <!-- Left Column: Trend / History -->
+            <div class="portal-col portal-col--left">
+              <div class="portal-card">
+                <h3 class="portal-card__title">Monitoring-Trend (Letzte Scans)</h3>
+                <div class="trend-list" id="pc-trend-list">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Activity Journal -->
+            <div class="portal-col portal-col--right">
+              <div class="portal-card">
+                <h3 class="portal-card__title">Ereignis-Journal</h3>
+                <div class="event-timeline" id="pc-event-timeline">
+                  <!-- Injected via JS -->
+                </div>
               </div>
             </div>
           </div>
