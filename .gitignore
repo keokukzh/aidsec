@@ -18,3 +18,4 @@ scripts/reorder-sections.py
 scripts/verify.py
 htmlhint*.txt
 htmlhint*.json
+.env*

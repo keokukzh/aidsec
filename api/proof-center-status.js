@@ -1,10 +1,17 @@
+/**
+ * AidSec Proof Center Status API
+ * Returns demo data for public visitors, customer portal data for authenticated users
+ *
+ * GET /api/proof-center-status (public demo)
+ * GET /api/proof-center-status?orderId=<id>&token=<token> (authenticated portal)
+ */
+
 import { storage } from './cron/storage.js';
 import { getCustomerPortalByOrderId } from './lib/order-store.js';
+import { computeLeadScore } from './crm-lead-scoring.js';
 import { verifyMagicToken } from './lib/order-token.js';
 
 async function loadSiteData() {
-  // In Vercel: fetch from the same origin (git-tracked static file)
-  // In local dev: fetch from localhost
   const baseUrl = process.env.BASE_URL || (process.env.NODE_ENV === 'production'
     ? 'https://aidsec.ch'
     : 'http://localhost:5173');
@@ -74,10 +81,25 @@ export default async function handler(req, res) {
       }
       const portal = await getCustomerPortalByOrderId(orderId);
       if (!portal) return res.status(404).json({ error: 'Kundenportal nicht gefunden' });
+
+      // Compute CRM lead score
+      var firstOrder = portal.orders && portal.orders[0];
+      var monitoringGrade = null;
+      if (firstOrder && firstOrder.monitoring && firstOrder.monitoring.grade) {
+        monitoringGrade = firstOrder.monitoring.grade;
+      }
+      var ls = computeLeadScore(firstOrder, monitoringGrade);
+
+      var enhancedPortal = await withSignedReportUrls({
+        ...portal,
+        leadScore: { score: ls.score, level: ls.score >= 75 ? 'hoch' : ls.score >= 50 ? 'mittel' : 'niedrig' },
+        upsellRecommendation: ls.upsells && ls.upsells[0] ? ls.upsells[0].reason : null,
+      });
+
       return res.status(200).json({
         success: true,
         updatedAt: new Date().toISOString(),
-        portal: await withSignedReportUrls(portal),
+        portal: enhancedPortal,
       });
     }
 
