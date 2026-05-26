@@ -158,6 +158,39 @@ test('storage exposes JSON and signed URL methods and rejects unconfigured produ
   process.env.NODE_ENV = previousNodeEnv;
 });
 
+test('storage signs R2 read URLs without SDK presigner dependencies', async () => {
+  const previous = {
+    NODE_ENV: process.env.NODE_ENV,
+    R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
+    R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
+    R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
+    R2_BUCKET: process.env.R2_BUCKET,
+  };
+  process.env.NODE_ENV = 'production';
+  process.env.R2_ACCOUNT_ID = 'test-account';
+  process.env.R2_ACCESS_KEY_ID = 'test-access-key';
+  process.env.R2_SECRET_ACCESS_KEY = 'test-secret-key';
+  process.env.R2_BUCKET = 'aidsec-test-bucket';
+
+  const { storage } = await import('../api/cron/storage.js?test=r2-signed-url');
+  const signedUrl = await storage.createSignedReadUrl('reports/orders/report with space.json', 900);
+  const parsed = new URL(signedUrl);
+
+  Object.entries(previous).forEach(([key, value]) => {
+    if (typeof value === 'undefined') {
+      delete process.env[key];
+    } else {
+      process.env[key] = value;
+    }
+  });
+  assert.equal(parsed.hostname, 'test-account.r2.cloudflarestorage.com');
+  assert.equal(parsed.searchParams.get('X-Amz-Algorithm'), 'AWS4-HMAC-SHA256');
+  assert.equal(parsed.searchParams.get('X-Amz-SignedHeaders'), 'host');
+  assert.equal(parsed.searchParams.get('X-Amz-Expires'), '900');
+  assert.match(parsed.pathname, /\/aidsec-test-bucket\/reports\/orders\/report%20with%20space\.json$/);
+  assert.match(parsed.searchParams.get('X-Amz-Signature'), /^[a-f0-9]{64}$/);
+});
+
 test('plugin relay requires licenseId even when HMAC signature is valid', async () => {
   const previousSecret = process.env.PLUGIN_SHARED_SECRET;
   const previousFetch = global.fetch;
