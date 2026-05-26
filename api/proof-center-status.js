@@ -1,9 +1,6 @@
-/**
- * AidSec Proof Center Status API
- * Returns proof center data from site-data.json
- *
- * Uses fetch instead of fs to work in Vercel Edge runtime.
- */
+import { storage } from './cron/storage.js';
+import { getCustomerPortalByOrderId } from './lib/order-store.js';
+import { verifyMagicToken } from './lib/order-token.js';
 
 async function loadSiteData() {
   // In Vercel: fetch from the same origin (git-tracked static file)
@@ -23,10 +20,39 @@ async function loadSiteData() {
   return response.json();
 }
 
+async function withSignedReportUrls(portal) {
+  const reports = await Promise.all(
+    (portal.reports || []).map(async (report) => {
+      if (!report.key) return report;
+      try {
+        return {
+          ...report,
+          url: await storage.createSignedReadUrl(report.key, 60 * 60),
+          expiresInSeconds: 60 * 60,
+        };
+      } catch (_) {
+        return {
+          ...report,
+          url: report.url || `/reports/${report.key}`,
+        };
+      }
+    }),
+  );
+  return { ...portal, reports };
+}
+
+function publicDemoResponse(siteData) {
+  return {
+    updatedAt: siteData.updatedAt,
+    packages: siteData.packages,
+    proofCenter: siteData.proofCenter,
+  };
+}
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || 'https://aidsec.ch');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
@@ -37,12 +63,26 @@ export default async function handler(req, res) {
   }
 
   try {
+    const { orderId, token } = req.query || {};
+    if (orderId || token) {
+      if (!orderId || !token) {
+        return res.status(401).json({ error: 'Proof Center Link unvollstaendig' });
+      }
+      const authResult = verifyMagicToken(token);
+      if (!authResult.valid || authResult.orderId !== orderId) {
+        return res.status(401).json({ error: 'Ungueltiger oder abgelaufener Proof Center Link' });
+      }
+      const portal = await getCustomerPortalByOrderId(orderId);
+      if (!portal) return res.status(404).json({ error: 'Kundenportal nicht gefunden' });
+      return res.status(200).json({
+        success: true,
+        updatedAt: new Date().toISOString(),
+        portal: await withSignedReportUrls(portal),
+      });
+    }
+
     const siteData = await loadSiteData();
-    return res.status(200).json({
-      updatedAt: siteData.updatedAt,
-      packages: siteData.packages,
-      proofCenter: siteData.proofCenter,
-    });
+    return res.status(200).json(publicDemoResponse(siteData));
   } catch (_) {
     return res.status(500).json({
       error: 'Proof-Center-Daten konnten nicht geladen werden.',

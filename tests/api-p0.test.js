@@ -181,3 +181,67 @@ test('plugin relay requires licenseId even when HMAC signature is valid', async 
   global.fetch = previousFetch;
   assert.equal(res.statusCode, 400);
 });
+
+test('checkout webhook creates a customer portal backbone after paid checkout', async () => {
+  const { createOrder, getCustomerPortalByOrderId } = await import('../api/lib/order-store.js');
+  const { handleStripeEvent } = await import('../api/checkout-webhook.js');
+  const order = await createOrder({
+    productSlug: 'cyber-mandat',
+    billingPeriod: 'monthly',
+    customer: { name: 'Dr. Portal', email: 'portal@example.ch', company: 'Portal AG' },
+    website: { url: 'https://portal.example.ch' },
+    status: 'pending_payment',
+    paymentStatus: 'unpaid',
+  });
+
+  const result = await handleStripeEvent({
+    id: `evt_${order.orderId}`,
+    type: 'checkout.session.completed',
+    data: {
+      object: {
+        id: `cs_${order.orderId}`,
+        customer: 'cus_stripe',
+        subscription: 'sub_stripe',
+        payment_status: 'paid',
+        metadata: { orderId: order.orderId },
+      },
+    },
+  });
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+
+  assert.equal(result.handled, true);
+  assert.equal(portal.customer.email, 'portal@example.ch');
+  assert.equal(portal.orders[0].orderId, order.orderId);
+  assert.equal(portal.websites[0].url, 'https://portal.example.ch');
+  assert.equal(portal.websites[0].productSlug, 'cyber-mandat');
+  assert.equal(portal.events.some((event) => event.type === 'checkout.session.completed'), true);
+});
+
+test('proof center returns authenticated customer portal data with signed report links', async () => {
+  const previousSecret = process.env.ORDER_TOKEN_SECRET;
+  process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';
+  const { createOrder, updateOrder, upsertCustomerForOrder } = await import('../api/lib/order-store.js');
+  const { generateMagicToken } = await import('../api/lib/order-token.js');
+  const { default: handler } = await import('../api/proof-center-status.js');
+  const order = await createOrder({
+    productSlug: 'rapid-header-fix',
+    customer: { name: 'Report User', email: 'report@example.ch', company: 'Report AG' },
+    website: { url: 'https://report.example.ch' },
+    status: 'complete',
+    paymentStatus: 'paid',
+    reportKey: 'reports/orders/report-test.json',
+  });
+  const updatedOrder = await updateOrder(order.orderId, { reportKey: 'reports/orders/report-test.json' });
+  await upsertCustomerForOrder(updatedOrder);
+  const token = generateMagicToken(order.orderId, 'report@example.ch');
+  const res = createResponse();
+
+  await handler({ method: 'GET', headers: {}, query: { orderId: order.orderId, token } }, res);
+
+  process.env.ORDER_TOKEN_SECRET = previousSecret;
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.success, true);
+  assert.equal(res.body.portal.customer.email, 'report@example.ch');
+  assert.equal(res.body.portal.reports[0].orderId, order.orderId);
+  assert.match(res.body.portal.reports[0].url, /reports\/orders\/report-test\.json|report-test/);
+});

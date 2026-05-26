@@ -5,6 +5,10 @@ const localOrders = new Map();
 const localSessionIndex = new Map();
 const localEvents = new Set();
 const localLicenses = new Map();
+const localCustomers = new Map();
+const localCustomerEmailIndex = new Map();
+const localWebsiteIndex = new Map();
+const localOrderEvents = new Map();
 
 export function generateOrderId() {
   return `ord_${crypto.randomBytes(8).toString('hex')}`;
@@ -16,6 +20,27 @@ export function generateLicenseId() {
 
 export function generateInstallSecret() {
   return crypto.randomBytes(32).toString('base64url');
+}
+
+function normalizeEmail(email = '') {
+  return String(email).trim().toLowerCase();
+}
+
+function normalizeWebsiteUrl(url = '') {
+  const raw = String(url).trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
+    parsed.hash = '';
+    parsed.search = '';
+    return parsed.toString().replace(/\/$/, '');
+  } catch (_) {
+    return raw.replace(/\/$/, '');
+  }
+}
+
+function customerIdForEmail(email) {
+  return `cus_${crypto.createHash('sha256').update(normalizeEmail(email)).digest('hex').slice(0, 16)}`;
 }
 
 function buildOrder(data) {
@@ -52,6 +77,10 @@ function buildOrder(data) {
       scoreAfter: null,
     },
     reportUrl: data.reportUrl || null,
+    reportKey: data.reportKey || null,
+    reports: data.reports || [],
+    monitoring: data.monitoring || null,
+    customerId: data.customerId || null,
     licenseId: data.licenseId || null,
     createdAt: data.createdAt || now,
     updatedAt: now,
@@ -91,6 +120,15 @@ async function redisGetJson(key) {
 
 async function redisSetJson(key, value) {
   await upstashCommand(['SET', key, JSON.stringify(value)]);
+}
+
+async function redisPushJson(key, value) {
+  await upstashCommand(['RPUSH', key, JSON.stringify(value)]);
+}
+
+async function redisListJson(key) {
+  const result = await upstashCommand(['LRANGE', key, 0, -1]);
+  return (result || []).map((item) => (typeof item === 'string' ? JSON.parse(item) : item));
 }
 
 export async function createOrder(data) {
@@ -135,6 +173,198 @@ export async function updateOrder(orderId, updates) {
   }
 
   return updated;
+}
+
+export async function recordOrderEvent(orderId, type, payload = {}) {
+  if (!orderId || !type) return null;
+  const event = {
+    id: `evt_${crypto.randomBytes(8).toString('hex')}`,
+    orderId,
+    type,
+    payload,
+    createdAt: new Date().toISOString(),
+  };
+
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) {
+    await redisPushJson(`order-events:${orderId}`, event);
+  } else {
+    const events = localOrderEvents.get(orderId) || [];
+    events.push(event);
+    localOrderEvents.set(orderId, events);
+  }
+
+  return event;
+}
+
+async function getOrderEvents(orderId) {
+  if (!orderId) return [];
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) return redisListJson(`order-events:${orderId}`);
+  return localOrderEvents.get(orderId) || [];
+}
+
+export async function upsertCustomerForOrder(order) {
+  requirePersistentStore();
+  if (!order?.customer?.email) throw new Error('Cannot create customer without email');
+
+  const now = new Date().toISOString();
+  const email = normalizeEmail(order.customer.email);
+  const customerId = order.customerId || customerIdForEmail(email);
+  const websiteUrl = normalizeWebsiteUrl(order.website?.url);
+
+  const existing = getEnvFirst(['UPSTASH_REDIS_REST_URL'])
+    ? await redisGetJson(`customer:${customerId}`)
+    : localCustomers.get(customerId);
+
+  const websites = { ...(existing?.websites || {}) };
+  if (websiteUrl) {
+    websites[websiteUrl] = {
+      url: websiteUrl,
+      orderId: order.orderId,
+      productSlug: order.productSlug,
+      status: order.status,
+      lastCheckedAt: order.monitoring?.checkedAt || null,
+      lastGrade: order.monitoring?.grade || null,
+    };
+  }
+
+  const reports = [...(existing?.reports || [])];
+  if ((order.reportKey || order.reportUrl) && !reports.some((report) => report.orderId === order.orderId)) {
+    reports.push({
+      orderId: order.orderId,
+      key: order.reportKey || null,
+      url: order.reportUrl || null,
+      label: 'Audit-Report',
+      createdAt: order.updatedAt || now,
+    });
+  }
+
+  const orderIds = Array.from(new Set([...(existing?.orderIds || []), order.orderId]));
+  const customer = {
+    customerId,
+    name: order.customer.name || existing?.name || '',
+    email,
+    company: order.customer.company || existing?.company || '',
+    orderIds,
+    websites,
+    reports,
+    activeProducts: Array.from(new Set([...(existing?.activeProducts || []), order.productSlug].filter(Boolean))),
+    updatedAt: now,
+    createdAt: existing?.createdAt || now,
+  };
+
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) {
+    await redisSetJson(`customer:${customerId}`, customer);
+    await upstashCommand(['SET', `customer-email:${email}`, customerId]);
+    if (websiteUrl) await redisSetJson(`website:${websiteUrl}`, { customerId, orderId: order.orderId });
+    await upstashCommand(['SADD', 'customer-ids', customerId]);
+  } else {
+    localCustomers.set(customerId, customer);
+    localCustomerEmailIndex.set(email, customerId);
+    if (websiteUrl) localWebsiteIndex.set(websiteUrl, { customerId, orderId: order.orderId });
+  }
+
+  if (order.customerId !== customerId) await updateOrder(order.orderId, { customerId });
+  return customer;
+}
+
+export async function getCustomerPortalByOrderId(orderId) {
+  const order = await getOrder(orderId);
+  if (!order) return null;
+
+  const customer = order.customerId
+    ? getEnvFirst(['UPSTASH_REDIS_REST_URL'])
+      ? await redisGetJson(`customer:${order.customerId}`)
+      : localCustomers.get(order.customerId)
+    : await upsertCustomerForOrder(order);
+
+  if (!customer) return null;
+  const orders = (await Promise.all((customer.orderIds || []).map((id) => getOrder(id)))).filter(Boolean);
+  const events = (await Promise.all(orders.map((item) => getOrderEvents(item.orderId)))).flat();
+  const reportsByOrder = orders
+    .filter((item) => item.reportKey || item.reportUrl)
+    .map((item) => ({
+      orderId: item.orderId,
+      key: item.reportKey || null,
+      url: item.reportUrl || null,
+      label: 'Audit-Report',
+      createdAt: item.updatedAt,
+    }));
+
+  return {
+    customer: {
+      customerId: customer.customerId,
+      name: customer.name,
+      email: customer.email,
+      company: customer.company,
+    },
+    orders: orders.map((item) => ({
+      orderId: item.orderId,
+      productSlug: item.productSlug,
+      package: item.package,
+      billingPeriod: item.billingPeriod,
+      status: item.status,
+      paymentStatus: item.paymentStatus,
+      website: item.website,
+      results: item.results,
+      licenseId: item.licenseId || null,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
+    })),
+    websites: Object.values(customer.websites || {}),
+    reports: [...(customer.reports || []), ...reportsByOrder].filter(
+      (report, index, all) => all.findIndex((candidate) => candidate.orderId === report.orderId) === index,
+    ),
+    events: events.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 25),
+  };
+}
+
+export async function recordMonitoringResultForWebsite(websiteUrl, result) {
+  const normalized = normalizeWebsiteUrl(websiteUrl);
+  const index = getEnvFirst(['UPSTASH_REDIS_REST_URL'])
+    ? await redisGetJson(`website:${normalized}`)
+    : localWebsiteIndex.get(normalized);
+  if (!index?.orderId) return null;
+
+  const order = await updateOrder(index.orderId, {
+    monitoring: {
+      ...result,
+      checkedAt: result.checkedAt || new Date().toISOString(),
+    },
+  });
+  if (!order) return null;
+  await upsertCustomerForOrder(order);
+  await recordOrderEvent(order.orderId, 'monitoring.completed', {
+    websiteUrl: normalized,
+    grade: result.grade,
+    score: result.score,
+  });
+  return order;
+}
+
+export async function listCustomerMonitoringTargets() {
+  const customerIds = getEnvFirst(['UPSTASH_REDIS_REST_URL'])
+    ? await upstashCommand(['SMEMBERS', 'customer-ids'])
+    : Array.from(localCustomers.keys());
+  const customers = (
+    await Promise.all(
+      (customerIds || []).map((customerId) =>
+        getEnvFirst(['UPSTASH_REDIS_REST_URL']) ? redisGetJson(`customer:${customerId}`) : localCustomers.get(customerId),
+      ),
+    )
+  ).filter(Boolean);
+
+  return customers.flatMap((customer) =>
+    Object.values(customer.websites || {})
+      .filter((website) => website.url)
+      .map((website) => ({
+        id: `${customer.customerId}:${website.url}`,
+        name: customer.name || customer.company || customer.email,
+        customerId: customer.customerId,
+        website: { url: website.url },
+        productSlug: website.productSlug,
+        active: true,
+      })),
+  );
 }
 
 export async function getOrderBySessionId(sessionId) {
@@ -192,4 +422,9 @@ export const orderStore = {
   markEventProcessed,
   createLicenseForOrder,
   getLicense,
+  recordOrderEvent,
+  upsertCustomerForOrder,
+  getCustomerPortalByOrderId,
+  recordMonitoringResultForWebsite,
+  listCustomerMonitoringTargets,
 };

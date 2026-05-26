@@ -1,5 +1,13 @@
 import { getEnvFirst } from './lib/env.js';
-import { createLicenseForOrder, getOrderBySessionId, markEventProcessed, updateOrder } from './lib/order-store.js';
+import { sendPaymentConfirmationEmail } from './lib/mailer.js';
+import {
+  createLicenseForOrder,
+  getOrderBySessionId,
+  markEventProcessed,
+  recordOrderEvent,
+  updateOrder,
+  upsertCustomerForOrder,
+} from './lib/order-store.js';
 import { getRawBody, verifyStripeSignature } from './lib/stripe-webhook.js';
 
 export const config = {
@@ -14,7 +22,7 @@ async function applyCheckoutCompleted(session) {
   if (!order) return { handled: false, reason: 'Order not found' };
 
   const paymentTime = new Date().toISOString();
-  await updateOrder(order.orderId, {
+  const updatedOrder = await updateOrder(order.orderId, {
     status: 'active',
     paymentStatus: session.payment_status || 'paid',
     stripeSessionId: session.id,
@@ -27,6 +35,24 @@ async function applyCheckoutCompleted(session) {
 
   if (!order.licenseId) {
     await createLicenseForOrder(order.orderId);
+  }
+  const customerOrder = await updateOrder(order.orderId, {});
+  await upsertCustomerForOrder(customerOrder || updatedOrder);
+  await recordOrderEvent(order.orderId, 'checkout.session.completed', {
+    stripeSessionId: session.id,
+    stripeCustomerId: session.customer || null,
+    stripeSubscriptionId: session.subscription || null,
+  });
+
+  try {
+    const emailResult = await sendPaymentConfirmationEmail(customerOrder || updatedOrder);
+    await recordOrderEvent(order.orderId, 'email.payment_confirmation', {
+      sent: !!emailResult.sent,
+      simulated: !!emailResult.simulated,
+    });
+  } catch (error) {
+    console.error('[checkout-webhook] Payment confirmation email failed:', error.message);
+    await recordOrderEvent(order.orderId, 'email.payment_confirmation_failed', { message: error.message });
   }
 
   return { handled: true, action: 'order_activated', orderId: order.orderId };
@@ -42,6 +68,7 @@ async function applyCheckoutExpired(session) {
     paymentStatus: 'expired',
     stripeSessionId: session.id,
   });
+  await recordOrderEvent(order.orderId, 'checkout.session.expired', { stripeSessionId: session.id });
   return { handled: true, action: 'order_expired', orderId: order.orderId };
 }
 

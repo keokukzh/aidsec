@@ -88,6 +88,14 @@ P0 production hardening also requires:
 
 Plugin install secrets are generated per order/license and stored in Upstash. Do not configure or ship a global plugin shared secret.
 
+P1 customer portal backbone:
+
+- Paid Stripe checkout events create/update a customer record in the same Upstash-backed store as orders.
+- `proof-center.html?orderId=...&token=...` switches from public demo data to an authenticated customer portal view.
+- Report links use R2/S3 signed URLs when `reportKey` is present; local/dev falls back to `/reports/...`.
+- Monthly monitoring targets are read from customer websites first, then from the legacy `data/customers.json` fallback.
+- Payment confirmation e-mails are sent from the checkout webhook when SMTP is configured; failures are recorded as order events and do not fail Stripe webhook acknowledgement.
+
 Local development and Vercel Preview may fall back to in-memory rate limiting. Production remains strict and returns `503` if Upstash is unavailable.
 
 Allowed origins for form endpoints include the primary domain, localhost dev origins, and the current Vercel deployment URL via `VERCEL_URL`. Custom allowlists from `ONBOARDING_ALLOWED_ORIGINS` or `CONTACT_ALLOWED_ORIGINS` are merged on top.
