@@ -38,7 +38,7 @@
       ]
     },
     {
-      "source": "/(.*\\.html)",
+      "source": "/(.*.html)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -89,12 +89,20 @@
     {
       "source": "/api/plugin-webhook-relay/(.*)",
       "destination": "/api/plugin-webhook-relay.js"
+    },
+    {
+      "source": "/api/crm-lead-scoring",
+      "destination": "/api/crm-lead-scoring.js"
     }
   ],
   "crons": [
     {
       "path": "/api/cron/monitoring",
       "schedule": "0 7 1 * *"
+    },
+    {
+      "path": "/api/cron/reaudit",
+      "schedule": "0 9 15 * *"
     }
   ]
 }

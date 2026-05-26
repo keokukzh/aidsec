@@ -1,5 +1,5 @@
 import { getEnvFirst } from './lib/env.js';
-import { sendPaymentConfirmationEmail } from './lib/mailer.js';
+import { sendPaymentConfirmationEmail, sendDeliveryEmail } from './lib/mailer.js';
 import {
   createLicenseForOrder,
   getOrderBySessionId,
@@ -44,6 +44,7 @@ async function applyCheckoutCompleted(session) {
     stripeSubscriptionId: session.subscription || null,
   });
 
+  // Send payment confirmation
   try {
     const emailResult = await sendPaymentConfirmationEmail(customerOrder || updatedOrder);
     await recordOrderEvent(order.orderId, 'email.payment_confirmation', {
@@ -53,6 +54,18 @@ async function applyCheckoutCompleted(session) {
   } catch (error) {
     console.error('[checkout-webhook] Payment confirmation email failed:', error.message);
     await recordOrderEvent(order.orderId, 'email.payment_confirmation_failed', { message: error.message });
+  }
+
+  // Send delivery email after payment confirmation
+  try {
+    const deliveryResult = await sendDeliveryEmail(customerOrder || updatedOrder);
+    await recordOrderEvent(order.orderId, 'email.delivery', {
+      sent: !!deliveryResult.sent,
+      simulated: !!deliveryResult.simulated,
+    });
+  } catch (error) {
+    console.error('[checkout-webhook] Delivery email failed:', error.message);
+    await recordOrderEvent(order.orderId, 'email.delivery_failed', { message: error.message });
   }
 
   return { handled: true, action: 'order_activated', orderId: order.orderId };
