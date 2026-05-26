@@ -355,3 +355,46 @@ test('vercel API rewrites target function routes instead of static js files', ()
   assert.equal(checkoutWebhook.destination, '/api/checkout-webhook');
   assert.equal(pluginRelay.destination, '/api/plugin-webhook-relay');
 });
+
+test('transactional emails use Brevo API in production when configured', async () => {
+  const previousFetch = global.fetch;
+  const previousNodeEnv = process.env.NODE_ENV;
+  const previousBrevo = process.env.BREVO_API_KEY;
+  const previousSmtpHost = process.env.SMTP_HOST;
+  const previousSmtpUser = process.env.SMTP_USER;
+  const previousSmtpPass = process.env.SMTP_PASS;
+  process.env.NODE_ENV = 'production';
+  process.env.BREVO_API_KEY = 'brevo_test_key';
+  delete process.env.SMTP_HOST;
+  delete process.env.SMTP_USER;
+  delete process.env.SMTP_PASS;
+  const calls = [];
+  global.fetch = async (url, options) => {
+    calls.push({ url, headers: options.headers, body: JSON.parse(options.body) });
+    return {
+      ok: true,
+      async json() {
+        return { messageId: 'brevo-message-id' };
+      },
+    };
+  };
+
+  const { sendMagicLinkEmail } = await import('../api/lib/mailer.js?brevo-test');
+  const result = await sendMagicLinkEmail({
+    orderId: 'ord_brevo_test',
+    customer: { name: 'Brevo User', email: 'brevo@example.ch' },
+  });
+
+  global.fetch = previousFetch;
+  process.env.NODE_ENV = previousNodeEnv;
+  process.env.BREVO_API_KEY = previousBrevo;
+  process.env.SMTP_HOST = previousSmtpHost;
+  process.env.SMTP_USER = previousSmtpUser;
+  process.env.SMTP_PASS = previousSmtpPass;
+
+  assert.equal(result.sent, true);
+  assert.equal(result.provider, 'brevo');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, 'https://api.brevo.com/v3/smtp/email');
+  assert.equal(calls[0].body.to[0].email, 'brevo@example.ch');
+});

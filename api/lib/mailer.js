@@ -13,6 +13,72 @@ function smtpConfig() {
   };
 }
 
+function parseAddress(value, fallbackName = '') {
+  const raw = String(value || '').trim();
+  const match = raw.match(/^(.*?)<([^>]+)>$/);
+  if (match) {
+    return {
+      name: match[1].trim().replace(/^"|"$/g, '') || fallbackName,
+      email: match[2].trim(),
+    };
+  }
+  return { name: fallbackName, email: raw };
+}
+
+async function sendTransactionalEmail(message) {
+  const config = smtpConfig();
+  const brevoApiKey = getEnvFirst(['BREVO_API_KEY']);
+
+  if (brevoApiKey) {
+    const sender = parseAddress(config.from, 'AidSec');
+    const recipient = parseAddress(message.to);
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'api-key': brevoApiKey,
+      },
+      body: JSON.stringify({
+        sender,
+        to: [recipient],
+        subject: message.subject,
+        htmlContent: message.html,
+        textContent: message.text,
+      }),
+    });
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(`Brevo email failed: ${payload.message || response.status}`);
+    }
+
+    const payload = await response.json().catch(() => ({}));
+    return { sent: true, provider: 'brevo', messageId: payload.messageId || null };
+  }
+
+  if (!config.host || !config.user || !config.pass) {
+    if (isProduction()) throw new Error('SMTP is not configured');
+    return { simulated: true, message };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: config.host,
+    port: config.port,
+    secure: config.secure,
+    auth: { user: config.user, pass: config.pass },
+  });
+
+  const result = await transporter.sendMail({
+    from: config.from,
+    to: message.to,
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+  });
+  return { sent: true, provider: 'smtp', messageId: result.messageId };
+}
+
 function customerName(order) {
   return order.customer?.name || 'Guten Tag';
 }
@@ -76,29 +142,8 @@ function buildPaymentConfirmationHtml(order, statusUrl, proofUrl) {
 }
 
 export async function sendPaymentConfirmationEmail(order) {
-  const config = smtpConfig();
   const message = buildPaymentConfirmationEmail(order);
-
-  if (!config.host || !config.user || !config.pass) {
-    if (isProduction()) throw new Error('SMTP is not configured');
-    return { simulated: true, message };
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.secure,
-    auth: { user: config.user, pass: config.pass },
-  });
-
-  const result = await transporter.sendMail({
-    from: config.from,
-    to: message.to,
-    subject: message.subject,
-    text: message.text,
-    html: message.html,
-  });
-  return { sent: true, messageId: result.messageId };
+  return sendTransactionalEmail(message);
 }
 
 // === Magic Link Email ===
@@ -145,29 +190,8 @@ export function buildMagicLinkEmail(order) {
 }
 
 export async function sendMagicLinkEmail(order) {
-  const config = smtpConfig();
   const message = buildMagicLinkEmail(order);
-
-  if (!config.host || !config.user || !config.pass) {
-    if (isProduction()) throw new Error('SMTP is not configured');
-    return { simulated: true, message };
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.secure,
-    auth: { user: config.user, pass: config.pass },
-  });
-
-  const result = await transporter.sendMail({
-    from: config.from,
-    to: message.to,
-    subject: message.subject,
-    text: message.text,
-    html: message.html,
-  });
-  return { sent: true, messageId: result.messageId };
+  return sendTransactionalEmail(message);
 }
 
 // === Delivery Email ===
@@ -254,29 +278,8 @@ function buildDeliveryHtml(order, instructions, portalUrl) {
 }
 
 export async function sendDeliveryEmail(order) {
-  const config = smtpConfig();
   const message = buildDeliveryEmail(order);
-
-  if (!config.host || !config.user || !config.pass) {
-    if (isProduction()) throw new Error('SMTP is not configured');
-    return { simulated: true, message };
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.secure,
-    auth: { user: config.user, pass: config.pass },
-  });
-
-  const result = await transporter.sendMail({
-    from: config.from,
-    to: message.to,
-    subject: message.subject,
-    text: message.text,
-    html: message.html,
-  });
-  return { sent: true, messageId: result.messageId };
+  return sendTransactionalEmail(message);
 }
 
 // === Re-Audit Email ===
@@ -329,27 +332,6 @@ export function buildReAuditEmail(order) {
 }
 
 export async function sendReAuditEmail(order) {
-  const config = smtpConfig();
   const message = buildReAuditEmail(order);
-
-  if (!config.host || !config.user || !config.pass) {
-    if (isProduction()) throw new Error('SMTP is not configured');
-    return { simulated: true, message };
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.secure,
-    auth: { user: config.user, pass: config.pass },
-  });
-
-  const result = await transporter.sendMail({
-    from: config.from,
-    to: message.to,
-    subject: message.subject,
-    text: message.text,
-    html: message.html,
-  });
-  return { sent: true, messageId: result.messageId };
+  return sendTransactionalEmail(message);
 }
