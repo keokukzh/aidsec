@@ -47,10 +47,14 @@ async function withSignedReportUrls(portal) {
   );
   const reportHistory = reports
     .map((report) => ({
+      reportId: report.reportId || null,
+      customerId: report.customerId || portal.customer?.customerId || null,
+      websiteId: report.websiteId || null,
       orderId: report.orderId,
       websiteUrl: report.websiteUrl || null,
       productSlug: report.productSlug || null,
       key: report.key || null,
+      storageKey: report.storageKey || report.key || null,
       url: report.url || null,
       label: report.label || 'Audit-Report',
       type: report.type || 'audit',

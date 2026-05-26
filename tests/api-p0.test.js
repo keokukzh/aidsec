@@ -251,6 +251,90 @@ test('checkout webhook creates a customer portal backbone after paid checkout', 
   assert.equal(portal.events.some((event) => event.type === 'checkout.session.completed'), true);
 });
 
+test('customer backbone exposes stable website and report records', async () => {
+  const {
+    createOrder,
+    updateOrder,
+    upsertCustomerForOrder,
+    getCustomerPortalByOrderId,
+    getWebsiteRecordByUrl,
+    getReportRecord,
+  } = await import('../api/lib/order-store.js?backbone-records');
+  const order = await createOrder({
+    productSlug: 'kanzlei-haertung',
+    customer: { name: 'Backbone User', email: 'backbone@example.ch', company: 'Backbone AG' },
+    website: { url: 'backbone.example.ch/path/?utm=ignored#section' },
+    status: 'active',
+    paymentStatus: 'paid',
+    reports: [
+      {
+        key: 'reports/orders/backbone-report.json',
+        label: 'Backbone Audit',
+        type: 'audit',
+        createdAt: '2026-05-01T08:00:00.000Z',
+      },
+    ],
+  });
+  const updatedOrder = await updateOrder(order.orderId, { reports: order.reports });
+  await upsertCustomerForOrder(updatedOrder);
+
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+  const website = portal.websites[0];
+  const report = portal.reports.find((item) => item.key === 'reports/orders/backbone-report.json');
+  const websiteRecord = await getWebsiteRecordByUrl('https://backbone.example.ch/path/');
+  const reportRecord = await getReportRecord(report.reportId);
+
+  assert.match(portal.customer.customerId, /^cus_/);
+  assert.match(website.websiteId, /^web_/);
+  assert.equal(website.url, 'https://backbone.example.ch/path');
+  assert.equal(website.customerId, portal.customer.customerId);
+  assert.deepEqual(website.orderIds, [order.orderId]);
+  assert.equal(website.activeMonitoring, true);
+  assert.match(report.reportId, /^rep_/);
+  assert.equal(report.customerId, portal.customer.customerId);
+  assert.equal(report.websiteId, website.websiteId);
+  assert.equal(websiteRecord.websiteId, website.websiteId);
+  assert.equal(websiteRecord.normalizedUrl, 'https://backbone.example.ch/path');
+  assert.equal(reportRecord.reportId, report.reportId);
+  assert.equal(reportRecord.storageKey, 'reports/orders/backbone-report.json');
+});
+
+test('proof center report history keeps stable backbone identifiers', async () => {
+  const previousSecret = process.env.ORDER_TOKEN_SECRET;
+  process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';
+  const { createOrder, updateOrder, upsertCustomerForOrder } = await import('../api/lib/order-store.js');
+  const { generateMagicToken } = await import('../api/lib/order-token.js');
+  const { default: handler } = await import('../api/proof-center-status.js?history-backbone');
+  const order = await createOrder({
+    productSlug: 'rapid-header-fix',
+    customer: { name: 'Backbone History', email: 'backbone-history@example.ch', company: 'Backbone AG' },
+    website: { url: 'https://backbone-history.example.ch' },
+    status: 'complete',
+    paymentStatus: 'paid',
+    reports: [
+      {
+        key: 'reports/orders/backbone-history.json',
+        label: 'Backbone History Audit',
+        type: 'audit',
+        createdAt: '2026-05-02T08:00:00.000Z',
+      },
+    ],
+  });
+  const updatedOrder = await updateOrder(order.orderId, { reports: order.reports });
+  const customer = await upsertCustomerForOrder(updatedOrder);
+  const token = generateMagicToken(order.orderId, 'backbone-history@example.ch');
+  const res = createResponse();
+
+  await handler({ method: 'GET', headers: {}, query: { orderId: order.orderId, token } }, res);
+
+  process.env.ORDER_TOKEN_SECRET = previousSecret;
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.portal.reportHistory[0].customerId, customer.customerId);
+  assert.match(res.body.portal.reportHistory[0].reportId, /^rep_/);
+  assert.match(res.body.portal.reportHistory[0].websiteId, /^web_/);
+  assert.equal(res.body.portal.reportHistory[0].storageKey, 'reports/orders/backbone-history.json');
+});
+
 test('proof center returns authenticated customer portal data with signed report links', async () => {
   const previousSecret = process.env.ORDER_TOKEN_SECRET;
   process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';

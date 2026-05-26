@@ -8,6 +8,8 @@ const localLicenses = new Map();
 const localCustomers = new Map();
 const localCustomerEmailIndex = new Map();
 const localWebsiteIndex = new Map();
+const localWebsiteRecords = new Map();
+const localReportRecords = new Map();
 const localOrderEvents = new Map();
 
 export function generateOrderId() {
@@ -41,6 +43,22 @@ function normalizeWebsiteUrl(url = '') {
 
 function customerIdForEmail(email) {
   return `cus_${crypto.createHash('sha256').update(normalizeEmail(email)).digest('hex').slice(0, 16)}`;
+}
+
+function websiteIdForUrl(url) {
+  return `web_${crypto.createHash('sha256').update(normalizeWebsiteUrl(url)).digest('hex').slice(0, 16)}`;
+}
+
+function reportIdFor({ orderId, key, url, createdAt, type }) {
+  return `rep_${crypto
+    .createHash('sha256')
+    .update([orderId, key || '', url || '', createdAt || '', type || 'audit'].join('|'))
+    .digest('hex')
+    .slice(0, 16)}`;
+}
+
+function uniqueBy(items, getKey) {
+  return items.filter((item, index, all) => all.findIndex((candidate) => getKey(candidate) === getKey(item)) === index);
 }
 
 function buildOrder(data) {
@@ -203,6 +221,47 @@ async function getOrderEvents(orderId) {
   return localOrderEvents.get(orderId) || [];
 }
 
+function buildReportRecordsForOrder(order, customerId, websiteId, websiteUrl, now) {
+  const explicitReports = (order.reports || []).map((report) => {
+    const createdAt = report.createdAt || order.updatedAt || now;
+    return {
+      reportId: report.reportId || reportIdFor({ orderId: order.orderId, key: report.key, url: report.url, createdAt, type: report.type }),
+      customerId,
+      websiteId: report.websiteId || websiteId || null,
+      orderId: order.orderId,
+      websiteUrl: report.websiteUrl || websiteUrl || null,
+      productSlug: report.productSlug || order.productSlug || null,
+      key: report.key || null,
+      storageKey: report.key || null,
+      url: report.url || null,
+      label: report.label || 'Audit-Report',
+      type: report.type || 'audit',
+      createdAt,
+    };
+  });
+
+  if (!order.reportKey && !order.reportUrl) return explicitReports;
+
+  const createdAt = order.updatedAt || now;
+  return [
+    ...explicitReports,
+    {
+      reportId: reportIdFor({ orderId: order.orderId, key: order.reportKey, url: order.reportUrl, createdAt, type: 'audit' }),
+      customerId,
+      websiteId: websiteId || null,
+      orderId: order.orderId,
+      websiteUrl: websiteUrl || null,
+      productSlug: order.productSlug || null,
+      key: order.reportKey || null,
+      storageKey: order.reportKey || null,
+      url: order.reportUrl || null,
+      label: 'Audit-Report',
+      type: 'audit',
+      createdAt,
+    },
+  ];
+}
+
 export async function upsertCustomerForOrder(order) {
   requirePersistentStore();
   if (!order?.customer?.email) throw new Error('Cannot create customer without email');
@@ -211,6 +270,7 @@ export async function upsertCustomerForOrder(order) {
   const email = normalizeEmail(order.customer.email);
   const customerId = order.customerId || customerIdForEmail(email);
   const websiteUrl = normalizeWebsiteUrl(order.website?.url);
+  const websiteId = websiteUrl ? websiteIdForUrl(websiteUrl) : null;
 
   const existing = getEnvFirst(['UPSTASH_REDIS_REST_URL'])
     ? await redisGetJson(`customer:${customerId}`)
@@ -218,26 +278,32 @@ export async function upsertCustomerForOrder(order) {
 
   const websites = { ...(existing?.websites || {}) };
   if (websiteUrl) {
+    const existingWebsite = getEnvFirst(['UPSTASH_REDIS_REST_URL'])
+      ? await redisGetJson(`website-id:${websiteId}`)
+      : localWebsiteRecords.get(websiteId);
+    const orderIds = Array.from(new Set([...(existingWebsite?.orderIds || websites[websiteUrl]?.orderIds || []), order.orderId]));
     websites[websiteUrl] = {
+      websiteId,
+      customerId,
       url: websiteUrl,
+      normalizedUrl: websiteUrl,
       orderId: order.orderId,
+      orderIds,
       productSlug: order.productSlug,
       status: order.status,
+      activeMonitoring: true,
       lastCheckedAt: order.monitoring?.checkedAt || null,
       lastGrade: order.monitoring?.grade || null,
+      updatedAt: now,
+      createdAt: existingWebsite?.createdAt || websites[websiteUrl]?.createdAt || now,
     };
   }
 
-  const reports = [...(existing?.reports || [])];
-  if ((order.reportKey || order.reportUrl) && !reports.some((report) => report.orderId === order.orderId)) {
-    reports.push({
-      orderId: order.orderId,
-      key: order.reportKey || null,
-      url: order.reportUrl || null,
-      label: 'Audit-Report',
-      createdAt: order.updatedAt || now,
-    });
-  }
+  const reportRecords = buildReportRecordsForOrder(order, customerId, websiteId, websiteUrl, now);
+  const reports = uniqueBy(
+    [...(existing?.reports || []), ...reportRecords],
+    (report) => report.reportId || `${report.orderId}:${report.key || report.url || ''}`,
+  );
 
   const orderIds = Array.from(new Set([...(existing?.orderIds || []), order.orderId]));
   const customer = {
@@ -256,12 +322,20 @@ export async function upsertCustomerForOrder(order) {
   if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) {
     await redisSetJson(`customer:${customerId}`, customer);
     await upstashCommand(['SET', `customer-email:${email}`, customerId]);
-    if (websiteUrl) await redisSetJson(`website:${websiteUrl}`, { customerId, orderId: order.orderId });
+    if (websiteUrl) {
+      await redisSetJson(`website:${websiteUrl}`, websites[websiteUrl]);
+      await redisSetJson(`website-id:${websiteId}`, websites[websiteUrl]);
+    }
+    await Promise.all(reportRecords.map((report) => redisSetJson(`report:${report.reportId}`, report)));
     await upstashCommand(['SADD', 'customer-ids', customerId]);
   } else {
     localCustomers.set(customerId, customer);
     localCustomerEmailIndex.set(email, customerId);
-    if (websiteUrl) localWebsiteIndex.set(websiteUrl, { customerId, orderId: order.orderId });
+    if (websiteUrl) {
+      localWebsiteIndex.set(websiteUrl, websites[websiteUrl]);
+      localWebsiteRecords.set(websiteId, websites[websiteUrl]);
+    }
+    reportRecords.forEach((report) => localReportRecords.set(report.reportId, report));
   }
 
   if (order.customerId !== customerId) await updateOrder(order.orderId, { customerId });
@@ -284,10 +358,22 @@ export async function getCustomerPortalByOrderId(orderId) {
   const reportsByOrder = orders
     .flatMap((item) => {
       const explicitReports = (item.reports || []).map((report) => ({
+        reportId:
+          report.reportId ||
+          reportIdFor({
+            orderId: item.orderId,
+            key: report.key,
+            url: report.url,
+            createdAt: report.createdAt || item.updatedAt,
+            type: report.type,
+          }),
+        customerId: customer.customerId,
+        websiteId: report.websiteId || (item.website?.url ? websiteIdForUrl(item.website.url) : null),
         orderId: item.orderId,
         websiteUrl: item.website?.url || null,
         productSlug: item.productSlug,
         key: report.key || null,
+        storageKey: report.key || null,
         url: report.url || null,
         label: report.label || 'Audit-Report',
         type: report.type || 'audit',
@@ -299,10 +385,14 @@ export async function getCustomerPortalByOrderId(orderId) {
       return [
         ...explicitReports,
         {
+          reportId: reportIdFor({ orderId: item.orderId, key: item.reportKey, url: item.reportUrl, createdAt: item.updatedAt, type: 'audit' }),
+          customerId: customer.customerId,
+          websiteId: item.website?.url ? websiteIdForUrl(item.website.url) : null,
           orderId: item.orderId,
           websiteUrl: item.website?.url || null,
           productSlug: item.productSlug,
           key: item.reportKey || null,
+          storageKey: item.reportKey || null,
           url: item.reportUrl || null,
           label: 'Audit-Report',
           type: 'audit',
@@ -338,13 +428,27 @@ export async function getCustomerPortalByOrderId(orderId) {
       (report, index, all) =>
         all.findIndex(
           (candidate) =>
-            candidate.orderId === report.orderId &&
-            (candidate.key || candidate.url || '') === (report.key || report.url || '') &&
-            String(candidate.createdAt || '') === String(report.createdAt || ''),
+            (candidate.reportId && candidate.reportId === report.reportId) ||
+            (candidate.orderId === report.orderId &&
+              (candidate.key || candidate.url || '') === (report.key || report.url || '') &&
+              String(candidate.createdAt || '') === String(report.createdAt || '')),
         ) === index,
     ),
     events: events.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 25),
   };
+}
+
+export async function getWebsiteRecordByUrl(websiteUrl) {
+  const normalized = normalizeWebsiteUrl(websiteUrl);
+  if (!normalized) return null;
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) return redisGetJson(`website:${normalized}`);
+  return localWebsiteIndex.get(normalized) || null;
+}
+
+export async function getReportRecord(reportId) {
+  if (!reportId) return null;
+  if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) return redisGetJson(`report:${reportId}`);
+  return localReportRecords.get(reportId) || null;
 }
 
 export async function recordMonitoringResultForWebsite(websiteUrl, result) {
@@ -487,4 +591,6 @@ export const orderStore = {
   getCustomerPortalByOrderId,
   recordMonitoringResultForWebsite,
   listCustomerMonitoringTargets,
+  getWebsiteRecordByUrl,
+  getReportRecord,
 };

@@ -8,6 +8,7 @@
 - GitHub Remote: `keokukzh/aidsec`
 - Branch: `main`
 - Ausgangs-HEAD dieses Blocks: `5454625 feat: support smtp email provider override`
+- Letzter dokumentierter HEAD vor Customer-Backbone-Slice: `049efae fix: avoid sdk presigner warning`
 - Vercel-Projekt: `aidsec-ucws`
 - Vercel Project ID: `prj_ZUcUNY6xWsq1dpMUH2G5L1Ot1LFS`
 - Vercel Team ID: `team_fAGLE7MCIh7hUmRtnk4HcwRC`
@@ -48,6 +49,21 @@
   - Regression fuer fehlendes hCaptcha im Contact Flow.
   - Regression fuer gueltiges hCaptcha im Onboarding Flow.
 
+## Customer Backbone Slice
+
+- `api/lib/order-store.js`
+  - Erzeugt stabile `websiteId` Werte (`web_*`) aus normalisierten Website URLs.
+  - Erzeugt stabile `reportId` Werte (`rep_*`) aus Order, Report-Key/URL, Typ und Datum.
+  - Speichert Website Records lokal/Redis-kompatibel unter dem bestehenden `website:<url>` Index und zusaetzlich per `website-id:<websiteId>`.
+  - Speichert Report Records unter `report:<reportId>`.
+  - Exponiert `getWebsiteRecordByUrl()` und `getReportRecord()` fuer kommende CRM-/Portal-APIs.
+  - Customer Portal gibt Websites und Reports mit `customerId`, `websiteId`, `reportId`, `orderIds`, `storageKey` und Monitoring-Flags aus.
+- `api/proof-center-status.js`
+  - `reportHistory` fuehrt stabile Backbone-IDs weiter, damit UI und Automationen nicht auf URL/String-Vergleiche angewiesen sind.
+- Tests
+  - `customer backbone exposes stable website and report records`
+  - `proof center report history keeps stable backbone identifiers`
+
 ## Verifikation Dieses Blocks
 
 Bereits lokal gruen:
@@ -80,7 +96,7 @@ Erfolgskriterium: Smoke gruen, keine frischen SMTP-/API-Fehler, keine erwartbare
 - Alle im Chat geteilten Provider-Secrets muessen rotiert werden. Dazu gehoeren mindestens SMTP/Microsoft, Brevo, hCaptcha Secret, HARPA Key, Redis Tokens und alle weiteren geposteten Keys. Diese Datei enthaelt bewusst keine Werte.
 - `.env.local` bleibt gitignored und darf nicht angezeigt oder committed werden.
 - Die alte Smoke-Variante mit `example.com` als Empfaenger hat Microsoft-Mailfehler erzeugt. Ab jetzt echte Smoke-Mail nur ueber `SMOKE_EMAIL`.
-- Die `url.parse` Deprecation-Warnung aus Vercel Logs konnte lokal mit `NODE_OPTIONS=--trace-deprecation` beim R2 signed URL Pfad nicht reproduziert werden. Im Repo gibt es keinen eigenen `url.parse` Aufruf; AWS SDK v3 und Nodemailer sind laut `npm outdated` aktuell. Wenn die Warnung nach neuem Deploy wieder frisch erscheint, Logs mit engem Zeitfenster ziehen und ggf. als Dependency-Warnung dokumentieren oder upstream fixen.
+- Die frische `url.parse` Deprecation-Warnung aus Vercel Logs wurde durch Entfernen des AWS SDK Presigners aus dem Read-URL-Pfad behoben. R2/S3 Put/Get/List nutzt weiter AWS SDK v3; signed Read URLs werden per WHATWG `URL` und SigV4 erzeugt. Der Production-Smoke nach `049efae` hatte danach leere Error-Logs.
 
 ## Naechste Schritte Fuer Neuen Agent
 
@@ -113,15 +129,15 @@ git push origin main
    - Lokale `.env.local` erneuern.
    - Danach Smoke erneut laufen lassen.
 
-5. Erst danach P1 Customer Backbone weiter ausbauen:
-   - Customer, Website, Order, Report, Monitoring und License als klarere Records modellieren.
-   - Upstash bleibt kurzfristig Source of Truth.
-   - Make/n8n nur fuer Orchestrierung nutzen, nicht als Datenquelle.
+5. Naechster P1 Customer Backbone Schritt:
+   - Bestehende Live-Orders bei naechstem Zugriff/Smoke automatisch ueber `upsertCustomerForOrder()` in neue Website/Report Records ueberfuehren.
+   - Optional Admin/CRM API fuer Customer Lookup nach E-Mail, Website und Order-ID bauen.
    - Portal danach um Ereignislog, bessere Report-Historie und Monitoring-Trend erweitern.
+   - Upstash bleibt kurzfristig Source of Truth; Make/n8n nur fuer Orchestrierung, nicht als Datenquelle.
 
 ## Wichtige Dateien
 
-- `api/lib/order-store.js`: Redis Store, Orders, Customers, Licenses, Events, Monitoring Targets.
+- `api/lib/order-store.js`: Redis Store, Orders, Customers, Licenses, Events, Monitoring Targets, Website/Report Backbone Records.
 - `api/lib/hcaptcha.js`: hCaptcha Server-Side Verification.
 - `api/lib/mailer.js`: Brevo API/SMTP transactional email.
 - `api/proof-center-status.js`: Portal API, signed report URLs, report/monitoring history response.
