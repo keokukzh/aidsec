@@ -26,8 +26,8 @@ Das monatliche Monitoring läuft automatisch via Cron-Job:
 
 2. **Neuer Cron-Job**:
    - Name: `monthly-monitoring`
-   - Schedule: `0 8 1 * *` (Monatlich, 1. Tag, 08:00 Uhr)
-   - Timezone: `Europe/Zurich`
+   - Schedule: `0 7 1 * *` (Monatlich, 1. Tag, 07:00 UTC; entspricht 08:00 Europe/Zurich in der Winterzeit)
+   - Hinweis: Vercel Cron nutzt UTC. Bei Sommerzeit ist der Lauf um 09:00 Europe/Zurich, sofern kein zweiter saisonaler Cron eingerichtet wird.
    - URL: `/api/cron/monitoring`
 
 ### Alternativ: System-Cron (Server)

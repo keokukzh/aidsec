@@ -604,7 +604,7 @@
 
     // Logic matching RiskCalculator.jsx
     const costPerRecord = 245;
-    const fixFee = 490;
+    const fixFee = 790; // Kanzlei-Härtung Preis — CHF 790
     const totalRisk = records * costPerRecord;
     const potentialFine = Math.min(totalRisk * 0.1, 250000);
     const totalPotentialDamage = totalRisk + potentialFine;

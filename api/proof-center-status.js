@@ -1,10 +1,26 @@
-import { readFile } from 'node:fs/promises';
-
-const SITE_DATA_URL = new URL('../data/site-data.json', import.meta.url);
+/**
+ * AidSec Proof Center Status API
+ * Returns proof center data from site-data.json
+ *
+ * Uses fetch instead of fs to work in Vercel Edge runtime.
+ */
 
 async function loadSiteData() {
-  const raw = await readFile(SITE_DATA_URL, 'utf8');
-  return JSON.parse(raw);
+  // In Vercel: fetch from the same origin (git-tracked static file)
+  // In local dev: fetch from localhost
+  const baseUrl = process.env.BASE_URL || (process.env.NODE_ENV === 'production'
+    ? 'https://aidsec.ch'
+    : 'http://localhost:5173');
+
+  const response = await fetch(`${baseUrl}/data/site-data.json`, {
+    headers: { Accept: 'application/json' }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to load site-data: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 export default async function handler(req, res) {

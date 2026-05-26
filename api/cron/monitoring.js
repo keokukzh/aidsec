@@ -1,14 +1,13 @@
 /**
  * AidSec Cron Monitoring API
  * Monatliches Security-Monitoring für Cyber-Mandat Pro Kunden
- * 
+ *
  * Vercel Cron: POST /api/cron/monitoring
  * Schedule: 0 8 1 * * (Monatlich am 1. um 08:00 Uhr)
  */
 
-import { checkCustomer } from './monitorlib.js';
-import fs from 'fs';
-import path from 'path';
+import { storage } from './storage.js';
+import { isProduction } from '../lib/env.js';
 
 const SECURITY_HEADERS = [
   'strict-transport-security',
@@ -24,79 +23,89 @@ function computeGrade(score) {
   return grades[Math.min(score, 6)];
 }
 
+/**
+ * Check security headers for a URL using fetch (works in Vercel Edge).
+ * Falls back to check-headers API for server-side evaluation.
+ */
 async function checkSecurityHeaders(url) {
-  return new Promise((resolve, reject) => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
 
-    const protocol = url.startsWith('https') ? https : http;
-
-    protocol.get(url, {
+  try {
+    // Use our own check-headers API (Vercel serverless — works here)
+    const apiUrl = `https://${process.env.AUTH_DOMAIN || 'aidsec.ch'}/api/check-headers?url=${encodeURIComponent(url)}`;
+    const response = await fetch(apiUrl, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'AidSec-Monitor/1.0' }
-    }, (res) => {
-      clearTimeout(timeout);
-      let score = 0;
-      const headers = {};
-
-      SECURITY_HEADERS.forEach(key => {
-        const value = res.headers[key];
-        const present = value !== undefined && value !== null;
-        if (present) score++;
-        headers[key] = { present, value: value || null };
-      });
-
-      resolve({
-        url,
-        grade: computeGrade(score),
-        score,
-        maxScore: SECURITY_HEADERS.length,
-        headers,
-        checkedAt: new Date().toISOString()
-      });
-    }).on('error', (err) => {
-      clearTimeout(timeout);
-      reject(err);
+      headers: {
+        'User-Agent': 'AidSec-Monitor/2.0',
+        'Accept': 'application/json'
+      }
     });
-  });
+
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return {
+      url,
+      grade: data.grade || 'F',
+      score: data.score || 0,
+      maxScore: SECURITY_HEADERS.length,
+      headers: data.headers || {},
+      checkedAt: data.metadata?.checkedAt || new Date().toISOString()
+    };
+  } catch (err) {
+    clearTimeout(timeout);
+    throw err;
+  }
+}
+
+async function loadCustomers() {
+  // Try storage first
+  try {
+    const customers = await storage.get('data/customers.json');
+    if (customers && Array.isArray(customers)) return customers;
+  } catch (_) {}
+
+  // Fallback: fetch from customers.json in repo (git-tracked data)
+  try {
+    const res = await fetch(`https://${process.env.AUTH_DOMAIN || 'aidsec.ch'}/data/customers.json`);
+    if (res.ok) return await res.json();
+  } catch (_) {}
+
+  return [];
 }
 
 async function runMonitoring() {
-  console.log('Starte monatliches Monitoring...');
+  console.log('[monitoring] Starte monatliches Security-Monitoring...');
 
-  // Load customers
-  const customersPath = path.join(process.cwd(), 'data', 'customers.json');
-  let customers = [];
+  let customers = await loadCustomers();
 
-  try {
-    if (fs.existsSync(customersPath)) {
-      customers = JSON.parse(fs.readFileSync(customersPath, 'utf8'));
-    }
-  } catch (e) {
-    console.error('Fehler beim Laden der Kunden:', e.message);
-  }
-
-  if (customers.length === 0) {
-    console.log('Keine Kunden gefunden.');
+  if (!customers || customers.length === 0) {
+    console.log('[monitoring] Keine Kunden gefunden.');
     return { success: true, customersChecked: 0, issuesFound: 0 };
   }
 
-  console.log(`Prüfe ${customers.length} Kunden...`);
+  // Filter active customers
+  customers = customers.filter(c => c.active !== false && c.website?.url);
+
+  console.log(`[monitoring] Prüfe ${customers.length} Kunden...`);
 
   const results = [];
   const issues = [];
 
   for (const customer of customers) {
-    // Skip inactive customers
-    if (customer.active === false) continue;
-
     try {
       const result = await checkSecurityHeaders(customer.website.url);
       result.customerId = customer.id;
       result.customerName = customer.name;
       results.push(result);
 
-      // Check for issues
+      // Track issues
       if (result.grade === 'F' || result.grade === 'E') {
         issues.push({
           customerId: customer.id,
@@ -104,7 +113,8 @@ async function runMonitoring() {
           website: customer.website.url,
           severity: 'critical',
           type: 'security_headers',
-          message: `Security Header Note: ${result.grade}`
+          message: `Security Header Note: ${result.grade}`,
+          score: result.score
         });
       } else if (result.grade !== 'A') {
         issues.push({
@@ -113,15 +123,16 @@ async function runMonitoring() {
           website: customer.website.url,
           severity: 'warning',
           type: 'security_headers',
-          message: `Security Header Note: ${result.grade}`
+          message: `Security Header Note: ${result.grade}`,
+          score: result.score
         });
       }
     } catch (e) {
-      console.error(`Fehler bei ${customer.website.url}:`, e.message);
+      console.error(`[monitoring] Fehler bei ${customer.website?.url}:`, e.message);
       issues.push({
         customerId: customer.id,
         customerName: customer.name,
-        website: customer.website.url,
+        website: customer.website?.url || 'unbekannt',
         severity: 'critical',
         type: 'error',
         message: `Website nicht erreichbar: ${e.message}`
@@ -136,36 +147,39 @@ async function runMonitoring() {
     ok: results.filter(r => r.grade === 'A').length,
     warning: results.filter(r => ['B', 'C', 'D'].includes(r.grade)).length,
     critical: results.filter(r => ['F', 'E'].includes(r.grade)).length,
-    errors: results.length - results.length // simplified
+    errors: customers.length - results.length
   };
 
-  console.log('\n=== Monitoring Ergebnis ===');
-  console.log(`OK: ${summary.ok} | Warnung: ${summary.warning} | Kritisch: ${summary.critical}`);
-  console.log(`Probleme gefunden: ${issues.length}`);
+  console.log('[monitoring] Ergebnis:', JSON.stringify(summary));
+  console.log(`[monitoring] OK: ${summary.ok} | Warnung: ${summary.warning} | Kritisch: ${summary.critical}`);
 
-  // Save results
-  const reportDir = path.join(process.cwd(), 'reports', 'monthly');
-  if (!fs.existsSync(reportDir)) {
-    fs.mkdirSync(reportDir, { recursive: true });
-  }
-
+  // Save report via storage adapter (R2 in prod, local in dev)
   const timestamp = new Date().toISOString().split('T')[0];
-  const reportFile = path.join(reportDir, `${timestamp}.json`);
+  const reportKey = `reports/monthly/${timestamp}.json`;
 
   const report = {
     timestamp: new Date().toISOString(),
+    apiVersion: '2.0.0',
     summary,
     results,
     issues
   };
 
-  fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
+  try {
+    await storage.put(reportKey, report);
+    console.log(`[monitoring] Report gespeichert: ${reportKey}`);
+  } catch (e) {
+    console.error('[monitoring] Storage write failed:', e.message);
+    if (isProduction()) {
+      throw e;
+    }
+  }
 
   // Alert if critical issues found
   const criticalIssues = issues.filter(i => i.severity === 'critical');
   if (criticalIssues.length > 0) {
-    console.log('\n⚠️ Kritische Probleme gefunden - E-Mail-Benachrichtigung wäre fällig');
-    // In Produktion: sendAlertEmail(criticalIssues);
+    console.log(`[monitoring] ⚠️ ${criticalIssues.length} kritische Probleme gefunden`);
+    // In production: sendAlertEmail(criticalIssues);
   }
 
   return {
@@ -173,29 +187,40 @@ async function runMonitoring() {
     customersChecked: summary.checked,
     issuesFound: issues.length,
     summary,
-    reportUrl: `/reports/monthly/${timestamp}.json`
+    reportKey
   };
 }
 
 export default async function handler(req, res) {
-  // Only allow POST and cron
+  res.setHeader('Content-Type', 'application/json');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
+  // Only allow POST (cron) and GET (manual test)
   if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Verify cron secret (Vercel provides this)
+  // Verify cron secret (Vercel provides this via Authorization header)
   const authHeader = req.headers.authorization;
   const cronSecret = process.env.CRON_SECRET;
 
   if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    // In dev without secret, allow GET for testing
+    if (req.method === 'GET' && process.env.NODE_ENV !== 'production') {
+      console.log('[monitoring] DEV mode: skipping auth check');
+    } else {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
   }
 
   try {
     const result = await runMonitoring();
     return res.status(200).json(result);
   } catch (error) {
-    console.error('Monitoring Error:', error);
+    console.error('[monitoring] Fatal error:', error);
     return res.status(500).json({
       success: false,
       error: 'Monitoring failed',
