@@ -76,3 +76,20 @@ test('homepage and proof center embed lightweight autoplay preview videos', () =
   assert.match(proof, /assets\/videos\/aidsec-proof-center\.mp4/);
   assert.match(proof, /preload="metadata"/);
 });
+
+test('video assets are cached long-term and lazy-pause observes current preview classes', () => {
+  const config = JSON.parse(readProjectFile('vercel.json'));
+  const mainJs = readProjectFile('js/main.js');
+  const videoHeader = config.headers.find((entry) => entry.source === '/assets/videos/(.*)');
+
+  assert.ok(videoHeader, 'video cache header should exist');
+  assert.deepEqual(videoHeader.headers, [
+    {
+      key: 'Cache-Control',
+      value: 'public, max-age=31536000, immutable',
+    },
+  ]);
+  assert.match(mainJs, /process-video__media/);
+  assert.match(mainJs, /trust-video__media/);
+  assert.match(mainJs, /industry-hero__video/);
+});

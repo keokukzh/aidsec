@@ -8,7 +8,7 @@
 
 import { storage } from './storage.js';
 import { isProduction } from '../lib/env.js';
-import { listCustomerMonitoringTargets, recordMonitoringResultForWebsite, getOrder } from '../lib/order-store.js';
+import { listCustomerMonitoringTargets, recordMonitoringResultForWebsite, getOrder, recordOrderEvent } from '../lib/order-store.js';
 import { sendReAuditEmail } from '../lib/mailer.js';
 
 const SECURITY_HEADERS = [
@@ -101,10 +101,20 @@ async function runReAudit() {
         }).catch(() => null);
         if (emailResult?.sent || emailResult?.simulated) {
           emailsSent += 1;
+          await recordOrderEvent(order?.orderId || target.orderId, 'email.reaudit', {
+            sent: !!emailResult.sent,
+            simulated: !!emailResult.simulated,
+            websiteUrl: target.website.url,
+            checkedAt: result.checkedAt,
+          });
           console.log(`[reaudit] Re-Audit-E-Mail gesendet fuer ${target.website.url}`);
         }
       } catch (e) {
         console.error(`[reaudit] Email send failed for ${target.website.url}:`, e.message);
+        await recordOrderEvent(target.orderId, 'email.reaudit_failed', {
+          message: e.message,
+          websiteUrl: target.website.url,
+        }).catch(() => null);
       }
     } catch (e) {
       console.error(`[reaudit] Fehler bei ${target.website?.url}:`, e.message);

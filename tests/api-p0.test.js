@@ -249,6 +249,11 @@ test('checkout webhook creates a customer portal backbone after paid checkout', 
   assert.equal(portal.websites[0].url, 'https://portal.example.ch');
   assert.equal(portal.websites[0].productSlug, 'cyber-mandat');
   assert.equal(portal.events.some((event) => event.type === 'checkout.session.completed'), true);
+  assert.equal(portal.events.some((event) => event.type === 'license.created'), true);
+  assert.equal(portal.events.some((event) => event.type === 'onboarding.task.created'), true);
+  assert.equal(portal.events.some((event) => event.type === 'report.placeholder.created'), true);
+  assert.equal(portal.events.some((event) => event.type === 'email.magic_link'), true);
+  assert.equal(portal.reports.some((report) => report.type === 'pending_delivery' && report.label === 'Delivery Report in Vorbereitung'), true);
 });
 
 test('customer backbone exposes stable website and report records', async () => {
@@ -765,6 +770,50 @@ test('proof center returns chronological report and monitoring history', async (
   assert.equal(res.body.portal.monitoringHistory[1].grade, 'C');
   assert.equal(res.body.portal.monitoringHistory[1].score, 4);
   assert.equal(res.body.portal.monitoringHistory[0].websiteUrl, 'https://history.example.ch');
+  assert.equal(res.body.portal.events.some((event) => event.type === 'monitoring.completed'), true);
+});
+
+test('monitoring results become customer-visible events with newest event first', async () => {
+  const {
+    createOrder,
+    upsertCustomerForOrder,
+    recordMonitoringResultForWebsite,
+    getCustomerPortalByOrderId,
+  } = await import('../api/lib/order-store.js?monitoring-event-test');
+  const order = await createOrder({
+    productSlug: 'cyber-mandat',
+    customer: { name: 'Event User', email: 'event@example.ch', company: 'Event AG' },
+    website: { url: 'https://events.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+  await upsertCustomerForOrder(order);
+  await recordMonitoringResultForWebsite('https://events.example.ch', {
+    grade: 'C',
+    score: 4,
+    checkedAt: '2026-05-01T09:00:00.000Z',
+  });
+  await recordMonitoringResultForWebsite('https://events.example.ch', {
+    grade: 'A',
+    score: 6,
+    checkedAt: '2026-05-02T09:00:00.000Z',
+  });
+
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+  const monitoringEvents = portal.events.filter((event) => event.type === 'monitoring.completed');
+
+  assert.equal(monitoringEvents.length, 2);
+  assert.equal(monitoringEvents[0].payload.grade, 'A');
+  assert.equal(monitoringEvents[0].payload.score, 6);
+  assert.equal(monitoringEvents[1].payload.grade, 'C');
+});
+
+test('re-audit cron records email automation outcomes as order events', () => {
+  const reauditSource = fs.readFileSync(new URL('../api/cron/reaudit.js', import.meta.url), 'utf8');
+
+  assert.match(reauditSource, /recordOrderEvent/);
+  assert.match(reauditSource, /email\.reaudit/);
+  assert.match(reauditSource, /email\.reaudit_failed/);
 });
 
 test('order-status lazily migrates legacy paid orders on access', async () => {

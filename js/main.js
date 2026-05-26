@@ -570,9 +570,11 @@
       { rootMargin: '100px' }
     );
 
-    document.querySelectorAll('.trust__video').forEach(function (video) {
-      videoObserver.observe(video);
-    });
+    document
+      .querySelectorAll('.trust__video, .process-video__media, .trust-video__media, .industry-hero__video')
+      .forEach(function (video) {
+        videoObserver.observe(video);
+      });
   }
 
   // ── CTA Event Tracking (data-track) ──

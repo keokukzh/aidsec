@@ -201,7 +201,7 @@ export async function recordOrderEvent(orderId, type, payload = {}) {
     orderId,
     type,
     payload,
-    createdAt: new Date().toISOString(),
+    createdAt: payload.createdAt || payload.checkedAt || new Date().toISOString(),
   };
 
   if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) {
@@ -213,6 +213,51 @@ export async function recordOrderEvent(orderId, type, payload = {}) {
   }
 
   return event;
+}
+
+export async function createOnboardingTaskForOrder(orderId, payload = {}) {
+  const order = await getOrder(orderId);
+  if (!order) return null;
+
+  return recordOrderEvent(orderId, 'onboarding.task.created', {
+    status: 'open',
+    productSlug: order.productSlug || null,
+    websiteUrl: order.website?.url || null,
+    customerEmail: normalizeEmail(order.customer?.email),
+    ...payload,
+  });
+}
+
+export async function createReportPlaceholderForOrder(orderId, payload = {}) {
+  const order = await getOrder(orderId);
+  if (!order) return null;
+
+  const type = payload.type || 'pending_delivery';
+  const existingReports = Array.isArray(order.reports) ? order.reports : [];
+  const existing = existingReports.find((report) => report.type === type);
+  if (existing) return { order, report: existing, created: false };
+
+  const createdAt = payload.createdAt || new Date().toISOString();
+  const report = {
+    reportId: reportIdFor({ orderId, createdAt, type }),
+    key: null,
+    storageKey: null,
+    url: null,
+    label: payload.label || 'Delivery Report in Vorbereitung',
+    type,
+    createdAt,
+  };
+
+  const updatedOrder = await updateOrder(orderId, {
+    reports: [...existingReports, report],
+  });
+  await recordOrderEvent(orderId, 'report.placeholder.created', {
+    reportId: report.reportId,
+    label: report.label,
+    type: report.type,
+  });
+
+  return { order: updatedOrder, report, created: true };
 }
 
 async function getOrderEvents(orderId) {
@@ -500,6 +545,7 @@ export async function recordMonitoringResultForWebsite(websiteUrl, result) {
     websiteUrl: normalized,
     grade: result.grade,
     score: result.score,
+    checkedAt,
   });
   return order;
 }
@@ -574,6 +620,10 @@ export async function createLicenseForOrder(orderId) {
     localLicenses.set(license.licenseId, license);
   }
   await updateOrder(orderId, { licenseId: license.licenseId });
+  await recordOrderEvent(orderId, 'license.created', {
+    licenseId: license.licenseId,
+    tokenVersion: license.tokenVersion,
+  });
   return license;
 }
 
@@ -605,6 +655,8 @@ export const orderStore = {
   createLicenseForOrder,
   getLicense,
   recordOrderEvent,
+  createOnboardingTaskForOrder,
+  createReportPlaceholderForOrder,
   upsertCustomerForOrder,
   getCustomerPortalByOrderId,
   recordMonitoringResultForWebsite,

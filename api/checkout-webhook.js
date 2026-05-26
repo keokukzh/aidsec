@@ -1,7 +1,9 @@
 import { getEnvFirst } from './lib/env.js';
-import { sendPaymentConfirmationEmail, sendDeliveryEmail } from './lib/mailer.js';
+import { sendPaymentConfirmationEmail, sendDeliveryEmail, sendMagicLinkEmail } from './lib/mailer.js';
 import {
+  createOnboardingTaskForOrder,
   createLicenseForOrder,
+  createReportPlaceholderForOrder,
   getOrderBySessionId,
   markEventProcessed,
   recordOrderEvent,
@@ -36,6 +38,13 @@ async function applyCheckoutCompleted(session) {
   if (!order.licenseId) {
     await createLicenseForOrder(order.orderId);
   }
+  await createOnboardingTaskForOrder(order.orderId, {
+    source: 'stripe.checkout.session.completed',
+    stripeSessionId: session.id,
+  });
+  await createReportPlaceholderForOrder(order.orderId, {
+    source: 'stripe.checkout.session.completed',
+  });
   const customerOrder = await updateOrder(order.orderId, {});
   await upsertCustomerForOrder(customerOrder || updatedOrder);
   await recordOrderEvent(order.orderId, 'checkout.session.completed', {
@@ -54,6 +63,18 @@ async function applyCheckoutCompleted(session) {
   } catch (error) {
     console.error('[checkout-webhook] Payment confirmation email failed:', error.message);
     await recordOrderEvent(order.orderId, 'email.payment_confirmation_failed', { message: error.message });
+  }
+
+  // Send explicit customer portal access link
+  try {
+    const magicLinkResult = await sendMagicLinkEmail(customerOrder || updatedOrder);
+    await recordOrderEvent(order.orderId, 'email.magic_link', {
+      sent: !!magicLinkResult.sent,
+      simulated: !!magicLinkResult.simulated,
+    });
+  } catch (error) {
+    console.error('[checkout-webhook] Magic-link email failed:', error.message);
+    await recordOrderEvent(order.orderId, 'email.magic_link_failed', { message: error.message });
   }
 
   // Send delivery email after payment confirmation

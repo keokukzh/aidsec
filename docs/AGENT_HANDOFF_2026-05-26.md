@@ -1,6 +1,6 @@
 # AidSec Agent Handoff - 2026-05-26
 
-> Stand lokal dokumentiert am 2026-05-26 nach Production-Mail-Fix, P1-Sicherheitsnacharbeit und Customer-Backbone-Slice. Keine Secret-Werte in dieser Datei speichern oder ausgeben.
+> Stand lokal aktualisiert am 2026-05-27 nach Production-Mail-Fix, P1-Sicherheitsnacharbeit, Customer-Backbone-Slice, Conversion-/Video-Block und P1-Automation-Nachzug. Keine Secret-Werte in dieser Datei speichern oder ausgeben.
 
 ## Kurzstatus
 
@@ -9,12 +9,13 @@
 - Branch: `main`
 - Ausgangs-HEAD dieses Blocks: `5454625 feat: support smtp email provider override`
 - Letzter dokumentierter HEAD vor Customer-Backbone-Slice: `049efae fix: avoid sdk presigner warning`
-- Aktueller dokumentierter HEAD: `f8dd090 fix: defer aws sdk import for signed reads`
+- Aktueller dokumentierter HEAD vor P1-Automation-Nachzug: `85cffec fix: resolve broken internal links, favicon paths and redundant font preloads`
+- P1-Automation-Nachzug Commit: dieser Commit, `feat: finalize p1 customer automation` (exakter SHA via `git log -1 --oneline`)
 - Vercel-Projekt: `aidsec-ucws`
 - Vercel Project ID: `prj_ZUcUNY6xWsq1dpMUH2G5L1Ot1LFS`
 - Vercel Team ID: `team_fAGLE7MCIh7hUmRtnk4HcwRC`
 - Production vor diesem Block: Deployment `dpl_Fzm4AQDnxy5KMvJQTWJd9y9Fdx5Q`, Status `READY`, Commit `5454625`
-- Aktuelles Production Deployment nach Customer-Backbone-Slice: `dpl_4RNN1e2ovWx9ubFd9V8u6h1vWNYs`, Status `READY`, Commit `f8dd090`
+- Aktuelles Production Deployment vor P1-Automation-Nachzug: `dpl_4etqZWvVrBtzefkDeQTVgUFx2tBR`, Status `READY`, Commit `85cffec`
 - Production Domains: `https://aidsec.ch`, `https://www.aidsec.ch`
 
 ## Erledigt
@@ -26,6 +27,7 @@
 - Microsoft SMTP AUTH wurde tenant-weit erlaubt und fuer `aid.destani@aidsec.ch` aktiviert.
 - DKIM fuer `aidsec.ch` loest oeffentlich auf die Microsoft DKIM CNAMEs `selector1` und `selector2`.
 - Production-Smoke mit echter Empfaengeradresse war zuletzt gruen: Stripe, Webhook, Redis, R2, Plugin-Relay, Portal API und Mailprovider-Pfad.
+- Conversion-/Video-Block ist live: Remotion-Videos, Poster, Social-Cuts und Website-Einbau sind vorhanden; `npm run video:check` war gruen.
 
 ## In Diesem Block Umgesetzt
 
@@ -69,6 +71,27 @@
   - `customer backbone exposes stable website and report records`
   - `proof center report history keeps stable backbone identifiers`
 
+## P1-Automation-Nachzug 2026-05-27
+
+- `api/lib/order-store.js`
+  - `recordOrderEvent()` kann fachliche Ereigniszeitpunkte ueber `payload.createdAt` oder `payload.checkedAt` abbilden, damit Monitoring-/Re-Audit-Events im Portal stabil sortiert werden.
+  - `createOnboardingTaskForOrder()` erzeugt ein internes `onboarding.task.created` Event nach bezahltem Checkout.
+  - `createReportPlaceholderForOrder()` haengt einen nicht-sensitiven `pending_delivery` Report-Platzhalter an die Order und erzeugt `report.placeholder.created`.
+  - `createLicenseForOrder()` dokumentiert `license.created`.
+- `api/checkout-webhook.js`
+  - `checkout.session.completed` aktiviert jetzt neben Customer/License auch Onboarding-Task, Delivery-Report-Platzhalter, Payment-Mail, explizite Proof-Center-Magic-Link-Mail und Delivery-Mail.
+  - Alle Mailpfade schreiben Erfolgs-/Fehler-Events; keine neuen oeffentlichen APIs.
+- `api/cron/reaudit.js`
+  - Re-Audit-Mailausgang schreibt `email.reaudit` oder `email.reaudit_failed` als Order-Event.
+- `vercel.json` und `js/main.js`
+  - `/assets/videos/(.*)` bekommt immutable Cache Header.
+  - Lazy-Pause beobachtet neben alten Trust-Videos auch `process-video__media`, `trust-video__media` und `industry-hero__video`.
+- Tests
+  - Checkout-Paid Folgeartefakte: License, Onboarding-Task, Report-Platzhalter, Magic-Link-Mail-Event.
+  - Monitoring-Events sind kundenportal-sichtbar und neuester Check steht zuerst.
+  - Re-Audit-Cron dokumentiert Mail-Automation als Events.
+  - Video Cache Header und neue Lazy-Pause-Selectoren sind abgesichert.
+
 ## Verifikation Dieses Blocks
 
 Bereits lokal gruen:
@@ -77,13 +100,9 @@ Bereits lokal gruen:
 npm.cmd test
 npm.cmd run lint -- --quiet
 Get-ChildItem -Path api,tests,scripts,js,onboarding -Recurse -Include *.js,*.mjs | ForEach-Object { node --check $_.FullName }
-```
-
-Vor Commit/Push noch laufen lassen:
-
-```powershell
 npm.cmd run build
 npm.cmd audit --audit-level=moderate
+npm.cmd run video:check
 ```
 
 Nach Deploy:
@@ -105,6 +124,7 @@ Erfolgskriterium fuer weitere Deploys: Smoke gruen, keine frischen SMTP-/API-Feh
 ## Bekannte Risiken
 
 - Alle im Chat geteilten Provider-Secrets muessen rotiert werden. Dazu gehoeren mindestens SMTP/Microsoft, Brevo, hCaptcha Secret, HARPA Key, Redis Tokens und alle weiteren geposteten Keys. Diese Datei enthaelt bewusst keine Werte.
+- Secret-Rotation ist nicht technisch durch alten Code loesbar: Neue Secrets muessen bei den Providern erzeugt und danach in Vercel Production/Preview/Development plus lokaler `.env.local` ersetzt werden. Danach ist ein neuer Production-Smoke Pflicht.
 - `.env.local` bleibt gitignored und darf nicht angezeigt oder committed werden.
 - Die alte Smoke-Variante mit `example.com` als Empfaenger hat Microsoft-Mailfehler erzeugt. Ab jetzt echte Smoke-Mail nur ueber `SMOKE_EMAIL`.
 - Die frische `url.parse` Deprecation-Warnung aus Vercel Logs wurde durch Entfernen des AWS SDK Presigners und spaeteres dynamisches Laden des AWS SDK aus dem Proof-Center-Read-Pfad behoben. R2/S3 Put/Get/List nutzt weiter AWS SDK v3; signed Read URLs werden per WHATWG `URL` und SigV4 erzeugt. Der Production-Smoke nach `f8dd090` hatte danach im engen Logfenster keine Error-Logs.
@@ -120,15 +140,17 @@ git log --oneline --decorate -8
 npx.cmd --yes vercel@latest list aidsec-ucws
 ```
 
-2. Falls dieser Block noch nicht committed ist:
+2. Falls der P1-Automation-Nachzug noch nicht committed ist:
 
 ```powershell
 npm.cmd test
 npm.cmd run lint -- --quiet
 Get-ChildItem -Path api,tests,scripts,js,onboarding -Recurse -Include *.js,*.mjs | ForEach-Object { node --check $_.FullName }
 npm.cmd run build
-git add api/lib/hcaptcha.js api/contact-submit.js api/onboarding-submit.js js/form.js onboarding index.html scripts/production-smoke.mjs tests/api-p0.test.js docs/AGENT_HANDOFF_2026-05-26.md
-git commit -m "fix: verify captcha and production smoke email"
+npm.cmd audit --audit-level=moderate
+npm.cmd run video:check
+git add api/lib/order-store.js api/checkout-webhook.js api/cron/reaudit.js js/main.js vercel.json tests/api-p0.test.js tests/conversion-design.test.js docs/AGENT_HANDOFF_2026-05-26.md
+git commit -m "feat: finalize p1 customer automation"
 git push origin main
 ```
 
@@ -140,10 +162,10 @@ git push origin main
    - Lokale `.env.local` erneuern.
    - Danach Smoke erneut laufen lassen.
 
-5. Naechster P1 Customer Backbone Schritt:
-   - Bestehende Live-Orders bei naechstem Zugriff/Smoke automatisch ueber `upsertCustomerForOrder()` in neue Website/Report Records ueberfuehren.
-   - Optional Admin/CRM API fuer Customer Lookup nach E-Mail, Website und Order-ID bauen.
-   - Portal danach um Ereignislog, bessere Report-Historie und Monitoring-Trend erweitern.
+5. Naechster P1/P2 Schritt nach Secret-Rotation:
+   - Echte Testimonials/Case Studies einholen und strukturierte Trust-Sektion bauen.
+   - Follow-up-/Upsell-Automation an Order-Events koppeln.
+   - Optional Airtable/Supabase erst anbinden, wenn Redis-Backbone-Events stabil gesmoked sind.
    - Upstash bleibt kurzfristig Source of Truth; Make/n8n nur fuer Orchestrierung, nicht als Datenquelle.
 
 ## Wichtige Dateien
