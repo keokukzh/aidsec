@@ -8,6 +8,7 @@
 import { getEnvFirst, isProduction } from './lib/env.js';
 import { createOrder, getOrder } from './lib/order-store.js';
 import { generateMagicToken, verifyDemoMagicToken, verifyMagicToken } from './lib/order-token.js';
+import { sendMagicLinkEmail } from './lib/mailer.js';
 
 function formatTimeline(timeline = {}) {
   return Object.entries(timeline).map(([key, value]) => ({ key, ...value }));
@@ -44,6 +45,39 @@ function validateInternalPost(req) {
   const expected = getEnvFirst(['INTERNAL_API_SECRET']);
   const provided = req.headers?.['x-aidsec-internal-secret'];
   return !!expected && provided === expected;
+}
+
+function normalizeEmail(email = '') {
+  return String(email).trim().toLowerCase();
+}
+
+async function handleMagicLinkRequest(req, res) {
+  const data = req.body || {};
+  const orderId = String(data.orderId || '').trim();
+  const email = normalizeEmail(data.email);
+
+  if (!orderId || !email) {
+    return res.status(400).json({ error: 'orderId und email sind erforderlich' });
+  }
+
+  const neutralResponse = {
+    success: true,
+    sent: true,
+    message: 'Falls Auftrag und E-Mail uebereinstimmen, wurde ein Zugangslink versendet.',
+  };
+
+  try {
+    const order = await getOrder(orderId);
+    if (!order || normalizeEmail(order.customer?.email) !== email) {
+      return res.status(202).json(neutralResponse);
+    }
+
+    await sendMagicLinkEmail(order);
+    return res.status(202).json(neutralResponse);
+  } catch (error) {
+    console.error('[order-status] Magic-link email error:', error.message);
+    return res.status(500).json({ error: 'Zugangslink konnte nicht versendet werden' });
+  }
 }
 
 export default async function handler(req, res) {
@@ -101,6 +135,10 @@ export default async function handler(req, res) {
         apiVersion: '3.0.0-magiclink-persistent',
       },
     });
+  }
+
+  if ((req.body || {}).action === 'send_magic_link') {
+    return handleMagicLinkRequest(req, res);
   }
 
   if (!validateInternalPost(req)) {

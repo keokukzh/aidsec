@@ -300,3 +300,48 @@ test('monitoring targets include real order and customer contact data for re-aud
   assert.equal(target.customer.email, 'audit@example.ch');
   assert.equal(target.productSlug, 'cyber-mandat');
 });
+
+test('portal can request a magic link for an existing order without exposing the token', async () => {
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'development';
+  const { createOrder } = await import('../api/lib/order-store.js');
+  const { default: handler } = await import('../api/order-status.js');
+  const order = await createOrder({
+    productSlug: 'rapid-header-fix',
+    customer: { name: 'Magic User', email: 'magic@example.ch', company: 'Magic AG' },
+    website: { url: 'https://magic.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+  const res = createResponse();
+
+  await handler({
+    method: 'POST',
+    headers: {},
+    body: { action: 'send_magic_link', orderId: order.orderId, email: 'magic@example.ch' },
+  }, res);
+
+  process.env.NODE_ENV = previousNodeEnv;
+  assert.equal(res.statusCode, 202);
+  assert.equal(res.body.sent, true);
+  assert.equal(res.body.token, undefined);
+  assert.equal(res.body.magicLink, undefined);
+});
+
+test('magic-link request is enumeration-safe in production for unknown orders', async () => {
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'production';
+  const { default: handler } = await import('../api/order-status.js');
+  const res = createResponse();
+
+  await handler({
+    method: 'POST',
+    headers: {},
+    body: { action: 'send_magic_link', orderId: 'ord_not_real', email: 'nobody@example.ch' },
+  }, res);
+
+  process.env.NODE_ENV = previousNodeEnv;
+  assert.equal(res.statusCode, 202);
+  assert.equal(res.body.sent, true);
+  assert.equal(res.body.token, undefined);
+});

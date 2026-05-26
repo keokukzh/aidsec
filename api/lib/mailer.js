@@ -101,6 +101,75 @@ export async function sendPaymentConfirmationEmail(order) {
   return { sent: true, messageId: result.messageId };
 }
 
+// === Magic Link Email ===
+
+export function buildMagicLinkEmail(order) {
+  const baseUrl = getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
+  const token = generateMagicToken(order.orderId, order.customer.email);
+  const portalUrl = `${baseUrl}/proof-center.html?orderId=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(token)}`;
+
+  return {
+    to: order.customer.email,
+    subject: `Ihr AidSec Proof-Center-Zugang: ${order.orderId}`,
+    html: `
+  <table cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">
+    <tr><td style="padding:40px 30px;background:#0b1d3a;color:#fff;text-align:center;border-radius:8px 8px 0 0;">
+      <h1 style="margin:0;font-size:24px;color:#c8a84c;">AidSec</h1>
+      <p style="margin:8px 0 0;font-size:16px;">Proof-Center-Zugang</p>
+    </td></tr>
+    <tr><td style="padding:30px;background:#fff;">
+      <p style="font-size:16px;color:#333;">Hallo ${customerName(order)},</p>
+      <p style="font-size:15px;color:#555;line-height:1.6;">Hier ist Ihr sicherer Zugang zum AidSec Proof Center.</p>
+      <p style="margin:24px 0 0;">
+        <a href="${portalUrl}" style="display:inline-block;padding:12px 24px;background:#c8a84c;color:#fff;text-decoration:none;border-radius:4px;font-weight:600;">Proof Center oeffnen</a>
+      </p>
+      <p style="margin:16px 0 0;font-size:13px;color:#64748b;">Dieser Link ist zeitlich begrenzt und nur fuer Ihren Auftrag gueltig.</p>
+    </td></tr>
+    <tr><td style="padding:20px 30px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;">
+      Freundliche Gruesse, AidSec
+    </td></tr>
+  </table>`,
+    text: [
+      `Hallo ${customerName(order)}`,
+      '',
+      'Hier ist Ihr sicherer Zugang zum AidSec Proof Center.',
+      '',
+      `Proof Center: ${portalUrl}`,
+      '',
+      'Dieser Link ist zeitlich begrenzt und nur fuer Ihren Auftrag gueltig.',
+      '',
+      'Freundliche Gruesse',
+      'AidSec',
+    ].join('\n'),
+  };
+}
+
+export async function sendMagicLinkEmail(order) {
+  const config = smtpConfig();
+  const message = buildMagicLinkEmail(order);
+
+  if (!config.host || !config.user || !config.pass) {
+    if (isProduction()) throw new Error('SMTP is not configured');
+    return { simulated: true, message };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: config.host,
+    port: config.port,
+    secure: config.secure,
+    auth: { user: config.user, pass: config.pass },
+  });
+
+  const result = await transporter.sendMail({
+    from: config.from,
+    to: message.to,
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+  });
+  return { sent: true, messageId: result.messageId };
+}
+
 // === Delivery Email ===
 
 export function buildDeliveryEmail(order) {

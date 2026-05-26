@@ -1,0 +1,301 @@
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+
+const repoRoot = new URL('..', import.meta.url);
+
+function loadDotenv(pathname) {
+  if (!fs.existsSync(pathname)) return;
+  const lines = fs.readFileSync(pathname, 'utf8').split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || !trimmed.includes('=')) continue;
+    const index = trimmed.indexOf('=');
+    const key = trimmed.slice(0, index).trim();
+    let value = trimmed.slice(index + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    if (!process.env[key]) process.env[key] = value;
+  }
+}
+
+loadDotenv(new URL('.env.local', repoRoot).pathname);
+
+const baseUrl = (process.env.BASE_URL || 'https://www.aidsec.ch').replace(/\/$/, '').replace('https://aidsec.ch', 'https://www.aidsec.ch');
+const runId = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
+const smokeEmail = `aidsec.smoke+${runId}@example.com`;
+const websiteUrl = `https://smoke-${runId}.example.com`;
+const results = [];
+
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value || !value.trim()) throw new Error(`${name} fehlt lokal fuer Production-Smoke`);
+  return value.trim();
+}
+
+function record(name, ok, details = {}) {
+  results.push({ name, ok, ...details });
+}
+
+function maskId(value) {
+  if (!value) return null;
+  return `${String(value).slice(0, 6)}...${String(value).slice(-6)}`;
+}
+
+function signMagicToken(orderId, email) {
+  const secret = requireEnv('ORDER_TOKEN_SECRET');
+  const payload = JSON.stringify({
+    orderId,
+    email,
+    expiry: Math.floor(Date.now() / 1000) + 3600,
+  });
+  const payloadB64 = Buffer.from(payload).toString('base64url');
+  const sig = crypto.createHmac('sha256', secret).update(payloadB64).digest('base64url');
+  return `${payloadB64}.${sig}`;
+}
+
+function stripeSignature(rawBody) {
+  const secret = requireEnv('STRIPE_WEBHOOK_SECRET');
+  const ts = Math.floor(Date.now() / 1000);
+  const sig = crypto.createHmac('sha256', secret).update(`${ts}.${rawBody}`).digest('hex');
+  return `t=${ts},v1=${sig}`;
+}
+
+function pluginSignature(payload, installSecret, ts) {
+  return crypto.createHmac('sha256', installSecret).update(JSON.stringify(payload) + ts).digest('base64');
+}
+
+async function postJson(url, payload, headers = {}) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...headers },
+    body: JSON.stringify(payload),
+  });
+  const text = await response.text();
+  let body = null;
+  try {
+    body = text ? JSON.parse(text) : null;
+  } catch (_) {
+    body = { raw: text.slice(0, 160) };
+  }
+  return { response, body };
+}
+
+async function getJson(url, headers = {}) {
+  const response = await fetch(url, { headers: { Accept: 'application/json', ...headers } });
+  const text = await response.text();
+  let body = null;
+  try {
+    body = text ? JSON.parse(text) : null;
+  } catch (_) {
+    body = { raw: text.slice(0, 160) };
+  }
+  return { response, body };
+}
+
+async function redisCommand(args) {
+  const url = requireEnv('UPSTASH_REDIS_REST_URL');
+  const token = requireEnv('UPSTASH_REDIS_REST_TOKEN');
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(args),
+  });
+  if (!response.ok) throw new Error(`Upstash ${args[0]} failed: ${response.status}`);
+  const body = await response.json();
+  return body.result;
+}
+
+async function redisGetJson(key) {
+  const result = await redisCommand(['GET', key]);
+  if (!result) return null;
+  return typeof result === 'string' ? JSON.parse(result) : result;
+}
+
+async function redisSetJson(key, value) {
+  return redisCommand(['SET', key, JSON.stringify(value)]);
+}
+
+async function putR2Json(key, data) {
+  const accountId = requireEnv('R2_ACCOUNT_ID');
+  const bucket = requireEnv('R2_BUCKET');
+  const client = new S3Client({
+    region: 'auto',
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId: requireEnv('R2_ACCESS_KEY_ID'),
+      secretAccessKey: requireEnv('R2_SECRET_ACCESS_KEY'),
+    },
+    forcePathStyle: true,
+  });
+  await client.send(new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: JSON.stringify(data, null, 2),
+    ContentType: 'application/json; charset=utf-8',
+  }));
+}
+
+async function createCheckout(productSlug, billingPeriod) {
+  const { response, body } = await postJson(`${baseUrl}/api/checkout`, {
+    productSlug,
+    billingPeriod,
+    name: `AidSec Smoke ${runId}`,
+    email: smokeEmail,
+    company: 'AidSec Smoke Test',
+    websiteUrl,
+  });
+  if (!response.ok || !body?.success || !body.orderId || !body.sessionId || !body.url) {
+    throw new Error(`${productSlug} checkout failed: ${response.status}`);
+  }
+
+  const token = signMagicToken(body.orderId, smokeEmail);
+  const status = await getJson(`${baseUrl}/api/order-status?orderId=${encodeURIComponent(body.orderId)}&token=${encodeURIComponent(token)}`);
+  if (!status.response.ok || status.body?.order?.paymentStatus !== 'unpaid') {
+    throw new Error(`${productSlug} persisted order check failed: ${status.response.status}`);
+  }
+
+  record(`checkout:${productSlug}`, true, {
+    orderId: maskId(body.orderId),
+    sessionId: maskId(body.sessionId),
+    mode: billingPeriod || 'once',
+  });
+  return { productSlug, orderId: body.orderId, sessionId: body.sessionId, token };
+}
+
+async function completeCheckout(order) {
+  const event = {
+    id: `evt_smoke_${runId}_${order.productSlug}`,
+    type: 'checkout.session.completed',
+    data: {
+      object: {
+        id: order.sessionId,
+        customer: `cus_smoke_${runId}`,
+        subscription: order.productSlug === 'cyber-mandat' ? `sub_smoke_${runId}` : null,
+        payment_status: 'paid',
+        metadata: {
+          orderId: order.orderId,
+          productSlug: order.productSlug,
+          websiteUrl,
+          billingPeriod: order.productSlug === 'cyber-mandat' ? 'monthly' : 'once',
+        },
+      },
+    },
+  };
+  const rawBody = JSON.stringify(event);
+  const response = await fetch(`${baseUrl}/api/checkout/webhook`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Stripe-Signature': stripeSignature(rawBody),
+    },
+    body: rawBody,
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || !body.received || body.handled !== true) {
+    throw new Error(`signed webhook failed: ${response.status}`);
+  }
+
+  const status = await getJson(`${baseUrl}/api/order-status?orderId=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(order.token)}`);
+  if (!status.response.ok || status.body?.order?.paymentStatus !== 'paid') {
+    throw new Error(`post-webhook order status failed: ${status.response.status}`);
+  }
+
+  record('stripe:signed-webhook', true, {
+    orderId: maskId(order.orderId),
+    duplicate: !!body.duplicate,
+  });
+}
+
+async function verifyR2SignedReport(order) {
+  const reportKey = `reports/smoke/${runId}-${order.orderId}.json`;
+  await putR2Json(reportKey, {
+    type: 'production-smoke',
+    runId,
+    orderId: order.orderId,
+    createdAt: new Date().toISOString(),
+  });
+
+  const stored = await redisGetJson(`order:${order.orderId}`);
+  if (!stored) throw new Error('order missing in Redis after webhook');
+  stored.reportKey = reportKey;
+  stored.reports = [
+    ...(stored.reports || []),
+    { orderId: order.orderId, key: reportKey, label: 'Smoke Report', createdAt: new Date().toISOString() },
+  ];
+  stored.updatedAt = new Date().toISOString();
+  await redisSetJson(`order:${order.orderId}`, stored);
+
+  const portal = await getJson(`${baseUrl}/api/proof-center-status?orderId=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(order.token)}`);
+  const report = portal.body?.portal?.reports?.find((item) => item.key === reportKey);
+  if (!portal.response.ok || !report?.url || !/^https:\/\//.test(report.url)) {
+    throw new Error(`signed report URL failed: ${portal.response.status}`);
+  }
+
+  record('r2:signed-report-url', true, {
+    orderId: maskId(order.orderId),
+    reportKey,
+    signed: report.url.includes('X-Amz-Signature') || report.url.includes('X-Amz-Credential'),
+  });
+}
+
+async function verifyPluginRelay(order) {
+  const stored = await redisGetJson(`order:${order.orderId}`);
+  if (!stored?.licenseId) throw new Error('order license missing after webhook');
+  const license = await redisGetJson(`license:${stored.licenseId}`);
+  if (!license?.installSecret) throw new Error('license install secret missing in Redis');
+
+  const payload = {
+    event: 'production_smoke',
+    site_url: websiteUrl,
+    licenseId: license.licenseId,
+    tokenVersion: Number.parseInt(process.env.PLUGIN_TOKEN_VERSION || String(license.tokenVersion || 1), 10),
+    smokeRunId: runId,
+  };
+  const ts = Math.floor(Date.now() / 1000).toString();
+  const { response, body } = await postJson(`${baseUrl}/api/plugin-webhook-relay`, payload, {
+    'X-AidSec-Ts': ts,
+    'X-AidSec-Sig': pluginSignature(payload, license.installSecret, ts),
+  });
+  if (!response.ok || body?.success !== true) {
+    throw new Error(`plugin relay failed: ${response.status}`);
+  }
+
+  record('plugin-relay:valid-license-signature', true, {
+    licenseId: maskId(license.licenseId),
+  });
+}
+
+async function main() {
+  const orders = [];
+  orders.push(await createCheckout('rapid-header-fix'));
+  orders.push(await createCheckout('kanzlei-haertung'));
+  orders.push(await createCheckout('cyber-mandat', 'monthly'));
+
+  const cyberMandat = orders.find((order) => order.productSlug === 'cyber-mandat');
+  await completeCheckout(cyberMandat);
+  await verifyR2SignedReport(cyberMandat);
+  await verifyPluginRelay(cyberMandat);
+
+  console.log(JSON.stringify({
+    ok: true,
+    baseUrl,
+    runId,
+    smokeEmail,
+    checks: results,
+  }, null, 2));
+}
+
+main().catch((error) => {
+  console.error(JSON.stringify({
+    ok: false,
+    runId,
+    error: error.message,
+    checks: results,
+  }, null, 2));
+  process.exitCode = 1;
+});
