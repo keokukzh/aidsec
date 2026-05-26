@@ -8,6 +8,7 @@
 
 import { storage } from './storage.js';
 import { isProduction } from '../lib/env.js';
+import { listCustomerMonitoringTargets, recordMonitoringResultForWebsite } from '../lib/order-store.js';
 
 const SECURITY_HEADERS = [
   'strict-transport-security',
@@ -65,6 +66,9 @@ async function checkSecurityHeaders(url) {
 }
 
 async function loadCustomers() {
+  const customerTargets = await listCustomerMonitoringTargets().catch(() => []);
+  if (customerTargets.length > 0) return customerTargets;
+
   // Try storage first
   try {
     const customers = await storage.get('data/customers.json');
@@ -104,6 +108,9 @@ async function runMonitoring() {
       result.customerId = customer.id;
       result.customerName = customer.name;
       results.push(result);
+      await recordMonitoringResultForWebsite(customer.website.url, result).catch((error) => {
+        console.error(`[monitoring] Store update failed for ${customer.website.url}:`, error.message);
+      });
 
       // Track issues
       if (result.grade === 'F' || result.grade === 'E') {
