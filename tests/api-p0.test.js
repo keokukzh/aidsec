@@ -398,3 +398,60 @@ test('transactional emails use Brevo API in production when configured', async (
   assert.equal(calls[0].url, 'https://api.brevo.com/v3/smtp/email');
   assert.equal(calls[0].body.to[0].email, 'brevo@example.ch');
 });
+
+test('proof center returns chronological report and monitoring history', async () => {
+  const previousSecret = process.env.ORDER_TOKEN_SECRET;
+  process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';
+  const {
+    createOrder,
+    updateOrder,
+    upsertCustomerForOrder,
+    recordMonitoringResultForWebsite,
+  } = await import('../api/lib/order-store.js');
+  const { generateMagicToken } = await import('../api/lib/order-token.js');
+  const { default: handler } = await import('../api/proof-center-status.js?history-test');
+  const order = await createOrder({
+    productSlug: 'cyber-mandat',
+    customer: { name: 'History User', email: 'history@example.ch', company: 'History AG' },
+    website: { url: 'https://history.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+    reports: [
+      {
+        key: 'reports/orders/history-old.json',
+        label: 'Initial Audit',
+        type: 'audit',
+        createdAt: '2026-01-10T08:00:00.000Z',
+      },
+      {
+        key: 'reports/orders/history-new.json',
+        label: 'Re-Audit',
+        type: 'reaudit',
+        createdAt: '2026-02-10T08:00:00.000Z',
+      },
+    ],
+  });
+  const updatedOrder = await updateOrder(order.orderId, {
+    reports: order.reports,
+  });
+  await upsertCustomerForOrder(updatedOrder);
+  await recordMonitoringResultForWebsite('https://history.example.ch', {
+    grade: 'B',
+    score: 5,
+    checkedAt: '2026-02-11T09:00:00.000Z',
+  });
+  const token = generateMagicToken(order.orderId, 'history@example.ch');
+  const res = createResponse();
+
+  await handler({ method: 'GET', headers: {}, query: { orderId: order.orderId, token } }, res);
+
+  process.env.ORDER_TOKEN_SECRET = previousSecret;
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.portal.orders[0].monitoring.grade, 'B');
+  assert.equal(res.body.portal.reportHistory.length, 2);
+  assert.equal(res.body.portal.reportHistory[0].label, 'Re-Audit');
+  assert.equal(res.body.portal.reportHistory[0].type, 'reaudit');
+  assert.match(res.body.portal.reportHistory[0].url, /history-new\.json/);
+  assert.equal(res.body.portal.monitoringHistory[0].grade, 'B');
+  assert.equal(res.body.portal.monitoringHistory[0].websiteUrl, 'https://history.example.ch');
+});

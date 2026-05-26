@@ -281,14 +281,34 @@ export async function getCustomerPortalByOrderId(orderId) {
   const orders = (await Promise.all((customer.orderIds || []).map((id) => getOrder(id)))).filter(Boolean);
   const events = (await Promise.all(orders.map((item) => getOrderEvents(item.orderId)))).flat();
   const reportsByOrder = orders
-    .filter((item) => item.reportKey || item.reportUrl)
-    .map((item) => ({
-      orderId: item.orderId,
-      key: item.reportKey || null,
-      url: item.reportUrl || null,
-      label: 'Audit-Report',
-      createdAt: item.updatedAt,
-    }));
+    .flatMap((item) => {
+      const explicitReports = (item.reports || []).map((report) => ({
+        orderId: item.orderId,
+        websiteUrl: item.website?.url || null,
+        productSlug: item.productSlug,
+        key: report.key || null,
+        url: report.url || null,
+        label: report.label || 'Audit-Report',
+        type: report.type || 'audit',
+        createdAt: report.createdAt || item.updatedAt,
+      }));
+
+      if (!item.reportKey && !item.reportUrl) return explicitReports;
+
+      return [
+        ...explicitReports,
+        {
+          orderId: item.orderId,
+          websiteUrl: item.website?.url || null,
+          productSlug: item.productSlug,
+          key: item.reportKey || null,
+          url: item.reportUrl || null,
+          label: 'Audit-Report',
+          type: 'audit',
+          createdAt: item.updatedAt,
+        },
+      ];
+    });
 
   return {
     customer: {
@@ -306,13 +326,20 @@ export async function getCustomerPortalByOrderId(orderId) {
       paymentStatus: item.paymentStatus,
       website: item.website,
       results: item.results,
+      monitoring: item.monitoring || null,
       licenseId: item.licenseId || null,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
     })),
     websites: Object.values(customer.websites || {}),
     reports: [...(customer.reports || []), ...reportsByOrder].filter(
-      (report, index, all) => all.findIndex((candidate) => candidate.orderId === report.orderId) === index,
+      (report, index, all) =>
+        all.findIndex(
+          (candidate) =>
+            candidate.orderId === report.orderId &&
+            (candidate.key || candidate.url || '') === (report.key || report.url || '') &&
+            String(candidate.createdAt || '') === String(report.createdAt || ''),
+        ) === index,
     ),
     events: events.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 25),
   };

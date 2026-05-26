@@ -90,6 +90,22 @@
     return '•••' + str.slice(-6);
   }
 
+  function escapeHtml(value) {
+    return String(value === null || value === undefined ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function reportTypeLabel(type) {
+    if (type === 'reaudit') return 'Re-Audit';
+    if (type === 'monitoring') return 'Monitoring';
+    if (type === 'delivery') return 'Delivery';
+    return 'Audit';
+  }
+
   function renderPortal(data) {
     hide('portal-auth');
     hide('portal-loading');
@@ -100,6 +116,8 @@
     var orders = portal.orders || [];
     var websites = portal.websites || [];
     var reports = portal.reports || [];
+    var reportHistory = portal.reportHistory || reports;
+    var monitoringHistory = portal.monitoringHistory || [];
     var events = portal.events || [];
     var customer = portal.customer || {};
     var leadScore = portal.leadScore || null;
@@ -133,27 +151,27 @@
       orders.forEach(function (o) {
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Auftrag</span>';
-        ordersHtml += '<span class="portal-order__value">' + o.orderId + '</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(o.orderId) + '</span>';
         ordersHtml += '</div>';
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Produkt</span>';
-        ordersHtml += '<span class="portal-order__value">' + o.package + '</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(o.package || o.productSlug || '-') + '</span>';
         ordersHtml += '</div>';
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Status</span>';
-        ordersHtml += '<span class="portal-order__value">' + statusLabel(o.status) + '</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(statusLabel(o.status)) + '</span>';
         ordersHtml += '</div>';
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Zahlung</span>';
-        ordersHtml += '<span class="portal-order__value">' + statusLabel(o.paymentStatus) + '</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(statusLabel(o.paymentStatus)) + '</span>';
         ordersHtml += '</div>';
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Website</span>';
-        ordersHtml += '<span class="portal-order__value">' + (o.website ? o.website.url : '-') + '</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(o.website ? o.website.url : '-') + '</span>';
         ordersHtml += '</div>';
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Bestellt am</span>';
-        ordersHtml += '<span class="portal-order__value">' + formatDate(o.createdAt) + '</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(formatDate(o.createdAt)) + '</span>';
         ordersHtml += '</div>';
         ordersHtml += '</div>';
       });
@@ -179,6 +197,20 @@
       var gradeEl = el('portal-monitor-circle');
       if (gradeEl) {
         gradeEl.className = 'portal-grade__circle portal-grade__circle--' + gradeColor(m.grade);
+      }
+      if (monitoringHistory.length > 0) {
+        var monitoringHtml = '<div class="portal-history portal-history--compact">';
+        monitoringHistory.slice(0, 5).forEach(function (entry) {
+          monitoringHtml += '<div class="portal-history__item">';
+          monitoringHtml += '<div class="portal-history__main">';
+          monitoringHtml += '<span class="portal-history__badge portal-history__badge--' + gradeColor(entry.grade) + '">' + escapeHtml(entry.grade || '-') + '</span>';
+          monitoringHtml += '<div>';
+          monitoringHtml += '<p class="portal-history__title">' + escapeHtml(entry.websiteUrl || 'Website') + '</p>';
+          monitoringHtml += '<p class="portal-history__meta">Score ' + escapeHtml((entry.score !== null && entry.score !== undefined) ? entry.score + '/6' : '-') + ' · ' + escapeHtml(formatDate(entry.checkedAt)) + '</p>';
+          monitoringHtml += '</div></div></div>';
+        });
+        monitoringHtml += '</div>';
+        el('portal-monitor-body').insertAdjacentHTML('beforeend', monitoringHtml);
       }
     } else {
       setHtml('portal-monitor-body', '<p style="color:var(--gray-500);font-size:var(--text-sm);">Monitoringdaten werden nach der naechsten Pruefung angezeigt.</p>');
@@ -208,15 +240,20 @@
     }
 
     // Reports
-    if (reports.length > 0) {
+    if (reportHistory.length > 0) {
       var reportsHtml = '';
-      reports.forEach(function (r) {
-        reportsHtml += '<div class="portal-order__row">';
-        reportsHtml += '<span class="portal-order__label">' + (r.label || 'Report') + '</span>';
+      reportHistory.forEach(function (r) {
+        reportsHtml += '<div class="portal-history__item">';
+        reportsHtml += '<div class="portal-history__main">';
+        reportsHtml += '<span class="portal-history__badge">' + escapeHtml(reportTypeLabel(r.type)) + '</span>';
+        reportsHtml += '<div>';
+        reportsHtml += '<p class="portal-history__title">' + escapeHtml(r.label || 'Report') + '</p>';
+        reportsHtml += '<p class="portal-history__meta">' + escapeHtml(formatDate(r.createdAt)) + (r.websiteUrl ? ' · ' + escapeHtml(r.websiteUrl) : '') + '</p>';
+        reportsHtml += '</div></div>';
         if (r.url) {
-          reportsHtml += '<span class="portal-order__value"><a href="' + r.url + '" target="_blank" rel="noopener">PDF anzeigen</a></span>';
+          reportsHtml += '<a class="portal-history__link" href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener">Report oeffnen</a>';
         } else {
-          reportsHtml += '<span class="portal-order__value">' + formatDate(r.createdAt) + '</span>';
+          reportsHtml += '<span class="portal-history__link portal-history__link--muted">In Vorbereitung</span>';
         }
         reportsHtml += '</div>';
       });
@@ -230,8 +267,8 @@
       var eventsHtml = '';
       events.slice(0, 5).forEach(function (e) {
         eventsHtml += '<div class="portal-order__row">';
-        eventsHtml += '<span class="portal-order__label">' + e.type.replace(/_/g, ' ') + '</span>';
-        eventsHtml += '<span class="portal-order__value">' + formatDate(e.createdAt) + '</span>';
+        eventsHtml += '<span class="portal-order__label">' + escapeHtml(e.type.replace(/_/g, ' ')) + '</span>';
+        eventsHtml += '<span class="portal-order__value">' + escapeHtml(formatDate(e.createdAt)) + '</span>';
         eventsHtml += '</div>';
       });
       setHtml('portal-events-body', eventsHtml);

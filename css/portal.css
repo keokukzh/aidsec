@@ -292,6 +292,94 @@
   line-height: var(--leading-relaxed);
 }
 
+/* Portal history */
+.portal-history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.portal-history--compact {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--gray-100);
+}
+
+.portal-history__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.portal-history__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.portal-history__badge {
+  flex: 0 0 auto;
+  min-width: 44px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-100);
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.portal-history__badge--a,
+.portal-history__badge--b {
+  background: var(--green-bg);
+  color: var(--green-safe);
+}
+
+.portal-history__badge--c,
+.portal-history__badge--d {
+  background: #fefce8;
+  color: var(--gold-dark);
+}
+
+.portal-history__badge--f {
+  background: var(--red-bg);
+  color: var(--red-danger);
+}
+
+.portal-history__title {
+  color: var(--navy);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.portal-history__meta {
+  color: var(--gray-500);
+  font-size: var(--text-xs);
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+}
+
+.portal-history__link {
+  flex: 0 0 auto;
+  color: var(--gold-dark);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.portal-history__link:hover {
+  text-decoration: underline;
+}
+
+.portal-history__link--muted {
+  color: var(--gray-400);
+}
+
 /* Lead score */
 .portal-lead {
   text-align: center;

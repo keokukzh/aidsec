@@ -45,7 +45,33 @@ async function withSignedReportUrls(portal) {
       }
     }),
   );
-  return { ...portal, reports };
+  const reportHistory = reports
+    .map((report) => ({
+      orderId: report.orderId,
+      websiteUrl: report.websiteUrl || null,
+      productSlug: report.productSlug || null,
+      key: report.key || null,
+      url: report.url || null,
+      label: report.label || 'Audit-Report',
+      type: report.type || 'audit',
+      createdAt: report.createdAt || null,
+      expiresInSeconds: report.expiresInSeconds || null,
+    }))
+    .sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+
+  const monitoringHistory = (portal.orders || [])
+    .filter((order) => order.monitoring)
+    .map((order) => ({
+      orderId: order.orderId,
+      websiteUrl: order.website?.url || order.monitoring.url || null,
+      grade: order.monitoring.grade || null,
+      score: order.monitoring.score ?? null,
+      checkedAt: order.monitoring.checkedAt || order.monitoring.checkedAt || null,
+      productSlug: order.productSlug || null,
+    }))
+    .sort((a, b) => String(b.checkedAt || '').localeCompare(String(a.checkedAt || '')));
+
+  return { ...portal, reports, reportHistory, monitoringHistory };
 }
 
 function publicDemoResponse(siteData) {
