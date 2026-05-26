@@ -104,7 +104,7 @@ async function createStripeSession({ productSlug, customerData, order, billingPe
     success_url: successUrl,
     cancel_url: cancelUrl,
     customer_email: customerData.email,
-    locale: 'de-CH',
+    locale: 'de',
     metadata,
     billing_address_collection: 'auto',
     tax_id_collection: { enabled: false },
