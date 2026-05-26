@@ -10,6 +10,10 @@ function apiDevMiddleware() {
     '/api/order-status': '/api/order-status.js',
     '/api/proof-center-status': '/api/proof-center-status.js',
     '/api/crm-lead-scoring': '/api/crm-lead-scoring.js',
+
+    '/api/cron/monitoring': '/api/cron/monitoring.js',
+    '/api/cron/reaudit': '/api/cron/reaudit.js',
+
   };
 
   function readRequestBody(nodeReq) {

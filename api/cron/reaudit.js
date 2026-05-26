@@ -68,6 +68,7 @@ async function runReAudit() {
 
   const audits = [];
   const errors = [];
+  let emailsSent = 0;
 
   for (const target of customerTargets) {
     try {
@@ -75,21 +76,31 @@ async function runReAudit() {
       result.customerId = target.customerId;
       result.customerName = target.name;
 
-      await recordMonitoringResultForWebsite(target.website.url, result).catch((e) => {
+      const updatedOrder = await recordMonitoringResultForWebsite(target.website.url, result).catch((e) => {
         console.error(`[reaudit] Store update failed for ${target.website.url}:`, e.message);
+        return null;
       });
 
       audits.push(result);
 
       try {
+        const order = updatedOrder || await getOrder(target.orderId);
+        if (!order?.customer?.email && !target.customer?.email) {
+          throw new Error('No customer email available for re-audit notification');
+        }
         const emailResult = await sendReAuditEmail({
-          orderId: `ord_reaudit_${Date.now()}`,
-          customer: { email: 'monitoring@aidsec.ch' },
-          package: 'Cyber-Mandat Pro',
+          ...order,
+          orderId: order?.orderId || target.orderId,
+          customer: {
+            ...(order?.customer || {}),
+            ...(target.customer || {}),
+          },
+          package: order?.package || order?.productSlug || 'Cyber-Mandat Pro',
           website: { url: target.website.url },
           monitoring: result
         }).catch(() => null);
-        if (emailResult?.sent) {
+        if (emailResult?.sent || emailResult?.simulated) {
+          emailsSent += 1;
           console.log(`[reaudit] Re-Audit-E-Mail gesendet fuer ${target.website.url}`);
         }
       } catch (e) {
@@ -100,6 +111,7 @@ async function runReAudit() {
       errors.push({
         website: target.website?.url,
         customerId: target.customerId,
+        orderId: target.orderId,
         error: e.message
       });
     }
@@ -138,7 +150,7 @@ async function runReAudit() {
   return {
     success: true,
     auditsCompleted: audits.length,
-    emailsSent: summary.ok + summary.warning,
+    emailsSent,
     summary,
     reportKey
   };

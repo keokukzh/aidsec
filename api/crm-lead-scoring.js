@@ -11,6 +11,7 @@
 
 import { getOrder, getCustomerPortalByOrderId } from './lib/order-store.js';
 import { getEnvFirst } from './lib/env.js';
+import { verifyMagicToken } from './lib/order-token.js';
 
 export function computeLeadScore(order, monitoringGrade) {
   let score = 0;
@@ -108,9 +109,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { orderId } = req.query || {};
+    const { orderId, token } = req.query || {};
     if (!orderId) {
       return res.status(400).json({ error: 'orderId ist erforderlich' });
+    }
+    if (!token) {
+      return res.status(401).json({ error: 'Authentifizierung erforderlich' });
+    }
+
+    const authResult = verifyMagicToken(token);
+    if (!authResult.valid || authResult.orderId !== orderId) {
+      return res.status(401).json({ error: 'Ungueltiger oder abgelaufener CRM-Link' });
     }
 
     const portal = await getCustomerPortalByOrderId(orderId);

@@ -263,3 +263,40 @@ test('delivery email can be built for all paid products without undefined variab
     assert.match(message.html, /Kundenportal|Header-Check|Proof Center/);
   }
 });
+
+test('crm lead scoring requires a magic-link token before returning portal data', async () => {
+  const { createOrder, upsertCustomerForOrder } = await import('../api/lib/order-store.js');
+  const { default: handler } = await import('../api/crm-lead-scoring.js');
+  const order = await createOrder({
+    productSlug: 'cyber-mandat',
+    customer: { name: 'CRM User', email: 'crm@example.ch', company: 'CRM AG' },
+    website: { url: 'https://crm.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+  await upsertCustomerForOrder(order);
+  const res = createResponse();
+
+  await handler({ method: 'GET', headers: {}, query: { orderId: order.orderId } }, res);
+
+  assert.equal(res.statusCode, 401);
+});
+
+test('monitoring targets include real order and customer contact data for re-audit emails', async () => {
+  const { createOrder, upsertCustomerForOrder, listCustomerMonitoringTargets } = await import('../api/lib/order-store.js');
+  const order = await createOrder({
+    productSlug: 'cyber-mandat',
+    customer: { name: 'Audit User', email: 'audit@example.ch', company: 'Audit AG' },
+    website: { url: 'https://audit.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+  await upsertCustomerForOrder(order);
+
+  const targets = await listCustomerMonitoringTargets();
+  const target = targets.find((item) => item.website.url === 'https://audit.example.ch');
+
+  assert.equal(target.orderId, order.orderId);
+  assert.equal(target.customer.email, 'audit@example.ch');
+  assert.equal(target.productSlug, 'cyber-mandat');
+});

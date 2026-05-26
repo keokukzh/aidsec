@@ -360,6 +360,12 @@ export async function listCustomerMonitoringTargets() {
         id: `${customer.customerId}:${website.url}`,
         name: customer.name || customer.company || customer.email,
         customerId: customer.customerId,
+        orderId: website.orderId,
+        customer: {
+          name: customer.name,
+          email: customer.email,
+          company: customer.company,
+        },
         website: { url: website.url },
         productSlug: website.productSlug,
         active: true,
