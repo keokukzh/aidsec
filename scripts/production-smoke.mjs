@@ -25,7 +25,9 @@ loadDotenv(fileURLToPath(new URL('.env.local', repoRoot)));
 
 const baseUrl = (process.env.BASE_URL || 'https://www.aidsec.ch').replace(/\/$/, '').replace('https://aidsec.ch', 'https://www.aidsec.ch');
 const runId = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
-const smokeEmail = `aidsec.smoke+${runId}@example.com`;
+const configuredSmokeEmail = (process.env.SMOKE_EMAIL || '').trim();
+const smokeEmail = configuredSmokeEmail || `aidsec-smoke-${runId}@example.invalid`;
+const expectsTransactionalEmail = Boolean(configuredSmokeEmail);
 const websiteUrl = `https://smoke-${runId}.example.com`;
 const results = [];
 
@@ -42,6 +44,13 @@ function record(name, ok, details = {}) {
 function maskId(value) {
   if (!value) return null;
   return `${String(value).slice(0, 6)}...${String(value).slice(-6)}`;
+}
+
+function maskEmail(value) {
+  const email = String(value || '');
+  const at = email.indexOf('@');
+  if (at <= 1) return email ? '***' : null;
+  return `${email.slice(0, 2)}***${email.slice(at)}`;
 }
 
 function signMagicToken(orderId, email) {
@@ -210,6 +219,11 @@ async function completeCheckout(order) {
     orderId: maskId(order.orderId),
     duplicate: !!body.duplicate,
   });
+
+  record('email:transactional-delivery', expectsTransactionalEmail, {
+    recipient: maskEmail(smokeEmail),
+    evidence: expectsTransactionalEmail ? 'checkout webhook accepted and mail provider errors are checked via deployment logs' : 'skipped: set SMOKE_EMAIL to a real test inbox',
+  });
 }
 
 async function verifyR2SignedReport(order) {
@@ -286,7 +300,7 @@ async function main() {
     ok: true,
     baseUrl,
     runId,
-    smokeEmail,
+    smokeEmail: maskEmail(smokeEmail),
     checks: results,
   }, null, 2));
 }

@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { createHash } from 'crypto';
+import { getHCaptchaToken, verifyHCaptchaToken } from './lib/hcaptcha.js';
 
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_MAX_REQUESTS = 10;
@@ -339,6 +340,14 @@ export default async function handler(req, res) {
 
   if (!hasValue(payload.agb)) {
     return res.status(400).json({ error: 'Bitte bestaetigen Sie die Berechtigung fuer den Sicherheits-Check.' });
+  }
+
+  const captcha = await verifyHCaptchaToken({
+    token: getHCaptchaToken(req.body),
+    remoteIp: ip,
+  });
+  if (!captcha.ok) {
+    return res.status(captcha.status).json({ error: captcha.error });
   }
 
   const transportConfig = getTransportConfig();

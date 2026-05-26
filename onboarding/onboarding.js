@@ -120,9 +120,60 @@
   var btnNext = document.querySelectorAll('[data-ob-next]');
   var btnPrev = document.querySelectorAll('[data-ob-prev]');
   var form = document.getElementById('ob-form');
+  var captchaContainer = document.getElementById('ob-hcaptcha-container');
+  var captchaWidgetId = null;
 
   var currentStep = 0;
   var totalSteps = steps.length;
+
+  function getCaptchaSiteKey() {
+    return (
+      (form ? form.getAttribute('data-hcaptcha-sitekey') : '') ||
+      (captchaContainer ? captchaContainer.getAttribute('data-sitekey') : '') ||
+      ''
+    );
+  }
+
+  function hasCaptchaConsent() {
+    return !window.aidsecConsent || window.aidsecConsent.hasConsent();
+  }
+
+  function initCaptcha(attempt) {
+    var siteKey = getCaptchaSiteKey();
+    if (!siteKey || !captchaContainer || !hasCaptchaConsent()) return;
+
+    captchaContainer.hidden = false;
+    captchaContainer.removeAttribute('hidden');
+    captchaContainer.setAttribute('aria-hidden', 'false');
+
+    if (window.hcaptcha && typeof window.hcaptcha.render === 'function') {
+      if (captchaWidgetId === null) {
+        captchaWidgetId = window.hcaptcha.render(captchaContainer, { sitekey: siteKey });
+      }
+      return;
+    }
+
+    if ((attempt || 0) < 30) {
+      setTimeout(function () {
+        initCaptcha((attempt || 0) + 1);
+      }, 250);
+    }
+  }
+
+  function getCaptchaToken() {
+    if (window.hcaptcha && captchaWidgetId !== null && typeof window.hcaptcha.getResponse === 'function') {
+      return window.hcaptcha.getResponse(captchaWidgetId) || '';
+    }
+    return form ? (new FormData(form).get('h-captcha-response') || '').toString() : '';
+  }
+
+  document.addEventListener('aidsec:consent-granted', function () {
+    initCaptcha(0);
+  });
+  document.addEventListener('aidsec:consent-change', function (event) {
+    if (event.detail === 'accepted') initCaptcha(0);
+  });
+  initCaptcha(0);
 
   /* ── Navigate Steps ────────────────────── */
   function goToStep(index) {
@@ -304,9 +355,22 @@
 
       if (!validateStep(currentStep)) return;
 
+      if (selectedPayment !== 'stripe' && getCaptchaSiteKey() && !hasCaptchaConsent()) {
+        alert('Bitte aktivieren Sie hCaptcha im Cookie-Hinweis, damit wir das Formular schuetzen koennen.');
+        return;
+      }
+
+      initCaptcha(0);
+      var hCaptchaToken = selectedPayment !== 'stripe' ? getCaptchaToken() : '';
+      if (selectedPayment !== 'stripe' && getCaptchaSiteKey() && !hCaptchaToken) {
+        alert('Bitte bestaetigen Sie hCaptcha und senden Sie das Formular erneut.');
+        return;
+      }
+
       var formData = new FormData(form);
 
       var payload = formDataToObject(formData);
+      payload.hCaptchaToken = hCaptchaToken;
       payload.packageSlug = packageSlug;
       payload.packageName = packageName;
       payload.packagePrice = packagePrice;

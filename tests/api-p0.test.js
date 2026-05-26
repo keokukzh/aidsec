@@ -470,6 +470,120 @@ test('transactional emails can force SMTP in production even when Brevo is confi
   assert.equal(fetchCalls.length, 0);
 });
 
+test('production smoke supports real recipient override and explicit email check', () => {
+  const smokeScript = fs.readFileSync(new URL('../scripts/production-smoke.mjs', import.meta.url), 'utf8');
+
+  assert.match(smokeScript, /process\.env\.SMOKE_EMAIL/);
+  assert.match(smokeScript, /email:transactional-delivery/);
+  assert.doesNotMatch(smokeScript, /aidsec\.smoke\+\$\{runId\}@example\.com/);
+});
+
+test('contact form requires hCaptcha token when server secret is configured', async () => {
+  const previousSecret = process.env.HCAPTCHA_SECRET;
+  process.env.HCAPTCHA_SECRET = 'test-hcaptcha-secret';
+  const { default: handler } = await import('../api/contact-submit.js?hcaptcha-missing');
+  const res = createResponse();
+
+  await handler(
+    {
+      method: 'POST',
+      headers: { origin: 'https://aidsec.ch' },
+      socket: { remoteAddress: '203.0.113.10' },
+      body: {
+        name: 'Captcha User',
+        email: 'captcha@example.ch',
+        websiteUrl: 'https://captcha.example.ch',
+        agb: 'true',
+      },
+    },
+    res,
+  );
+
+  process.env.HCAPTCHA_SECRET = previousSecret;
+  assert.equal(res.statusCode, 400);
+  assert.match(res.body.error, /Captcha|hCaptcha/i);
+});
+
+test('onboarding form accepts valid hCaptcha token before sending mail', async () => {
+  const previousFetch = global.fetch;
+  const previousSecret = process.env.HCAPTCHA_SECRET;
+  const previousSmtpHost = process.env.SMTP_HOST;
+  const previousSmtpPort = process.env.SMTP_PORT;
+  const previousSmtpUser = process.env.SMTP_USER;
+  const previousSmtpPass = process.env.SMTP_PASS;
+  const previousFrom = process.env.ONBOARDING_FROM_EMAIL;
+  const previousTo = process.env.ONBOARDING_TO_EMAIL;
+  process.env.HCAPTCHA_SECRET = 'test-hcaptcha-secret';
+  process.env.SMTP_HOST = 'smtp.example.test';
+  process.env.SMTP_PORT = '587';
+  process.env.SMTP_USER = 'sender@example.ch';
+  process.env.SMTP_PASS = 'smtp-test-password';
+  process.env.ONBOARDING_FROM_EMAIL = 'AidSec <sender@example.ch>';
+  process.env.ONBOARDING_TO_EMAIL = 'ops@example.ch';
+  const captchaCalls = [];
+  global.fetch = async (url, options) => {
+    captchaCalls.push({ url, body: String(options.body) });
+    return {
+      ok: true,
+      async json() {
+        return { success: true };
+      },
+    };
+  };
+  const nodemailer = await import('nodemailer');
+  const previousCreateTransport = nodemailer.default.createTransport;
+  let smtpMessage;
+  nodemailer.default.createTransport = () => ({
+    async sendMail(message) {
+      smtpMessage = message;
+      return { messageId: 'smtp-message-id' };
+    },
+  });
+  const { default: handler } = await import('../api/onboarding-submit.js?hcaptcha-valid');
+  const res = createResponse();
+
+  try {
+    await handler(
+      {
+        method: 'POST',
+        headers: { origin: 'https://aidsec.ch', 'user-agent': 'test-agent' },
+        socket: { remoteAddress: '203.0.113.11' },
+        body: {
+          packageSlug: 'rapid-header-fix',
+          packageName: 'Rapid Header Fix',
+          packagePrice: '390',
+          websiteUrl: 'https://onboarding.example.ch',
+          name: 'Onboarding User',
+          email: 'onboarding@example.ch',
+          paymentMethod: 'card',
+          authCheck: 'true',
+          privacyCheck: 'true',
+          accessCheck: 'true',
+          hCaptchaToken: 'valid-token',
+        },
+      },
+      res,
+    );
+  } finally {
+    nodemailer.default.createTransport = previousCreateTransport;
+    global.fetch = previousFetch;
+    process.env.HCAPTCHA_SECRET = previousSecret;
+    process.env.SMTP_HOST = previousSmtpHost;
+    process.env.SMTP_PORT = previousSmtpPort;
+    process.env.SMTP_USER = previousSmtpUser;
+    process.env.SMTP_PASS = previousSmtpPass;
+    process.env.ONBOARDING_FROM_EMAIL = previousFrom;
+    process.env.ONBOARDING_TO_EMAIL = previousTo;
+  }
+
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.ok, true);
+  assert.equal(captchaCalls.length, 1);
+  assert.match(captchaCalls[0].url, /hcaptcha\.com\/siteverify/);
+  assert.match(captchaCalls[0].body, /valid-token/);
+  assert.equal(smtpMessage.to, 'ops@example.ch');
+});
+
 test('proof center returns chronological report and monitoring history', async () => {
   const previousSecret = process.env.ORDER_TOKEN_SECRET;
   process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';

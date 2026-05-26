@@ -8,8 +8,21 @@
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/onboarding/onboarding.css">
   <link rel="icon" href="/logowhite.png" type="image/png">
+  <script src="/js/consent.js" defer></script>
 </head>
 <body class="ob-page" data-package="cyber-mandat">
+    <div id="cookie-banner" class="cookie-banner" style="display: none">
+      <div class="cookie-banner__content">
+        <p class="cookie-banner__text">
+          Diese Website verwendet hCaptcha zum Spam-Schutz. Plausible Analytics laeuft cookieless.
+          <a href="/datenschutz.html" class="cookie-banner__link">Mehr erfahren</a>
+        </p>
+        <div class="cookie-banner__buttons">
+          <button id="cookie-reject" class="cookie-banner__btn cookie-banner__btn--reject" onclick="aidsecConsent.reject()">Ablehnen</button>
+          <button id="cookie-accept" class="cookie-banner__btn cookie-banner__btn--accept" onclick="aidsecConsent.grant()">Akzeptieren</button>
+        </div>
+      </div>
+    </div>
     <header class="nav" id="nav" role="banner">
       <div class="container nav__inner">
         <!-- Logo -->
@@ -156,7 +169,7 @@
         <span class="ob-progress__dot"></span>
       </div>
 
-      <form id="ob-form" name="onboarding-cyber-mandat" method="POST" action="/api/onboarding-submit" novalidate>
+      <form id="ob-form" name="onboarding-cyber-mandat" method="POST" action="/api/onboarding-submit" data-hcaptcha-sitekey="69ae5b0c-a530-46c2-b978-e1a6f72615c8" novalidate>
         <input type="hidden" name="package" id="ob-package-input" value="Cyber-Mandat Pro / ComplianceOps – CHF 89.–/Monat (CHF 1'068.– / Jahr)">
         <input type="hidden" name="payment-method" id="ob-payment-method" value="">
         <p hidden><label>Nicht ausfüllen: <input name="bot-field"></label></p>
@@ -318,6 +331,8 @@
             <span class="ob-price__amount" id="ob-price-amount">CHF 1'068.–</span>
             <span class="ob-price__period" id="ob-price-period">Jaehrliche Abrechnung (CHF 89.–/Monat) · Laufende Security- und Compliance-Begleitung</span>
           </div>
+
+          <div id="ob-hcaptcha-container" class="ob-hcaptcha" data-sitekey="69ae5b0c-a530-46c2-b978-e1a6f72615c8" aria-hidden="true" hidden></div>
 
           <div class="ob-payment-cards">
             <div class="ob-payment-card" data-method="twint">
