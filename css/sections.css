@@ -3335,6 +3335,16 @@
   justify-content: center;
 }
 
+.blog-hero__image {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(200, 169, 10, 0.2);
+  display: block;
+}
+
 .blog-hero__image-placeholder {
   width: 100%;
   max-width: 400px;
@@ -3413,6 +3423,18 @@
   grid-column: span 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.blog-card__image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+
+.blog-card--featured .blog-card__image {
+  aspect-ratio: auto;
+  height: 100%;
 }
 
 .blog-card__image-placeholder {
