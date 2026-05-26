@@ -84,9 +84,10 @@ a:hover {
 }
 
 a:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 3px solid var(--gold);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 4px rgba(200, 168, 76, 0.25);
 }
 
 /* Consistent focus indicator for buttons and inputs (WCAG 2.4.7) */
@@ -94,9 +95,10 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 3px solid var(--gold);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 4px rgba(200, 168, 76, 0.25);
 }
 
 strong,

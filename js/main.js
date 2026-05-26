@@ -635,6 +635,64 @@
     updateROI(); // Init
   }
 
+  // ── ROI Calculator 2 (Mitarbeiter / Branche) ──
+  const secondMitarbeiter = document.getElementById('roi-mitarbeiter');
+  const secondMitarbeiterOutput = document.getElementById('roi-mitarbeiter-output');
+  const secondBranche = document.getElementById('roi-branche');
+  const secondWordpress = document.getElementById('roi-wordpress');
+  const secondRisk = document.getElementById('roi-risk');
+  const secondCost = document.getElementById('roi-cost');
+  const secondRoi = document.getElementById('roi-roi');
+
+  function updateSecondROI() {
+    if (!secondMitarbeiter) return;
+
+    const mitarbeiter = parseInt(secondMitarbeiter.value, 10);
+    if (secondMitarbeiterOutput) secondMitarbeiterOutput.textContent = mitarbeiter;
+
+    const branchValue = secondBranche ? secondBranche.value : 'kanzlei';
+    const hasWordpress = secondWordpress ? secondWordpress.checked : true;
+
+    let baseMultiplier = 8000;
+    if (branchValue === 'arztpraxis') baseMultiplier = 6000;
+    if (branchValue === 'notariat') baseMultiplier = 10000;
+
+    const totalRisk = mitarbeiter * baseMultiplier * (hasWordpress ? 1.5 : 1.0);
+    const fixFee = 790;
+
+    const formattedRisk = new Intl.NumberFormat('de-CH', {
+      style: 'currency',
+      currency: 'CHF',
+      maximumFractionDigits: 0,
+    }).format(totalRisk);
+
+    const formattedCost = new Intl.NumberFormat('de-CH', {
+      style: 'currency',
+      currency: 'CHF',
+      maximumFractionDigits: 0,
+    }).format(fixFee);
+
+    const roiPercent = Math.round((totalRisk / fixFee) * 100);
+
+    if (secondRisk) secondRisk.textContent = formattedRisk;
+    if (secondCost) secondCost.textContent = formattedCost;
+    if (secondRoi) secondRoi.textContent = roiPercent.toLocaleString('de-CH') + '%';
+  }
+
+  if (secondMitarbeiter) {
+    secondMitarbeiter.addEventListener('input', updateSecondROI);
+  }
+  if (secondBranche) {
+    secondBranche.addEventListener('change', updateSecondROI);
+  }
+  if (secondWordpress) {
+    secondWordpress.addEventListener('change', updateSecondROI);
+  }
+
+  // Initialize
+  updateSecondROI();
+
+
   // ── Scroll-to-top Button ──
   var scrollTopBtn = document.getElementById('scroll-top');
   if (scrollTopBtn) {
