@@ -1,5 +1,4 @@
 import crypto from 'node:crypto';
-import { GetObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getEnvFirst, isProduction } from '../lib/env.js';
 
 function encodeRfc3986(value) {
@@ -109,10 +108,12 @@ class S3Storage {
     this.config = config;
     this.bucket = config.bucket;
     this.client = null;
+    this.commands = null;
   }
 
-  getClient() {
-    if (this.client) return this.client;
+  async getSdk() {
+    if (this.client && this.commands) return { client: this.client, ...this.commands };
+    const { GetObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } = await import('@aws-sdk/client-s3');
     this.client = new S3Client({
       region: this.config.region,
       endpoint: this.config.endpoint,
@@ -122,12 +123,14 @@ class S3Storage {
       },
       forcePathStyle: true,
     });
-    return this.client;
+    this.commands = { GetObjectCommand, ListObjectsV2Command, PutObjectCommand };
+    return { client: this.client, ...this.commands };
   }
 
   async putJson(key, data) {
+    const { client, PutObjectCommand } = await this.getSdk();
     const body = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-    await this.getClient().send(
+    await client.send(
       new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
@@ -140,7 +143,8 @@ class S3Storage {
 
   async getJson(key) {
     try {
-      const result = await this.getClient().send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
+      const { client, GetObjectCommand } = await this.getSdk();
+      const result = await client.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
       const body = await result.Body.transformToString();
       return JSON.parse(body);
     } catch (error) {
@@ -150,7 +154,8 @@ class S3Storage {
   }
 
   async list(prefix = '') {
-    const result = await this.getClient().send(
+    const { client, ListObjectsV2Command } = await this.getSdk();
+    const result = await client.send(
       new ListObjectsV2Command({
         Bucket: this.bucket,
         Prefix: prefix,
