@@ -25,11 +25,18 @@ function parseAddress(value, fallbackName = '') {
   return { name: fallbackName, email: raw };
 }
 
+function emailProvider() {
+  const provider = String(getEnvFirst(['EMAIL_PROVIDER']) || 'auto').trim().toLowerCase();
+  if (['auto', 'brevo', 'smtp'].includes(provider)) return provider;
+  throw new Error('EMAIL_PROVIDER must be one of: auto, brevo, smtp');
+}
+
 async function sendTransactionalEmail(message) {
   const config = smtpConfig();
   const brevoApiKey = getEnvFirst(['BREVO_API_KEY']);
+  const provider = emailProvider();
 
-  if (brevoApiKey) {
+  if ((provider === 'auto' || provider === 'brevo') && brevoApiKey) {
     const sender = parseAddress(config.from, 'AidSec');
     const recipient = parseAddress(message.to);
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -55,6 +62,11 @@ async function sendTransactionalEmail(message) {
 
     const payload = await response.json().catch(() => ({}));
     return { sent: true, provider: 'brevo', messageId: payload.messageId || null };
+  }
+
+  if (provider === 'brevo') {
+    if (isProduction()) throw new Error('BREVO_API_KEY is required when EMAIL_PROVIDER=brevo');
+    return { simulated: true, message };
   }
 
   if (!config.host || !config.user || !config.pass) {

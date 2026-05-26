@@ -359,11 +359,13 @@ test('vercel API rewrites target function routes instead of static js files', ()
 test('transactional emails use Brevo API in production when configured', async () => {
   const previousFetch = global.fetch;
   const previousNodeEnv = process.env.NODE_ENV;
+  const previousProvider = process.env.EMAIL_PROVIDER;
   const previousBrevo = process.env.BREVO_API_KEY;
   const previousSmtpHost = process.env.SMTP_HOST;
   const previousSmtpUser = process.env.SMTP_USER;
   const previousSmtpPass = process.env.SMTP_PASS;
   process.env.NODE_ENV = 'production';
+  delete process.env.EMAIL_PROVIDER;
   process.env.BREVO_API_KEY = 'brevo_test_key';
   delete process.env.SMTP_HOST;
   delete process.env.SMTP_USER;
@@ -387,6 +389,7 @@ test('transactional emails use Brevo API in production when configured', async (
 
   global.fetch = previousFetch;
   process.env.NODE_ENV = previousNodeEnv;
+  process.env.EMAIL_PROVIDER = previousProvider;
   process.env.BREVO_API_KEY = previousBrevo;
   process.env.SMTP_HOST = previousSmtpHost;
   process.env.SMTP_USER = previousSmtpUser;
@@ -397,6 +400,74 @@ test('transactional emails use Brevo API in production when configured', async (
   assert.equal(calls.length, 1);
   assert.equal(calls[0].url, 'https://api.brevo.com/v3/smtp/email');
   assert.equal(calls[0].body.to[0].email, 'brevo@example.ch');
+});
+
+test('transactional emails can force SMTP in production even when Brevo is configured', async () => {
+  const previousFetch = global.fetch;
+  const previousNodeEnv = process.env.NODE_ENV;
+  const previousProvider = process.env.EMAIL_PROVIDER;
+  const previousBrevo = process.env.BREVO_API_KEY;
+  const previousSmtpHost = process.env.SMTP_HOST;
+  const previousSmtpPort = process.env.SMTP_PORT;
+  const previousSmtpSecure = process.env.SMTP_SECURE;
+  const previousSmtpUser = process.env.SMTP_USER;
+  const previousSmtpPass = process.env.SMTP_PASS;
+  const previousFrom = process.env.EMAIL_FROM;
+  process.env.NODE_ENV = 'production';
+  process.env.EMAIL_PROVIDER = 'smtp';
+  process.env.BREVO_API_KEY = 'brevo_test_key';
+  process.env.SMTP_HOST = 'smtp.office365.com';
+  process.env.SMTP_PORT = '587';
+  process.env.SMTP_SECURE = 'false';
+  process.env.SMTP_USER = 'info@aidsec.ch';
+  process.env.SMTP_PASS = 'smtp-test-password';
+  process.env.EMAIL_FROM = 'AidSec <info@aidsec.ch>';
+  const fetchCalls = [];
+  let smtpConfig;
+  let smtpMessage;
+  global.fetch = async (url) => {
+    fetchCalls.push(url);
+    throw new Error('Brevo should not be called when EMAIL_PROVIDER=smtp');
+  };
+
+  const nodemailer = await import('nodemailer');
+  const previousCreateTransport = nodemailer.default.createTransport;
+  nodemailer.default.createTransport = (config) => {
+    smtpConfig = config;
+    return {
+      async sendMail(message) {
+        smtpMessage = message;
+        return { messageId: 'smtp-message-id' };
+      },
+    };
+  };
+
+  let result;
+  try {
+    const { sendMagicLinkEmail } = await import('../api/lib/mailer.js?smtp-provider-test');
+    result = await sendMagicLinkEmail({
+      orderId: 'ord_smtp_test',
+      customer: { name: 'SMTP User', email: 'smtp-user@example.ch' },
+    });
+  } finally {
+    nodemailer.default.createTransport = previousCreateTransport;
+    global.fetch = previousFetch;
+    process.env.NODE_ENV = previousNodeEnv;
+    process.env.EMAIL_PROVIDER = previousProvider;
+    process.env.BREVO_API_KEY = previousBrevo;
+    process.env.SMTP_HOST = previousSmtpHost;
+    process.env.SMTP_PORT = previousSmtpPort;
+    process.env.SMTP_SECURE = previousSmtpSecure;
+    process.env.SMTP_USER = previousSmtpUser;
+    process.env.SMTP_PASS = previousSmtpPass;
+    process.env.EMAIL_FROM = previousFrom;
+  }
+
+  assert.equal(result.provider, 'smtp');
+  assert.equal(smtpConfig.host, 'smtp.office365.com');
+  assert.equal(smtpConfig.auth.user, 'info@aidsec.ch');
+  assert.equal(smtpMessage.to, 'smtp-user@example.ch');
+  assert.equal(fetchCalls.length, 0);
 });
 
 test('proof center returns chronological report and monitoring history', async () => {
