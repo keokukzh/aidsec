@@ -1019,6 +1019,51 @@
   margin: 0;
 }
 
+.process-video {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(360px, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+  max-width: 74rem;
+  margin: var(--space-10) auto 0;
+  padding: var(--space-6);
+  border: 1px solid rgba(200, 168, 76, 0.18);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(6, 15, 31, 0.04), rgba(200, 168, 76, 0.08));
+}
+
+.process-video__copy {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.process-video__copy h3 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
+  font-weight: 500;
+  line-height: var(--leading-tight);
+}
+
+.process-video__copy p {
+  margin: 0;
+  color: var(--gray-600);
+  line-height: var(--leading-relaxed);
+}
+
+.process-video__media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border: 1px solid rgba(6, 15, 31, 0.16);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  background: var(--navy-deep);
+}
+
 /* ── Stats (Ergebnisse in Zahlen) ── */
 .stats__grid {
   display: grid;
@@ -1311,8 +1356,10 @@
 /* ── Trust Visual ── */
 .trust__visual {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--space-8);
   min-height: 280px;
   padding: var(--space-10);
   border-radius: var(--radius-xl);
@@ -1323,6 +1370,22 @@
     rgba(6, 15, 31, 0.4) 40%,
     var(--navy-deep) 100%
   );
+}
+
+.trust-video {
+  width: min(100%, 520px);
+}
+
+.trust-video__media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border: 1px solid rgba(200, 168, 76, 0.24);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  background: var(--navy-deep);
 }
 
 .trust-badges {
@@ -3075,12 +3138,14 @@
   box-shadow: var(--shadow-xl);
 }
 
-.industry-hero__visual img {
+.industry-hero__visual img,
+.industry-hero__video {
   width: 100%;
   aspect-ratio: 16 / 11;
   height: auto;
   display: block;
   object-fit: cover;
+  background: var(--navy-deep);
 }
 
 .industry-hero__badge {
@@ -3458,6 +3523,19 @@
 
 /* ═══ RESPONSIVE: BRANCHEN PAGES ═══ */
 @media (max-width: 768px) {
+  .process-video {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+
+  .process-video__copy h3 {
+    font-size: var(--text-2xl);
+  }
+
+  .trust__visual {
+    padding: var(--space-6);
+  }
+
   .alert-cards {
     grid-template-columns: 1fr;
   }
@@ -3486,6 +3564,15 @@
 }
 
 @media (max-width: 480px) {
+  .process-video {
+    margin-top: var(--space-8);
+  }
+
+  .process-video__media,
+  .trust-video__media {
+    border-radius: var(--radius-md);
+  }
+
   .stats {
     grid-template-columns: 1fr;
   }

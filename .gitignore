@@ -5,6 +5,8 @@ Thumbs.db
 dist/
 js/dist/
 css/fonts/
+remotion/public/
+remotion/renders/
 *.local
 .env
 .env.local

@@ -24,6 +24,23 @@ test('conversion image assets are present as webp files', () => {
   }
 });
 
+test('remotion preview video assets and posters are present', () => {
+  const requiredAssets = [
+    'assets/videos/aidsec-proof-center.mp4',
+    'assets/videos/aidsec-hardening-flow.mp4',
+    'assets/videos/aidsec-treuhand-security.mp4',
+    'assets/videos/aidsec-portal-walkthrough.mp4',
+    'assets/videos/aidsec-roi-snapshot.mp4',
+    'assets/videos/posters/aidsec-proof-center.webp',
+    'assets/videos/posters/aidsec-hardening-flow.webp',
+    'assets/videos/posters/aidsec-treuhand-security.webp',
+  ];
+
+  for (const asset of requiredAssets) {
+    assert.equal(existsSync(join(root, asset)), true, `${asset} should exist`);
+  }
+});
+
 test('homepage exposes conversion paths, proof visuals, and treuhand ROI option', () => {
   const html = readProjectFile('index.html');
 
@@ -39,9 +56,23 @@ test('homepage exposes conversion paths, proof visuals, and treuhand ROI option'
 test('treuhand page has industry visual, proof block, and check-scope panel', () => {
   const html = readProjectFile('branchen/treuhand.html');
 
-  assert.match(html, /industry_treuhand_security\.webp/);
+  assert.match(html, /assets\/videos\/aidsec-treuhand-security\.mp4/);
+  assert.match(html, /data-video-embed="treuhand-hero"/);
   assert.match(html, /Steuerdaten/);
   assert.match(html, /Fristen/);
   assert.match(html, /Phishing/);
   assert.match(html, /Was wird gepr(?:&uuml;|ü)ft/);
+});
+
+test('homepage and proof center embed lightweight autoplay preview videos', () => {
+  const home = readProjectFile('index.html');
+  const proof = readProjectFile('proof-center.html');
+
+  assert.match(home, /data-video-embed="hardening-flow"/);
+  assert.match(home, /assets\/videos\/aidsec-hardening-flow\.mp4/);
+  assert.match(home, /muted/);
+  assert.match(home, /playsinline/);
+  assert.match(proof, /data-video-embed="proof-center"/);
+  assert.match(proof, /assets\/videos\/aidsec-proof-center\.mp4/);
+  assert.match(proof, /preload="metadata"/);
 });

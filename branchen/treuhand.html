@@ -243,14 +243,19 @@
               </div>
             </div>
             <figure class="industry-hero__visual" data-reveal="fade-up" data-reveal-delay="120">
-              <img
-                src="/assets/images/industry_treuhand_security.webp"
-                alt="AidSec Security-Audit für Schweizer Treuhandbüros mit Audit-Overlay"
-                width="1400"
-                height="900"
-                loading="eager"
-                decoding="async"
-              />
+              <video
+                class="industry-hero__video"
+                data-video-embed="treuhand-hero"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster="/assets/videos/posters/aidsec-treuhand-security.webp"
+                aria-label="Animierte AidSec Vorschau fuer Treuhand-Security"
+              >
+                <source src="/assets/videos/aidsec-treuhand-security.mp4" type="video/mp4" />
+              </video>
               <figcaption class="industry-hero__badge">
                 <strong>Treuhand Audit</strong>
                 <span>Steuerdaten · Fristen · Phishing</span>
