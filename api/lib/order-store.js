@@ -80,6 +80,7 @@ function buildOrder(data) {
     reportKey: data.reportKey || null,
     reports: data.reports || [],
     monitoring: data.monitoring || null,
+    monitoringHistory: Array.isArray(data.monitoringHistory) ? data.monitoringHistory : [],
     customerId: data.customerId || null,
     licenseId: data.licenseId || null,
     createdAt: data.createdAt || now,
@@ -327,6 +328,7 @@ export async function getCustomerPortalByOrderId(orderId) {
       website: item.website,
       results: item.results,
       monitoring: item.monitoring || null,
+      monitoringHistory: Array.isArray(item.monitoringHistory) ? item.monitoringHistory : [],
       licenseId: item.licenseId || null,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
@@ -352,11 +354,36 @@ export async function recordMonitoringResultForWebsite(websiteUrl, result) {
     : localWebsiteIndex.get(normalized);
   if (!index?.orderId) return null;
 
+  const existingOrder = await getOrder(index.orderId);
+  if (!existingOrder) return null;
+  const checkedAt = result.checkedAt || new Date().toISOString();
+  const monitoring = {
+    ...result,
+    checkedAt,
+  };
+  const historyEntry = {
+    orderId: existingOrder.orderId,
+    websiteUrl: normalized,
+    productSlug: existingOrder.productSlug || null,
+    grade: monitoring.grade || null,
+    score: monitoring.score ?? null,
+    checkedAt,
+  };
+  const existingHistory = Array.isArray(existingOrder.monitoringHistory) ? existingOrder.monitoringHistory : [];
+  const monitoringHistory = [historyEntry, ...existingHistory]
+    .filter(
+      (entry, index, all) =>
+        all.findIndex(
+          (candidate) =>
+            String(candidate.checkedAt || '') === String(entry.checkedAt || '') &&
+            String(candidate.websiteUrl || '') === String(entry.websiteUrl || ''),
+        ) === index,
+    )
+    .slice(0, 24);
+
   const order = await updateOrder(index.orderId, {
-    monitoring: {
-      ...result,
-      checkedAt: result.checkedAt || new Date().toISOString(),
-    },
+    monitoring,
+    monitoringHistory,
   });
   if (!order) return null;
   await upsertCustomerForOrder(order);

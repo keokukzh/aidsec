@@ -106,6 +106,21 @@
     return 'Audit';
   }
 
+  function scoreText(score) {
+    return (score !== null && score !== undefined) ? score + '/6' : '-';
+  }
+
+  function monitoringTrend(history) {
+    if (!history || history.length < 2) return null;
+    var latest = Number(history[0].score);
+    var previous = Number(history[1].score);
+    if (!Number.isFinite(latest) || !Number.isFinite(previous)) return null;
+    var delta = latest - previous;
+    if (delta > 0) return { label: 'Verbessert (+' + delta + ')', className: 'up' };
+    if (delta < 0) return { label: 'Rueckgang (' + delta + ')', className: 'down' };
+    return { label: 'Stabil', className: 'stable' };
+  }
+
   function renderPortal(data) {
     hide('portal-auth');
     hide('portal-loading');
@@ -189,24 +204,31 @@
     }
 
     // Monitoring
-    if (firstOrder && firstOrder.monitoring) {
-      var m = firstOrder.monitoring;
+    var latestMonitoring = monitoringHistory[0] || (firstOrder && firstOrder.monitoring);
+    if (latestMonitoring) {
+      var m = latestMonitoring;
       setText('portal-monitor-grade', m.grade || '-');
-      setText('portal-monitor-score', (m.score !== null && m.score !== undefined) ? m.score + '/6' : '-');
+      setText('portal-monitor-score', scoreText(m.score));
       setText('portal-monitor-date', m.checkedAt ? new Date(m.checkedAt).toLocaleDateString('de-CH') : '-');
       var gradeEl = el('portal-monitor-circle');
       if (gradeEl) {
         gradeEl.className = 'portal-grade__circle portal-grade__circle--' + gradeColor(m.grade);
       }
       if (monitoringHistory.length > 0) {
-        var monitoringHtml = '<div class="portal-history portal-history--compact">';
-        monitoringHistory.slice(0, 5).forEach(function (entry) {
+        var trend = monitoringTrend(monitoringHistory);
+        var monitoringHtml = '<div class="portal-monitor-summary">';
+        monitoringHtml += '<div><span>Letzter Check</span><strong>' + escapeHtml(formatDate(m.checkedAt)) + '</strong></div>';
+        monitoringHtml += '<div><span>Checks</span><strong>' + escapeHtml(String(monitoringHistory.length)) + '</strong></div>';
+        monitoringHtml += '<div><span>Trend</span><strong class="portal-monitor-trend portal-monitor-trend--' + escapeHtml(trend ? trend.className : 'stable') + '">' + escapeHtml(trend ? trend.label : 'Noch offen') + '</strong></div>';
+        monitoringHtml += '</div>';
+        monitoringHtml += '<div class="portal-history portal-history--compact">';
+        monitoringHistory.slice(0, 10).forEach(function (entry) {
           monitoringHtml += '<div class="portal-history__item">';
           monitoringHtml += '<div class="portal-history__main">';
           monitoringHtml += '<span class="portal-history__badge portal-history__badge--' + gradeColor(entry.grade) + '">' + escapeHtml(entry.grade || '-') + '</span>';
           monitoringHtml += '<div>';
           monitoringHtml += '<p class="portal-history__title">' + escapeHtml(entry.websiteUrl || 'Website') + '</p>';
-          monitoringHtml += '<p class="portal-history__meta">Score ' + escapeHtml((entry.score !== null && entry.score !== undefined) ? entry.score + '/6' : '-') + ' · ' + escapeHtml(formatDate(entry.checkedAt)) + '</p>';
+          monitoringHtml += '<p class="portal-history__meta">Score ' + escapeHtml(scoreText(entry.score)) + ' - ' + escapeHtml(formatDate(entry.checkedAt)) + '</p>';
           monitoringHtml += '</div></div></div>';
         });
         monitoringHtml += '</div>';

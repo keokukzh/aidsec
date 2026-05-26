@@ -60,15 +60,29 @@ async function withSignedReportUrls(portal) {
     .sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
 
   const monitoringHistory = (portal.orders || [])
-    .filter((order) => order.monitoring)
-    .map((order) => ({
-      orderId: order.orderId,
-      websiteUrl: order.website?.url || order.monitoring.url || null,
-      grade: order.monitoring.grade || null,
-      score: order.monitoring.score ?? null,
-      checkedAt: order.monitoring.checkedAt || order.monitoring.checkedAt || null,
-      productSlug: order.productSlug || null,
-    }))
+    .flatMap((order) => {
+      if (Array.isArray(order.monitoringHistory) && order.monitoringHistory.length > 0) {
+        return order.monitoringHistory.map((entry) => ({
+          orderId: entry.orderId || order.orderId,
+          websiteUrl: entry.websiteUrl || order.website?.url || null,
+          grade: entry.grade || null,
+          score: entry.score ?? null,
+          checkedAt: entry.checkedAt || null,
+          productSlug: entry.productSlug || order.productSlug || null,
+        }));
+      }
+      if (!order.monitoring) return [];
+      return [
+        {
+          orderId: order.orderId,
+          websiteUrl: order.website?.url || order.monitoring.url || null,
+          grade: order.monitoring.grade || null,
+          score: order.monitoring.score ?? null,
+          checkedAt: order.monitoring.checkedAt || null,
+          productSlug: order.productSlug || null,
+        },
+      ];
+    })
     .sort((a, b) => String(b.checkedAt || '').localeCompare(String(a.checkedAt || '')));
 
   return { ...portal, reports, reportHistory, monitoringHistory };

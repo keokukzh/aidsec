@@ -436,8 +436,13 @@ test('proof center returns chronological report and monitoring history', async (
   });
   await upsertCustomerForOrder(updatedOrder);
   await recordMonitoringResultForWebsite('https://history.example.ch', {
+    grade: 'C',
+    score: 4,
+    checkedAt: '2026-02-10T09:00:00.000Z',
+  });
+  await recordMonitoringResultForWebsite('https://history.example.ch', {
     grade: 'B',
-    score: 5,
+    score: 6,
     checkedAt: '2026-02-11T09:00:00.000Z',
   });
   const token = generateMagicToken(order.orderId, 'history@example.ch');
@@ -452,6 +457,10 @@ test('proof center returns chronological report and monitoring history', async (
   assert.equal(res.body.portal.reportHistory[0].label, 'Re-Audit');
   assert.equal(res.body.portal.reportHistory[0].type, 'reaudit');
   assert.match(res.body.portal.reportHistory[0].url, /history-new\.json/);
+  assert.equal(res.body.portal.monitoringHistory.length, 2);
   assert.equal(res.body.portal.monitoringHistory[0].grade, 'B');
+  assert.equal(res.body.portal.monitoringHistory[0].score, 6);
+  assert.equal(res.body.portal.monitoringHistory[1].grade, 'C');
+  assert.equal(res.body.portal.monitoringHistory[1].score, 4);
   assert.equal(res.body.portal.monitoringHistory[0].websiteUrl, 'https://history.example.ch');
 });

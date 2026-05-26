@@ -292,6 +292,47 @@
   line-height: var(--leading-relaxed);
 }
 
+.portal-monitor-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.portal-monitor-summary div {
+  padding: var(--space-3);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  background: var(--gray-50);
+  min-width: 0;
+}
+
+.portal-monitor-summary span {
+  display: block;
+  color: var(--gray-500);
+  font-size: var(--text-xs);
+  margin-bottom: 4px;
+}
+
+.portal-monitor-summary strong {
+  display: block;
+  color: var(--navy);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.portal-monitor-trend--up {
+  color: var(--green-safe) !important;
+}
+
+.portal-monitor-trend--down {
+  color: var(--red-danger) !important;
+}
+
+.portal-monitor-trend--stable {
+  color: var(--gold-dark) !important;
+}
+
 /* Portal history */
 .portal-history {
   display: flex;
@@ -564,6 +605,9 @@
   .portal-grade {
     flex-direction: column;
     align-items: flex-start;
+  }
+  .portal-monitor-summary {
+    grid-template-columns: 1fr;
   }
 }
 
