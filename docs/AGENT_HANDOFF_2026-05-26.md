@@ -1,6 +1,6 @@
 # AidSec Agent Handoff - 2026-05-26
 
-> Stand lokal dokumentiert am 2026-05-26 nach Production-Mail-Fix und P1-Sicherheitsnacharbeit. Keine Secret-Werte in dieser Datei speichern oder ausgeben.
+> Stand lokal dokumentiert am 2026-05-26 nach Production-Mail-Fix, P1-Sicherheitsnacharbeit und Customer-Backbone-Slice. Keine Secret-Werte in dieser Datei speichern oder ausgeben.
 
 ## Kurzstatus
 
@@ -9,10 +9,12 @@
 - Branch: `main`
 - Ausgangs-HEAD dieses Blocks: `5454625 feat: support smtp email provider override`
 - Letzter dokumentierter HEAD vor Customer-Backbone-Slice: `049efae fix: avoid sdk presigner warning`
+- Aktueller dokumentierter HEAD: `f8dd090 fix: defer aws sdk import for signed reads`
 - Vercel-Projekt: `aidsec-ucws`
 - Vercel Project ID: `prj_ZUcUNY6xWsq1dpMUH2G5L1Ot1LFS`
 - Vercel Team ID: `team_fAGLE7MCIh7hUmRtnk4HcwRC`
 - Production vor diesem Block: Deployment `dpl_Fzm4AQDnxy5KMvJQTWJd9y9Fdx5Q`, Status `READY`, Commit `5454625`
+- Aktuelles Production Deployment nach Customer-Backbone-Slice: `dpl_4RNN1e2ovWx9ubFd9V8u6h1vWNYs`, Status `READY`, Commit `f8dd090`
 - Production Domains: `https://aidsec.ch`, `https://www.aidsec.ch`
 
 ## Erledigt
@@ -60,6 +62,9 @@
   - Customer Portal gibt Websites und Reports mit `customerId`, `websiteId`, `reportId`, `orderIds`, `storageKey` und Monitoring-Flags aus.
 - `api/proof-center-status.js`
   - `reportHistory` fuehrt stabile Backbone-IDs weiter, damit UI und Automationen nicht auf URL/String-Vergleiche angewiesen sind.
+- `api/cron/storage.js`
+  - AWS SDK wird fuer Put/Get/List erst dynamisch geladen.
+  - Proof-Center signed Read URLs laufen ohne AWS-SDK-Import und ohne `url.parse` Deprecation Warning.
 - Tests
   - `customer backbone exposes stable website and report records`
   - `proof center report history keeps stable backbone identifiers`
@@ -89,14 +94,20 @@ node scripts/production-smoke.mjs
 npx.cmd --yes vercel@latest logs aidsec.ch --since 5m --level error --expand
 ```
 
-Erfolgskriterium: Smoke gruen, keine frischen SMTP-/API-Fehler, keine erwartbaren Warnungen im Testfenster.
+Letzter dokumentierter Production-Smoke nach `f8dd090`:
+
+- Run ID: `20260526151213`
+- Erfolgreich: Stripe Checkout fuer alle 3 Produkte, signed Stripe Webhook, Redis Persistenz, R2 signed report URL, Plugin Relay License-Signatur, transactional mail path.
+- Direkt danach: `npx.cmd --yes vercel@latest logs aidsec.ch --since 1m --level error --expand` meldete keine Error-Logs.
+
+Erfolgskriterium fuer weitere Deploys: Smoke gruen, keine frischen SMTP-/API-Fehler, keine erwartbaren Warnungen im Testfenster.
 
 ## Bekannte Risiken
 
 - Alle im Chat geteilten Provider-Secrets muessen rotiert werden. Dazu gehoeren mindestens SMTP/Microsoft, Brevo, hCaptcha Secret, HARPA Key, Redis Tokens und alle weiteren geposteten Keys. Diese Datei enthaelt bewusst keine Werte.
 - `.env.local` bleibt gitignored und darf nicht angezeigt oder committed werden.
 - Die alte Smoke-Variante mit `example.com` als Empfaenger hat Microsoft-Mailfehler erzeugt. Ab jetzt echte Smoke-Mail nur ueber `SMOKE_EMAIL`.
-- Die frische `url.parse` Deprecation-Warnung aus Vercel Logs wurde durch Entfernen des AWS SDK Presigners aus dem Read-URL-Pfad behoben. R2/S3 Put/Get/List nutzt weiter AWS SDK v3; signed Read URLs werden per WHATWG `URL` und SigV4 erzeugt. Der Production-Smoke nach `049efae` hatte danach leere Error-Logs.
+- Die frische `url.parse` Deprecation-Warnung aus Vercel Logs wurde durch Entfernen des AWS SDK Presigners und spaeteres dynamisches Laden des AWS SDK aus dem Proof-Center-Read-Pfad behoben. R2/S3 Put/Get/List nutzt weiter AWS SDK v3; signed Read URLs werden per WHATWG `URL` und SigV4 erzeugt. Der Production-Smoke nach `f8dd090` hatte danach im engen Logfenster keine Error-Logs.
 
 ## Naechste Schritte Fuer Neuen Agent
 
