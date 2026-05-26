@@ -656,6 +656,7 @@
     let baseMultiplier = 8000;
     if (branchValue === 'arztpraxis') baseMultiplier = 6000;
     if (branchValue === 'notariat') baseMultiplier = 10000;
+    if (branchValue === 'treuhand') baseMultiplier = 9000;
 
     const totalRisk = mitarbeiter * baseMultiplier * (hasWordpress ? 1.5 : 1.0);
     const fixFee = 790;
