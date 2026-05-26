@@ -245,3 +245,21 @@ test('proof center returns authenticated customer portal data with signed report
   assert.equal(res.body.portal.reports[0].orderId, order.orderId);
   assert.match(res.body.portal.reports[0].url, /reports\/orders\/report-test\.json|report-test/);
 });
+
+test('delivery email can be built for all paid products without undefined variables', async () => {
+  const { buildDeliveryEmail } = await import('../api/lib/mailer.js');
+  const baseOrder = {
+    orderId: 'ord_delivery_test',
+    customer: { name: 'Delivery User', email: 'delivery@example.ch' },
+    website: { url: 'https://delivery.example.ch' },
+    package: 'AidSec Paket',
+    licenseId: 'lic_delivery',
+  };
+
+  for (const productSlug of ['rapid-header-fix', 'kanzlei-haertung', 'cyber-mandat']) {
+    const message = buildDeliveryEmail({ ...baseOrder, productSlug });
+    assert.equal(message.to, 'delivery@example.ch');
+    assert.match(message.text, /Proof Center/);
+    assert.match(message.html, /Kundenportal|Header-Check|Proof Center/);
+  }
+});

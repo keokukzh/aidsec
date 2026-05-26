@@ -108,7 +108,7 @@ export function buildDeliveryEmail(order) {
   const token = generateMagicToken(order.orderId, order.customer.email);
   const portalUrl = `${baseUrl}/proof-center.html?orderId=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(token)}`;
 
-  const productInstructions = getProductInstructions(order.productSlug, order.licenseId);
+  const productInstructions = getProductInstructions(order, baseUrl);
 
   return {
     to: order.customer.email,
@@ -129,7 +129,8 @@ export function buildDeliveryEmail(order) {
   };
 }
 
-function getProductInstructions(productSlug, licenseId) {
+function getProductInstructions(order, baseUrl) {
+  const productSlug = order.productSlug;
   if (productSlug === 'rapid-header-fix') {
     return `
       <h3 style="color:#0b1d3a;margin:0 0 8px;">Rapid Header Fix — Schnelleinstieg</h3>
