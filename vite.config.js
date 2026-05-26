@@ -9,6 +9,7 @@ function apiDevMiddleware() {
     '/api/checkout': '/api/checkout.js',
     '/api/order-status': '/api/order-status.js',
     '/api/proof-center-status': '/api/proof-center-status.js',
+    '/api/crm-lead-scoring': '/api/crm-lead-scoring.js',
   };
 
   function readRequestBody(nodeReq) {
@@ -116,3 +117,4 @@ export default defineConfig({
     copyPublicDir: false,
   },
 });
+
