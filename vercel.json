@@ -120,10 +120,6 @@
     {
       "path": "/api/cron/reaudit",
       "schedule": "0 9 15 * *"
-    },
-    {
-      "path": "/api/cron/workflow-runner",
-      "schedule": "0 */4 * * *"
     }
   ]
 }
