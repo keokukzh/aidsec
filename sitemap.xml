@@ -127,6 +127,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://aidsec.ch/branchen/treuhand.html</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://aidsec.ch/wissen/email-sicherheit-kanzlei.html</loc>
     <lastmod>2026-03-03</lastmod>
     <changefreq>monthly</changefreq>

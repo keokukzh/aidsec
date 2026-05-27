@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Onboarding and customer areas - do not crawl
+Disallow: /onboarding/
+Disallow: /kunden/
+
 Sitemap: https://aidsec.ch/sitemap.xml
