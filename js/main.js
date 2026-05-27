@@ -331,6 +331,15 @@
             if (entry.isIntersecting) {
               // Ensure visible before animating
               entry.target.style.opacity = '1';
+              // Set initial text to final value BEFORE animation starts
+              // so that if animation fails or is slow, correct value is shown
+              var target = parseInt(entry.target.getAttribute('data-count-to'), 10);
+              var prefix = entry.target.getAttribute('data-count-prefix') || '';
+              var suffix = entry.target.getAttribute('data-count-suffix') || '';
+              var separator = entry.target.getAttribute('data-count-separator') || '';
+              if (!isNaN(target)) {
+                entry.target.textContent = prefix + formatNumber(target, separator) + suffix;
+              }
               animateCounter(entry.target);
               counterObserver.unobserve(entry.target);
             }

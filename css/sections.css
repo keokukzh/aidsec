@@ -2363,10 +2363,16 @@
 
 .section--dark.knowledge-hero {
   padding-top: 0;
+  min-height: unset;
 }
 
 .section--dark.knowledge-hero .section-header {
   padding-top: calc(var(--nav-height) + var(--space-8));
+}
+
+.section--deep {
+  background: var(--navy-deep);
+  padding-top: var(--space-16);
 }
 
 .knowledge-hero::after {
