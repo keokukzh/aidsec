@@ -6,7 +6,7 @@
  * GET /api/proof-center-status?orderId=<id>&token=<token> (authenticated portal)
  */
 
-import { storage } from './cron/storage.js';
+import { createSignedStorageReadUrl } from './lib/signed-storage-url.js';
 import { getCustomerPortalByOrderId } from './lib/order-store.js';
 import { computeLeadScore } from './crm-lead-scoring.js';
 import { verifyMagicToken } from './lib/order-token.js';
@@ -34,7 +34,7 @@ async function withSignedReportUrls(portal) {
       try {
         return {
           ...report,
-          url: await storage.createSignedReadUrl(report.key, 60 * 60),
+          url: await createSignedStorageReadUrl(report.key, 60 * 60),
           expiresInSeconds: 60 * 60,
         };
       } catch (_) {

@@ -1,77 +1,5 @@
-import crypto from 'node:crypto';
 import { getEnvFirst, isProduction } from '../lib/env.js';
-
-function encodeRfc3986(value) {
-  return encodeURIComponent(String(value)).replace(/[!'()*]/g, (char) =>
-    `%${char.charCodeAt(0).toString(16).toUpperCase()}`,
-  );
-}
-
-function encodeKeyPath(key) {
-  return String(key || '')
-    .replace(/^\/+/, '')
-    .split('/')
-    .map(encodeRfc3986)
-    .join('/');
-}
-
-function hmac(key, value, encoding) {
-  return crypto.createHmac('sha256', key).update(value).digest(encoding);
-}
-
-function sha256Hex(value) {
-  return crypto.createHash('sha256').update(value).digest('hex');
-}
-
-function formatAmzDate(date) {
-  return date.toISOString().replace(/[:-]|\.\d{3}/g, '');
-}
-
-function canonicalQuery(params) {
-  return Array.from(params.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => `${encodeRfc3986(key)}=${encodeRfc3986(value)}`)
-    .join('&');
-}
-
-function createPresignedGetUrl(config, key, expiresIn = 3600) {
-  const now = new Date();
-  const amzDate = formatAmzDate(now);
-  const dateStamp = amzDate.slice(0, 8);
-  const region = config.region || 'auto';
-  const service = 's3';
-  const scope = `${dateStamp}/${region}/${service}/aws4_request`;
-  const endpoint = new URL(config.endpoint || `https://s3.${region}.amazonaws.com`);
-  const endpointPath = endpoint.pathname.replace(/\/+$/, '');
-  const canonicalUri = `${endpointPath}/${encodeRfc3986(config.bucket)}/${encodeKeyPath(key)}`;
-  const signedHeaders = 'host';
-  const expires = Math.max(1, Math.min(Number(expiresIn) || 3600, 604800));
-  const params = new Map([
-    ['X-Amz-Algorithm', 'AWS4-HMAC-SHA256'],
-    ['X-Amz-Content-Sha256', 'UNSIGNED-PAYLOAD'],
-    ['X-Amz-Credential', `${config.accessKeyId}/${scope}`],
-    ['X-Amz-Date', amzDate],
-    ['X-Amz-Expires', String(expires)],
-    ['X-Amz-SignedHeaders', signedHeaders],
-  ]);
-  const query = canonicalQuery(params);
-  const canonicalRequest = [
-    'GET',
-    canonicalUri,
-    query,
-    `host:${endpoint.host}\n`,
-    signedHeaders,
-    'UNSIGNED-PAYLOAD',
-  ].join('\n');
-  const stringToSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256Hex(canonicalRequest)].join('\n');
-  const dateKey = hmac(Buffer.from(`AWS4${config.secretAccessKey}`, 'utf8'), dateStamp);
-  const regionKey = hmac(dateKey, region);
-  const serviceKey = hmac(regionKey, service);
-  const signingKey = hmac(serviceKey, 'aws4_request');
-  const signature = hmac(signingKey, stringToSign, 'hex');
-
-  return `${endpoint.origin}${canonicalUri}?${query}&X-Amz-Signature=${signature}`;
-}
+import { createPresignedGetUrl, getObjectStorageConfig } from '../lib/signed-storage-url.js';
 
 class UnconfiguredStorage {
   constructor(reason) {
@@ -236,38 +164,8 @@ class LocalStorage {
   }
 }
 
-function r2Config() {
-  const accountId = getEnvFirst(['R2_ACCOUNT_ID']);
-  const accessKeyId = getEnvFirst(['R2_ACCESS_KEY_ID']);
-  const secretAccessKey = getEnvFirst(['R2_SECRET_ACCESS_KEY']);
-  const bucket = getEnvFirst(['R2_BUCKET']);
-  if (!accountId || !accessKeyId || !secretAccessKey || !bucket) return null;
-  return {
-    bucket,
-    accessKeyId,
-    secretAccessKey,
-    region: 'auto',
-    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-  };
-}
-
-function s3Config() {
-  const accessKeyId = getEnvFirst(['AWS_ACCESS_KEY_ID']);
-  const secretAccessKey = getEnvFirst(['AWS_SECRET_ACCESS_KEY']);
-  const region = getEnvFirst(['AWS_REGION']) || 'eu-central-1';
-  const bucket = getEnvFirst(['S3_BUCKET']);
-  if (!accessKeyId || !secretAccessKey || !bucket) return null;
-  return {
-    bucket,
-    accessKeyId,
-    secretAccessKey,
-    region,
-    endpoint: getEnvFirst(['S3_ENDPOINT']) || undefined,
-  };
-}
-
 export function createStorage() {
-  const config = r2Config() || s3Config();
+  const config = getObjectStorageConfig();
   if (config) return new S3Storage(config);
   if (!isProduction() || getEnvFirst(['USE_LOCAL_STORAGE']) === 'true') return new LocalStorage('./reports');
   return new UnconfiguredStorage('Object storage is not configured for production');

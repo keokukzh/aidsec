@@ -340,6 +340,13 @@ test('proof center report history keeps stable backbone identifiers', async () =
   assert.equal(res.body.portal.reportHistory[0].storageKey, 'reports/orders/backbone-history.json');
 });
 
+test('proof center signed report links avoid importing the cron storage adapter', () => {
+  const proofSource = fs.readFileSync(new URL('../api/proof-center-status.js', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(proofSource, /cron\/storage/);
+  assert.match(proofSource, /signed-storage-url/);
+});
+
 test('proof center returns authenticated customer portal data with signed report links', async () => {
   const previousSecret = process.env.ORDER_TOKEN_SECRET;
   process.env.ORDER_TOKEN_SECRET = 'test-order-token-secret-with-32-chars';
