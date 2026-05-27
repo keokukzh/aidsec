@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Kostenloser Security-Audit | WordPress-Sicherheitscheck – AidSec</title>
+  <meta name="description" content=" Kostenloser WordPress Security-Audit für Schweizer Kanzleien und Praxen. Sofort-Analyse Ihrer Website inkl. Security Headers, WordPress-Konfiguration und nDSG-Check. Keine Anmeldung nötig." />
+
+  <link rel="stylesheet" href="/css/fonts.css" />
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/sections.css" />
+  <link rel="stylesheet" href="/css/animations.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="icon" type="image/webp" href="/logowhite.png" />
+
+  <style>
+    .audit-hero {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--navy) 0%, #0f2a4a 100%);
+    }
+    .audit-hero__title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 16px;
+    }
+    .audit-hero__title span { color: var(--gold); }
+    .audit-hero__subtitle {
+      font-size: 1.125rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      margin: 0 0 40px;
+      line-height: 1.6;
+    }
+
+    .audit-form {
+      width: 100%;
+      max-width: 560px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    .audit-form__label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      margin: 0 0 8px;
+      text-align: left;
+    }
+    .audit-form__row {
+      display: flex;
+      gap: 12px;
+    }
+    .audit-form__input {
+      flex: 1;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .audit-form__input::placeholder { color: rgba(255,255,255,0.5); }
+    .audit-form__input:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.15);
+    }
+    .audit-form__btn {
+      padding: 14px 28px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+    }
+    .audit-form__btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(200,168,76,0.3);
+    }
+    .audit-form__btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .audit-form__hint {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.6);
+      margin: 12px 0 0;
+      text-align: left;
+    }
+
+    .audit-result {
+      display: none;
+      width: 100%;
+      max-width: 720px;
+      margin: 40px auto 0;
+      text-align: left;
+    }
+    .audit-result.visible { display: block; }
+
+    .audit-result__card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .audit-result__header {
+      padding: 32px;
+      background: linear-gradient(135deg, var(--navy) 0%, #0f2a4a 100%);
+      color: #fff;
+    }
+    .audit-result__header-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .audit-result__grade {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .audit-result__grade.grade-a { background: #16a34a; color: #fff; }
+    .audit-result__grade.grade-b { background: #65a30d; color: #fff; }
+    .audit-result__grade.grade-c { background: #ca8a04; color: #fff; }
+    .audit-result__grade.grade-d { background: #d97706; color: #fff; }
+    .audit-result__grade.grade-e { background: #ea580c; color: #fff; }
+    .audit-result__grade.grade-f { background: #dc2626; color: #fff; }
+    .audit-result__info h2 {
+      font-size: 1.5rem;
+      margin: 0 0 8px;
+    }
+    .audit-result__info p {
+      margin: 0;
+      opacity: 0.8;
+      font-size: 0.9375rem;
+    }
+    .audit-result__url {
+      font-family: monospace;
+      font-size: 0.875rem;
+      opacity: 0.7;
+      margin-top: 8px;
+    }
+
+    .audit-result__body {
+      padding: 32px;
+    }
+    .audit-result__section {
+      margin: 0 0 32px;
+    }
+    .audit-result__section:last-child { margin: 0; }
+    .audit-result__section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .audit-headers__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .audit-headers__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .audit-headers__item:last-child { border-bottom: none; }
+    .audit-headers__icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .audit-headers__icon.ok { background: #dcfce7; color: #16a34a; }
+    .audit-headers__icon.missing { background: #fee2e2; color: #dc2626; }
+    .audit-headers__label {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #333;
+    }
+    .audit-headers__desc {
+      font-size: 0.8125rem;
+      color: #666;
+      margin: 4px 0 0;
+    }
+
+    .audit-score__bar {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 0 12px;
+    }
+    .audit-score__fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+    .audit-score__text {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .audit-result__actions {
+      padding: 24px 32px;
+      background: #f8fafc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .audit-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--gold);
+      color: var(--navy);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .audit-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(200,168,76,0.25);
+    }
+
+    .audit-error {
+      display: none;
+      width: 100%;
+      max-width: 560px;
+      margin: 24px auto 0;
+      padding: 20px 24px;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      color: #991b1b;
+      text-align: left;
+    }
+    .audit-error.visible { display: block; }
+
+    .audit-loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin: 40px auto 0;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+    }
+    .audit-loading.visible { display: flex; }
+    .audit-loading__spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .audit-loading__text { font-size: 1rem; }
+
+    .audit-email-form {
+      margin: 32px auto 0;
+      max-width: 560px;
+      padding: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      text-align: center;
+    }
+    .audit-email-form h3 {
+      color: #fff;
+      font-size: 1.25rem;
+      margin: 0 0 8px;
+    }
+    .audit-email-form p {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9375rem;
+      margin: 0 0 20px;
+    }
+    .audit-email-form__row {
+      display: flex;
+      gap: 12px;
+    }
+    .audit-email-form__input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .audit-email-form__input::placeholder { color: rgba(255,255,255,0.5); }
+    .audit-email-form__input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .audit-email-form__btn {
+      padding: 12px 24px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav container">
+      <a href="/" class="nav__logo">
+        <img src="/logowhite.png" alt="AidSec" width="140" height="36" />
+      </a>
+      <a href="/" class="btn btn--outline btn--sm">Zurück zur Startseite</a>
+    </nav>
+  </header>
+
+  <!-- Audit Hero -->
+  <main class="audit-hero">
+    <h1 class="audit-hero__title">Kostenloser <span>Security-Audit</span></h1>
+    <p class="audit-hero__subtitle">
+      Analysieren Sie Ihre WordPress-Website in Echtzeit. Security Headers, WordPress-Konfiguration, nDSG-Compliance — alles in einem Report.
+    </p>
+
+    <form class="audit-form" id="audit-form" novalidate>
+      <label class="audit-form__label" for="audit-url">Website-URL eingeben</label>
+      <div class="audit-form__row">
+        <input
+          type="url"
+          id="audit-url"
+          class="audit-form__input"
+          placeholder="ihre-kanzlei.ch"
+          autocomplete="url"
+          inputmode="url"
+          required
+        />
+        <button type="submit" class="audit-form__btn" id="audit-submit">
+          Audit starten
+        </button>
+      </div>
+      <p class="audit-form__hint">Keine Anmeldung nötig · Ergebnis in unter 30 Sekunden</p>
+    </form>
+
+    <div class="audit-loading" id="audit-loading">
+      <div class="audit-loading__spinner"></div>
+      <p class="audit-loading__text">Security-Check läuft...</p>
+    </div>
+
+    <div class="audit-error" id="audit-error" role="alert"></div>
+
+    <!-- Result -->
+    <div class="audit-result" id="audit-result" aria-live="polite">
+      <div class="audit-result__card">
+        <div class="audit-result__header">
+          <div class="audit-result__header-row">
+            <div class="audit-result__grade" id="result-grade">—</div>
+            <div class="audit-result__info">
+              <h2 id="result-title">Security-Analyse</h2>
+              <p id="result-subtitle">Ihr Security-Bericht</p>
+              <p class="audit-result__url" id="result-url"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="audit-result__body">
+          <div class="audit-result__section">
+            <h3 class="audit-result__section-title">Security Headers</h3>
+            <ul class="audit-headers__list" id="headers-list"></ul>
+          </div>
+
+          <div class="audit-result__section">
+            <h3 class="audit-result__section-title">Security-Score</h3>
+            <div class="audit-score__bar">
+              <div class="audit-score__fill" id="score-fill"></div>
+            </div>
+            <p class="audit-score__text" id="score-text"></p>
+          </div>
+
+          <div class="audit-result__section" id="recommendations-section">
+            <h3 class="audit-result__section-title">Empfehlungen</h3>
+            <ul class="audit-headers__list" id="recommendations-list"></ul>
+          </div>
+        </div>
+
+        <div class="audit-result__actions">
+          <a href="#kontakt" class="audit-cta" data-track="audit-result-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+            Auf Note A verbessern
+          </a>
+          <button type="button" class="audit-cta" id="save-report-btn" style="background:#0b1d3a;color:#fff;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Report speichern
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Capture -->
+    <div class="audit-email-form" id="email-capture" style="display:none;">
+      <h3>Vollen Report per E-Mail erhalten</h3>
+      <p>inkl. Detailed-Analyse und nächsten Schritten</p>
+      <div class="audit-email-form__row">
+        <input type="email" id="report-email" class="audit-email-form__input" placeholder="ihre@email.ch" />
+        <button type="button" class="audit-email-form__btn" id="send-report-btn">Senden</button>
+      </div>
+    </div>
+  <!-- Contact Section -->
+    <section class="audit-contact" id="kontakt" style="display:none;">
+      <div class="audit-contact__inner">
+        <h2>Security verbessern?</h2>
+        <p>Wir bringen Ihre Website in unter 24 Stunden auf Note A.</p>
+        <form class="audit-contact__form" id="contact-form">
+          <input type="text" placeholder="Name" required />
+          <input type="email" placeholder="E-Mail" required />
+          <input type="tel" placeholder="Telefon (optional)" />
+          <input type="url" id="contact-url" placeholder="Website-URL" style="display:none;" />
+          <textarea placeholder="Nachricht" rows="4"></textarea>
+          <button type="submit" class="btn btn--gold btn--lg">Anfrage senden</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('audit-form');
+    const urlInput = document.getElementById('audit-url');
+    const submitBtn = document.getElementById('audit-submit');
+    const loading = document.getElementById('audit-loading');
+    const errorEl = document.getElementById('audit-error');
+    const resultEl = document.getElementById('audit-result');
+    const emailCapture = document.getElementById('email-capture');
+
+    const GRADE_LABELS = {
+      'A+': 'Ausgezeichnet',
+      A: 'Sehr gut',
+      B: 'Gut',
+      C: 'Befriedigend',
+      D: 'Ausreichend',
+      E: 'Mangelhaft',
+      F: 'Ungenügend',
+    };
+
+    const HEADERS_INFO = {
+      'strict-transport-security': { label: 'HSTS (HTTP Strict Transport Security)', desc: 'Erzwingt HTTPS-Verbindungen' },
+      'content-security-policy': { label: 'Content-Security-Policy (CSP)', desc: 'Schützt vor XSS-Angriffen' },
+      'x-content-type-options': { label: 'X-Content-Type-Options', desc: 'Verhindert MIME-Sniffing' },
+      'x-frame-options': { label: 'X-Frame-Options', desc: 'Schützt vor Clickjacking' },
+      'referrer-policy': { label: 'Referrer-Policy', desc: 'Kontrolliert URL-Weitergabe' },
+      'permissions-policy': { label: 'Permissions-Policy', desc: 'Beschränkt Browser-APIs' },
+    };
+
+    function showError(msg) {
+      errorEl.textContent = msg;
+      errorEl.classList.add('visible');
+      loading.classList.remove('visible');
+      resultEl.classList.remove('visible');
+      emailCapture.style.display = 'none';
+    }
+
+    function hideError() {
+      errorEl.classList.remove('visible');
+    }
+
+    function showResult(data) {
+      window.__auditData = data;
+
+      const gradeEl = document.getElementById('result-grade');
+      const titleEl = document.getElementById('result-title');
+      const subtitleEl = document.getElementById('result-subtitle');
+      const urlEl = document.getElementById('result-url');
+      const headersList = document.getElementById('headers-list');
+      const scoreFill = document.getElementById('score-fill');
+      const scoreText = document.getElementById('score-text');
+      const recList = document.getElementById('recommendations-list');
+
+      // Grade
+      gradeEl.textContent = data.grade || '?';
+      gradeEl.className = 'audit-result__grade grade-' + (data.grade || 'f').toLowerCase();
+      titleEl.textContent = GRADE_LABELS[data.grade] || 'Security-Analyse';
+      subtitleEl.textContent = data.score + ' von 6 Headern vorhanden';
+      urlEl.textContent = data.url;
+
+      // Headers list
+      headersList.innerHTML = '';
+      const recs = [];
+      (data.headers || []).forEach(h => {
+        const info = HEADERS_INFO[h.key] || { label: h.key, desc: '' };
+        const li = document.createElement('li');
+        li.className = 'audit-headers__item';
+        li.innerHTML = `
+          <span class="audit-headers__icon ${h.present ? 'ok' : 'missing'}">${h.present ? '✓' : '✗'}</span>
+          <div>
+            <div class="audit-headers__label">${info.label}</div>
+            <div class="audit-headers__desc">${info.desc}${h.value ? ` — ${h.value.substring(0, 80)}${h.value.length > 80 ? '...' : ''}` : ' — nicht gesetzt'}</div>
+          </div>
+        `;
+        headersList.appendChild(li);
+        if (!h.present) recs.push(info);
+      });
+
+      // Score bar
+      const pct = Math.round((data.score / 6) * 100);
+      const color = pct >= 80 ? '#16a34a' : pct >= 50 ? '#ca8a04' : '#dc2626';
+      scoreFill.style.width = pct + '%';
+      scoreFill.style.background = color;
+      scoreText.textContent = `${data.score}/6 Security Headers vorhanden (${pct}%)`;
+
+      // Recommendations
+      recList.innerHTML = '';
+      if (recs.length > 0) {
+        recs.forEach(r => {
+          const li = document.createElement('li');
+          li.className = 'audit-headers__item';
+          li.innerHTML = `
+            <span class="audit-headers__icon missing">!</span>
+            <div>
+              <div class="audit-headers__label">${r.label} fehlt</div>
+              <div class="audit-headers__desc">${r.desc} — verbessern Sie diese Einstellung für besseren Schutz</div>
+            </div>
+          `;
+          recList.appendChild(li);
+        });
+        document.getElementById('recommendations-section').style.display = 'block';
+      } else {
+        document.getElementById('recommendations-section').style.display = 'none';
+      }
+
+      loading.classList.remove('visible');
+      resultEl.classList.add('visible');
+      emailCapture.style.display = 'block';
+      hideError();
+    }
+
+    async function runAudit(url) {
+      loading.classList.add('visible');
+      resultEl.classList.remove('visible');
+      emailCapture.style.display = 'none';
+      hideError();
+      submitBtn.disabled = true;
+
+      try {
+        const apiUrl = '/api/check-headers?url=' + encodeURIComponent(url);
+        const resp = await fetch(apiUrl, {
+          headers: { 'Accept': 'application/json', 'User-Agent': 'AidSec-Audit/1.0' }
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error(err.error || 'Server error: ' + resp.status);
+        }
+
+        const data = await resp.json();
+        showResult(data);
+      } catch (e) {
+        showError(e.message || 'Analyse fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const url = urlInput.value.trim();
+      if (!url) { showError('Bitte geben Sie eine URL ein.'); return; }
+      runAudit(url);
+    });
+
+    // Save report button
+    document.getElementById('save-report-btn').addEventListener('click', () => {
+      const data = window.__auditData;
+      if (!data) return;
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'aidsec-audit-' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+    });
+
+    // Email capture
+    document.getElementById('send-report-btn').addEventListener('click', async () => {
+      const email = document.getElementById('report-email').value.trim();
+      const data = window.__auditData;
+      if (!email || !data) return;
+      const btn = document.getElementById('send-report-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sende...';
+      try {
+        const resp = await fetch('/api/ai/offer-generator', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ websiteUrl: data.url, email })
+        });
+        if (resp.ok) {
+          btn.textContent = 'Gesendet!';
+          setTimeout(() => { btn.textContent = 'Senden'; btn.disabled = false; }, 2000);
+        } else {
+          throw new Error('Failed');
+        }
+      } catch (_) {
+        btn.textContent = 'Fehler';
+        setTimeout(() => { btn.textContent = 'Senden'; btn.disabled = false; }, 2000);
+      }
+    });
+  </script>
+</body>
+</html>
