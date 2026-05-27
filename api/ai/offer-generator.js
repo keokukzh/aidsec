@@ -10,7 +10,8 @@ import { getEnvFirst, isProduction } from '../lib/env.js';
 import { storage } from '../cron/storage.js';
 import { generateMagicToken } from '../lib/order-token.js';
 
-const OPENAI_API_KEY = getEnvFirst(['OPENAI_API_KEY']);
+const GATEWAY_API_KEY = getEnvFirst(['AI_GATEWAY_API_KEY']);
+const GATEWAY_BASE_URL = 'https://gateway.hubble.ai/v1/chat/completions';
 
 function buildSystemPrompt() {
   return `Du bist ein erfahrener Cybersecurity-Berater für Schweizer Anwaltskanzleien, Arztpraxen, Notariate und Treuhand-Unternehmen.
@@ -60,18 +61,18 @@ Erstelle ein überzeugendes, personalisiertes Angebot mit klarem Call-to-Action.
 }
 
 async function generateOfferWithAI(leadData, auditResult) {
-  if (!OPENAI_API_KEY) {
+  if (!GATEWAY_API_KEY) {
     return generateFallbackOffer(leadData, auditResult);
   }
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  const response = await fetch(GATEWAY_BASE_URL, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${OPENAI_API_KEY}`,
+      'Authorization': `Bearer ${GATEWAY_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4o',
+      model: 'openai/gpt-5.4',
       messages: [
         { role: 'system', content: buildSystemPrompt() },
         { role: 'user', content: buildUserPrompt(leadData, auditResult) },
