@@ -7,6 +7,7 @@ import {
   upsertCustomerForOrder,
 } from '../lib/order-store.js';
 import { generateMagicToken } from '../lib/order-token.js';
+import { getWorkflowForOrder } from '../lib/workflow-store.js';
 
 function validateInternalRequest(req) {
   if (!isProduction()) return true;
@@ -70,6 +71,7 @@ export default async function handler(req, res) {
     }
 
     const orders = [];
+    const workflows = [];
     const portalLinks = [];
     const baseUrl = getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
 
@@ -78,6 +80,20 @@ export default async function handler(req, res) {
         const order = await getOrder(id);
         if (order) {
           orders.push(order);
+          const workflow = await getWorkflowForOrder(order.orderId);
+          if (workflow) {
+            workflows.push({
+              workflowId: workflow.workflowId,
+              orderId: workflow.orderId,
+              productSlug: workflow.productSlug,
+              status: workflow.status,
+              currentStep: workflow.currentStep,
+              attempts: workflow.attempts,
+              approvalRequired: !!workflow.approvalRequired,
+              lastError: workflow.lastError || null,
+              updatedAt: workflow.updatedAt,
+            });
+          }
           if (customer.email) {
             const token = generateMagicToken(order.orderId, customer.email);
             portalLinks.push({
@@ -104,6 +120,7 @@ export default async function handler(req, res) {
         updatedAt: customer.updatedAt,
       },
       orders,
+      workflows,
       portalLinks,
     });
   } catch (error) {

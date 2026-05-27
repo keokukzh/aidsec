@@ -71,6 +71,32 @@
     return 'pending';
   }
 
+  function workflowStatusLabel(s) {
+    if (!s) return 'Noch nicht gestartet';
+    if (s === 'queued') return 'Eingeplant';
+    if (s === 'running') return 'Automation laeuft';
+    if (s === 'delivered') return 'Geliefert';
+    if (s === 'needs_manual_review') return 'Review noetig';
+    return s;
+  }
+
+  function deliveryStatusLabel(s) {
+    if (!s) return 'Wird vorbereitet';
+    if (s === 'queued') return 'Eingeplant';
+    if (s === 'analysis_running') return 'Analyse laeuft';
+    if (s === 'monitoring_active') return 'Monitoring aktiv';
+    if (s === 'delivered') return 'Geliefert';
+    if (s === 'review_needed') return 'Review noetig';
+    if (s === 'retry_scheduled') return 'Retry geplant';
+    return s;
+  }
+
+  function reportReadinessLabel(s) {
+    if (!s || s === 'pending') return 'In Vorbereitung';
+    if (s === 'ready') return 'Bereit';
+    return s;
+  }
+
   function formatMoney(amount) {
     if (!amount) return '-';
     return 'CHF ' + amount.replace(/['']/g, '') + ' CHF 1284.40';
@@ -102,7 +128,7 @@
   function reportTypeLabel(type) {
     if (type === 'reaudit') return 'Re-Audit';
     if (type === 'monitoring') return 'Monitoring';
-    if (type === 'delivery') return 'Delivery';
+    if (type === 'delivery' || type === 'delivery_report') return 'Delivery';
     return 'Audit';
   }
 
@@ -180,6 +206,24 @@
         ordersHtml += '<span class="portal-order__label">Zahlung</span>';
         ordersHtml += '<span class="portal-order__value">' + escapeHtml(statusLabel(o.paymentStatus)) + '</span>';
         ordersHtml += '</div>';
+        ordersHtml += '<div class="portal-order__row">';
+        ordersHtml += '<span class="portal-order__label">Lieferung</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(deliveryStatusLabel(o.deliveryStatus)) + '</span>';
+        ordersHtml += '</div>';
+        ordersHtml += '<div class="portal-order__row">';
+        ordersHtml += '<span class="portal-order__label">Workflow</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(workflowStatusLabel(o.workflowStatus)) + '</span>';
+        ordersHtml += '</div>';
+        ordersHtml += '<div class="portal-order__row">';
+        ordersHtml += '<span class="portal-order__label">Report</span>';
+        ordersHtml += '<span class="portal-order__value">' + escapeHtml(reportReadinessLabel(o.reportReadiness)) + '</span>';
+        ordersHtml += '</div>';
+        if (o.nextAction) {
+          ordersHtml += '<div class="portal-order__row">';
+          ordersHtml += '<span class="portal-order__label">Naechster Schritt</span>';
+          ordersHtml += '<span class="portal-order__value">' + escapeHtml(o.nextAction) + '</span>';
+          ordersHtml += '</div>';
+        }
         ordersHtml += '<div class="portal-order__row">';
         ordersHtml += '<span class="portal-order__label">Website</span>';
         ordersHtml += '<span class="portal-order__value">' + escapeHtml(o.website ? o.website.url : '-') + '</span>';

@@ -77,6 +77,15 @@ test('homepage and proof center embed lightweight autoplay preview videos', () =
   assert.match(proof, /preload="metadata"/);
 });
 
+test('proof center portal renders workflow delivery status fields', () => {
+  const portalScript = readProjectFile('js/portal.js');
+
+  assert.match(portalScript, /deliveryStatus/);
+  assert.match(portalScript, /workflowStatus/);
+  assert.match(portalScript, /reportReadiness/);
+  assert.match(portalScript, /Nächster Schritt|Naechster Schritt/);
+});
+
 test('video assets are cached long-term and lazy-pause observes current preview classes', () => {
   const config = JSON.parse(readProjectFile('vercel.json'));
   const mainJs = readProjectFile('js/main.js');

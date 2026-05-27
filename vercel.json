@@ -106,6 +106,10 @@
     {
       "source": "/api/admin/crm-lookup",
       "destination": "/api/admin/crm-lookup.js"
+    },
+    {
+      "source": "/api/internal/workflow-runner",
+      "destination": "/api/internal/workflow-runner.js"
     }
   ],
   "crons": [
@@ -116,6 +120,10 @@
     {
       "path": "/api/cron/reaudit",
       "schedule": "0 9 15 * *"
+    },
+    {
+      "path": "/api/cron/workflow-runner",
+      "schedule": "*/15 * * * *"
     }
   ]
 }

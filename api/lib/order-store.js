@@ -99,6 +99,11 @@ function buildOrder(data) {
     reports: data.reports || [],
     monitoring: data.monitoring || null,
     monitoringHistory: Array.isArray(data.monitoringHistory) ? data.monitoringHistory : [],
+    workflowId: data.workflowId || null,
+    workflowStatus: data.workflowStatus || null,
+    deliveryStatus: data.deliveryStatus || null,
+    nextAction: data.nextAction || null,
+    reportReadiness: data.reportReadiness || null,
     customerId: data.customerId || null,
     licenseId: data.licenseId || null,
     createdAt: data.createdAt || now,
@@ -264,6 +269,10 @@ async function getOrderEvents(orderId) {
   if (!orderId) return [];
   if (getEnvFirst(['UPSTASH_REDIS_REST_URL'])) return redisListJson(`order-events:${orderId}`);
   return localOrderEvents.get(orderId) || [];
+}
+
+export async function listOrderEvents(orderId) {
+  return getOrderEvents(orderId);
 }
 
 function buildReportRecordsForOrder(order, customerId, websiteId, websiteUrl, now) {
@@ -469,6 +478,11 @@ export async function getCustomerPortalByOrderId(orderId) {
       results: item.results,
       monitoring: item.monitoring || null,
       monitoringHistory: Array.isArray(item.monitoringHistory) ? item.monitoringHistory : [],
+      workflowId: item.workflowId || null,
+      workflowStatus: item.workflowStatus || null,
+      deliveryStatus: item.deliveryStatus || null,
+      nextAction: item.nextAction || null,
+      reportReadiness: item.reportReadiness || null,
       licenseId: item.licenseId || null,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
@@ -655,6 +669,7 @@ export const orderStore = {
   createLicenseForOrder,
   getLicense,
   recordOrderEvent,
+  listOrderEvents,
   createOnboardingTaskForOrder,
   createReportPlaceholderForOrder,
   upsertCustomerForOrder,

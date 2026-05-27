@@ -110,6 +110,24 @@
   - Bestehender R2-Signed-URL-Test bleibt gruen.
   - `object storage and production smoke do not depend on AWS SDK packages`
 
+## Agent-Workflow-Automation 2026-05-27
+
+- Neue interne Workflow-Schicht fuer bezahlte Bestellungen:
+  - `api/lib/workflow-store.js` verwaltet `workflow:<id>`, `workflow-order:<orderId>:delivery`, `workflow-jobs:ready`, Locks und Step-Idempotenz.
+  - `api/lib/delivery-workflow.js` verarbeitet Produktfluesse deterministisch: Intake, License, Baseline-Audit, Delivery-Report, Mails, Monitoring-Aktivierung oder Human-Approval-Gate.
+  - `api/internal/workflow-runner.js` ist der geschuetzte interne Runner (`X-AidSec-Internal-Secret`, `INTERNAL_WORKFLOW_SECRET` oder Fallback `INTERNAL_API_SECRET`).
+  - `api/cron/workflow-runner.js` verarbeitet liegengebliebene Jobs ueber Vercel Cron.
+- Stripe Webhook bleibt schnell:
+  - `checkout.session.completed` aktiviert Order/Payment, sichert Customer/License minimal, schreibt `order.paid`/`checkout.session.completed`, queued genau einen Delivery-Workflow und sendet keine direkten Delivery-Mails mehr.
+  - Mailversand, Report-Platzhalter, Monitoring-Aktivierung und Review-Gates laufen im Runner mit Step-Events.
+- Produktverhalten:
+  - `rapid-header-fix` und `cyber-mandat` laufen automatisch bis `deliveryStatus=delivered`.
+  - `kanzlei-haertung` stoppt bewusst bei `deliveryStatus=review_needed` und `workflowStatus=needs_manual_review`.
+  - Portal gibt nur nicht-sensitive Felder aus: `workflowStatus`, `deliveryStatus`, `nextAction`, `reportReadiness`.
+- Production-Smoke:
+  - `scripts/production-smoke.mjs` ruft nach signed Stripe Webhook den internen Workflow-Runner auf.
+  - Fuer Production-Smoke muss lokal/Vercel `INTERNAL_WORKFLOW_SECRET` gesetzt sein.
+
 ## Verifikation Dieses Blocks
 
 Bereits lokal gruen:

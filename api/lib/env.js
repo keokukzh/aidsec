@@ -1,13 +1,19 @@
 export function getEnvFirst(names, env = process.env || {}) {
+  const normalize = (value) => {
+    if (typeof value !== 'string') return '';
+    const trimmed = value.trim();
+    if (!trimmed || ['undefined', 'null'].includes(trimmed.toLowerCase())) return '';
+    return trimmed;
+  };
+
   for (const name of names) {
-    const direct = env[name];
-    if (typeof direct === 'string' && direct.trim()) return direct.trim();
+    const direct = normalize(env[name]);
+    if (direct) return direct;
 
     const wanted = name.toLowerCase();
     const matchedKey = Object.keys(env).find((key) => key.toLowerCase() === wanted);
-    if (matchedKey && typeof env[matchedKey] === 'string' && env[matchedKey].trim()) {
-      return env[matchedKey].trim();
-    }
+    const matched = matchedKey ? normalize(env[matchedKey]) : '';
+    if (matched) return matched;
   }
 
   return '';

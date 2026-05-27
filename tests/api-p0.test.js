@@ -259,11 +259,11 @@ test('checkout webhook creates a customer portal backbone after paid checkout', 
   assert.equal(portal.websites[0].url, 'https://portal.example.ch');
   assert.equal(portal.websites[0].productSlug, 'cyber-mandat');
   assert.equal(portal.events.some((event) => event.type === 'checkout.session.completed'), true);
+  assert.equal(portal.events.some((event) => event.type === 'order.paid'), true);
   assert.equal(portal.events.some((event) => event.type === 'license.created'), true);
-  assert.equal(portal.events.some((event) => event.type === 'onboarding.task.created'), true);
-  assert.equal(portal.events.some((event) => event.type === 'report.placeholder.created'), true);
-  assert.equal(portal.events.some((event) => event.type === 'email.magic_link'), true);
-  assert.equal(portal.reports.some((report) => report.type === 'pending_delivery' && report.label === 'Delivery Report in Vorbereitung'), true);
+  assert.equal(portal.events.some((event) => event.type === 'workflow.requested'), true);
+  assert.equal(portal.orders[0].workflowStatus, 'queued');
+  assert.equal(portal.orders[0].deliveryStatus, 'queued');
 });
 
 test('customer backbone exposes stable website and report records', async () => {
@@ -490,9 +490,13 @@ test('vercel API rewrites target function routes instead of static js files', ()
   const config = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
   const checkoutWebhook = config.rewrites.find((rewrite) => rewrite.source === '/api/checkout/webhook');
   const pluginRelay = config.rewrites.find((rewrite) => rewrite.source === '/api/plugin-webhook-relay/(.*)');
+  const workflowRunner = config.rewrites.find((rewrite) => rewrite.source === '/api/internal/workflow-runner');
+  const workflowCron = config.crons.find((cron) => cron.path === '/api/cron/workflow-runner');
 
   assert.equal(checkoutWebhook.destination, '/api/checkout-webhook');
   assert.equal(pluginRelay.destination, '/api/plugin-webhook-relay');
+  assert.equal(workflowRunner.destination, '/api/internal/workflow-runner.js');
+  assert.equal(workflowCron.schedule, '*/15 * * * *');
 });
 
 test('transactional emails use Brevo API in production when configured', async () => {
@@ -613,6 +617,8 @@ test('production smoke supports real recipient override and explicit email check
   const smokeScript = fs.readFileSync(new URL('../scripts/production-smoke.mjs', import.meta.url), 'utf8');
 
   assert.match(smokeScript, /process\.env\.SMOKE_EMAIL/);
+  assert.match(smokeScript, /INTERNAL_WORKFLOW_SECRET/);
+  assert.match(smokeScript, /workflow:delivery-runner/);
   assert.match(smokeScript, /email:transactional-delivery/);
   assert.doesNotMatch(smokeScript, /aidsec\.smoke\+\$\{runId\}@example\.com/);
 });
@@ -939,4 +945,140 @@ test('crm-lookup API requires internal secret and returns customer details by em
   } else {
     process.env.VERCEL_ENV = previousVercelEnv;
   }
+});
+
+test('delivery workflow queue creates exactly one workflow per paid order', async () => {
+  const { createOrder, getCustomerPortalByOrderId } = await import('../api/lib/order-store.js');
+  const {
+    enqueueDeliveryWorkflowForOrder,
+    claimReadyWorkflowJobs,
+    getWorkflow,
+    getWorkflowForOrder,
+    peekReadyWorkflowJobs,
+  } = await import('../api/lib/workflow-store.js');
+
+  const order = await createOrder({
+    productSlug: 'rapid-header-fix',
+    customer: { name: 'Workflow User', email: 'workflow@example.ch', company: 'Workflow AG' },
+    website: { url: 'https://workflow.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+
+  const first = await enqueueDeliveryWorkflowForOrder(order.orderId);
+  const second = await enqueueDeliveryWorkflowForOrder(order.orderId);
+  const workflow = await getWorkflow(first.workflowId);
+  const indexed = await getWorkflowForOrder(order.orderId);
+  const queuedJobs = await peekReadyWorkflowJobs();
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+  const requestedEvents = portal.events.filter((event) => event.type === 'workflow.requested');
+
+  assert.equal(first.workflowId, second.workflowId);
+  assert.equal(first.created, true);
+  assert.equal(second.created, false);
+  assert.equal(indexed.workflowId, first.workflowId);
+  assert.equal(workflow.status, 'queued');
+  assert.equal(workflow.productSlug, 'rapid-header-fix');
+  assert.equal(queuedJobs.filter((job) => job.workflowId === first.workflowId).length, 1);
+  assert.equal(requestedEvents.length, 1);
+  await claimReadyWorkflowJobs(100);
+});
+
+test('workflow runner delivers rapid header fix idempotently', async () => {
+  const { createOrder, getOrder, getCustomerPortalByOrderId } = await import('../api/lib/order-store.js');
+  const {
+    enqueueDeliveryWorkflowForOrder,
+    getWorkflowForOrder,
+    claimReadyWorkflowJobs,
+  } = await import('../api/lib/workflow-store.js');
+  const { runDeliveryWorkflowBatch } = await import('../api/lib/delivery-workflow.js');
+  await claimReadyWorkflowJobs(100);
+
+  const order = await createOrder({
+    productSlug: 'rapid-header-fix',
+    customer: { name: 'Rapid Runner', email: 'rapid-runner@example.ch', company: 'Rapid Runner AG' },
+    website: { url: 'https://rapid-runner.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+
+  await enqueueDeliveryWorkflowForOrder(order.orderId);
+  const firstRun = await runDeliveryWorkflowBatch({ limit: 5 });
+  const secondRun = await runDeliveryWorkflowBatch({ limit: 5 });
+  const workflow = await getWorkflowForOrder(order.orderId);
+  const updatedOrder = await getOrder(order.orderId);
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+
+  assert.equal(firstRun.processed, 1);
+  assert.equal(firstRun.completed, 1);
+  assert.equal(secondRun.processed, 0);
+  assert.equal(workflow.status, 'delivered');
+  assert.equal(workflow.currentStep, 'complete');
+  assert.equal(updatedOrder.deliveryStatus, 'delivered');
+  assert.equal(updatedOrder.workflowStatus, 'delivered');
+  assert.equal(updatedOrder.reportReadiness, 'ready');
+  assert.equal(portal.orders[0].deliveryStatus, 'delivered');
+  assert.equal(portal.orders[0].workflowStatus, 'delivered');
+  assert.equal(portal.events.some((event) => event.type === 'workflow.step.completed' && event.payload.stepId === 'delivery_email'), true);
+  assert.equal(portal.events.filter((event) => event.type === 'email.delivery').length, 1);
+});
+
+test('kanzlei hardening workflow stops at manual approval gate', async () => {
+  const { createOrder, getOrder, getCustomerPortalByOrderId } = await import('../api/lib/order-store.js');
+  const {
+    enqueueDeliveryWorkflowForOrder,
+    getWorkflowForOrder,
+    claimReadyWorkflowJobs,
+  } = await import('../api/lib/workflow-store.js');
+  const { runDeliveryWorkflowBatch } = await import('../api/lib/delivery-workflow.js');
+  await claimReadyWorkflowJobs(100);
+
+  const order = await createOrder({
+    productSlug: 'kanzlei-haertung',
+    customer: { name: 'Review Runner', email: 'review-runner@example.ch', company: 'Review Kanzlei' },
+    website: { url: 'https://review-runner.example.ch' },
+    status: 'active',
+    paymentStatus: 'paid',
+  });
+
+  await enqueueDeliveryWorkflowForOrder(order.orderId);
+  const result = await runDeliveryWorkflowBatch({ limit: 5 });
+  const workflow = await getWorkflowForOrder(order.orderId);
+  const updatedOrder = await getOrder(order.orderId);
+  const portal = await getCustomerPortalByOrderId(order.orderId);
+
+  assert.equal(result.processed, 1);
+  assert.equal(result.needsManualReview, 1);
+  assert.equal(workflow.status, 'needs_manual_review');
+  assert.equal(workflow.approvalRequired, true);
+  assert.equal(workflow.currentStep, 'ops_review');
+  assert.equal(updatedOrder.deliveryStatus, 'review_needed');
+  assert.equal(updatedOrder.nextAction, 'Interne Haertungsfreigabe pruefen');
+  assert.equal(portal.orders[0].deliveryStatus, 'review_needed');
+  assert.equal(portal.events.some((event) => event.type === 'workflow.approval_required'), true);
+});
+
+test('workflow runner endpoint requires internal secret in production', async () => {
+  const previousVercelEnv = process.env.VERCEL_ENV;
+  const previousSecret = process.env.INTERNAL_WORKFLOW_SECRET;
+  process.env.VERCEL_ENV = 'production';
+  process.env.INTERNAL_WORKFLOW_SECRET = 'workflow-secret';
+  const { default: handler } = await import('../api/internal/workflow-runner.js?workflow-endpoint-auth');
+
+  const denied = createResponse();
+  await handler({ method: 'POST', headers: {}, body: {} }, denied);
+
+  const allowed = createResponse();
+  await handler({ method: 'POST', headers: { 'x-aidsec-internal-secret': 'workflow-secret' }, body: { limit: 1 } }, allowed);
+
+  if (previousVercelEnv === undefined) {
+    delete process.env.VERCEL_ENV;
+  } else {
+    process.env.VERCEL_ENV = previousVercelEnv;
+  }
+  process.env.INTERNAL_WORKFLOW_SECRET = previousSecret;
+
+  assert.equal(denied.statusCode, 401);
+  assert.equal(allowed.statusCode, 200);
+  assert.equal(allowed.body.success, true);
 });

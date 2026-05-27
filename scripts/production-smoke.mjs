@@ -217,7 +217,28 @@ async function completeCheckout(order) {
 
   record('email:transactional-delivery', expectsTransactionalEmail, {
     recipient: maskEmail(smokeEmail),
-    evidence: expectsTransactionalEmail ? 'checkout webhook accepted and mail provider errors are checked via deployment logs' : 'skipped: set SMOKE_EMAIL to a real test inbox',
+    evidence: expectsTransactionalEmail ? 'workflow runner accepted and mail provider errors are checked via deployment logs' : 'skipped: set SMOKE_EMAIL to a real test inbox',
+  });
+}
+
+async function runDeliveryWorkflow(order) {
+  const secret = requireEnv('INTERNAL_WORKFLOW_SECRET');
+  const { response, body } = await postJson(`${baseUrl}/api/internal/workflow-runner`, { limit: 5 }, {
+    'X-AidSec-Internal-Secret': secret,
+  });
+  if (!response.ok || body?.success !== true) {
+    throw new Error(`workflow runner failed: ${response.status}`);
+  }
+
+  const stored = await redisGetJson(`order:${order.orderId}`);
+  if (!stored || !['delivered', 'review_needed', 'monitoring_active'].includes(stored.deliveryStatus)) {
+    throw new Error('workflow runner did not update order delivery status');
+  }
+
+  record('workflow:delivery-runner', true, {
+    orderId: maskId(order.orderId),
+    deliveryStatus: stored.deliveryStatus,
+    workflowStatus: stored.workflowStatus,
   });
 }
 
@@ -288,6 +309,7 @@ async function main() {
 
   const cyberMandat = orders.find((order) => order.productSlug === 'cyber-mandat');
   await completeCheckout(cyberMandat);
+  await runDeliveryWorkflow(cyberMandat);
   await verifyR2SignedReport(cyberMandat);
   await verifyPluginRelay(cyberMandat);
 
