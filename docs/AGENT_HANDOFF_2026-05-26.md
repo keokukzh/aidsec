@@ -95,15 +95,20 @@
 ## Log-Hygiene-Nachzug 2026-05-27
 
 - `api/lib/signed-storage-url.js`
-  - Neuer AWS-SDK-freier SigV4 Read-URL-Signer fuer R2/S3-kompatible Downloads.
-  - Wird von Proof Center direkt genutzt, damit `/api/proof-center-status` den Cron-Storage-Adapter und dessen AWS-SDK-Pfad nicht importiert.
+  - Neuer AWS-SDK-freier SigV4-Signer fuer R2/S3-kompatible Read-, Put- und List-Operationen.
+  - Wird von Proof Center direkt genutzt, damit `/api/proof-center-status` keinen SDK-Pfad importiert.
 - `api/cron/storage.js`
-  - Nutzt denselben Signer weiter fuer `createSignedReadUrl()`, behaelt AWS SDK v3 nur fuer Put/Get/List.
+  - Nutzt denselben Signer fuer `putJson`, `getJson`, `list` und `createSignedReadUrl()` per `fetch`.
 - `api/proof-center-status.js`
   - Importiert nur noch `createSignedStorageReadUrl()` statt `./cron/storage.js`.
+- `scripts/production-smoke.mjs`
+  - Schreibt Smoke-Reports in R2 per SigV4+fetch statt AWS SDK.
+- `package.json`
+  - `@aws-sdk/client-s3` entfernt, damit Vercel keine Smithy/AWS Dependency in jede Function packt.
 - Tests
   - `proof center signed report links avoid importing the cron storage adapter`
   - Bestehender R2-Signed-URL-Test bleibt gruen.
+  - `object storage and production smoke do not depend on AWS SDK packages`
 
 ## Verifikation Dieses Blocks
 
@@ -140,7 +145,7 @@ Erfolgskriterium fuer weitere Deploys: Smoke gruen, keine frischen SMTP-/API-Feh
 - Secret-Rotation ist nicht technisch durch alten Code loesbar: Neue Secrets muessen bei den Providern erzeugt und danach in Vercel Production/Preview/Development plus lokaler `.env.local` ersetzt werden. Danach ist ein neuer Production-Smoke Pflicht.
 - `.env.local` bleibt gitignored und darf nicht angezeigt oder committed werden.
 - Die alte Smoke-Variante mit `example.com` als Empfaenger hat Microsoft-Mailfehler erzeugt. Ab jetzt echte Smoke-Mail nur ueber `SMOKE_EMAIL`.
-- Die frische `url.parse` Deprecation-Warnung aus Vercel Logs wurde erneut nach Production-Smoke sichtbar. Root Cause: `/api/proof-center-status` importierte den Cron-Storage-Adapter. Fix: Proof Center nutzt jetzt `api/lib/signed-storage-url.js` ohne AWS-SDK-Pfad; nach Deploy erneut Production-Smoke plus Error-Logs pruefen.
+- Die frische `url.parse` Deprecation-Warnung aus Vercel Logs wurde erneut nach Production-Smoke sichtbar. Root Cause: `@aws-sdk/client-s3` brachte Smithy-Dependencies in Vercel Functions. Fix: AWS SDK entfernt; R2/S3 laeuft ueber `api/lib/signed-storage-url.js` und `fetch`. Nach Deploy erneut Production-Smoke plus Error-Logs pruefen.
 
 ## Naechste Schritte Fuer Neuen Agent
 
@@ -162,7 +167,7 @@ Get-ChildItem -Path api,tests,scripts,js,onboarding -Recurse -Include *.js,*.mjs
 npm.cmd run build
 npm.cmd audit --audit-level=moderate
 npm.cmd run video:check
-git add api/lib/order-store.js api/lib/signed-storage-url.js api/checkout-webhook.js api/proof-center-status.js api/cron/storage.js api/cron/reaudit.js js/main.js vercel.json tests/api-p0.test.js tests/conversion-design.test.js docs/AGENT_HANDOFF_2026-05-26.md
+git add api/lib/order-store.js api/lib/signed-storage-url.js api/checkout-webhook.js api/proof-center-status.js api/cron/storage.js api/cron/reaudit.js js/main.js vercel.json scripts/production-smoke.mjs package.json package-lock.json tests/api-p0.test.js tests/conversion-design.test.js docs/AGENT_HANDOFF_2026-05-26.md
 git commit -m "feat: finalize p1 customer automation"
 git push origin main
 ```

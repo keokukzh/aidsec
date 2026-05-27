@@ -23,7 +23,6 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1053.0",
     "@fontsource/instrument-serif": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
     "motion": "^12.34.0",

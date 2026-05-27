@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { createPresignedPutUrl, getObjectStorageConfig } from '../api/lib/signed-storage-url.js';
 
 const repoRoot = new URL('..', import.meta.url);
 
@@ -131,23 +131,18 @@ async function redisSetJson(key, value) {
 }
 
 async function putR2Json(key, data) {
-  const accountId = requireEnv('R2_ACCOUNT_ID');
-  const bucket = requireEnv('R2_BUCKET');
-  const client = new S3Client({
-    region: 'auto',
-    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId: requireEnv('R2_ACCESS_KEY_ID'),
-      secretAccessKey: requireEnv('R2_SECRET_ACCESS_KEY'),
-    },
-    forcePathStyle: true,
+  requireEnv('R2_ACCOUNT_ID');
+  requireEnv('R2_ACCESS_KEY_ID');
+  requireEnv('R2_SECRET_ACCESS_KEY');
+  requireEnv('R2_BUCKET');
+  const config = getObjectStorageConfig();
+  if (!config) throw new Error('R2-Konfiguration fehlt fuer Production-Smoke');
+  const response = await fetch(createPresignedPutUrl(config, key), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(data, null, 2),
   });
-  await client.send(new PutObjectCommand({
-    Bucket: bucket,
-    Key: key,
-    Body: JSON.stringify(data, null, 2),
-    ContentType: 'application/json; charset=utf-8',
-  }));
+  if (!response.ok) throw new Error(`R2 smoke report write failed: ${response.status}`);
 }
 
 async function createCheckout(productSlug, billingPeriod) {

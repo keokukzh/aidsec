@@ -191,6 +191,16 @@ test('storage signs R2 read URLs without SDK presigner dependencies', async () =
   assert.match(parsed.searchParams.get('X-Amz-Signature'), /^[a-f0-9]{64}$/);
 });
 
+test('object storage and production smoke do not depend on AWS SDK packages', () => {
+  const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  const storageSource = fs.readFileSync(new URL('../api/cron/storage.js', import.meta.url), 'utf8');
+  const smokeSource = fs.readFileSync(new URL('../scripts/production-smoke.mjs', import.meta.url), 'utf8');
+
+  assert.equal(packageJson.dependencies['@aws-sdk/client-s3'], undefined);
+  assert.doesNotMatch(storageSource, /@aws-sdk\/client-s3/);
+  assert.doesNotMatch(smokeSource, /@aws-sdk\/client-s3/);
+});
+
 test('plugin relay requires licenseId even when HMAC signature is valid', async () => {
   const previousSecret = process.env.PLUGIN_SHARED_SECRET;
   const previousFetch = global.fetch;

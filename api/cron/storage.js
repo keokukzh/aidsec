@@ -1,5 +1,19 @@
 import { getEnvFirst, isProduction } from '../lib/env.js';
-import { createPresignedGetUrl, getObjectStorageConfig } from '../lib/signed-storage-url.js';
+import {
+  createPresignedGetUrl,
+  createPresignedListUrl,
+  createPresignedPutUrl,
+  getObjectStorageConfig,
+} from '../lib/signed-storage-url.js';
+
+function decodeXml(value) {
+  return String(value)
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&gt;/g, '>')
+    .replace(/&lt;/g, '<')
+    .replace(/&amp;/g, '&');
+}
 
 class UnconfiguredStorage {
   constructor(reason) {
@@ -35,61 +49,31 @@ class S3Storage {
   constructor(config) {
     this.config = config;
     this.bucket = config.bucket;
-    this.client = null;
-    this.commands = null;
-  }
-
-  async getSdk() {
-    if (this.client && this.commands) return { client: this.client, ...this.commands };
-    const { GetObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } = await import('@aws-sdk/client-s3');
-    this.client = new S3Client({
-      region: this.config.region,
-      endpoint: this.config.endpoint,
-      credentials: {
-        accessKeyId: this.config.accessKeyId,
-        secretAccessKey: this.config.secretAccessKey,
-      },
-      forcePathStyle: true,
-    });
-    this.commands = { GetObjectCommand, ListObjectsV2Command, PutObjectCommand };
-    return { client: this.client, ...this.commands };
   }
 
   async putJson(key, data) {
-    const { client, PutObjectCommand } = await this.getSdk();
     const body = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-    await client.send(
-      new PutObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-        Body: body,
-        ContentType: 'application/json; charset=utf-8',
-      }),
-    );
+    const response = await fetch(createPresignedPutUrl(this.config, key), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body,
+    });
+    if (!response.ok) throw new Error(`Object storage PUT failed: ${response.status}`);
     return { success: true, key };
   }
 
   async getJson(key) {
-    try {
-      const { client, GetObjectCommand } = await this.getSdk();
-      const result = await client.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
-      const body = await result.Body.transformToString();
-      return JSON.parse(body);
-    } catch (error) {
-      if (error.name === 'NoSuchKey' || error.$metadata?.httpStatusCode === 404) return null;
-      throw error;
-    }
+    const response = await fetch(createPresignedGetUrl(this.config, key));
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`Object storage GET failed: ${response.status}`);
+    return JSON.parse(await response.text());
   }
 
   async list(prefix = '') {
-    const { client, ListObjectsV2Command } = await this.getSdk();
-    const result = await client.send(
-      new ListObjectsV2Command({
-        Bucket: this.bucket,
-        Prefix: prefix,
-      }),
-    );
-    return (result.Contents || []).map((item) => item.Key);
+    const response = await fetch(createPresignedListUrl(this.config, prefix));
+    if (!response.ok) throw new Error(`Object storage LIST failed: ${response.status}`);
+    const xml = await response.text();
+    return Array.from(xml.matchAll(/<Key>([\s\S]*?)<\/Key>/g), (match) => decodeXml(match[1]));
   }
 
   async createSignedReadUrl(key, expiresIn = 3600) {

@@ -34,7 +34,7 @@ function canonicalQuery(params) {
     .join('&');
 }
 
-export function createPresignedGetUrl(config, key, expiresIn = 3600) {
+export function createPresignedUrl(config, method, key = '', expiresIn = 3600, queryParams = []) {
   const now = new Date();
   const amzDate = formatAmzDate(now);
   const dateStamp = amzDate.slice(0, 8);
@@ -46,17 +46,18 @@ export function createPresignedGetUrl(config, key, expiresIn = 3600) {
   const canonicalUri = `${endpointPath}/${encodeRfc3986(config.bucket)}/${encodeKeyPath(key)}`;
   const signedHeaders = 'host';
   const expires = Math.max(1, Math.min(Number(expiresIn) || 3600, 604800));
-  const params = new Map([
+  const params = new Map(queryParams);
+  [
     ['X-Amz-Algorithm', 'AWS4-HMAC-SHA256'],
     ['X-Amz-Content-Sha256', 'UNSIGNED-PAYLOAD'],
     ['X-Amz-Credential', `${config.accessKeyId}/${scope}`],
     ['X-Amz-Date', amzDate],
     ['X-Amz-Expires', String(expires)],
     ['X-Amz-SignedHeaders', signedHeaders],
-  ]);
+  ].forEach(([paramKey, paramValue]) => params.set(paramKey, paramValue));
   const query = canonicalQuery(params);
   const canonicalRequest = [
-    'GET',
+    method,
     canonicalUri,
     query,
     `host:${endpoint.host}\n`,
@@ -71,6 +72,27 @@ export function createPresignedGetUrl(config, key, expiresIn = 3600) {
   const signature = hmac(signingKey, stringToSign, 'hex');
 
   return `${endpoint.origin}${canonicalUri}?${query}&X-Amz-Signature=${signature}`;
+}
+
+export function createPresignedGetUrl(config, key, expiresIn = 3600) {
+  return createPresignedUrl(config, 'GET', key, expiresIn);
+}
+
+export function createPresignedPutUrl(config, key, expiresIn = 3600) {
+  return createPresignedUrl(config, 'PUT', key, expiresIn);
+}
+
+export function createPresignedListUrl(config, prefix = '', expiresIn = 3600) {
+  return createPresignedUrl(
+    config,
+    'GET',
+    '',
+    expiresIn,
+    [
+      ['list-type', '2'],
+      ['prefix', String(prefix || '')],
+    ],
+  );
 }
 
 export function getObjectStorageConfig() {
