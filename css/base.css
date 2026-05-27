@@ -372,6 +372,10 @@ table {
   color: var(--gray-300);
 }
 
+.section--alt .section-header__bullets li {
+  color: var(--gray-700);
+}
+
 .section__micro-cta {
   text-align: center;
   margin-top: var(--space-10);

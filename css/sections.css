@@ -1069,7 +1069,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-8);
-  max-width: 48rem;
+  max-width: 60rem;
   margin: 0 auto var(--space-6);
 }
 
@@ -1233,6 +1233,15 @@
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--gray-800);
+}
+
+.testimonial__stars {
+  display: flex;
+  gap: 2px;
+  color: var(--gold);
+  font-size: var(--text-sm);
+  letter-spacing: 2px;
+  margin-top: var(--space-2);
 }
 
 .testimonial__role {
@@ -2217,7 +2226,7 @@
 }
 
 .roi__result-value--cost {
-  color: var(--gold);
+  color: var(--green-safe);
 }
 
 .roi__result-value--roi {
@@ -2337,7 +2346,7 @@
 
 /* ── Hero ── */
 .knowledge-hero {
-  padding: var(--space-24) 0 var(--space-16);
+  padding: 0 0 var(--space-16);
   text-align: center;
   background:
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200, 168, 76, 0.06) 0%, transparent 60%),
@@ -2833,6 +2842,10 @@
   color: var(--gray-100);
   margin-bottom: var(--space-8);
   font-size: var(--text-lg);
+}
+
+.cta-banner .btn--gold {
+  box-shadow: 0 4px 24px rgba(200, 168, 76, 0.4);
 }
 
 .cta-banner--footer {

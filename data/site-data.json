@@ -46,11 +46,11 @@
     "lastAuditLabel": "18.03.2026",
     "incidentSlaLabel": "< 4h",
     "badgeTitle": "Verified",
-    "badgeSubtitle": "Monatlich geprueft",
+    "badgeSubtitle": "Monatlich geprüft",
     "report": {
-      "status": "Konform. Security Headers unveraendert auf Note A, WordPress-Konfiguration ohne kritische Rueckschritte, keine aktiven Blocklisten-Eintraege.",
+      "status": "Konform. Security Headers unverändert auf Note A, WordPress-Konfiguration ohne kritische Rückschritte, keine aktiven Blocklisten-Einträge.",
       "changes": "Ein Plugin ersetzt, DMARC-Richtlinie angezogen, Server-Header bereinigt, 2 Massnahmen abgeschlossen, 1 Empfehlung offen.",
-      "openItems": "Empfohlen: Passwort-Rotation fuer Admin-Zugang, DNS-Dokumentation aktualisieren, Incident-Playbook fuer Stellvertretung hinterlegen."
+      "openItems": "Empfohlen: Passwort-Rotation für Admin-Zugang, DNS-Dokumentation aktualisieren, Incident-Playbook für Stellvertretung hinterlegen."
     }
   }
 }

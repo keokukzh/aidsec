@@ -105,7 +105,7 @@ export function buildPaymentConfirmationEmail(order) {
 
   return {
     to: order.customer.email,
-    subject: `AidSec Auftrag bestaetigt: ${order.orderId}`,
+    subject: `AidSec Auftrag bestätigt: ${order.orderId}`,
     html: buildPaymentConfirmationHtml(order, orderStatusUrl, proofCenterUrl),
     text: [
       `Hallo ${customerName(order)}`,
@@ -119,7 +119,7 @@ export function buildPaymentConfirmationEmail(order) {
       `Status: ${orderStatusUrl}`,
       `Proof Center: ${proofCenterUrl}`,
       '',
-      'Freundliche Gruesse',
+      'Freundliche Grüße',
       'AidSec',
     ].join('\n'),
   };
@@ -130,7 +130,7 @@ function buildPaymentConfirmationHtml(order, statusUrl, proofUrl) {
   <table cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">
     <tr><td style="padding:40px 30px;background:#0b1d3a;color:#fff;text-align:center;border-radius:8px 8px 0 0;">
       <h1 style="margin:0;font-size:24px;color:#c8a84c;">AidSec</h1>
-      <p style="margin:8px 0 0;font-size:16px;">Auftrag bestaetigt</p>
+      <p style="margin:8px 0 0;font-size:16px;">Auftrag bestätigt</p>
     </td></tr>
     <tr><td style="padding:30px;background:#fff;">
       <p style="font-size:16px;color:#333;">Hallo ${customerName(order)},</p>
@@ -178,12 +178,12 @@ export function buildMagicLinkEmail(order) {
       <p style="font-size:16px;color:#333;">Hallo ${customerName(order)},</p>
       <p style="font-size:15px;color:#555;line-height:1.6;">Hier ist Ihr sicherer Zugang zum AidSec Proof Center.</p>
       <p style="margin:24px 0 0;">
-        <a href="${portalUrl}" style="display:inline-block;padding:12px 24px;background:#c8a84c;color:#fff;text-decoration:none;border-radius:4px;font-weight:600;">Proof Center oeffnen</a>
+        <a href="${portalUrl}" style="display:inline-block;padding:12px 24px;background:#c8a84c;color:#fff;text-decoration:none;border-radius:4px;font-weight:600;">Proof Center öffnen</a>
       </p>
-      <p style="margin:16px 0 0;font-size:13px;color:#64748b;">Dieser Link ist zeitlich begrenzt und nur fuer Ihren Auftrag gueltig.</p>
+      <p style="margin:16px 0 0;font-size:13px;color:#64748b;">Dieser Link ist zeitlich begrenzt und nur für Ihren Auftrag gültig.</p>
     </td></tr>
     <tr><td style="padding:20px 30px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;">
-      Freundliche Gruesse, AidSec
+      Freundliche Grüße, AidSec
     </td></tr>
   </table>`,
     text: [
@@ -193,9 +193,9 @@ export function buildMagicLinkEmail(order) {
       '',
       `Proof Center: ${portalUrl}`,
       '',
-      'Dieser Link ist zeitlich begrenzt und nur fuer Ihren Auftrag gueltig.',
+      'Dieser Link ist zeitlich begrenzt und nur für Ihren Auftrag gültig.',
       '',
-      'Freundliche Gruesse',
+      'Freundliche Grüße',
       'AidSec',
     ].join('\n'),
   };
@@ -227,7 +227,7 @@ export function buildDeliveryEmail(order) {
       '',
       `Proof Center: ${portalUrl}`,
       '',
-      'Freundliche Gruesse',
+      'Freundliche Grüße',
       'AidSec',
     ].join('\n'),
     html: buildDeliveryHtml(order, productInstructions, portalUrl),
@@ -240,7 +240,7 @@ function getProductInstructions(order, baseUrl) {
     return `
       <h3 style="color:#0b1d3a;margin:0 0 8px;">Rapid Header Fix — Schnelleinstieg</h3>
       <p style="font-size:14px;color:#333;line-height:1.6;">
-        Die Sicherheits-Header wurden fuer Ihre Website vorbereitet. Bitte pruefen Sie das Ergebnis<br>
+        Die Sicherheits-Header wurden für Ihre Website vorbereitet. Bitte prüfen Sie das Ergebnis<br>
         im <a href="${baseUrl}/api/check-headers?url=${encodeURIComponent(order.website?.url || '')}">Header-Check</a>.
       </p>`;
   }
@@ -248,7 +248,7 @@ function getProductInstructions(order, baseUrl) {
     return `
       <h3 style="color:#0b1d3a;margin:0 0 8px;">Kanzlei-Haertung — Einrichtungsanleitung</h3>
       <p style="font-size:14px;color:#333;line-height:1.6;">
-        Die vollständige Website-Haertung wurde durchgefuehrt. Die Details finden Sie in Ihrem<br>
+        Die vollständige Website-Härtung wurde durchgeführt. Die Details finden Sie in Ihrem<br>
         <a href="${baseUrl}/proof-center.html">Proof Center</a>.
       </p>`;
   }
@@ -284,7 +284,7 @@ function buildDeliveryHtml(order, instructions, portalUrl) {
       </p>
     </td></tr>
     <tr><td style="padding:20px 30px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;">
-      Freundliche Gruesse, AidSec
+      Freundliche Grüße, AidSec
     </td></tr>
   </table>`;
 }
@@ -311,11 +311,11 @@ export function buildReAuditEmail(order) {
       '',
       `Website: ${order.website?.url || '-'}`,
       `Note: ${order.monitoring?.grade || 'N/A'}`,
-      `Geprueft am: ${order.monitoring?.checkedAt ? new Date(order.monitoring.checkedAt).toLocaleDateString('de-CH') : 'N/A'}`,
+      `Geprüft am: ${order.monitoring?.checkedAt ? new Date(order.monitoring.checkedAt).toLocaleDateString('de-CH') : 'N/A'}`,
       '',
       `Kundenportal: ${portalUrl}`,
       '',
-      'Freundliche Gruesse',
+      'Freundliche Grüße',
       'AidSec',
     ].join('\n'),
     html: `
@@ -337,7 +337,7 @@ export function buildReAuditEmail(order) {
       </p>
     </td></tr>
     <tr><td style="padding:20px 30px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;">
-      Freundliche Gruesse, AidSec
+      Freundliche Grüße, AidSec
     </td></tr>
   </table>`,
   };
