@@ -72,7 +72,7 @@ async function generateOfferWithAI(leadData, auditResult) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'openai/gpt-5.4',
+      model: 'minimax/minimax-m2.7',
       messages: [
         { role: 'system', content: buildSystemPrompt() },
         { role: 'user', content: buildUserPrompt(leadData, auditResult) },
