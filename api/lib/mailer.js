@@ -246,7 +246,7 @@ function getProductInstructions(order, baseUrl) {
   }
   if (productSlug === 'kanzlei-haertung') {
     return `
-      <h3 style="color:#0b1d3a;margin:0 0 8px;">Kanzlei-Haertung — Einrichtungsanleitung</h3>
+      <h3 style="color:#0b1d3a;margin:0 0 8px;">Kanzlei-Härtung — Einrichtungsanleitung</h3>
       <p style="font-size:14px;color:#333;line-height:1.6;">
         Die vollständige Website-Härtung wurde durchgeführt. Die Details finden Sie in Ihrem<br>
         <a href="${baseUrl}/proof-center.html">Proof Center</a>.
