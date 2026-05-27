@@ -1065,12 +1065,18 @@
 }
 
 /* ── Stats (Ergebnisse in Zahlen) ── */
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .stats__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-8);
+  width: 100%;
   max-width: 60rem;
-  margin: 0 auto var(--space-6);
 }
 
 .stats__item {
@@ -2346,13 +2352,21 @@
 
 /* ── Hero ── */
 .knowledge-hero {
-  padding: 0 0 var(--space-16);
+  padding: var(--space-8) 0 var(--space-16);
   text-align: center;
   background:
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200, 168, 76, 0.06) 0%, transparent 60%),
     radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
     radial-gradient(circle at center, #0f2547, var(--navy-deep));
   position: relative;
+}
+
+.section--dark.knowledge-hero {
+  padding-top: 0;
+}
+
+.section--dark.knowledge-hero .section-header {
+  padding-top: calc(var(--nav-height) + var(--space-8));
 }
 
 .knowledge-hero::after {

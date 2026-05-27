@@ -30,14 +30,22 @@
   transform: none;
 }
 
-[data-reveal='scale'] {
-  transform: scale(0.95);
-}
-
 /* Revealed state */
 [data-reveal].revealed {
   opacity: 1;
   transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Counters always visible — no fade, just animate */
+[data-reveal][data-count-to] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+[data-reveal][data-count-to].revealed {
+  opacity: 1;
+  transform: none;
 }
 
 /* Delay modifiers (set via data-reveal-delay in JS) */

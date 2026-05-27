@@ -329,12 +329,14 @@
         function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
+              // Ensure visible before animating
+              entry.target.style.opacity = '1';
               animateCounter(entry.target);
               counterObserver.unobserve(entry.target);
             }
           });
         },
-        { rootMargin: '0px 0px -40px 0px', threshold: 0.3 }
+        { rootMargin: '0px 0px -40px 0px', threshold: 0.1 }
       );
       counterElements.forEach(function (el) {
         counterObserver.observe(el);
