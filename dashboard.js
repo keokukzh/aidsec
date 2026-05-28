@@ -42,7 +42,7 @@
   const CONFIG = {
     apiEndpoint: '/api/dashboard-status',
     fallbackApiEndpoint: '/api/order-status',
-    pluginDownloadUrl: '/aidsec-express.zip',
+    pluginDownloadUrl: '/aidsec-express-fix.zip',
     invoiceBaseUrl: '/api/invoice',
     redirectDelay: 5000,
   };
@@ -219,7 +219,7 @@ function getUrlParams() {
             productSlug: 'kanzlei-haertung',
             websiteUrl: 'https://mueller-partner.ch',
             status: 'active',
-            licenseId: 'AIDSEC-DEMO-2026-XXXX-XXXX',
+            licenseKey: 'AIDSEC-DEMO-2026-KANZ-LEIH',
             results: { headersScore: 72, issuesFixed: 8, lastScan: '2026-05-28' },
           }
         },
