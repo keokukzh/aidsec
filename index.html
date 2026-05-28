@@ -392,9 +392,33 @@
          Plausible Analytics ist cookieless & EU-gehostet → wird SOFORT geladen (kein Consent nötig).
          hCaptcha erfordert Consent und wird erst nach Zustimmung geladen.
          Kein Google Analytics / HubSpot / Hotjar — Privacy-First. -->
-    <script src="js/consent.js" defer></script>
+<script src="js/consent.js" defer></script>
   </head>
   <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" aria-hidden="true">
+      <div class="scroll-progress__bar"></div>
+    </div>
+
+    <!-- Mobile Sticky CTA -->
+    <div id="sticky-cta" class="mobile-sticky-cta" aria-hidden="true">
+      <div class="mobile-sticky-cta__inner">
+        <a href="/index.html#kontakt" class="btn btn--gold btn--lg" data-track="mobile-sticky-cta">
+          Kostenlosen Security-Check starten
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="scroll-top" class="back-to-top" aria-label="Nach oben scrollen" title="Nach oben">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 15l-6-6-6 6"/>
+      </svg>
+    </button>
+
     <!-- Cookie Consent Banner -->
     <div id="cookie-banner" class="cookie-banner" style="display: none">
       <div class="cookie-banner__content">

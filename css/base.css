@@ -95,7 +95,9 @@ a:focus-visible {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+label:focus-visible,
+[tabindex]:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
@@ -428,4 +430,123 @@ table {
 ::selection {
   background: var(--gold);
   color: var(--navy);
+}
+
+/* ── Scroll Progress Bar ── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(200, 168, 76, 0.15);
+  z-index: calc(var(--z-sticky) + 1);
+  pointer-events: none;
+}
+
+.scroll-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: var(--scroll-progress, 0%);
+  transition: width 50ms linear;
+  box-shadow: 0 0 8px rgba(200, 168, 76, 0.4);
+}
+
+/* ── Sticky Mobile CTA Bar ── */
+.mobile-sticky-cta {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--navy-deep);
+  border-top: 1px solid rgba(200, 168, 76, 0.2);
+  padding: var(--space-3) var(--space-4);
+  z-index: var(--z-overlay);
+  transform: translateY(100%);
+  transition: transform 400ms var(--ease-out);
+}
+
+.mobile-sticky-cta.is-visible {
+  transform: translateY(0);
+}
+
+.mobile-sticky-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-sticky-cta .btn {
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .mobile-sticky-cta {
+    display: block;
+  }
+  body {
+    padding-bottom: 80px;
+  }
+}
+
+/* ── Back to Top Button ── */
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  z-index: var(--z-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transition:
+    opacity var(--duration-normal) var(--ease-out),
+    visibility var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+  box-shadow: 0 4px 16px rgba(200, 168, 76, 0.3);
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.back-to-top:hover {
+  background: var(--gold-hover);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(200, 168, 76, 0.4);
+}
+
+.back-to-top:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(200, 168, 76, 0.25);
+}
+
+.back-to-top svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: calc(80px + var(--space-4));
+    right: var(--space-4);
+    width: 44px;
+    height: 44px;
+  }
 }

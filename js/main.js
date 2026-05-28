@@ -46,11 +46,18 @@
   const mobileMenu = document.getElementById('mobile-menu');
   const revealElements = document.querySelectorAll('[data-reveal]');
 
-  // ── Sticky Nav on Scroll ──
+// ── Sticky Nav on Scroll ──
   function handleNavScroll() {
     if (!nav) return;
     const scrolled = window.scrollY > 60;
     nav.classList.toggle('scrolled', scrolled);
+
+    // Update CSS scroll progress variable
+    const scrollProgress = Math.min(
+      (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100,
+      100
+    );
+    document.documentElement.style.setProperty('--scroll-progress', scrollProgress + '%');
   }
 
   window.addEventListener('scroll', handleNavScroll, { passive: true });
@@ -282,7 +289,7 @@
     }
   }
 
-  // ── Animated Number Counters ──
+// ── Animated Number Counters with Skeleton Loading ──
   function formatNumber(num, separator) {
     if (!separator) return String(num);
     var str = String(num);
@@ -329,19 +336,25 @@
         function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              // Ensure visible before animating
-              entry.target.style.opacity = '1';
-              // Set initial text to final value BEFORE animation starts
-              // so that if animation fails or is slow, correct value is shown
-              var target = parseInt(entry.target.getAttribute('data-count-to'), 10);
-              var prefix = entry.target.getAttribute('data-count-prefix') || '';
-              var suffix = entry.target.getAttribute('data-count-suffix') || '';
-              var separator = entry.target.getAttribute('data-count-separator') || '';
-              if (!isNaN(target)) {
-                entry.target.textContent = prefix + formatNumber(target, separator) + suffix;
-              }
-              animateCounter(entry.target);
-              counterObserver.unobserve(entry.target);
+              var el = entry.target;
+              // Add skeleton shimmer loading state
+              el.classList.add('is-loading');
+              el.style.opacity = '1';
+
+              // After brief shimmer, animate to final value
+              setTimeout(function() {
+                el.classList.remove('is-loading');
+                var target = parseInt(el.getAttribute('data-count-to'), 10);
+                var prefix = el.getAttribute('data-count-prefix') || '';
+                var suffix = el.getAttribute('data-count-suffix') || '';
+                var separator = el.getAttribute('data-count-separator') || '';
+                if (!isNaN(target)) {
+                  el.textContent = prefix + formatNumber(target, separator) + suffix;
+                }
+                animateCounter(el);
+              }, 400);
+
+              counterObserver.unobserve(el);
             }
           });
         },

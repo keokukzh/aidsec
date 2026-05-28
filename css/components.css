@@ -268,18 +268,23 @@ body .nav.scrolled {
   transition:
     transform var(--duration-normal) var(--ease-out),
     opacity var(--duration-fast) var(--ease-in-out);
+  transform-origin: center;
 }
 
 .nav__toggle.active .nav__toggle-bar:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
+  transition-duration: 250ms;
 }
 
 .nav__toggle.active .nav__toggle-bar:nth-child(2) {
   opacity: 0;
+  transform: scaleX(0);
+  transition-duration: 150ms;
 }
 
 .nav__toggle.active .nav__toggle-bar:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
+  transition-duration: 250ms;
 }
 
 /* ── Mobile Menu ── */
@@ -538,6 +543,21 @@ body .nav.scrolled {
   border: 1px solid rgba(200, 168, 76, 0.15);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-6);
+  transition:
+    background var(--duration-normal) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.service-card:hover .service-card__icon {
+  background: rgba(200, 168, 76, 0.18);
+  border-color: rgba(200, 168, 76, 0.4);
+  box-shadow: 0 0 16px rgba(200, 168, 76, 0.2);
+}
+
+.service-card:hover .service-card__icon svg {
+  transform: scale(1.15) rotate(3deg);
+  transition: transform 400ms var(--ease-out);
 }
 
 .service-card__title {
@@ -610,6 +630,12 @@ body .nav.scrolled {
   width: 340px;
   flex-shrink: 0;
   cursor: pointer;
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+}
+
+.grade-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
 }
 
 .grade-card--fail {
@@ -666,25 +692,44 @@ body .nav.scrolled {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   font-family: var(--font-body);
   font-size: var(--text-4xl);
-  font-weight: 700;
+  font-weight: 800;
   border-radius: var(--radius-lg);
   line-height: 1;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.grade-card__letter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  border-radius: inherit;
 }
 
 .grade-card__letter--f {
   background: var(--red-bg);
   color: var(--red-danger);
   border: 2px solid var(--red-border);
+  box-shadow:
+    0 0 20px rgba(220, 38, 38, 0.3),
+    0 0 40px rgba(220, 38, 38, 0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .grade-card__letter--a {
   background: var(--green-bg);
   color: var(--green-safe);
   border: 2px solid var(--green-border);
+  box-shadow:
+    0 0 20px rgba(22, 163, 74, 0.35),
+    0 0 40px rgba(22, 163, 74, 0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .grade-card__details {
@@ -1096,12 +1141,40 @@ body .nav.scrolled {
 
 .contact-form__input:focus {
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(200, 168, 76, 0.15);
+  box-shadow: 0 0 0 3px rgba(200, 168, 76, 0.15), 0 0 12px rgba(200, 168, 76, 0.1);
 }
 
 .contact-form__input.error {
   border-color: var(--red-danger);
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  animation: errorPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1); }
+  50% { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2), 0 0 8px rgba(220, 38, 38, 0.15); }
+}
+
+.contact-form__input.success {
+  border-color: var(--green-safe);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.contact-form__input.success::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='3'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation: checkmarkIn 0.3s var(--ease-out);
+}
+
+@keyframes checkmarkIn {
+  from { transform: translateY(-50%) scale(0); opacity: 0; }
+  to { transform: translateY(-50%) scale(1); opacity: 1; }
 }
 
 .contact-form__error {
