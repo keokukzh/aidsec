@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1B3E"/>
+  <!-- Stethoscope bell (circle) -->
+  <circle cx="160" cy="120" r="35" fill="none" stroke="#C9A84C" stroke-width="2.5"/>
+  <circle cx="160" cy="120" r="20" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Stethoscope tubing -->
+  <path d="M195 120 C195 70 150 50 200 50 C250 50 270 80 270 130" fill="none" stroke="#C9A84C" stroke-width="2.5"/>
+  <!-- Earpieces -->
+  <path d="M270 130 L285 145 M270 130 L280 115" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Shield overlay on right side -->
+  <path d="M280 60 L340 75 L340 150 C340 185 315 205 280 220 C245 205 220 185 220 150 L220 75 Z" fill="none" stroke="#C9A84C" stroke-width="2"/>
+  <!-- Cross inside shield -->
+  <line x1="280" y1="100" x2="280" y2="160" stroke="#C9A84C" stroke-width="2.5"/>
+  <line x1="245" y1="130" x2="315" y2="130" stroke="#C9A84C" stroke-width="2.5"/>
+  <!-- Decorative corner elements -->
+  <path d="M20 20 L50 20 M20 20 L20 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 20 L350 20 M380 20 L380 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M20 220 L50 220 M20 220 L20 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 220 L350 220 M380 220 L380 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+</svg>

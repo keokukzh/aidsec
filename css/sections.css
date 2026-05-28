@@ -1319,9 +1319,20 @@
 /* ── Trust Section ── */
 .trust {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 55% 45%;
   align-items: center;
   gap: var(--space-16);
+}
+
+.trust.why-grid {
+  padding: var(--space-8) 0;
+}
+
+.trust.why-grid .trust__visual {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .trust__features {
@@ -1491,6 +1502,196 @@
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
   opacity: 0.95;
+}
+
+/* ── Why Wrapper (Warum Section) ── */
+.why-wrapper {
+  padding: 0 0 var(--space-16) 0;
+}
+
+.trust.why-grid {
+  margin-bottom: 0;
+}
+
+.trust.why-grid .trust__feature {
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid rgba(200, 168, 76, 0.1);
+}
+
+.trust.why-grid .trust__feature:last-child {
+  border-bottom: none;
+}
+
+.trust.why-grid .trust__feature-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(200, 168, 76, 0.08);
+  border: 1px solid rgba(200, 168, 76, 0.15);
+  border-radius: var(--radius-md);
+}
+
+.trust.why-grid .trust__feature-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: #0D1B3E;
+  margin-bottom: var(--space-1);
+}
+
+.trust.why-grid .trust__feature-desc {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: #4A5568;
+}
+
+/* Right visual */
+.why-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(200, 168, 76, 0.12);
+  background: linear-gradient(165deg, rgba(200, 168, 76, 0.04) 0%, rgba(6, 15, 31, 0.4) 40%, var(--navy-deep) 100%);
+}
+
+.why-dashboard-img {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid rgba(200, 168, 76, 0.22);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.why-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.why-badge-chip {
+  display: inline-block;
+  padding: var(--space-1) var(--space-4);
+  background: rgba(200, 168, 76, 0.12);
+  border: 1px solid rgba(200, 168, 76, 0.3);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--gold);
+}
+
+.why-badge-chip--verified {
+  background: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.25);
+  color: var(--green-safe);
+}
+
+.why-trust-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.why-live-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  background: rgba(200, 168, 76, 0.12);
+  border: 1px solid rgba(200, 168, 76, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.why-live-grade {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.why-live-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+.why-certified-label {
+  display: inline-block;
+  padding: var(--space-1) var(--space-4);
+  background: var(--navy-deep);
+  border: 1px solid rgba(200, 168, 76, 0.3);
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--gold);
+}
+
+/* Divider */
+.why-divider {
+  height: 1px;
+  background: #E2E8F0;
+  margin: var(--space-12) 0;
+}
+
+/* Trust Block (3 columns) */
+.why-trust-block {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  text-align: center;
+  padding: 0 0 var(--space-12) 0;
+}
+
+.why-trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.why-trust-item svg {
+  flex-shrink: 0;
+}
+
+.why-trust-item strong {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--navy-deep);
+}
+
+.why-trust-item span {
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+  line-height: var(--leading-relaxed);
+}
+
+/* Gegründet Badge */
+.gegründet-badge {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+.gegründet-badge span,
+.gegründet-badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-5);
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--gold);
 }
 
 .proof-actions {

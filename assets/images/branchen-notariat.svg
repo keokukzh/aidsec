@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1B3E"/>
+  <!-- Document body -->
+  <rect x="120" y="40" width="120" height="160" rx="4" fill="none" stroke="#C9A84C" stroke-width="2"/>
+  <!-- Folded corner -->
+  <path d="M200 40 L240 80 L200 80 Z" fill="#0D1B3E" stroke="#C9A84C" stroke-width="1.5"/>
+  <path d="M200 40 L240 40 L240 80" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Text lines on document -->
+  <line x1="140" y1="100" x2="200" y2="100" stroke="#C9A84C" stroke-width="1.5" opacity="0.7"/>
+  <line x1="140" y1="115" x2="220" y2="115" stroke="#C9A84C" stroke-width="1.5" opacity="0.7"/>
+  <line x1="140" y1="130" x2="180" y2="130" stroke="#C9A84C" stroke-width="1.5" opacity="0.7"/>
+  <!-- Official seal/stamp circle -->
+  <circle cx="280" cy="160" r="50" fill="none" stroke="#C9A84C" stroke-width="3"/>
+  <circle cx="280" cy="160" r="40" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Star in seal center -->
+  <path d="M280 130 L285 150 L305 150 L290 165 L295 185 L280 175 L265 185 L270 165 L255 150 L275 150 Z" fill="#C9A84C"/>
+  <!-- Decorative corner elements -->
+  <path d="M20 20 L50 20 M20 20 L20 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 20 L350 20 M380 20 L380 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M20 220 L50 220 M20 220 L20 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 220 L350 220 M380 220 L380 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+</svg>

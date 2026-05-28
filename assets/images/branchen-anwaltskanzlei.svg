@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1B3E"/>
+  <!-- Shield outline -->
+  <path d="M200 35 L260 55 L260 130 C260 175 230 205 200 220 C170 205 140 175 140 130 L140 55 Z" fill="none" stroke="#C9A84C" stroke-width="2"/>
+  <!-- Balance scale inside shield -->
+  <line x1="200" y1="80" x2="200" y2="160" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="160" y1="95" x2="240" y2="95" stroke="#C9A84C" stroke-width="2"/>
+  <!-- Left pan -->
+  <path d="M160 95 L150 120 L170 120 Z" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Right pan -->
+  <path d="M240 95 L230 120 L250 120 Z" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Gavel -->
+  <rect x="175" y="165" width="50" height="12" rx="2" fill="#C9A84C"/>
+  <rect x="195" y="177" width="10" height="25" fill="#C9A84C"/>
+  <!-- Decorative corner elements -->
+  <path d="M20 20 L50 20 M20 20 L20 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 20 L350 20 M380 20 L380 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M20 220 L50 220 M20 220 L20 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 220 L350 220 M380 220 L380 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+</svg>

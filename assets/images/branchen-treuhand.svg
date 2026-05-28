@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1B3E"/>
+  <!-- Bar chart background -->
+  <rect x="80" y="60" width="200" height="140" rx="4" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Chart bars -->
+  <rect x="100" y="140" width="30" height="45" fill="#C9A84C" opacity="0.8"/>
+  <rect x="145" y="110" width="30" height="75" fill="#C9A84C" opacity="0.9"/>
+  <rect x="190" y="80" width="30" height="105" fill="#C9A84C"/>
+  <!-- Trend line -->
+  <path d="M115 135 L160 105 L205 75" fill="none" stroke="#0D1B3E" stroke-width="2"/>
+  <circle cx="115" cy="135" r="4" fill="#0D1B3E"/>
+  <circle cx="160" cy="105" r="4" fill="#0D1B3E"/>
+  <circle cx="205" cy="75" r="4" fill="#0D1B3E"/>
+  <!-- Shield on right side -->
+  <path d="M300 50 L360 65 L360 140 C360 175 330 195 300 210 C270 195 240 175 240 140 L240 65 Z" fill="none" stroke="#C9A84C" stroke-width="2"/>
+  <!-- Euro/currency symbol in shield -->
+  <text x="300" y="140" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#C9A84C" text-anchor="middle">€</text>
+  <!-- Decorative corner elements -->
+  <path d="M20 20 L50 20 M20 20 L20 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 20 L350 20 M380 20 L380 50" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M20 220 L50 220 M20 220 L20 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+  <path d="M380 220 L350 220 M380 220 L380 190" stroke="#C9A84C" stroke-width="1.5" opacity="0.5"/>
+</svg>
