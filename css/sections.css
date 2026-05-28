@@ -1324,6 +1324,11 @@
   gap: var(--space-16);
 }
 
+/* Anchor scroll offset for fixed nav */
+[id] {
+  scroll-margin-top: var(--nav-height);
+}
+
 .trust.why-grid {
   padding: var(--space-8) 0;
 }
