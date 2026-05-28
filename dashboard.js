@@ -82,7 +82,7 @@ function getUrlParams() {
 function showState(state) {
     elements.loadingState.style.display = state === 'loading' ? 'flex' : 'none';
     elements.errorState.style.display = state === 'error' ? 'flex' : 'none';
-    elements.dashboardContent.style.display = state === 'content' ? 'flex' : 'none';
+    elements.dashboardContent.style.display = state === 'content' ? 'block' : 'none';
   }
 
   /**
