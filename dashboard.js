@@ -218,7 +218,7 @@ function showState(state) {
             customer: { name: 'Müller & Partner', email: 'muster@example.ch', company: 'Müller & Partner Rechtsanwälte' },
             productSlug: 'kanzlei-haertung',
             websiteUrl: 'https://mueller-partner.ch',
-            status: 'pending', // Shows as "Analyse & Härtung" in progress
+status: 'active', // Shows as "Analyse & Härtung" in progress
             licenseKey: 'AIDSEC-DEMO-2026-KANZ-LEIH',
             createdAt: '2026-05-28',
             results: { headersScore: 72, issuesFixed: 8, lastScan: '2026-05-28' },
