@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AidSec Kunden-Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="/" class="nav__logo">
+        <img src="/logowhite.png" alt="AidSec" class="nav__logo-img">
+      </a>
+      <a href="/kunden" class="nav__back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Zurueck
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="dashboard">
+    <div class="dashboard__container">
+      <!-- Loading State -->
+      <div id="loading-state" class="dashboard__loading">
+        <div class="loading-spinner"></div>
+        <p>Lade Ihre Daten...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" class="dashboard__error" style="display: none;">
+        <div class="error-card">
+          <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <h2>Fehler beim Laden</h2>
+          <p id="error-message">Ein unbekannter Fehler ist aufgetreten.</p>
+          <a href="/kunden" class="btn btn--gold">Zur Startseite</a>
+        </div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div id="dashboard-content" class="dashboard__content" style="display: none;">
+        <!-- Header Section -->
+        <header class="dashboard__header">
+          <div class="dashboard__welcome">
+            <span class="dashboard__badge">Kundenportal</span>
+            <h1 class="dashboard__title">Willkommen zurueck</h1>
+            <p class="dashboard__subtitle" id="customer-name">Sehr geehrte Kundin, sehr geehrter Kunde</p>
+          </div>
+          <div class="dashboard__status-badge" id="status-badge">
+            <span class="status-dot"></span>
+            <span id="status-text">Laden...</span>
+          </div>
+        </header>
+
+        <!-- Info Cards Grid -->
+        <div class="dashboard__grid">
+          <!-- Customer Info Card -->
+          <div class="card">
+            <div class="card__header">
+              <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <h3 class="card__title">Kundendaten</h3>
+            </div>
+            <div class="card__body">
+              <dl class="card__list">
+                <div class="card__item">
+                  <dt>Name</dt>
+                  <dd id="info-name">-</dd>
+                </div>
+                <div class="card__item">
+                  <dt>E-Mail</dt>
+                  <dd id="info-email">-</dd>
+                </div>
+                <div class="card__item">
+                  <dt>Firma</dt>
+                  <dd id="info-company">-</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <!-- Product Info Card -->
+          <div class="card">
+            <div class="card__header">
+              <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+              <h3 class="card__title">Produkt</h3>
+            </div>
+            <div class="card__body">
+              <dl class="card__list">
+                <div class="card__item">
+                  <dt>Bezeichnung</dt>
+                  <dd id="info-product">-</dd>
+                </div>
+                <div class="card__item">
+                  <dt>Website</dt>
+                  <dd id="info-website">-</dd>
+                </div>
+                <div class="card__item">
+                  <dt>Auftrags-ID</dt>
+                  <dd id="info-order-id">-</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <!-- License Card -->
+        <div class="card card--license">
+          <div class="card__header">
+            <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <h3 class="card__title">Plugin License Key</h3>
+          </div>
+          <div class="card__body">
+            <div class="license-display">
+              <div class="license-key-container">
+                <code id="license-key" class="license-key">-</code>
+                <button id="copy-license-btn" class="copy-btn" title="In Zwischenablage kopieren">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  <span class="copy-tooltip">Kopiert!</span>
+                </button>
+              </div>
+              <p class="license-hint">Installieren Sie diesen Key im AidSec WordPress Plugin</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Section -->
+        <div class="card card--download">
+          <div class="card__header">
+            <svg class="card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <h3 class="card__title">Plugin Download</h3>
+          </div>
+          <div class="card__body">
+            <div class="download-section">
+              <div class="download-info">
+                <p class="download-description">Laden Sie das AidSec Express Plugin fuer WordPress herunter und installieren Sie es auf Ihrer Website.</p>
+                <div class="download-meta">
+                  <span class="download-version">Version 1.0.0</span>
+                  <span class="download-format">WordPress Plugin (.zip)</span>
+                </div>
+              </div>
+              <a id="download-link" href="#" class="btn btn--gold btn--download" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Plugin herunterladen
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions Row -->
+        <div class="dashboard__actions">
+          <a href="#" id="invoice-link" class="btn btn--outline btn--lg" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            Rechnung anzeigen
+          </a>
+          <a href="/kontakt" class="btn btn--outline btn--lg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            Support kontaktieren
+          </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard__footer">
+          <p>Bei Fragen wenden Sie sich an <a href="mailto:support@aidsec.ch">support@aidsec.ch</a></p>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
