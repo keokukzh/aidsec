@@ -158,6 +158,23 @@ body {
   height: 20px;
 }
 
+.nav__logout {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color var(--duration-fast) var(--ease-out);
+  margin-left: var(--space-4);
+}
+
+.nav__logout:hover {
+  color: var(--white);
+}
+
+.nav__logout svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* ============================================
    Dashboard Layout
    ============================================ */
