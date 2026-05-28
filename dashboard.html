@@ -60,7 +60,7 @@
 
       <!-- Dashboard Content -->
       <div id="dashboard-content" class="dashboard__content" style="display: none;">
-        <!-- Header Section -->
+<!-- Header Section -->
         <header class="dashboard__header">
           <div class="dashboard__welcome">
             <span class="dashboard__badge">Kundenportal</span>
@@ -72,6 +72,38 @@
             <span id="status-text">Laden...</span>
           </div>
         </header>
+
+        <!-- Status Timeline -->
+        <div class="timeline" id="status-timeline">
+          <div class="timeline__item timeline__item--done" data-step="order">
+            <div class="timeline__dot"></div>
+            <div class="timeline__label">
+              <span class="timeline__title">Auftrag eingegangen</span>
+              <span class="timeline__date" id="step-date-order">-</span>
+            </div>
+          </div>
+          <div class="timeline__item timeline__item--active" data-step="analysis">
+            <div class="timeline__dot"></div>
+            <div class="timeline__label">
+              <span class="timeline__title">Analyse & Härtung</span>
+              <span class="timeline__date" id="step-date-analysis">In Bearbeitung</span>
+            </div>
+          </div>
+          <div class="timeline__item" data-step="delivery">
+            <div class="timeline__dot"></div>
+            <div class="timeline__label">
+              <span class="timeline__title">Plugin & Bericht</span>
+              <span class="timeline__date" id="step-date-delivery">Ausstehend</span>
+            </div>
+          </div>
+          <div class="timeline__item" data-step="complete">
+            <div class="timeline__dot"></div>
+            <div class="timeline__label">
+              <span class="timeline__title">Abgeschlossen</span>
+              <span class="timeline__date" id="step-date-complete">Ausstehend</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Info Cards Grid -->
         <div class="dashboard__grid">

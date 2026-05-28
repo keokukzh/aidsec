@@ -218,8 +218,9 @@ function getUrlParams() {
             customer: { name: 'Müller & Partner', email: 'muster@example.ch', company: 'Müller & Partner Rechtsanwälte' },
             productSlug: 'kanzlei-haertung',
             websiteUrl: 'https://mueller-partner.ch',
-            status: 'active',
+            status: 'pending', // Shows as "Analyse & Härtung" in progress
             licenseKey: 'AIDSEC-DEMO-2026-KANZ-LEIH',
+            createdAt: '2026-05-28',
             results: { headersScore: 72, issuesFixed: 8, lastScan: '2026-05-28' },
           }
         },
@@ -289,7 +290,7 @@ function getUrlParams() {
   function transformOrderData(apiResponse) {
     const order = apiResponse.order || apiResponse;
 
-    return {
+return {
       customer: {
         name: order.customer?.name || order.name || '',
         email: order.customer?.email || order.email || '',
@@ -305,12 +306,66 @@ function getUrlParams() {
       statusLabel: order.statusLabel || getStatusConfig(order.status).label,
       licenseId: order.licenseId || order.licenseKey || '',
       results: order.results || {},
+      createdAt: order.createdAt || '',
     };
   }
 
-  // ============================================
+// ============================================
   // UI Update Functions
   // ============================================
+
+  /**
+   * Update status timeline based on order status
+   */
+  function updateTimeline(data) {
+    const timeline = document.getElementById('status-timeline');
+    if (!timeline) return;
+
+    const status = data.status;
+    const orderDate = data.createdAt ? formatDate(data.createdAt) : '-';
+    document.getElementById('step-date-order').textContent = orderDate;
+
+    const steps = ['order', 'analysis', 'delivery', 'complete'];
+    let currentIndex = 0;
+
+    if (status === 'pending' || status === 'pending_payment') currentIndex = 0;
+    else if (status === 'active' || status === 'in_progress') currentIndex = 1;
+    else if (status === 'complete' || status === 'paid' || status === 'delivered') currentIndex = 3;
+
+    if (status === 'active') currentIndex = 1;
+
+    const stepElements = timeline.querySelectorAll('.timeline__item');
+    stepElements.forEach((el, i) => {
+      el.classList.remove('timeline__item--done', 'timeline__item--active');
+      if (i < currentIndex) {
+        el.classList.add('timeline__item--done');
+      } else if (i === currentIndex) {
+        el.classList.add('timeline__item--active');
+      }
+    });
+
+    // Update specific date labels
+    if (currentIndex >= 2) {
+      document.getElementById('step-date-analysis').textContent = 'Abgeschlossen';
+    }
+    if (currentIndex >= 3) {
+      document.getElementById('step-date-delivery').textContent = 'Bereit';
+      document.getElementById('step-date-complete').textContent = formatDate(new Date().toISOString().split('T')[0]);
+    }
+  }
+
+  /**
+   * Format date for display
+   */
+  function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  }
 
   /**
    * Update UI with dashboard data
@@ -341,10 +396,13 @@ function getUrlParams() {
       elements.licenseKey.style.borderColor = 'rgba(255,255,255,0.2)';
     }
 
-    // Update status badge
+// Update status badge
     const statusConfig = getStatusConfig(data.status);
     elements.statusText.textContent = statusConfig.label;
     elements.statusBadge.className = `dashboard__status-badge ${statusConfig.class}`;
+
+    // Update timeline
+    updateTimeline(data);
 
     // Update download link based on product
     if (data.product.slug === 'cyber-mandat') {
