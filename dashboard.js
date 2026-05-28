@@ -79,10 +79,10 @@ function getUrlParams() {
   /**
    * Show specific state (loading, error, or content)
    */
-  function showState(state) {
+function showState(state) {
     elements.loadingState.style.display = state === 'loading' ? 'flex' : 'none';
-    elements.errorState.style.display = state === 'error' ? 'block' : 'none';
-    elements.dashboardContent.style.display = state === 'content' ? 'block' : 'none';
+    elements.errorState.style.display = state === 'error' ? 'flex' : 'none';
+    elements.dashboardContent.style.display = state === 'content' ? 'flex' : 'none';
   }
 
   /**
