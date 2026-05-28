@@ -54,11 +54,24 @@
   /**
    * Get URL parameters
    */
-  function getUrlParams() {
+function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('order_id') || params.get('orderId') || '';
+    const token = params.get('token') || '';
+
+    // Demo mode: inject fake data when no real credentials
+    if (!orderId && !token) {
+      console.log('[dashboard] Demo mode active');
+      return {
+        orderId: 'DEMO-ORDER-001',
+        token: 'demo-token-aidsec-2026',
+        email: 'muster@example.ch',
+      };
+    }
+
     return {
-      orderId: params.get('order_id') || params.get('orderId') || '',
-      token: params.get('token') || '',
+      orderId,
+      token,
       email: params.get('email') || '',
     };
   }
@@ -190,10 +203,30 @@
   // API Functions
   // ============================================
 
-  /**
+/**
    * Fetch dashboard data from API
    */
   async function fetchDashboardData(orderId, token, email) {
+    // Demo mode: return mock data
+    if (token === 'demo-token-aidsec-2026') {
+      await new Promise(r => setTimeout(r, 800)); // Simulate network delay
+      return {
+        success: true,
+        data: {
+          order: {
+            orderId: 'DEMO-ORDER-001',
+            customer: { name: 'Müller & Partner', email: 'muster@example.ch', company: 'Müller & Partner Rechtsanwälte' },
+            productSlug: 'kanzlei-haertung',
+            websiteUrl: 'https://mueller-partner.ch',
+            status: 'active',
+            licenseId: 'AIDSEC-DEMO-2026-XXXX-XXXX',
+            results: { headersScore: 72, issuesFixed: 8, lastScan: '2026-05-28' },
+          }
+        },
+        endpoint: 'demo'
+      };
+    }
+
     // Try primary endpoint first
     try {
       const params = new URLSearchParams({ orderId, token });
