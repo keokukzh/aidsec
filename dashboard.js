@@ -355,9 +355,14 @@ function getUrlParams() {
       elements.downloadLink.href = CONFIG.pluginDownloadUrl;
     }
 
-    // Update invoice link
-    if (data.orderId) {
+// Update invoice link
+    if (data.orderId && data.orderId.startsWith && !data.orderId.startsWith('DEMO')) {
       elements.invoiceLink.href = `${CONFIG.invoiceBaseUrl}/${data.orderId}`;
+      elements.invoiceLink.style.pointerEvents = 'auto';
+    } else {
+      elements.invoiceLink.style.pointerEvents = 'none';
+      elements.invoiceLink.style.opacity = '0.4';
+      elements.invoiceLink.style.cursor = 'default';
     }
   }
 
