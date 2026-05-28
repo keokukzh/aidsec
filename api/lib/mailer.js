@@ -100,7 +100,7 @@ function customerName(order) {
 export function buildPaymentConfirmationEmail(order) {
   const baseUrl = getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
   const token = generateMagicToken(order.orderId, order.customer.email);
-  const orderStatusUrl = `${baseUrl}/auftrag/${order.orderId}?token=${token}`;
+  const orderStatusUrl = `${baseUrl}/dashboard?order_id=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(token)}`;
   const proofCenterUrl = `${baseUrl}/proof-center.html?orderId=${encodeURIComponent(order.orderId)}&token=${encodeURIComponent(token)}`;
 
   return {

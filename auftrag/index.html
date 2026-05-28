@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weiterleitung – AidSec</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/logowhite.png" type="image/png">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+      background: #0b1d3a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .container { padding: 2rem; max-width: 480px; }
+    h1 { color: #c8a84b; font-size: 1.5rem; margin-bottom: 1rem; }
+    p { color: rgba(255,255,255,0.7); line-height: 1.6; }
+    a { color: #c8a84b; }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: #c8a84b;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 1.5rem auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+  <script>
+    // Handle both /auftrag/?orderId=X&token=Y and /auftrag/ORDER-ID?token=X
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var token = params.get('token');
+      // /auftrag/ORDER-ID?token=X → path segments
+      var pathParts = window.location.pathname.split('/').filter(Boolean);
+      var orderId = params.get('orderId') || params.get('order_id') || pathParts[pathParts.length - 1] || '';
+      if (orderId && token && orderId !== 'auftrag') {
+        window.location.replace('/dashboard?order_id=' + encodeURIComponent(orderId) + '&token=' + encodeURIComponent(token));
+      } else {
+        window.location.replace('/dashboard');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>AidSec</h1>
+    <div class="spinner"></div>
+    <p>Sie werden zum Kundenportal weitergeleitet...</p>
+    <p>Falls die Weiterleitung nicht funktioniert, <a href="/dashboard">hier klicken</a>.</p>
+  </div>
+</body>
+</html>
