@@ -7,8 +7,8 @@
  * Returns: { success: true, airtableId: "..." }
  */
 
-import { getEnvFirst } from '../../lib/env.js';
-import { createLead } from '../../lib/airtable.js';
+import { getEnvFirst } from '../lib/env.js';
+import { createLead } from '../lib/airtable.js';
 
 function requireInternalAuth(req) {
   const secret = getEnvFirst(['AIDSEC_INTERNAL_SECRET', 'INTERNAL_API_SECRET']);

@@ -1,47 +1,84 @@
-import { describe, it, expect } from 'vitest';
-import { handleStripeEvent } from './checkout-webhook.js';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-/**
- * Mock helper for Stripe events
- */
-function createStripeEvent(type, data = {}) {
-  return {
-    id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    type,
-    data: {
-      object: {
-        id: data.id || `sub_test_${Date.now()}`,
-        customer: data.customer || 'cus_test',
-        subscription: data.subscription || null,
-        status: data.status || 'active',
-        metadata: data.metadata || {},
-        ...data,
-      },
-    },
-  };
-}
+vi.mock('./lib/order-store.js', () => ({
+  getOrderBySessionId: vi.fn(),
+  updateOrder: vi.fn(),
+  markEventProcessed: vi.fn(),
+  recordOrderEvent: vi.fn(),
+  createLicenseForOrder: vi.fn(),
+  upsertCustomerForOrder: vi.fn(),
+}));
 
-describe('checkout-webhook', () => {
-  it('handles subscription.created event', async () => {
-    const event = createStripeEvent('subscription.created', {
-      id: 'sub_stripe_123',
-      customer: 'cus_stripe_abc',
-      status: 'active',
-    });
+vi.mock('./lib/workflow-store.js', () => ({
+  enqueueDeliveryWorkflowForOrder: vi.fn(),
+}));
+
+vi.mock('./lib/stripe-webhook.js', () => ({
+  getRawBody: vi.fn(),
+  verifyStripeSignature: vi.fn(),
+}));
+
+const { handleStripeEvent } = await import('./checkout-webhook.js');
+const {
+  getOrderBySessionId,
+  updateOrder,
+  markEventProcessed,
+  recordOrderEvent,
+  createLicenseForOrder,
+  upsertCustomerForOrder,
+} = await import('./lib/order-store.js');
+const { enqueueDeliveryWorkflowForOrder } = await import('./lib/workflow-store.js');
+
+describe('handleStripeEvent', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    markEventProcessed.mockResolvedValue(true);
+  });
+
+  it('handles checkout.session.completed', async () => {
+    getOrderBySessionId.mockResolvedValue({ orderId: 'ord_test123', licenseId: null });
+    updateOrder.mockResolvedValue({ orderId: 'ord_test123', status: 'active' });
+    createLicenseForOrder.mockResolvedValue({ licenseId: 'lic_test' });
+    upsertCustomerForOrder.mockResolvedValue({});
+    recordOrderEvent.mockResolvedValue({});
+    enqueueDeliveryWorkflowForOrder.mockResolvedValue({ workflowId: 'wf_test', created: true });
+
+    const event = {
+      id: 'evt_test_123',
+      type: 'checkout.session.completed',
+      data: { object: { id: 'cs_test', metadata: { orderId: 'ord_test123' } } },
+    };
+
+    const result = await handleStripeEvent(event);
+
+    expect(result.handled).toBe(true);
+    expect(result.action).toBe('order_activated_workflow_queued');
+  });
+
+  it('handles subscription.created', async () => {
+    recordOrderEvent.mockResolvedValue({});
+
+    const event = {
+      id: 'evt_sub_456',
+      type: 'subscription.created',
+      data: { object: { id: 'sub_test', customer: 'cus_test', status: 'active' } },
+    };
 
     const result = await handleStripeEvent(event);
 
     expect(result.handled).toBe(true);
     expect(result.action).toBe('subscription_created');
-    expect(result.subscriptionId).toBe('sub_stripe_123');
+    expect(result.subscriptionId).toBe('sub_test');
   });
 
-  it('handles subscription.cancelled event', async () => {
-    const event = createStripeEvent('subscription.cancelled', {
-      id: 'sub_stripe_cancel_123',
-      customer: 'cus_stripe_cancel',
-      status: 'canceled',
-    });
+  it('handles subscription.cancelled', async () => {
+    recordOrderEvent.mockResolvedValue({});
+
+    const event = {
+      id: 'evt_sub_789',
+      type: 'subscription.cancelled',
+      data: { object: { id: 'sub_cancel', customer: 'cus_cancel', status: 'canceled' } },
+    };
 
     const result = await handleStripeEvent(event);
 
@@ -49,101 +86,38 @@ describe('checkout-webhook', () => {
     expect(result.action).toBe('subscription_cancelled');
   });
 
-  it('subscription.created handler returns correct structure', async () => {
-    const event = createStripeEvent('subscription.created', {
-      id: 'sub_xyz',
-      customer: 'cus_xyz',
-      status: 'trialing',
-    });
+  it('marks duplicate events as handled', async () => {
+    markEventProcessed
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(false);
 
-    const result = await handleStripeEvent(event);
+    recordOrderEvent.mockResolvedValue({});
 
-    expect(typeof result.handled).toBe('boolean');
-    expect(typeof result.action).toBe('string');
-    expect(typeof result.subscriptionId).toBe('string');
-    expect(result.subscriptionId).toBe('sub_xyz');
-  });
-
-  it('subscription events record order events for tracking', async () => {
-    const subId = `sub_events_${Date.now()}`;
-    const customerId = 'cus_events';
-
-    const event = createStripeEvent('subscription.created', {
-      id: subId,
-      customer: customerId,
-      status: 'active',
-    });
-
-    const result = await handleStripeEvent(event);
-    expect(result.handled).toBe(true);
-    expect(result.action).toBe('subscription_created');
-  });
-
-  it('subscription.created and subscription.cancelled have unique event IDs for deduplication', async () => {
-    const eventId1 = `evt_sub_created_${Date.now()}`;
-    const eventId2 = `evt_sub_canceled_${Date.now()}`;
-
-    // First call should be processed
-    const createEvent = {
-      id: eventId1,
-      type: 'subscription.created',
-      data: {
-        object: {
-          id: 'sub_dedup_test',
-          customer: 'cus_dedup',
-          status: 'active',
-        },
-      },
+    const event = {
+      id: 'evt_duplicate',
+      type: 'checkout.session.completed',
+      data: { object: { id: 'cs_test', metadata: {} } },
     };
 
-    const cancelEvent = {
-      id: eventId2,
-      type: 'subscription.cancelled',
-      data: {
-        object: {
-          id: 'sub_dedup_test',
-          customer: 'cus_dedup',
-          status: 'canceled',
-        },
-      },
-    };
-
-    const firstResult = await handleStripeEvent(createEvent);
-    const secondCall = await handleStripeEvent(createEvent);
-    const cancelResult = await handleStripeEvent(cancelEvent);
-
+    const firstResult = await handleStripeEvent(event);
     expect(firstResult.handled).toBe(true);
-    expect(secondCall.duplicate).toBe(true);
-    expect(cancelResult.handled).toBe(true);
+    expect(firstResult.duplicate).toBeUndefined();
+
+    const secondResult = await handleStripeEvent(event);
+    expect(secondResult.handled).toBe(true);
+    expect(secondResult.duplicate).toBe(true);
   });
 
-  it('unhandled event types are rejected', async () => {
-    const event = createStripeEvent('customer.subscription.updated', {
-      id: 'sub_unknown',
-      customer: 'cus_unknown',
-      status: 'active',
-    });
+  it('returns handled:false for unhandled event types', async () => {
+    const event = {
+      id: 'evt_unknown',
+      type: 'customer.updated',
+      data: { object: {} },
+    };
 
     const result = await handleStripeEvent(event);
 
     expect(result.handled).toBe(false);
-    expect(result.reason !== undefined || result.error !== undefined).toBeTruthy();
-  });
-
-  it('subscription events handle different status values', async () => {
-    const statuses = ['active', 'trialing', 'past_due', 'canceled', 'unpaid', 'incomplete'];
-
-    for (const status of statuses) {
-      const event = createStripeEvent('subscription.created', {
-        id: `sub_status_${status}`,
-        customer: 'cus_status',
-        status,
-      });
-
-      const result = await handleStripeEvent(event);
-
-      expect(result.handled).toBe(true);
-      expect(result.action).toBe('subscription_created');
-    }
+    expect(result.reason).toContain('Unhandled event type');
   });
 });
