@@ -2581,6 +2581,15 @@
   padding-top: var(--space-16);
 }
 
+/* Branchen card titles must be white on deep dark background */
+.section--deep .service-card .service-card__title {
+  color: var(--white) !important;
+}
+
+.section--deep .service-card .service-card__desc {
+  color: var(--gray-300) !important;
+}
+
 .knowledge-hero::after {
   content: "";
   position: absolute;
