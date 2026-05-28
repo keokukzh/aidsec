@@ -799,13 +799,42 @@ body {
     flex-direction: column;
   }
 
-  .license-key {
+.license-key {
     font-size: var(--text-base);
     word-break: break-all;
   }
 
   .btn--download {
     width: 100%;
+  }
+
+  .timeline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+  }
+
+  .timeline::before {
+    display: none;
+  }
+
+  .timeline__item {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .timeline__dot {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .timeline__label {
+    align-items: flex-start;
+    text-align: left;
   }
 }
 
