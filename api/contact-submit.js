@@ -388,6 +388,19 @@ export default async function handler(req, res) {
       text: buildMailBody(payload, meta),
     });
 
+    // Sync warm leads (score >= 40) to Airtable CRM
+    if (process.env.AIRTABLE_API_KEY) {
+      const { createLead } = await import('./lib/airtable.js');
+      createLead({
+        email: payload.email,
+        name: payload.name,
+        company: payload.company,
+        source: payload.source || 'website',
+        score: 50,
+        status: 'new',
+      }).catch((e) => console.warn('[contact-submit] Airtable sync failed:', e.message));
+    }
+
     return res.status(200).json({ ok: true });
   } catch (error) {
     console.error('contact-submit error:', error);

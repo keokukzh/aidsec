@@ -12,6 +12,16 @@ import { computeLeadScore } from '../crm-lead-scoring.js';
 import { sendTransactionalEmail } from '../lib/mailer.js';
 import { generateMagicToken } from '../lib/order-token.js';
 
+// Airtable CRM integration (lazy import to avoid circular deps)
+async function getAirtableModule() {
+  if (!process.env.AIRTABLE_API_KEY) return null;
+  try {
+    return await import('../lib/airtable.js');
+  } catch (_) {
+    return null;
+  }
+}
+
 function buildFollowUpEmail(order, followUpType) {
   const baseUrl = getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
   const token = generateMagicToken(order.orderId, order.customer.email);
@@ -184,6 +194,14 @@ async function runFollowUp() {
         await recordOrderEvent(order.orderId, 'email.followup.unpaid_reminder', {
           customerEmail: order.customer?.email,
         });
+        // Update Airtable CRM: mark lead as contacted
+        const airtable = await getAirtableModule();
+        if (airtable) {
+          airtable.updateLead(order.customer.email, {
+            status: 'contacted',
+            'Last Follow-up': new Date().toISOString(),
+          }).catch((e) => console.warn('[followup] Airtable update failed:', e.message));
+        }
         results.unpaidReminders++;
         console.log(`[followup] Erinnerung gesendet für ${order.orderId}`);
       }
@@ -205,6 +223,15 @@ async function runFollowUp() {
         await recordOrderEvent(order.orderId, 'email.followup.upsell', {
           customerEmail: order.customer?.email,
         });
+        // Update Airtable CRM: mark lead as contacted + update score
+        const airtable = await getAirtableModule();
+        if (airtable) {
+          airtable.updateLead(order.customer.email, {
+            status: 'contacted',
+            score: score,
+            'Last Follow-up': new Date().toISOString(),
+          }).catch((e) => console.warn('[followup] Airtable update failed:', e.message));
+        }
         results.upsellEmails++;
         console.log(`[followup] Upsell-E-Mail gesendet für ${order.orderId}`);
       }
