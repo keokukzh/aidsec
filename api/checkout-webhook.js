@@ -73,6 +73,31 @@ async function applyCheckoutExpired(session) {
   return { handled: true, action: 'order_expired', orderId: order.orderId };
 }
 
+async function applySubscriptionCreated(subscription) {
+  const subscriptionId = subscription.id;
+  const customerId = subscription.customer;
+  // Log purchase, trigger Guard onboarding
+  await recordOrderEvent(null, 'subscription.created', {
+    stripeSubscriptionId: subscriptionId,
+    stripeCustomerId: customerId,
+    status: subscription.status,
+  });
+  return {
+    handled: true,
+    action: 'subscription_created',
+    subscriptionId,
+  };
+}
+
+async function applySubscriptionCancelled(subscription) {
+  await recordOrderEvent(null, 'subscription.cancelled', {
+    stripeSubscriptionId: subscription.id,
+    customerId: subscription.customer,
+    status: subscription.status,
+  });
+  return { handled: true, action: 'subscription_cancelled' };
+}
+
 async function handleStripeEvent(event) {
   if (event.id) {
     const firstSeen = await markEventProcessed(event.id);
@@ -85,6 +110,10 @@ async function handleStripeEvent(event) {
       return applyCheckoutCompleted(object);
     case 'checkout.session.expired':
       return applyCheckoutExpired(object);
+    case 'subscription.created':
+      return applySubscriptionCreated(object);
+    case 'subscription.cancelled':
+      return applySubscriptionCancelled(object);
     case 'invoice.payment_failed':
       return { handled: true, action: 'payment_failed' };
     default:
