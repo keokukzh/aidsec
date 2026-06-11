@@ -1,4 +1,5 @@
-import { sendDeliveryEmail, sendMagicLinkEmail, sendPaymentConfirmationEmail } from './mailer.js';
+import { scanSecurityHeaders } from './header-scan.js';
+import { sendDeliveryEmail, sendMagicLinkEmail, sendOpsReviewEmail, sendPaymentConfirmationEmail } from './mailer.js';
 import { getObjectStorageConfig } from './signed-storage-url.js';
 import {
   createLicenseForOrder,
@@ -23,13 +24,15 @@ import {
 
 const MAX_ATTEMPTS = 3;
 
+// payment_email kommt direkt nach intake: Die Zahlungsbestaetigung darf nie an
+// einem fehlgeschlagenen Audit-/Report-Schritt haengen bleiben.
 const PRODUCT_STEPS = {
   'rapid-header-fix': [
     'intake',
+    'payment_email',
     'license',
     'baseline_audit',
     'delivery_report',
-    'payment_email',
     'magic_link_email',
     'delivery_email',
     'activate_monitoring',
@@ -37,23 +40,28 @@ const PRODUCT_STEPS = {
   ],
   'cyber-mandat': [
     'intake',
+    'payment_email',
     'license',
     'baseline_audit',
     'delivery_report',
-    'payment_email',
     'magic_link_email',
     'delivery_email',
     'activate_monitoring',
     'complete',
   ],
+  // ops_review pausiert den Workflow (needs_manual_review). Nach Freigabe via
+  // /api/internal/workflow-runner?action=approve laufen die restlichen Steps.
   'kanzlei-haertung': [
     'intake',
+    'payment_email',
     'license',
     'baseline_audit',
     'delivery_report',
-    'payment_email',
     'magic_link_email',
     'ops_review',
+    'delivery_email',
+    'activate_monitoring',
+    'complete',
   ],
 };
 
@@ -109,8 +117,23 @@ async function runLicense(order) {
 }
 
 async function runBaselineAudit(order, workflow) {
-  const score = baselineScoreForOrder(order);
-  const grade = scoreToGrade(score);
+  let score;
+  let grade;
+  let headers = null;
+  let source = 'delivery_workflow_live_scan';
+
+  try {
+    const scan = await scanSecurityHeaders(order.website?.url);
+    score = scan.score;
+    grade = scan.grade;
+    headers = scan.headers;
+  } catch (error) {
+    // Zielseite nicht erreichbar — Heuristik statt Workflow-Abbruch.
+    score = baselineScoreForOrder(order);
+    grade = scoreToGrade(score);
+    source = `delivery_workflow_fallback: ${error.message}`;
+  }
+
   await updateOrder(order.orderId, {
     results: {
       ...(order.results || {}),
@@ -121,8 +144,9 @@ async function runBaselineAudit(order, workflow) {
       url: order.website?.url || null,
       score,
       grade,
+      headers,
       checkedAt: new Date().toISOString(),
-      source: 'delivery_workflow_baseline',
+      source,
     },
   });
   await recordOrderEvent(order.orderId, 'workflow.audit.completed', {
@@ -130,6 +154,7 @@ async function runBaselineAudit(order, workflow) {
     websiteUrl: order.website?.url || null,
     score,
     grade,
+    source,
   });
 }
 
@@ -228,6 +253,7 @@ async function runOpsReview(order, workflow) {
     workflowId: workflow.workflowId,
     reason: 'kanzlei_haertung_requires_human_approval',
   });
+  await sendOnce(order, 'email.ops_review', (o) => sendOpsReviewEmail(o, workflow));
 }
 
 async function runComplete(order, workflow) {

@@ -42,8 +42,7 @@
   const CONFIG = {
     apiEndpoint: '/api/dashboard-status',
     fallbackApiEndpoint: '/api/order-status',
-    pluginDownloadUrl: '/aidsec-express-fix.zip',
-    invoiceBaseUrl: '/api/invoice',
+    pluginDownloadUrl: '/assets/downloads/aidsec-security.zip',
     redirectDelay: 5000,
   };
 
@@ -413,14 +412,13 @@ return {
       elements.downloadLink.href = CONFIG.pluginDownloadUrl;
     }
 
-// Update invoice link
-    if (data.orderId && data.orderId.startsWith && !data.orderId.startsWith('DEMO')) {
-      elements.invoiceLink.href = `${CONFIG.invoiceBaseUrl}/${data.orderId}`;
-      elements.invoiceLink.style.pointerEvents = 'auto';
-    } else {
+    // Rechnungen kommen direkt von Stripe per E-Mail — bis ein Kundenportal-Link
+    // existiert, bleibt der Button deaktiviert (es gibt keinen /api/invoice Endpoint).
+    if (elements.invoiceLink) {
       elements.invoiceLink.style.pointerEvents = 'none';
       elements.invoiceLink.style.opacity = '0.4';
       elements.invoiceLink.style.cursor = 'default';
+      elements.invoiceLink.title = 'Ihre Rechnung erhalten Sie per E-Mail von Stripe';
     }
   }
 

@@ -122,16 +122,24 @@
     {
       "source": "/api/internal/workflow-runner",
       "destination": "/api/internal/workflow-runner.js"
+    },
+    {
+      "source": "/api/license/(.*)",
+      "destination": "/api/license.js"
+    },
+    {
+      "source": "/api/health",
+      "destination": "/api/license.js"
+    },
+    {
+      "source": "/api/plugin/scan-result",
+      "destination": "/api/plugin-scan-result.js"
     }
   ],
   "crons": [
     {
-      "path": "/api/cron/monitoring",
-      "schedule": "0 7 1 * *"
-    },
-    {
-      "path": "/api/cron/reaudit",
-      "schedule": "0 9 15 * *"
+      "path": "/api/cron/daily",
+      "schedule": "0 6 * * *"
     }
   ]
 }

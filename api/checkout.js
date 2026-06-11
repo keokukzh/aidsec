@@ -81,8 +81,8 @@ async function createStripeSession({ productSlug, customerData, order, billingPe
   const product = PRODUCTS[productSlug];
   const stripeKey = getEnvFirst(['STRIPE_SECRET_KEY']);
 
-  const successUrl = `${baseUrl}/onboarding/bestaetigung/?session_id={CHECKOUT_SESSION_ID}&order_id=${order.orderId}`;
-  const cancelUrl = `${baseUrl}/onboarding/${productSlug}/`;
+  const successUrl = `${baseUrl}/onboarding/bestaetigung?session_id={CHECKOUT_SESSION_ID}&order_id=${order.orderId}`;
+  const cancelUrl = `${baseUrl}/onboarding/${productSlug}`;
 
   if (!stripeKey) {
     if (isProduction()) throw new Error('STRIPE_SECRET_KEY not configured');

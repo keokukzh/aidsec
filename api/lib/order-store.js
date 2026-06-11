@@ -345,7 +345,7 @@ export async function upsertCustomerForOrder(order) {
       orderIds,
       productSlug: order.productSlug,
       status: order.status,
-      activeMonitoring: true,
+      activeMonitoring: !['cancelled', 'expired'].includes(order.status),
       lastCheckedAt: order.monitoring?.checkedAt || null,
       lastGrade: order.monitoring?.grade || null,
       updatedAt: now,
@@ -578,7 +578,7 @@ export async function listCustomerMonitoringTargets() {
 
   return customers.flatMap((customer) =>
     Object.values(customer.websites || {})
-      .filter((website) => website.url)
+      .filter((website) => website.url && website.activeMonitoring !== false)
       .map((website) => ({
         id: `${customer.customerId}:${website.url}`,
         name: customer.name || customer.company || customer.email,

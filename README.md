@@ -102,6 +102,23 @@ Allowed origins for form endpoints include the primary domain, localhost dev ori
 
 **Vor dem Go-Live:** Siehe `config.example.json` und `scripts/fill-placeholders.js` für optionale Platzhalter (Plausible, hCaptcha).
 
+## Automatisierte Lieferung (Stand Juni 2026)
+
+- Stripe `checkout.session.completed` verifiziert die Signatur gegen den **rohen** Request-Body
+  (`readRawBody` in `api/lib/stripe-webhook.js`) und verarbeitet den Delivery-Workflow direkt
+  im Webhook (`processDeliveryWorkflow`). Fallback/Retry: täglicher Cron `/api/cron/daily`
+  (verarbeitet die Queue; am 1. zusätzlich Monitoring, am 15. Re-Audit).
+- Workflow-Steps pro Produkt in `api/lib/delivery-workflow.js`; `payment_email` läuft direkt
+  nach `intake`. `baseline_audit` macht einen echten Header-Scan (`api/lib/header-scan.js`).
+- Kanzlei-Härtung pausiert bei `ops_review`: Ops-Mail mit signiertem Freigabe-Link
+  (`/api/internal/workflow-runner?action=approve&workflowId=…&sig=…`, HMAC mit
+  `INTERNAL_API_SECRET`). Nach Klick laufen `delivery_email` → `activate_monitoring` → `complete`.
+- WP-Plugin-Endpunkte: `GET /api/health`, `GET /api/license/status` (Bearer `lic_…`),
+  `POST /api/plugin/scan-result`. Plugin-ZIP wird mit `npm run build:plugin` nach
+  `assets/downloads/aidsec-security.zip` gebaut (Teil von `npm run build`).
+- Subscription-Lifecycle: `customer.subscription.created/deleted` und `invoice.payment_failed`
+  (Dunning-Mail an Kunde + Ops-Alert) werden im Webhook behandelt.
+
 ## Deploy
 
 1. `config.example.json` → `config.json` kopieren und Werte eintragen

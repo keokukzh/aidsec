@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { getEnvFirst, isProduction } from './env.js';
-import { generateMagicToken } from './order-token.js';
+import { generateMagicToken, signInternalAction } from './order-token.js';
 
 function smtpConfig() {
   return {
@@ -239,10 +239,13 @@ function getProductInstructions(order, baseUrl) {
   if (productSlug === 'rapid-header-fix') {
     return `
       <h3 style="color:#0b1d3a;margin:0 0 8px;">Rapid Header Fix — Schnelleinstieg</h3>
-      <p style="font-size:14px;color:#333;line-height:1.6;">
-        Die Sicherheits-Header wurden für Ihre Website vorbereitet. Bitte prüfen Sie das Ergebnis<br>
-        im <a href="${baseUrl}/api/check-headers?url=${encodeURIComponent(order.website?.url || '')}">Header-Check</a>.
-      </p>`;
+      <ol style="font-size:14px;color:#333;line-height:1.8;padding-left:20px;margin:0 0 12px;">
+        <li><a href="${baseUrl}/assets/downloads/aidsec-security.zip">AidSec Security Plugin herunterladen</a></li>
+        <li>WordPress-Admin &rarr; Plugins &rarr; Installieren &rarr; Plugin hochladen &rarr; ZIP auswaehlen &rarr; Aktivieren</li>
+        <li>AidSec Security &rarr; Einstellungen &rarr; Lizenz-Schluessel <strong>${order.licenseId || '(siehe unten)'}</strong> eintragen und speichern</li>
+        <li>Das Plugin setzt die Sicherheits-Header automatisch. Ergebnis pruefen:
+          <a href="${baseUrl}/api/check-headers?url=${encodeURIComponent(order.website?.url || '')}">Header-Check</a></li>
+      </ol>`;
   }
   if (productSlug === 'kanzlei-haertung') {
     return `
@@ -346,4 +349,94 @@ export function buildReAuditEmail(order) {
 export async function sendReAuditEmail(order) {
   const message = buildReAuditEmail(order);
   return sendTransactionalEmail(message);
+}
+
+// === Interne Ops-Mails ===
+
+function opsRecipient() {
+  return getEnvFirst(['ONBOARDING_TO_EMAIL', 'MAIL_TO']) || 'aid.destani@aidsec.ch';
+}
+
+export async function sendOpsEmail(subject, lines = []) {
+  const text = (Array.isArray(lines) ? lines : [String(lines)]).join('\n');
+  return sendTransactionalEmail({
+    to: opsRecipient(),
+    subject: `[AidSec Ops] ${subject}`,
+    text,
+    html: `<pre style="font-family:monospace;font-size:13px;">${text.replace(/</g, '&lt;')}</pre>`,
+  });
+}
+
+export async function sendOpsReviewEmail(order, workflow) {
+  const baseUrl = getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
+  const sig = signInternalAction(workflow.workflowId);
+  const approveUrl = `${baseUrl}/api/internal/workflow-runner?action=approve&workflowId=${encodeURIComponent(workflow.workflowId)}&sig=${encodeURIComponent(sig)}`;
+
+  return sendTransactionalEmail({
+    to: opsRecipient(),
+    subject: `[AidSec Ops] Haertungsfreigabe noetig: ${order.orderId}`,
+    text: [
+      `Auftrag ${order.orderId} (${order.productSlug}) wartet auf die Haertungsfreigabe.`,
+      '',
+      `Kunde: ${order.customer?.name || '-'} <${order.customer?.email || '-'}>`,
+      `Firma: ${order.customer?.company || '-'}`,
+      `Website: ${order.website?.url || '-'}`,
+      `Baseline: Note ${order.results?.gradeBefore || order.monitoring?.grade || '?'} (Score ${order.results?.scoreBefore ?? order.monitoring?.score ?? '?'}/6)`,
+      '',
+      'Nach durchgefuehrter Haertung hier freigeben (loest Liefer-Mail + Monitoring aus):',
+      approveUrl,
+    ].join('\n'),
+    html: `
+  <table cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">
+    <tr><td style="padding:30px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;">
+      <h2 style="margin:0 0 16px;color:#0b1d3a;">Haertungsfreigabe noetig</h2>
+      <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 20px;border:1px solid #e2e8f0;border-radius:4px;">
+        <tr><td style="padding:10px 14px;background:#f8fafc;font-size:13px;color:#64748b;width:120px;">Auftrag</td><td style="padding:10px 14px;font-size:14px;font-weight:600;">${order.orderId}</td></tr>
+        <tr><td style="padding:10px 14px;background:#f8fafc;font-size:13px;color:#64748b;border-top:1px solid #e2e8f0;">Kunde</td><td style="padding:10px 14px;font-size:14px;border-top:1px solid #e2e8f0;">${order.customer?.name || '-'} &lt;${order.customer?.email || '-'}&gt;</td></tr>
+        <tr><td style="padding:10px 14px;background:#f8fafc;font-size:13px;color:#64748b;border-top:1px solid #e2e8f0;">Website</td><td style="padding:10px 14px;font-size:14px;border-top:1px solid #e2e8f0;">${order.website?.url || '-'}</td></tr>
+        <tr><td style="padding:10px 14px;background:#f8fafc;font-size:13px;color:#64748b;border-top:1px solid #e2e8f0;">Baseline</td><td style="padding:10px 14px;font-size:14px;border-top:1px solid #e2e8f0;">Note ${order.results?.gradeBefore || '?'} (Score ${order.results?.scoreBefore ?? '?'}/6)</td></tr>
+      </table>
+      <p style="font-size:14px;color:#555;">Nach durchgefuehrter Haertung freigeben — das loest Liefer-Mail und Monitoring aus:</p>
+      <p style="margin:16px 0 0;">
+        <a href="${approveUrl}" style="display:inline-block;padding:12px 24px;background:#16a34a;color:#fff;text-decoration:none;border-radius:4px;font-weight:600;">Haertung freigeben</a>
+      </p>
+    </td></tr>
+  </table>`,
+  });
+}
+
+// === Dunning (Zahlung fehlgeschlagen) ===
+
+export async function sendPaymentFailedEmail(order) {
+  const baseUrl = getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
+  return sendTransactionalEmail({
+    to: order.customer.email,
+    subject: `Zahlung fehlgeschlagen — AidSec Auftrag ${order.orderId}`,
+    text: [
+      `Hallo ${customerName(order)}`,
+      '',
+      `Die Abbuchung fuer Ihr AidSec Abo (Auftrag ${order.orderId}) ist fehlgeschlagen.`,
+      'Bitte aktualisieren Sie Ihre Zahlungsmethode, damit Monitoring und Compliance-Nachweis aktiv bleiben.',
+      '',
+      `Bei Fragen erreichen Sie uns unter info@aidsec.ch oder ${baseUrl}.`,
+      '',
+      'Freundliche Grüße',
+      'AidSec',
+    ].join('\n'),
+    html: `
+  <table cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">
+    <tr><td style="padding:40px 30px;background:#0b1d3a;color:#fff;text-align:center;border-radius:8px 8px 0 0;">
+      <h1 style="margin:0;font-size:24px;color:#c8a84c;">AidSec</h1>
+      <p style="margin:8px 0 0;font-size:16px;">Zahlung fehlgeschlagen</p>
+    </td></tr>
+    <tr><td style="padding:30px;background:#fff;">
+      <p style="font-size:16px;color:#333;">Hallo ${customerName(order)},</p>
+      <p style="font-size:15px;color:#555;line-height:1.6;">Die Abbuchung fuer Ihr AidSec Abo (Auftrag <strong>${order.orderId}</strong>) ist fehlgeschlagen. Bitte aktualisieren Sie Ihre Zahlungsmethode, damit Monitoring und Compliance-Nachweis aktiv bleiben.</p>
+      <p style="font-size:13px;color:#64748b;">Bei Fragen erreichen Sie uns unter info@aidsec.ch.</p>
+    </td></tr>
+    <tr><td style="padding:20px 30px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;">
+      Freundliche Grüße, AidSec
+    </td></tr>
+  </table>`,
+  });
 }

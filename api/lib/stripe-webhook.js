@@ -6,6 +6,23 @@ export function getRawBody(req) {
   return JSON.stringify(req.body || {});
 }
 
+/**
+ * Reads the raw request body from the stream. Signature verification needs the
+ * original bytes — a re-serialized parsed body never matches Stripe's HMAC.
+ */
+export async function readRawBody(req) {
+  if (typeof req.rawBody === 'string' || Buffer.isBuffer(req.rawBody)) return req.rawBody;
+  if (typeof req.body === 'string' || Buffer.isBuffer(req.body)) return req.body;
+  if (req.readable) {
+    const chunks = [];
+    for await (const chunk of req) {
+      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+    }
+    return Buffer.concat(chunks);
+  }
+  return JSON.stringify(req.body || {});
+}
+
 export function verifyStripeSignature(rawBody, signatureHeader, webhookSecret, toleranceSeconds = 300) {
   if (!signatureHeader || !webhookSecret) return { valid: false, reason: 'Stripe signature configuration missing' };
 
