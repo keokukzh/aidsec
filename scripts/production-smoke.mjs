@@ -301,6 +301,110 @@ async function verifyPluginRelay(order) {
   });
 }
 
+async function checkPricingCtas() {
+  // Plan DoD-Kriterium 4: kein Pricing-CTA fuehrt auf 404.
+  // Wir laden die Startseite + Notfall-Landing + alle Onboarding-/Leistungen-Seiten,
+  // sammeln alle internen hrefs und HEAD-en sie. Alles >= 400 (ausser 401/403 fuer
+  // bewusst geschuetzte Routen wie /api/license) gilt als Bruch.
+  const seedUrls = [
+    `${baseUrl}/`,
+    `${baseUrl}/notfall.html`,
+    `${baseUrl}/index.html#preise`,
+    `${baseUrl}/leistungen/header-optimierung.html`,
+    `${baseUrl}/leistungen/wordpress-haertung.html`,
+    `${baseUrl}/leistungen/cyber-mandat.html`,
+    `${baseUrl}/leistungen/ndsg-compliance-pack.html`,
+    `${baseUrl}/leistungen/notfall-intervention.html`,
+    `${baseUrl}/leistungen/email-sicherheit.html`,
+    `${baseUrl}/onboarding/rapid-header-fix/`,
+    `${baseUrl}/onboarding/kanzlei-haertung/`,
+    `${baseUrl}/onboarding/cyber-mandat/`,
+  ];
+
+  const seen = new Map(); // href -> { sourceUrl, status }
+  const failures = [];
+
+  for (const seed of seedUrls) {
+    let html;
+    try {
+      const res = await fetch(seed, { headers: { Accept: 'text/html' }, redirect: 'follow' });
+      if (!res.ok) {
+        failures.push({ source: seed, reason: `seed returned ${res.status}` });
+        continue;
+      }
+      html = await res.text();
+    } catch (error) {
+      failures.push({ source: seed, reason: `fetch failed: ${error.message}` });
+      continue;
+    }
+
+    const hrefs = extractInternalHrefs(html, baseUrl);
+    for (const href of hrefs) {
+      if (seen.has(href)) continue;
+      seen.set(href, { sourceUrl: seed, status: null });
+    }
+  }
+
+  for (const [href, meta] of seen.entries()) {
+    // Bewusst geschuetzte Endpoints ueberspringen — der CTA-Check zielt auf Seiten.
+    if (/\/api\//.test(href)) continue;
+    if (/\/dashboard\b/.test(href)) continue; // login-pflichtig
+    if (/\/auftrag\/[A-Za-z0-9_-]+/.test(href)) continue; // dynamische Routen
+    if (/\?/.test(href)) continue; // Query-Parameter (z.B. ?order_id=) — wuerden eh umgelenkt
+
+    // HEAD spart Bandbreite; manche Hosts antworten mit 405 -> Fallback GET.
+    let status = 0;
+    try {
+      const headRes = await fetch(href, { method: 'HEAD', redirect: 'follow' });
+      status = headRes.status;
+      if (status === 405 || status === 501) {
+        const getRes = await fetch(href, { method: 'GET', redirect: 'follow' });
+        status = getRes.status;
+      }
+    } catch (error) {
+      failures.push({ href, source: meta.sourceUrl, reason: `fetch failed: ${error.message}` });
+      continue;
+    }
+
+    meta.status = status;
+    if (status >= 400) {
+      failures.push({ href, source: meta.sourceUrl, status });
+    }
+  }
+
+  record('pricing-ctas:no-404', failures.length === 0, {
+    checked: seen.size,
+    failures: failures.slice(0, 10),
+  });
+
+  return failures;
+}
+
+function extractInternalHrefs(html, origin) {
+  const matches = html.matchAll(/\bhref\s*=\s*["']([^"']+)["']/gi);
+  const out = new Set();
+  for (const match of matches) {
+    const raw = match[1].trim();
+    if (!raw) continue;
+    if (raw.startsWith('#') || raw.startsWith('mailto:') || raw.startsWith('tel:') || raw.startsWith('javascript:')) continue;
+    if (/^https?:\/\//i.test(raw)) {
+      try {
+        const u = new URL(raw);
+        if (u.origin !== origin) continue; // extern
+        out.add(u.pathname.replace(/\/$/, '') || '/');
+      } catch (_) { /* ignore malformed */ }
+      continue;
+    }
+    if (raw.startsWith('//')) continue;
+    // intern
+    const path = raw.split('#')[0].split('?')[0];
+    if (!path) continue;
+    const normalized = path.replace(/\/$/, '') || '/';
+    out.add(normalized);
+  }
+  return Array.from(out);
+}
+
 async function main() {
   const orders = [];
   orders.push(await createCheckout('rapid-header-fix'));
@@ -312,6 +416,12 @@ async function main() {
   await runDeliveryWorkflow(cyberMandat);
   await verifyR2SignedReport(cyberMandat);
   await verifyPluginRelay(cyberMandat);
+
+  // CTA-Smoke laeuft VOR dem JSON-Output, damit seine failures im Report sichtbar sind.
+  // Bei `SMOKE_SKIP_CTAS=1` (z.B. weil die Seite down ist) kann er uebersprungen werden.
+  if (process.env.SMOKE_SKIP_CTAS !== '1') {
+    await checkPricingCtas();
+  }
 
   console.log(JSON.stringify({
     ok: true,

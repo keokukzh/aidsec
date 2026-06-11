@@ -2,10 +2,11 @@
  * AidSec Daily Cron Dispatcher
  *
  * Vercel Hobby erlaubt nur wenige Cron-Jobs — dieser eine taegliche Einstieg
- * verarbeitet immer die Delivery-Workflow-Queue (Retry-Fallback zum Webhook)
- * und triggert an den Stichtagen die monatlichen Jobs:
- *   - 1. des Monats: /api/cron/monitoring
- *   - 15. des Monats: /api/cron/reaudit
+ * verarbeitet immer die Delivery-Workflow-Queue (Retry-Fallback zum Webhook),
+ * die Lead-/Kunden-Follow-ups und triggert an den Stichtagen die monatlichen Jobs:
+ *   - taeglich:             /api/cron/followup (Lead-Nurturing, 48h-Reminder)
+ *   - 1. des Monats:        /api/cron/monitoring
+ *   - 15. des Monats:       /api/cron/reaudit
  */
 
 import { runDeliveryWorkflowBatch } from '../lib/delivery-workflow.js';
@@ -42,7 +43,14 @@ export default async function handler(req, res) {
   }
 
   const dayOfMonth = new Date().getUTCDate();
-  const result = { success: true, dayOfMonth, workflows: null, monitoring: null, reaudit: null };
+  const result = {
+    success: true,
+    dayOfMonth,
+    workflows: null,
+    followup: null,
+    monitoring: null,
+    reaudit: null,
+  };
 
   try {
     result.workflows = await runDeliveryWorkflowBatch({ limit: 10 });
@@ -51,6 +59,11 @@ export default async function handler(req, res) {
     result.success = false;
     result.workflows = { error: error.message };
   }
+
+  // Follow-up laeuft taeglich: nicht-zahlende Leads/Unpaid-Orders bekommen nach 48h
+  // eine Erinnerung (DSG-konform nur, wenn Opt-in aus Check-Formular vorliegt —
+  // ist im Followup-Cron selbst ueber `optedIn` abgesichert).
+  result.followup = await triggerSibling('/api/cron/followup');
 
   if (dayOfMonth === 1) result.monitoring = await triggerSibling('/api/cron/monitoring');
   if (dayOfMonth === 15) result.reaudit = await triggerSibling('/api/cron/reaudit');

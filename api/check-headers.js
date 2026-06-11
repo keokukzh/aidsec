@@ -1,4 +1,8 @@
 import { fetchWithSSRFProtection, validateTargetUrlForSSRF } from './lib/ssrf.js';
+import { consumeRateLimit, getClientIp, rateLimitHeaders } from './lib/rate-limit.js';
+
+const RATE_LIMIT = 10; // Plan P1.9.4: 10 Calls pro Minute und IP
+const RATE_WINDOW_MS = 60_000;
 
 const SECURITY_HEADERS = [
   { 
@@ -155,6 +159,35 @@ export default async function handler(req, res) {
   }
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // ── Rate-Limit pro IP (Plan P1.9.4) ──
+  let rateResult;
+  try {
+    rateResult = await consumeRateLimit({
+      bucket: 'check-headers',
+      limit: RATE_LIMIT,
+      windowMs: RATE_WINDOW_MS,
+      identifier: getClientIp(req),
+    });
+  } catch (error) {
+    console.error('[check-headers] Rate-Limit fehlgeschlagen:', error.message);
+    return res.status(503).json({
+      error: 'Rate-Limit temporaer nicht verfuegbar. Bitte spaeter erneut versuchen.',
+      code: 'RATE_LIMIT_UNAVAILABLE',
+    });
+  }
+
+  const rateHeaders = rateLimitHeaders(rateResult, RATE_LIMIT, RATE_WINDOW_MS);
+  Object.entries(rateHeaders).forEach(([key, value]) => res.setHeader(key, value));
+
+  if (rateResult.limited) {
+    res.setHeader('Retry-After', String(Math.ceil((rateResult.resetMs || RATE_WINDOW_MS) / 1000)));
+    return res.status(429).json({
+      error: 'Zu viele Anfragen. Bitte eine Minute warten.',
+      code: 'RATE_LIMITED',
+      retryAfterSeconds: Math.ceil((rateResult.resetMs || RATE_WINDOW_MS) / 1000),
+    });
   }
 
   var rawUrl = req.query.url;
