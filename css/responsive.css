@@ -194,6 +194,10 @@
     margin: 0 auto;
   }
 
+  .pricing-addons__grid {
+    grid-template-columns: 1fr;
+  }
+
   .services {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -491,6 +495,14 @@
 
   .pricing-card__amount {
     font-size: var(--text-3xl);
+  }
+
+  .pricing-addons {
+    padding: var(--space-6);
+  }
+
+  .pricing-card__billing-toggle {
+    grid-template-columns: 1fr;
   }
 
   /* Services: single column */

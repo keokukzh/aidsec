@@ -33,11 +33,11 @@
       "shortName": "Cyber-Mandat Pro",
       "navName": "Cyber-Mandat Pro",
       "price": "CHF 89.–/Monat",
-      "priceAmount": "CHF 1'068.–",
-      "pricePeriod": "Jaehrliche Abrechnung (CHF 89.–/Monat) · Laufende Security- und Compliance-Begleitung",
-      "annual": "CHF 1'068.– / Jahr",
-      "checkoutLabel": "Cyber-Mandat Pro / ComplianceOps – CHF 89.–/Monat (CHF 1'068.– / Jahr)",
-      "type": "jaehrlich",
+      "priceAmount": "CHF 89.–",
+      "pricePeriod": "Monatlich kuendbar · oder CHF 890.– / Jahr",
+      "annual": "CHF 890.– / Jahr",
+      "checkoutLabel": "Cyber-Mandat Pro / ComplianceOps – CHF 89.–/Monat",
+      "type": "monatlich",
       "href": "/onboarding/cyber-mandat/"
     }
   },

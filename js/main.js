@@ -719,6 +719,32 @@
   // Initialize
   updateSecondROI();
 
+  var mandatPricingCard = document.querySelector('[data-mandat-pricing-card]');
+  if (mandatPricingCard) {
+    var mandatPrice = mandatPricingCard.querySelector('[data-mandat-price]');
+    var mandatPeriod = mandatPricingCard.querySelector('[data-mandat-period]');
+    var mandatNote = mandatPricingCard.querySelector('[data-mandat-note]');
+    var mandatCta = mandatPricingCard.querySelector('[data-mandat-cta]');
+
+    function updateMandatBilling(value) {
+      var yearly = value === 'yearly';
+      if (mandatPrice) mandatPrice.innerHTML = yearly ? '890.&ndash;' : '89.&ndash;';
+      if (mandatPeriod) mandatPeriod.textContent = yearly ? '/ Jahr' : '/ Monat';
+      if (mandatNote) {
+        mandatNote.innerHTML = yearly
+          ? 'Jaehrliche Abrechnung: CHF 890.&ndash; / Jahr. 2 Monate geschenkt.'
+          : 'Monatlich kuendbar. Jahresoption: CHF 890.&ndash; / Jahr.';
+      }
+      if (mandatCta) mandatCta.href = '/onboarding/cyber-mandat?billing=' + (yearly ? 'yearly' : 'monthly');
+    }
+
+    mandatPricingCard.querySelectorAll('input[name="mandat-billing"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        updateMandatBilling(input.value);
+      });
+    });
+  }
+
 
   // ── Scroll-to-top Button ──
   var scrollTopBtn = document.getElementById('scroll-top');

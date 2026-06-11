@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════
    ONBOARDING FLOW – SHARED JS
    ═══════════════════════════════════════════ */
 
@@ -25,10 +25,10 @@
     'cyber-mandat': {
       name: 'Cyber-Mandat Pro / ComplianceOps',
       price: 'CHF 89.–/Monat',
-      annual: "CHF 1'068.– / Jahr",
-      checkoutLabel: "Cyber-Mandat Pro / ComplianceOps – CHF 89.–/Monat (CHF 1'068.– / Jahr)",
-      priceAmount: "CHF 1'068.–",
-      pricePeriod: 'Jaehrliche Abrechnung (CHF 89.–/Monat) · Laufende Security- und Compliance-Begleitung',
+      annual: 'CHF 890.- / Jahr',
+      checkoutLabel: 'Cyber-Mandat Pro / ComplianceOps - CHF 89.-/Monat',
+      priceAmount: 'CHF 89.-',
+      pricePeriod: 'Monatlich kuendbar oder CHF 890.- / Jahr',
     },
   };
 
@@ -57,10 +57,45 @@
   var packageName = document.body.getAttribute('data-package-name') || '';
   var packagePrice = document.body.getAttribute('data-package-price') || '';
   var packagePeriod = document.body.getAttribute('data-package-period') || '';
+  var activePackageConfig = null;
+  var billingPeriod = 'monthly';
+
+  function getBillingPeriod() {
+    var checked = document.querySelector('input[name="billing-period"]:checked');
+    if (!checked) return packageSlug === 'cyber-mandat' ? 'monthly' : 'once';
+    return checked.value === 'yearly' ? 'yearly' : 'monthly';
+  }
+
+  function getSelectedAddOns() {
+    return Array.from(document.querySelectorAll('input[name="add-ons"]:checked')).map(function (input) {
+      return input.value;
+    });
+  }
+
+  function getBillingPriceConfig(packageConfig) {
+    billingPeriod = getBillingPeriod();
+    if (packageSlug !== 'cyber-mandat') return packageConfig;
+
+    if (billingPeriod === 'yearly') {
+      return {
+        priceAmount: 'CHF 890.-',
+        pricePeriod: 'Jaehrliche Abrechnung - 2 Monate geschenkt',
+        checkoutLabel: 'Cyber-Mandat Pro / ComplianceOps - CHF 890.-/Jahr',
+      };
+    }
+
+    return {
+      priceAmount: 'CHF 89.-',
+      pricePeriod: 'Monatlich kuendbar',
+      checkoutLabel: packageConfig.checkoutLabel || 'Cyber-Mandat Pro / ComplianceOps - CHF 89.-/Monat',
+    };
+  }
 
   function applyPackageConfig(packageConfig) {
     if (!packageConfig) return;
 
+    activePackageConfig = packageConfig;
+    var billingConfig = getBillingPriceConfig(packageConfig);
     packageName = packageConfig.name || packageName;
     packagePrice = packageConfig.price || packagePrice;
     packagePeriod = packageConfig.annual || packagePeriod;
@@ -76,19 +111,19 @@
     var pricePeriod = document.getElementById('ob-price-period');
 
     if (packageBadge) {
-      packageBadge.textContent = packageConfig.checkoutLabel || packageName;
+      packageBadge.textContent = billingConfig.checkoutLabel || packageConfig.checkoutLabel || packageName;
     }
     if (packageInput) {
-      packageInput.value = packageConfig.checkoutLabel || packageName;
+      packageInput.value = billingConfig.checkoutLabel || packageConfig.checkoutLabel || packageName;
     }
     if (packageSummary) {
       packageSummary.textContent = packageName;
     }
     if (priceAmount) {
-      priceAmount.textContent = packageConfig.priceAmount || packagePrice;
+      priceAmount.textContent = billingConfig.priceAmount || packageConfig.priceAmount || packagePrice;
     }
     if (pricePeriod) {
-      pricePeriod.textContent = packageConfig.pricePeriod || packagePeriod;
+      pricePeriod.textContent = billingConfig.pricePeriod || packageConfig.pricePeriod || packagePeriod;
     }
   }
 
@@ -260,6 +295,10 @@
 
   document.addEventListener('change', function (e) {
     var el = e.target;
+    if (el.name === 'billing-period' || el.name === 'add-ons') {
+      if (activePackageConfig) applyPackageConfig(activePackageConfig);
+      renderSummary();
+    }
     if (el.type === 'checkbox' && el.classList.contains('ob-input--error')) {
       el.classList.remove('ob-input--error');
       var group = el.closest('.ob-checkbox');
@@ -281,7 +320,14 @@
     var sumName = document.getElementById('sum-name');
     var sumEmail = document.getElementById('sum-email');
 
-    if (sumPkg) sumPkg.textContent = packageName;
+    if (activePackageConfig) applyPackageConfig(activePackageConfig);
+
+    if (sumPkg) {
+      var suffix = packageSlug === 'cyber-mandat' && billingPeriod === 'yearly' ? ' (jaehrlich)' : '';
+      var selectedAddOns = getSelectedAddOns();
+      var addOnText = selectedAddOns.length ? ' + ' + selectedAddOns.length + ' Add-on(s)' : '';
+      sumPkg.textContent = packageName + suffix + addOnText;
+    }
     if (sumUrl && url) sumUrl.textContent = url.value;
     if (sumName && name) sumName.textContent = name.value;
     if (sumEmail && email) sumEmail.textContent = email.value;
@@ -375,6 +421,8 @@
       payload.packageName = packageName;
       payload.packagePrice = packagePrice;
       payload.packagePeriod = packagePeriod;
+      payload.billingPeriod = getBillingPeriod();
+      payload.addOns = getSelectedAddOns();
       payload.sourcePath = window.location.pathname;
 
       if (
@@ -398,6 +446,8 @@
           email: payload.email,
           company: payload.company,
           websiteUrl: payload['website-url'],
+          billingPeriod: getBillingPeriod(),
+          addOns: getSelectedAddOns(),
           accessOption: payload['access-option'],
           accessNote: payload['access-note']
         };
@@ -521,6 +571,21 @@
   }
 
   /* ── Init ───────────────────────────────── */
+  function applyQuerySelections() {
+    var params = new URLSearchParams(window.location.search);
+    var requestedBilling = params.get('billing');
+    if (requestedBilling === 'monthly' || requestedBilling === 'yearly') {
+      var billingInput = document.querySelector('input[name="billing-period"][value="' + requestedBilling + '"]');
+      if (billingInput) billingInput.checked = true;
+    }
+
+    params.getAll('addon').forEach(function (slug) {
+      var addOnInput = document.querySelector('input[name="add-ons"][value="' + slug + '"]');
+      if (addOnInput) addOnInput.checked = true;
+    });
+  }
+
+  applyQuerySelections();
   loadSiteData().then(function (siteData) {
     if (siteData && siteData.packages) {
       if (siteData.packages[packageSlug]) {

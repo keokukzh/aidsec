@@ -28,10 +28,37 @@ const PRODUCTS = {
     name: 'AidSec Cyber-Mandat Pro',
     description: 'Laufendes Compliance-Monitoring, monatliche Reports und Re-Audits',
     priceChf: 8900,
-    priceChfYearly: 106800,
+    priceChfYearly: 89000,
     priceIdEnv: 'STRIPE_PRICE_MANDAT_MONTHLY',
     priceIdYearlyEnv: 'STRIPE_PRICE_MANDAT_YEARLY',
     mode: 'subscription',
+  },
+};
+
+const ADD_ONS = {
+  'ndsg-compliance-pack': {
+    name: 'nDSG Compliance Pack',
+    description: 'Website-Audit, Cookie-Consent-Check und nDSG-Massnahmenliste',
+    priceChf: 49000,
+    priceIdEnv: 'STRIPE_PRICE_ADDON_NDSG',
+    mode: 'payment',
+    products: ['rapid-header-fix', 'kanzlei-haertung'],
+  },
+  'email-sicherheit': {
+    name: 'E-Mail-Sicherheit',
+    description: 'SPF, DKIM und DMARC-Konfiguration fuer eine Domain',
+    priceChf: 14900,
+    priceIdEnv: 'STRIPE_PRICE_ADDON_EMAIL',
+    mode: 'payment',
+    products: ['rapid-header-fix', 'kanzlei-haertung'],
+  },
+  'priority-sla': {
+    name: 'Priority-SLA / Notfall-Bereitschaft',
+    description: 'Priorisierter Incident-Support als monatliches Add-on zum Cyber-Mandat',
+    priceChf: 2900,
+    priceIdEnv: 'STRIPE_PRICE_ADDON_PRIORITY_SLA',
+    mode: 'subscription',
+    products: ['cyber-mandat'],
   },
 };
 
@@ -55,7 +82,10 @@ function encodeStripeForm(payload) {
 }
 
 function buildLineItem(product, billingPeriod) {
-  const useYearly = product.mode === 'subscription' && billingPeriod === 'yearly';
+  const useYearly =
+    product.mode === 'subscription' &&
+    billingPeriod === 'yearly' &&
+    Boolean(product.priceChfYearly || product.priceIdYearlyEnv);
   const priceEnv = useYearly ? product.priceIdYearlyEnv : product.priceIdEnv;
   const price = getEnvFirst([priceEnv]);
 
@@ -77,7 +107,27 @@ function buildLineItem(product, billingPeriod) {
   return { price_data: priceData, quantity: 1 };
 }
 
-async function createStripeSession({ productSlug, customerData, order, billingPeriod, baseUrl }) {
+function normalizeAddOns(rawAddOns) {
+  if (!rawAddOns) return [];
+  const addOns = Array.isArray(rawAddOns) ? rawAddOns : [rawAddOns];
+  return [...new Set(addOns.map((item) => String(item).trim()).filter(Boolean))];
+}
+
+function resolveAddOns(productSlug, requestedAddOns) {
+  return normalizeAddOns(requestedAddOns).map((slug) => {
+    const addOn = ADD_ONS[slug];
+    if (!addOn || !addOn.products.includes(productSlug)) {
+      throw new Error(`Unbekanntes oder nicht verfuegbares Add-on: ${slug}`);
+    }
+    return { slug, ...addOn };
+  });
+}
+
+function buildLineItems(product, billingPeriod, addOns = []) {
+  return [buildLineItem(product, billingPeriod), ...addOns.map((addOn) => buildLineItem(addOn, billingPeriod))];
+}
+
+async function createStripeSession({ productSlug, customerData, order, billingPeriod, addOns, baseUrl }) {
   const product = PRODUCTS[productSlug];
   const stripeKey = getEnvFirst(['STRIPE_SECRET_KEY']);
 
@@ -96,11 +146,12 @@ async function createStripeSession({ productSlug, customerData, order, billingPe
     productSlug,
     websiteUrl: customerData.websiteUrl || '',
     billingPeriod: billingPeriod || 'once',
+    addOns: addOns.map((addOn) => addOn.slug).join(','),
   };
 
   const sessionPayload = {
     mode: product.mode,
-    line_items: [buildLineItem(product, billingPeriod)],
+    line_items: buildLineItems(product, billingPeriod, addOns),
     success_url: successUrl,
     cancel_url: cancelUrl,
     customer_email: customerData.email,
@@ -166,6 +217,7 @@ export default async function handler(req, res) {
   const product = PRODUCTS[productSlug];
   const customerData = normalizeCustomerData(body);
   const billingPeriod = body.billingPeriod === 'yearly' ? 'yearly' : productSlug === 'cyber-mandat' ? 'monthly' : 'once';
+  let addOns = [];
   const requestOrigin = req.headers?.origin || (req.headers?.host ? `http://${req.headers.host}` : '');
   const baseUrl = !isProduction() && requestOrigin ? requestOrigin : getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
 
@@ -177,15 +229,22 @@ export default async function handler(req, res) {
   }
 
   try {
+    addOns = resolveAddOns(productSlug, body.addOns);
+  } catch (err) {
+    return res.status(400).json({ error: err.message, validAddOns: Object.keys(ADD_ONS) });
+  }
+
+  try {
     const order = await createOrder({
       productSlug,
       billingPeriod,
+      addOns: addOns.map((addOn) => addOn.slug),
       customer: customerData,
       website: { url: customerData.websiteUrl },
       status: 'pending_payment',
       paymentStatus: 'unpaid',
     });
-    const session = await createStripeSession({ productSlug, customerData, order, billingPeriod, baseUrl });
+    const session = await createStripeSession({ productSlug, customerData, order, billingPeriod, addOns, baseUrl });
     await updateOrder(order.orderId, { stripeSessionId: session.id });
 
     return res.status(200).json({
@@ -203,4 +262,4 @@ export default async function handler(req, res) {
   }
 }
 
-export { PRODUCTS, buildLineItem, encodeStripeForm };
+export { PRODUCTS, ADD_ONS, buildLineItem, buildLineItems, encodeStripeForm, normalizeAddOns, resolveAddOns };
