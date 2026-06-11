@@ -16,6 +16,20 @@
 }
 
 /* ── Layout ─────────────────────────────── */
+.ob-pill {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.ob-pill--gold {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22), rgba(212, 175, 55, 0.08));
+  border: 1px solid var(--ob-gold);
+  color: var(--ob-gold-light);
+}
 .ob-page {
   min-height: 100vh;
   display: flex;

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notfall-Hilfe – AidSec</title>
+    <meta
+      name="description"
+      content="Website gehackt, blockiert oder kompromittiert? AidSec Notfall-Intervention für Schweizer Kanzleien und Praxen: +41 44 000 00 00."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://aidsec.ch/notfall.html" />
+
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/sections.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+
+    <link rel="icon" type="image/webp" href="/logowhite.png" />
+    <script src="/js/consent.js"></script>
+    <style>
+      html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    </style>
+  </head>
+  <body>
+    <header class="nav" id="nav" role="banner">
+      <div class="container nav__inner">
+        <a href="/" class="nav__logo" aria-label="AidSec — Startseite">
+          <img
+            src="/assets/images/logowhite.webp"
+            alt="AidSec"
+            width="119"
+            height="109"
+            class="nav__logo-img"
+            loading="eager"
+            decoding="async"
+          />
+        </a>
+
+        <nav class="nav__links" aria-label="Hauptnavigation">
+          <div class="nav__item has-dropdown">
+            <a href="/index.html#leistungen" class="nav__link">Leistungen</a>
+            <div class="nav__dropdown">
+              <a href="/leistungen/header-optimierung.html">Rapid Header Fix</a>
+              <a href="/leistungen/wordpress-haertung.html">Kanzlei-Härtung</a>
+              <a href="/leistungen/cyber-mandat.html">Cyber-Mandat</a>
+              <a href="/leistungen/ndsg-compliance-pack.html">nDSG Compliance Pack</a>
+              <a href="/leistungen/notfall-intervention.html">Notfall-Intervention</a>
+              <a href="/leistungen/email-sicherheit.html">E-Mail-Sicherheit</a>
+            </div>
+          </div>
+
+          <div class="nav__item has-dropdown">
+            <span class="nav__link" tabindex="0">Branchen</span>
+            <div class="nav__dropdown">
+              <a href="/branchen/anwaltskanzleien.html">Anwaltskanzleien</a>
+              <a href="/branchen/arztpraxen.html">Arztpraxen</a>
+              <a href="/branchen/notariate.html">Notariate</a>
+              <a href="/branchen/treuhand.html">Treuhand &amp; Treuhänder</a>
+            </div>
+          </div>
+
+          <a href="/fallstudien.html" class="nav__link">Fallstudien</a>
+          <a href="/faq.html" class="nav__link">FAQ</a>
+          <a href="/dashboard.html" class="nav__link nav__link--muted">Kundenportal</a>
+          <a href="/index.html#preise" class="nav__link">Preise</a>
+
+          <div class="nav__item has-dropdown">
+            <a href="/wissen/index.html" class="nav__link">Wissen</a>
+            <div class="nav__dropdown">
+              <a href="/wissen/index.html">Alle Artikel</a>
+              <a href="/wissen/ultimate-ndsg-checklist-2025.html">nDSG Compliance Guide</a>
+              <a href="/wissen/security-headers-note-f-auf-a.html">Security Headers Note F</a>
+            </div>
+          </div>
+        </nav>
+
+        <a
+          href="/index.html#kontakt"
+          class="btn btn--gold nav__cta desktop-only"
+          data-track="nav-cta"
+          aria-label="Kostenfreien Security-Check starten"
+        >
+          Kostenfreien Security-Check
+          <span class="btn__badge">24h</span>
+        </a>
+
+        <button
+          class="nav__toggle"
+          id="nav-toggle"
+          aria-label="Menü öffnen"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
+          <a href="/index.html#leistungen" class="nav__link mobile-menu__link">Leistungen</a>
+          <a href="/index.html#preise" class="nav__link mobile-menu__link">Preise</a>
+          <a href="/faq.html" class="nav__link mobile-menu__link">FAQ</a>
+          <a href="/fallstudien.html" class="nav__link mobile-menu__link">Fallstudien</a>
+          <a href="/dashboard.html" class="nav__link mobile-menu__link">Kundenportal</a>
+        </nav>
+        <a href="/index.html#kontakt" class="btn btn--gold mobile-menu__cta">Kostenfreien Security-Check</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero / Sofort-Kontakt -->
+      <section class="section section--dark knowledge-hero">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <span class="eyebrow text-gold">Notfall-Hilfe</span>
+            <h1 class="section-header__title">
+              Website kompromittiert, blockiert oder gehackt?
+            </h1>
+            <p class="section-header__subtitle">
+              AidSec Notfall-Intervention für Schweizer Kanzleien und Praxen.
+              Wir reagieren innerhalb von 4 Stunden, entfernen Schadcode, entschärfen
+              Hosting-Sperren und stellen die nDSG-Dokumentation wieder her.
+            </p>
+
+            <div class="notfall-actions">
+              <a class="btn btn--gold btn--lg notfall-call" href="tel:+41440000000" data-track="notfall-call">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                +41 44 000 00 00 anrufen
+              </a>
+              <a class="btn btn--outline btn--lg" href="#notfall-formular" data-track="notfall-form-anchor">
+                Formular ausfüllen
+              </a>
+            </div>
+
+            <p class="notfall-meta">
+              Erreichbarkeit: Mo–Fr 07:00–22:00 · Sa 09:00–18:00 · So nach Vereinbarung
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Schnelle Hilfe -->
+      <section class="section section--deep">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2 class="section-header__title">Was Sie jetzt sofort tun sollten</h2>
+            <p class="section-header__subtitle">
+              Diese Schritte sichern Sie, bevor wir aktiv werden:
+            </p>
+          </div>
+
+          <div class="notfall-steps">
+            <ol class="notfall-steps__list">
+              <li>
+                <strong>Site vom Netz nehmen</strong>
+                <span>Falls Besucher Schadcode ausgeliefert bekommen: in den Wartungsmodus schalten oder .htaccess-Sperre. Keine Panik-Änderungen im Backend.</span>
+              </li>
+              <li>
+                <strong>Keine Passwörter per E-Mail senden</strong>
+                <span>Hoster-, FTP- und WordPress-Zugänge niemals unverschlüsselt weitergeben. Wir senden Ihnen nach dem Anruf einen sicheren Handoff-Kanal.</span>
+              </li>
+              <li>
+                <strong>Beweise sichern</strong>
+                <span>Screenshot der Browser-Warnung, Hosting-Sperr-Mail und betroffene URLs. Beschleunigt die Forensik.</span>
+              </li>
+              <li>
+                <strong>nDSG-Meldepflicht prüfen</strong>
+                <span>Bei bestätigtem Datenabfall sind Sie ggf. meldepflichtig (Art. 24 nDSG). Wir unterstützen Sie beim Formular an den EDÖB.</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- Formular -->
+      <section class="section section--alt" id="notfall-formular">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2 class="section-header__title">Notfall-Formular</h2>
+            <p class="section-header__subtitle">
+              Schildern Sie uns die Situation. Wir melden uns innerhalb von 4 Stunden
+              per Telefon oder E-Mail. Bei Lebensgefahr wählen Sie bitte direkt 144.
+            </p>
+          </div>
+
+          <form class="notfall-form" id="notfall-form" novalidate>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-name">Name *</label>
+              <input id="nf-name" name="name" class="notfall-form__input" type="text" required autocomplete="name" />
+            </div>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-company">Kanzlei / Praxis</label>
+              <input id="nf-company" name="company" class="notfall-form__input" type="text" autocomplete="organization" />
+            </div>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-email">E-Mail *</label>
+              <input id="nf-email" name="email" class="notfall-form__input" type="email" required autocomplete="email" />
+            </div>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-phone">Telefon *</label>
+              <input id="nf-phone" name="phone" class="notfall-form__input" type="tel" required autocomplete="tel" placeholder="+41 …" />
+            </div>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-url">Betroffene Website-URL *</label>
+              <input id="nf-url" name="websiteUrl" class="notfall-form__input" type="url" required placeholder="https://ihre-kanzlei.ch" />
+            </div>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-category">Was liegt vor? *</label>
+              <select id="nf-category" name="category" class="notfall-form__input" required>
+                <option value="">Bitte wählen …</option>
+                <option value="defacement">Seite wurde verändert / Defacement</option>
+                <option value="malware">Google-Warnung "Diese Website ist gefährlich"</option>
+                <option value="blacklist">Hoster hat die Seite gesperrt</option>
+                <option value="leak">Datenabfall vermutet / bestätigt</option>
+                <option value="phishing">Phishing-Mail im Namen unserer Kanzlei verschickt</option>
+                <option value="other">Etwas anderes</option>
+              </select>
+            </div>
+            <div class="notfall-form__row">
+              <label class="notfall-form__label" for="nf-message">Beschreibung *</label>
+              <textarea id="nf-message" name="message" class="notfall-form__input notfall-form__textarea" rows="5" required placeholder="Was ist passiert, wann haben Sie es bemerkt, welche Maßnahmen haben Sie bereits ergriffen?"></textarea>
+            </div>
+
+            <label class="notfall-form__check">
+              <input type="checkbox" name="privacy" required />
+              <span>Ich habe die <a href="/datenschutz.html">Datenschutzerklärung</a> gelesen und bin einverstanden, dass AidSec meine Angaben zur Notfall-Bearbeitung speichert. *</span>
+            </label>
+
+            <div class="notfall-form__actions">
+              <button type="submit" class="btn btn--gold btn--lg" data-track="notfall-form-submit">
+                Notfall melden
+              </button>
+              <a class="btn btn--outline" href="tel:+41440000000">Lieber direkt anrufen</a>
+            </div>
+
+            <p class="notfall-form__feedback" id="notfall-feedback" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- Eskalationspfad / Kostenrahmen -->
+      <section class="section section--deep">
+        <div class="container">
+          <div class="section-header" data-reveal="fade-up">
+            <h2 class="section-header__title">Ablauf &amp; Kosten</h2>
+            <p class="section-header__subtitle">
+              Klare Preise auch im Notfall. Keine versteckten Stunden, keine Überraschungen.
+            </p>
+          </div>
+
+          <div class="notfall-flow">
+            <article class="notfall-flow__step">
+              <span class="notfall-flow__num">1</span>
+              <h3>Anruf + Sofort-Einschätzung</h3>
+              <p>Innerhalb von 4 Stunden. Wir priorisieren die Situation (öffentlich erreichbar? Datenleck? Hosting-Sperre?) und geben eine erste Einschätzung ab.</p>
+              <strong class="notfall-flow__price">Kostenlos</strong>
+            </article>
+            <article class="notfall-flow__step">
+              <span class="notfall-flow__num">2</span>
+              <h3>Sicherung &amp; Forensik</h3>
+              <p>Backup, Log-Auswertung, Identifikation der Einbruchsstelle. Fixpreis-Pauschale, kein Stundenzähler.</p>
+              <strong class="notfall-flow__price">ab CHF 990.–</strong>
+            </article>
+            <article class="notfall-flow__step">
+              <span class="notfall-flow__num">3</span>
+              <h3>Bereinigung &amp; Härtung</h3>
+              <p>Schadcode entfernen, Hintertüren schließen, WordPress &amp; Plugins aktualisieren, WAF-Regeln, Passwort-Rotation.</p>
+              <strong class="notfall-flow__price">ab CHF 1'490.–</strong>
+            </article>
+            <article class="notfall-flow__step">
+              <span class="notfall-flow__num">4</span>
+              <h3>Nachweis &amp; Prävention</h3>
+              <p>Forensik-Bericht, nDSG-Meldeunterlage, Empfehlungen — auf Wunsch nahtloser Übergang in ein Cyber-Mandat.</p>
+              <strong class="notfall-flow__price">im Pauschalpreis enthalten</strong>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <img
+              src="/assets/images/logowhite.webp"
+              alt="AidSec"
+              width="36"
+              height="36"
+              class="footer__logo"
+              loading="lazy"
+            />
+            <span class="footer__brand-text">Aid<strong>SEC</strong></span>
+          </div>
+          <p class="footer__tagline">Digitale Sicherheit für Schweizer Kanzleien und Praxen</p>
+          <p class="footer__copy">&copy; 2026 AidSec. Alle Rechte vorbehalten. Schweiz.</p>
+          <div class="footer__links">
+            <a href="/datenschutz.html" class="footer__link">Datenschutz</a>
+            <a href="/impressum.html" class="footer__link">Impressum</a>
+            <a href="/agb.html" class="footer__link">AGB</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+    <script>
+      (function () {
+        'use strict';
+
+        var form = document.getElementById('notfall-form');
+        var feedback = document.getElementById('notfall-feedback');
+        if (!form) return;
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+          var data = Object.fromEntries(new FormData(form).entries());
+          if (feedback) {
+            feedback.textContent = 'Sende Notfall-Meldung …';
+            feedback.className = 'notfall-form__feedback notfall-form__feedback--pending';
+          }
+          fetch('/api/contact-submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              kind: 'notfall',
+              name: data.name,
+              company: data.company,
+              email: data.email,
+              phone: data.phone,
+              websiteUrl: data.websiteUrl,
+              category: data.category,
+              message: data.message,
+              privacy: data.privacy,
+              source: 'notfall-page'
+            })
+          })
+            .then(function (res) {
+              if (!res.ok) throw new Error('status ' + res.status);
+              return res.json();
+            })
+            .then(function () {
+              if (feedback) {
+                feedback.textContent =
+                  'Vielen Dank. Wir melden uns innerhalb von 4 Stunden per Telefon oder E-Mail. Bei akuter Lebensgefahr wählen Sie 144.';
+                feedback.className = 'notfall-form__feedback notfall-form__feedback--success';
+              }
+              form.reset();
+            })
+            .catch(function () {
+              if (feedback) {
+                feedback.textContent =
+                  'Versand fehlgeschlagen. Bitte rufen Sie uns direkt an: +41 44 000 00 00.';
+                feedback.className = 'notfall-form__feedback notfall-form__feedback--error';
+              }
+            });
+        });
+      })();
+    </script>
+
+    <style>
+      .notfall-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin: 1.5rem 0 0.75rem;
+        justify-content: center;
+      }
+      .notfall-call svg { margin-right: 0.5rem; vertical-align: middle; }
+      .notfall-meta {
+        font-size: 0.85rem;
+        color: var(--ob-text-muted, #94a3b8);
+        margin-top: 0.5rem;
+      }
+      .notfall-steps__list {
+        counter-reset: step;
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .notfall-steps__list li {
+        background: var(--ob-surface, rgba(255,255,255,0.04));
+        border: 1px solid var(--ob-border, rgba(212,175,55,0.18));
+        border-radius: 12px;
+        padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .notfall-steps__list li::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #d4af37, #f0d060);
+        color: #0b1120;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notfall-steps__list strong { display: block; color: #fff; margin-bottom: 0.25rem; }
+      .notfall-steps__list span { color: var(--ob-text-muted, #94a3b8); font-size: 0.9rem; }
+      .notfall-form {
+        max-width: 640px;
+        margin: 0 auto;
+        display: grid;
+        gap: 1rem;
+        background: var(--ob-surface, rgba(255,255,255,0.04));
+        border: 1px solid var(--ob-border, rgba(212,175,55,0.18));
+        border-radius: 14px;
+        padding: 1.75rem;
+      }
+      .notfall-form__row { display: grid; gap: 0.4rem; }
+      .notfall-form__label {
+        font-size: 0.85rem;
+        color: #fff;
+        font-weight: 600;
+      }
+      .notfall-form__input {
+        background: var(--ob-surface-2, #1a2332);
+        border: 1px solid var(--ob-border, rgba(212,175,55,0.18));
+        border-radius: 8px;
+        padding: 0.7rem 0.9rem;
+        color: #fff;
+        font-size: 0.95rem;
+        font-family: inherit;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .notfall-form__input:focus {
+        outline: none;
+        border-color: #d4af37;
+        box-shadow: 0 0 0 3px rgba(212,175,55,0.18);
+      }
+      .notfall-form__textarea { min-height: 140px; resize: vertical; }
+      .notfall-form__check {
+        display: flex; gap: 0.6rem; align-items: flex-start;
+        font-size: 0.85rem; color: var(--ob-text-muted, #94a3b8);
+      }
+      .notfall-form__check a { color: #d4af37; }
+      .notfall-form__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+      .notfall-form__feedback {
+        font-size: 0.88rem;
+        margin: 0;
+        min-height: 1.2em;
+        color: var(--ob-text-muted, #94a3b8);
+      }
+      .notfall-form__feedback--success { color: #34d399; }
+      .notfall-form__feedback--error { color: #f87171; }
+      .notfall-form__feedback--pending { color: #f0d060; }
+      .notfall-flow {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      .notfall-flow__step {
+        background: var(--ob-surface, rgba(255,255,255,0.04));
+        border: 1px solid var(--ob-border, rgba(212,175,55,0.18));
+        border-radius: 12px;
+        padding: 1.5rem 1.25rem;
+        position: relative;
+      }
+      .notfall-flow__num {
+        position: absolute;
+        top: -14px; left: 1rem;
+        background: #d4af37;
+        color: #0b1120;
+        font-weight: 700;
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .notfall-flow__step h3 {
+        font-size: 1rem;
+        color: #fff;
+        margin: 0 0 0.4rem;
+      }
+      .notfall-flow__step p {
+        font-size: 0.88rem;
+        color: var(--ob-text-muted, #94a3b8);
+        margin: 0 0 0.6rem;
+        line-height: 1.5;
+      }
+      .notfall-flow__price {
+        color: #f0d060;
+        font-size: 0.95rem;
+      }
+      .eyebrow {
+        display: inline-block;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      .text-gold { color: #d4af37; }
+      .section--alt { background: #0e1a30; }
+      .section--deep { background: #0b1120; }
+    </style>
+  </body>
+</html>

@@ -449,6 +449,7 @@
     var urlEl = document.getElementById('hero-check-url');
     var headersEl = document.getElementById('hero-check-headers');
     var scoreEl = document.getElementById('hero-check-score');
+    var ctaEl = document.getElementById('hero-check-cta');
 
     if (gradeEl) {
       gradeEl.textContent = data.grade;
@@ -493,6 +494,14 @@
       scoreEl.textContent = data.score + ' von ' + data.maxScore + ' Security-Headern aktiv';
     }
 
+    if (ctaEl) {
+      var recommendation = recommendForGrade(data.grade, data.url);
+      ctaEl.href = recommendation.href;
+      ctaEl.setAttribute('data-track', 'check-result-cta-' + recommendation.trackKey);
+      ctaEl.textContent = recommendation.label + ' ';
+      ctaEl.appendChild(createArrowSvg());
+    }
+
     if (heroCheckError) {
       heroCheckError.hidden = true;
       heroCheckError.setAttribute('hidden', '');
@@ -501,6 +510,61 @@
     heroCheckResult.hidden = false;
     heroCheckResult.removeAttribute('hidden');
     heroCheckResult.classList.add('hero__check-result--visible');
+  }
+
+  function createArrowSvg() {
+    var svgNs = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNs, 'svg');
+    svg.setAttribute('class', 'btn__icon');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    var p1 = document.createElementNS(svgNs, 'path');
+    p1.setAttribute('d', 'M5 12h14');
+    var p2 = document.createElementNS(svgNs, 'path');
+    p2.setAttribute('d', 'm12 5 7 7-7 7');
+    svg.appendChild(p1);
+    svg.appendChild(p2);
+    return svg;
+  }
+
+  function recommendForGrade(grade, rawUrl) {
+    var cleanedUrl = stripUrlForQuery(rawUrl);
+    var enc = encodeURIComponent(cleanedUrl);
+    if (grade === 'A+' || grade === 'A' || grade === 'B') {
+      return {
+        href: '/onboarding/cyber-mandat/?url=' + enc + '&billing=yearly',
+        label: 'Note halten mit Cyber-Mandat – 2 Monate sparen',
+        trackKey: 'good-mandat',
+      };
+    }
+    if (grade === 'C' || grade === 'D') {
+      return {
+        href: '/onboarding/cyber-mandat/?url=' + enc + '&billing=monthly',
+        label: 'Cyber-Mandat starten und auf Note A bringen',
+        trackKey: 'mid-mandat',
+      };
+    }
+    return {
+      href: '/onboarding/rapid-header-fix/?url=' + enc,
+      label: 'Wir bringen Sie auf Note A – in unter 24h',
+      trackKey: 'bad-rapid',
+    };
+  }
+
+  function stripUrlForQuery(rawUrl) {
+    try {
+      var parsed = new URL(rawUrl);
+      return parsed.origin + parsed.pathname.replace(/\/$/, '');
+    } catch (_) {
+      return String(rawUrl || '').trim();
+    }
   }
 
   function runSecurityCheck() {

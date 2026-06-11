@@ -127,11 +127,12 @@ function buildLineItems(product, billingPeriod, addOns = []) {
   return [buildLineItem(product, billingPeriod), ...addOns.map((addOn) => buildLineItem(addOn, billingPeriod))];
 }
 
-async function createStripeSession({ productSlug, customerData, order, billingPeriod, addOns, baseUrl }) {
+async function createStripeSession({ productSlug, customerData, order, billingPeriod, addOns, baseUrl, upsell }) {
   const product = PRODUCTS[productSlug];
   const stripeKey = getEnvFirst(['STRIPE_SECRET_KEY']);
 
-  const successUrl = `${baseUrl}/onboarding/bestaetigung?session_id={CHECKOUT_SESSION_ID}&order_id=${order.orderId}`;
+  const upsellQuery = upsell ? `&upsell=${encodeURIComponent(upsell)}` : '';
+  const successUrl = `${baseUrl}/onboarding/bestaetigung?session_id={CHECKOUT_SESSION_ID}&order_id=${order.orderId}${upsellQuery}`;
   const cancelUrl = `${baseUrl}/onboarding/${productSlug}`;
 
   if (!stripeKey) {
@@ -167,7 +168,11 @@ async function createStripeSession({ productSlug, customerData, order, billingPe
   };
 
   if (product.mode === 'subscription') {
-    sessionPayload.subscription_data = { metadata };
+    const subscriptionData = { metadata };
+    if (upsell === 'mandat-trial' && productSlug === 'cyber-mandat') {
+      subscriptionData.trial_period_days = 30;
+    }
+    sessionPayload.subscription_data = subscriptionData;
   } else {
     sessionPayload.payment_intent_data = { metadata };
   }
@@ -218,6 +223,7 @@ export default async function handler(req, res) {
   const customerData = normalizeCustomerData(body);
   const billingPeriod = body.billingPeriod === 'yearly' ? 'yearly' : productSlug === 'cyber-mandat' ? 'monthly' : 'once';
   let addOns = [];
+  const upsell = body.upsell === 'mandat-trial' ? 'mandat-trial' : undefined;
   const requestOrigin = req.headers?.origin || (req.headers?.host ? `http://${req.headers.host}` : '');
   const baseUrl = !isProduction() && requestOrigin ? requestOrigin : getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
 
@@ -244,7 +250,7 @@ export default async function handler(req, res) {
       status: 'pending_payment',
       paymentStatus: 'unpaid',
     });
-    const session = await createStripeSession({ productSlug, customerData, order, billingPeriod, addOns, baseUrl });
+    const session = await createStripeSession({ productSlug, customerData, order, billingPeriod, addOns, baseUrl, upsell });
     await updateOrder(order.orderId, { stripeSessionId: session.id });
 
     return res.status(200).json({

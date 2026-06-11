@@ -96,13 +96,40 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
-    const { orderId, token, email } = req.query || {};
+    const { orderId, token, email, source } = req.query || {};
     if (!orderId) {
       return res.status(400).json({
         error: 'orderId Parameter erforderlich',
         hint: 'Nutzen Sie den Link aus Ihrer Bestaetigungs-E-Mail',
       });
     }
+
+    // Public confirmation-page snippet: no PII, no license keys, just product + status.
+    if (!token && source === 'confirmation') {
+      const order = await getOrder(orderId);
+      if (!order) {
+        return res.status(404).json({ error: 'Auftrag nicht gefunden', orderId });
+      }
+      return res.status(200).json({
+        success: true,
+        order: {
+          orderId: order.orderId,
+          status: order.status,
+          productSlug: order.productSlug,
+          productName:
+            order.package?.name ||
+            order.productName ||
+            ({
+              'rapid-header-fix': 'Rapid Header Fix',
+              'kanzlei-haertung': 'Kanzlei-Härtung',
+              'cyber-mandat': 'Cyber-Mandat Pro',
+            }[order.productSlug] || order.productSlug),
+          billingPeriod: order.billingPeriod,
+          addOns: order.addOns || [],
+        },
+      });
+    }
+
     if (!token) {
       return res.status(401).json({
         error: 'Authentifizierung erforderlich',

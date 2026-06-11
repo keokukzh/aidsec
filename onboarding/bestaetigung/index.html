@@ -8,9 +8,85 @@
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/onboarding/onboarding.css">
   <link rel="icon" href="/logowhite.png" type="image/png">
+  <style>
+    .ob-confirm__order {
+      margin: 0 auto 1.5rem;
+      max-width: 520px;
+      padding: 1rem 1.25rem;
+      background: var(--ob-surface);
+      border: 1px solid var(--ob-border);
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.9rem;
+      color: var(--ob-text-muted);
+    }
+    .ob-confirm__order strong { color: #fff; display: block; margin-bottom: 0.25rem; }
+    .ob-confirm__order code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      color: var(--ob-gold-light);
+      font-size: 0.85rem;
+    }
+    .ob-upsell {
+      margin: 2rem auto 0;
+      max-width: 560px;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(212, 175, 55, 0.04));
+      border: 1px solid var(--ob-gold);
+      border-radius: 14px;
+      text-align: left;
+    }
+    .ob-upsell__eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ob-gold-light);
+      margin-bottom: 0.5rem;
+    }
+    .ob-upsell__title {
+      font-size: 1.25rem;
+      color: #fff;
+      margin: 0 0 0.5rem;
+      line-height: 1.3;
+    }
+    .ob-upsell__text {
+      font-size: 0.92rem;
+      color: var(--ob-text-muted);
+      margin: 0 0 1.25rem;
+      line-height: 1.5;
+    }
+    .ob-upsell__list {
+      margin: 0 0 1.25rem;
+      padding-left: 1.1rem;
+      color: var(--ob-text);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+    .ob-upsell__list li { margin-bottom: 0.35rem; }
+    .ob-upsell__list li::marker { color: var(--ob-gold); }
+    .ob-upsell__actions { display: flex; flex-direction: column; gap: 0.65rem; }
+    .ob-upsell__skip {
+      background: transparent;
+      border: none;
+      color: var(--ob-text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0.4rem;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .ob-upsell__skip:hover { color: var(--ob-text); }
+    .ob-confirm__btn--secondary {
+      display: inline-block;
+      margin-top: 0.75rem;
+      color: var(--ob-text-muted);
+      font-size: 0.85rem;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
 </head>
 <body class="ob-page">
-    
 
   <!-- Header -->
   <header class="ob-header">
@@ -32,18 +108,37 @@
           </svg>
         </div>
 
-        <h1 class="ob-confirm__title">Vielen Dank – Ihr Auftrag ist eingegangen.</h1>
+        <h1 class="ob-confirm__title" id="confirm-title">Vielen Dank – Ihr Auftrag ist eingegangen.</h1>
 
-        <p class="ob-confirm__text">
+        <p class="ob-confirm__text" id="confirm-headline">
           Wir melden uns innert 24 Stunden per E-Mail.
           Sie müssen nichts weiter tun.
         </p>
-        <p class="ob-confirm__text">
+        <p class="ob-confirm__text" id="confirm-subline">
           Wir führen Sie Schritt für Schritt durch alles, was wir von Ihnen benötigen –
           kein technisches Wissen erforderlich.
         </p>
 
-        <p class="ob-confirm__email">
+        <!-- Order-Box (gefüllt durch JS) -->
+        <div class="ob-confirm__order" id="confirm-order" hidden>
+          <strong id="confirm-order-product">Auftrag</strong>
+          <span>Auftrags-ID: <code id="confirm-order-id">–</code></span><br>
+          <span>Status: <span id="confirm-order-status">–</span></span>
+        </div>
+
+        <!-- Upsell-Block (gefüllt durch JS) -->
+        <section class="ob-upsell" id="confirm-upsell" hidden aria-label="Empfehlung">
+          <span class="ob-upsell__eyebrow" id="confirm-upsell-eyebrow">Empfehlung</span>
+          <h2 class="ob-upsell__title" id="confirm-upsell-title">Empfehlung für Sie</h2>
+          <p class="ob-upsell__text" id="confirm-upsell-text">–</p>
+          <ul class="ob-upsell__list" id="confirm-upsell-list"></ul>
+          <div class="ob-upsell__actions">
+            <a class="ob-btn ob-btn--primary" id="confirm-upsell-cta" href="#">Jetzt starten</a>
+            <button type="button" class="ob-upsell__skip" id="confirm-upsell-skip">Nein danke, kein Interesse</button>
+          </div>
+        </section>
+
+        <p class="ob-confirm__email" id="confirm-email-hint">
           Fragen? <a href="mailto:info@aidsec.ch">info@aidsec.ch</a>
         </p>
 
@@ -62,5 +157,133 @@
     </p>
   </footer>
 
+  <script>
+    (function () {
+      'use strict';
+
+      var params = new URLSearchParams(window.location.search);
+      var sessionId = params.get('session_id');
+      var orderId = params.get('order_id');
+      var upsellFlag = params.get('upsell');
+
+      var orderBox = document.getElementById('confirm-order');
+      var orderIdEl = document.getElementById('confirm-order-id');
+      var orderStatusEl = document.getElementById('confirm-order-status');
+      var orderProductEl = document.getElementById('confirm-order-product');
+
+      var upsellBox = document.getElementById('confirm-upsell');
+      var upsellEyebrow = document.getElementById('confirm-upsell-eyebrow');
+      var upsellTitle = document.getElementById('confirm-upsell-title');
+      var upsellText = document.getElementById('confirm-upsell-text');
+      var upsellList = document.getElementById('confirm-upsell-list');
+      var upsellCta = document.getElementById('confirm-upsell-cta');
+      var upsellSkip = document.getElementById('confirm-upsell-skip');
+
+      function hideUpsell() {
+        if (upsellBox) upsellBox.hidden = true;
+      }
+
+      function showUpsell(config) {
+        if (!upsellBox) return;
+        upsellEyebrow.textContent = config.eyebrow || 'Empfehlung';
+        upsellTitle.textContent = config.title;
+        upsellText.textContent = config.text;
+        upsellList.innerHTML = '';
+        (config.bullets || []).forEach(function (bullet) {
+          var li = document.createElement('li');
+          li.textContent = bullet;
+          upsellList.appendChild(li);
+        });
+        upsellCta.textContent = config.ctaLabel;
+        upsellCta.href = config.ctaHref;
+        upsellBox.hidden = false;
+      }
+
+      // 1) Trial-Upsell (direkt auf der Success-Page)
+      if (upsellFlag === 'mandat-trial') {
+        showUpsell({
+          eyebrow: 'Ihr 1. Monat ist geschenkt',
+          title: 'Cyber-Mandat Pro 30 Tage kostenlos testen',
+          text: 'Sichern Sie Ihre Website dauerhaft. Mit dem Cyber-Mandat erhalten Sie laufendes Compliance-Monitoring, monatliche Reports und proaktive Notfall-Hilfe. Sie können jederzeit kündigen – der erste Monat kostet Sie 0.–.',
+          bullets: [
+            'Monatliche Header- und Verfügbarkeitsprüfung Ihrer WordPress-Site',
+            'Proaktiver Notfall-Support per E-Mail (Reaktionszeit < 4h)',
+            'Compliance-Nachweis für Ihre Kanzlei oder Praxis (nDSG)',
+            'Jederzeit monatlich kündbar, keine versteckten Kosten'
+          ],
+          ctaLabel: 'Cyber-Mandat 30 Tage gratis starten →',
+          ctaHref: '/onboarding/cyber-mandat/?billing=monthly&upsell=mandat-trial',
+        });
+      }
+
+      // 2) Order-Lookup → kontextueller Upsell (Rapid Header Fix → Mandat)
+      if (orderId) {
+        if (orderIdEl) orderIdEl.textContent = orderId;
+        if (orderBox) {
+          orderBox.hidden = false;
+        }
+        fetch('/api/order-status?orderId=' + encodeURIComponent(orderId) + '&source=confirmation')
+          .then(function (res) {
+            if (!res.ok) throw new Error('order-status ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            if (!data || !data.order) return;
+            var order = data.order;
+            if (orderProductEl) {
+              orderProductEl.textContent = order.productName || order.productSlug || 'Ihr Auftrag';
+            }
+            if (orderStatusEl) {
+              var label = {
+                pending_payment: 'Zahlung wird verarbeitet …',
+                paid: 'Zahlung bestätigt',
+                in_progress: 'In Bearbeitung',
+                delivered: 'Bereitgestellt',
+                failed: 'Fehler – wir melden uns'
+              }[order.status] || order.status;
+              orderStatusEl.textContent = label;
+            }
+            // Wenn noch nicht über den Trial-Flag oben entschieden wurde:
+            if (upsellFlag === 'mandat-trial') return;
+            if (order.productSlug === 'rapid-header-fix') {
+              showUpsell({
+                eyebrow: 'Bleiben Sie dauerhaft geschützt',
+                title: 'Cyber-Mandat Pro – 1. Monat geschenkt',
+                text: 'Ihr Header-Fix steht in 24h. Damit Sie dauerhaft geschützt bleiben, testen Sie das Cyber-Mandat jetzt 30 Tage kostenlos.',
+                bullets: [
+                  'Header- & Verfügbarkeits-Monitoring Ihrer Site',
+                  'Proaktive Notfall-Hilfe unter 4h Reaktionszeit',
+                  'Monatlicher Compliance-Nachweis (nDSG)',
+                  'Jederzeit monatlich kündbar'
+                ],
+                ctaLabel: 'Cyber-Mandat 30 Tage gratis starten →',
+                ctaHref: '/onboarding/cyber-mandat/?billing=monthly&upsell=mandat-trial',
+              });
+            } else if (order.productSlug === 'cyber-mandat') {
+              // Optional: zweites Add-on upsellen (Priority-SLA)
+              showUpsell({
+                eyebrow: 'Optional zubuchbar',
+                title: 'Priority-SLA / Notfall-Bereitschaft',
+                text: 'Mit dem Priority-SLA erhalten Sie priorisierten Incident-Support und eine Notfall-Hotline für Ihren Cyber-Mandat-Vertrag.',
+                bullets: [
+                  'Reaktionszeit unter 1 Stunde an Werktagen',
+                  'Direktkanal zum AidSec-Incident-Team',
+                  'Monatlich kündbar als Add-on'
+                ],
+                ctaLabel: 'Priority-SLA für CHF 29.–/Mt hinzufügen →',
+                ctaHref: '/onboarding/cyber-mandat/?addon=priority-sla&billing=monthly',
+              });
+            }
+          })
+          .catch(function () {
+            if (orderStatusEl) orderStatusEl.textContent = 'Wird geladen …';
+          });
+      }
+
+      if (upsellSkip) {
+        upsellSkip.addEventListener('click', hideUpsell);
+      }
+    })();
+  </script>
 </body>
 </html>

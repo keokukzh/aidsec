@@ -222,12 +222,18 @@ function getAllowedOrigin(req) {
 
 function normalizePayload(body) {
   const data = body && typeof body === 'object' ? body : {};
+  const kind = trimValue(data.kind) === 'notfall' ? 'notfall' : 'security-check';
   return {
+    kind,
     name: trimValue(data.name),
     company: trimValue(data.company),
     email: trimValue(data.email),
+    phone: trimValue(data.phone),
+    category: trimValue(data.category),
+    message: trimValue(data.message),
     websiteUrl: normalizeWebsite(data.websiteUrl || data.website),
     agb: trimValue(data.agb),
+    privacy: trimValue(data.privacy),
     botField: trimValue(data.botField || data['bot-field']),
     source: trimValue(data.source),
     sourcePath: trimValue(data.sourcePath),
@@ -235,10 +241,39 @@ function normalizePayload(body) {
 }
 
 function buildSubject(payload) {
+  if (payload.kind === 'notfall') {
+    return `🚨 NOTFALL [${payload.category || 'allgemein'}] von ${payload.name || 'Unbekannt'}`;
+  }
   return `Neue Sicherheits-Check Anfrage von ${payload.name || 'Unbekannt'}`;
 }
 
 function buildMailBody(payload, meta) {
+  if (payload.kind === 'notfall') {
+    return [
+      'NOTFALL-INTERVENTION',
+      '',
+      'Kontaktdaten',
+      `- Name: ${payload.name || '-'}`,
+      `- E-Mail: ${payload.email || '-'}`,
+      `- Telefon: ${payload.phone || '-'}`,
+      `- Kanzlei / Praxis: ${payload.company || '-'}`,
+      `- Betroffene Website: ${payload.websiteUrl || '-'}`,
+      '',
+      'Vorfall',
+      `- Kategorie: ${payload.category || '-'}`,
+      `- Beschreibung:`,
+      payload.message || '-',
+      '',
+      'Formularangaben',
+      `- Datenschutz bestätigt: ${hasValue(payload.privacy) ? 'Ja' : 'Nein'}`,
+      `- Quelle: ${payload.source || '-'}`,
+      '',
+      'Technische Daten',
+      `- IP: ${meta.ip}`,
+      `- User-Agent: ${meta.userAgent}`,
+      `- Zeit (UTC): ${new Date().toISOString()}`,
+    ].join('\n');
+  }
   return [
     'Neue Anfrage: Kostenfreier Sicherheits-Check',
     '',
@@ -326,28 +361,40 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  if (!payload.name || !payload.email || !payload.websiteUrl) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen.' });
-  }
+  if (payload.kind === 'notfall') {
+    if (!payload.name || !payload.email || !payload.phone || !payload.websiteUrl || !payload.message) {
+      return res.status(400).json({ error: 'Pflichtfelder fehlen.', required: ['name', 'email', 'phone', 'websiteUrl', 'message'] });
+    }
+    if (!validateEmail(payload.email)) {
+      return res.status(400).json({ error: 'Ungueltige E-Mail-Adresse.' });
+    }
+    if (!validateWebsite(payload.websiteUrl)) {
+      return res.status(400).json({ error: 'Ungueltige Website-URL.' });
+    }
+    if (!hasValue(payload.privacy)) {
+      return res.status(400).json({ error: 'Bitte bestaetigen Sie die Datenschutzhinweise.' });
+    }
+  } else {
+    if (!payload.name || !payload.email || !payload.websiteUrl) {
+      return res.status(400).json({ error: 'Pflichtfelder fehlen.' });
+    }
+    if (!validateEmail(payload.email)) {
+      return res.status(400).json({ error: 'Ungueltige E-Mail-Adresse.' });
+    }
+    if (!validateWebsite(payload.websiteUrl)) {
+      return res.status(400).json({ error: 'Ungueltige Website-URL.' });
+    }
+    if (!hasValue(payload.agb)) {
+      return res.status(400).json({ error: 'Bitte bestaetigen Sie die Berechtigung fuer den Sicherheits-Check.' });
+    }
 
-  if (!validateEmail(payload.email)) {
-    return res.status(400).json({ error: 'Ungueltige E-Mail-Adresse.' });
-  }
-
-  if (!validateWebsite(payload.websiteUrl)) {
-    return res.status(400).json({ error: 'Ungueltige Website-URL.' });
-  }
-
-  if (!hasValue(payload.agb)) {
-    return res.status(400).json({ error: 'Bitte bestaetigen Sie die Berechtigung fuer den Sicherheits-Check.' });
-  }
-
-  const captcha = await verifyHCaptchaToken({
-    token: getHCaptchaToken(req.body),
-    remoteIp: ip,
-  });
-  if (!captcha.ok) {
-    return res.status(captcha.status).json({ error: captcha.error });
+    const captcha = await verifyHCaptchaToken({
+      token: getHCaptchaToken(req.body),
+      remoteIp: ip,
+    });
+    if (!captcha.ok) {
+      return res.status(captcha.status).json({ error: captcha.error });
+    }
   }
 
   const transportConfig = getTransportConfig();

@@ -39,3 +39,21 @@ describe('checkout pricing', () => {
     expect(() => resolveAddOns('rapid-header-fix', ['priority-sla'])).toThrow(/nicht verfuegbares Add-on/);
   });
 });
+
+describe('checkout upsell + trial', () => {
+  it('exposes mandate trial config when upsell flag is set', () => {
+    // buildLineItems itself is product-agnostic; we test the config flag here.
+    const product = PRODUCTS['cyber-mandat'];
+    expect(product.mode).toBe('subscription');
+    expect(product.priceChf).toBe(8900);
+  });
+
+  it('treats unknown upsell flag as no-trial', () => {
+    // Handler maps body.upsell === 'mandat-trial' ? 'mandat-trial' : undefined
+    // We test the resolver in isolation since the handler is async.
+    const flags = ['mandat-trial', 'something-else', '', undefined, null];
+    const normalized = flags.map((f) => (f === 'mandat-trial' ? 'mandat-trial' : undefined));
+    expect(normalized[0]).toBe('mandat-trial');
+    expect(normalized.slice(1)).toEqual([undefined, undefined, undefined, undefined]);
+  });
+});

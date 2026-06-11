@@ -583,6 +583,29 @@
       var addOnInput = document.querySelector('input[name="add-ons"][value="' + slug + '"]');
       if (addOnInput) addOnInput.checked = true;
     });
+
+    var prefillUrl = params.get('url');
+    if (prefillUrl) {
+      var urlField = document.getElementById('ob-url');
+      if (urlField && !urlField.value) {
+        urlField.value = prefillUrl;
+        try {
+          urlField.dispatchEvent(new Event('input', { bubbles: true }));
+        } catch (_) {}
+      }
+    }
+
+    var upsell = params.get('upsell');
+    if (upsell === 'mandat-trial') {
+      var note = document.createElement('p');
+      note.className = 'ob-pill ob-pill--gold';
+      note.textContent = 'Ihr erster Monat Cyber-Mandat ist geschenkt (30 Tage Trial).';
+      var firstStep = document.querySelector('.ob-step--active');
+      if (firstStep) {
+        var title = firstStep.querySelector('.ob-step__title');
+        if (title) title.parentNode.insertBefore(note, title.nextSibling);
+      }
+    }
   }
 
   applyQuerySelections();
