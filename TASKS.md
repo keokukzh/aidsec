@@ -87,10 +87,10 @@ docs/
 ## 🔄 Offene Tasks
 
 ### Geplant aber nicht umgesetzt (Phase D)
-- [ ] Blacklist-Monitoring API (DNSBL)
-- [ ] Google Safe Browsing Integration
-- [ ] PDF-Versand via E-Mail automatisieren
-- [ ] WordPress Plugin Update-Server
+- [x] Blacklist-Monitoring API (DNSBL)
+- [x] Google Safe Browsing Integration
+- [x] PDF-Versand via E-Mail automatisieren
+- [x] WordPress Plugin Update-Server
 
 ### Optional
 - [ ] Blog/News-Sektion für regelmässige Content-Updates
