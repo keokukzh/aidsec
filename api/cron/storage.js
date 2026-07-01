@@ -36,11 +36,13 @@ class UnconfiguredStorage {
     throw new Error(this.reason);
   }
 
-  async put(key, data) {
+  async put(key, data, contentType) {
+    if (contentType) throw new Error(this.reason);
     return this.putJson(key, data);
   }
 
-  async get(key) {
+  async get(key, asBuffer) {
+    if (asBuffer) throw new Error(this.reason);
     return this.getJson(key);
   }
 }
@@ -80,11 +82,26 @@ class S3Storage {
     return createPresignedGetUrl(this.config, key, expiresIn);
   }
 
-  async put(key, data) {
+  async put(key, data, contentType) {
+    if (contentType) {
+      const response = await fetch(createPresignedPutUrl(this.config, key), {
+        method: 'PUT',
+        headers: { 'Content-Type': contentType },
+        body: data,
+      });
+      if (!response.ok) throw new Error(`Object storage PUT failed: ${response.status}`);
+      return { success: true, key };
+    }
     return this.putJson(key, data);
   }
 
-  async get(key) {
+  async get(key, asBuffer = false) {
+    if (asBuffer) {
+      const response = await fetch(createPresignedGetUrl(this.config, key));
+      if (response.status === 404) return null;
+      if (!response.ok) throw new Error(`Object storage GET failed: ${response.status}`);
+      return Buffer.from(await response.arrayBuffer());
+    }
     return this.getJson(key);
   }
 }
@@ -139,12 +156,29 @@ class LocalStorage {
     return `/reports/${key}`;
   }
 
-  async put(key, data) {
+  async put(key, data, contentType) {
+    if (contentType) {
+      await this.init();
+      const fullPath = this.path.join(this.baseDir, key);
+      await this.fs.mkdir(this.path.dirname(fullPath), { recursive: true });
+      await this.fs.writeFile(fullPath, data);
+      return { success: true, key };
+    }
     return this.putJson(key, data);
   }
 
-  async get(key) {
-    return this.getJson(key);
+  async get(key, asBuffer = false) {
+    await this.init();
+    try {
+      const filePath = this.path.join(this.baseDir, key);
+      if (asBuffer) {
+        return await this.fs.readFile(filePath);
+      }
+      return JSON.parse(await this.fs.readFile(filePath, 'utf8'));
+    } catch (error) {
+      if (error.code === 'ENOENT') return null;
+      throw error;
+    }
   }
 }
 

@@ -9,6 +9,7 @@
 import { storage } from './storage.js';
 import { isProduction } from '../lib/env.js';
 import { listCustomerMonitoringTargets, recordMonitoringResultForWebsite } from '../lib/order-store.js';
+import { checkDomainReputation } from '../lib/reputation.js';
 
 const SECURITY_HEADERS = [
   'strict-transport-security',
@@ -33,15 +34,22 @@ async function checkSecurityHeaders(url) {
   const timeout = setTimeout(() => controller.abort(), 15000);
 
   try {
-    // Use our own check-headers API (Vercel serverless — works here)
     const apiUrl = `https://${process.env.AUTH_DOMAIN || 'aidsec.ch'}/api/check-headers?url=${encodeURIComponent(url)}`;
-    const response = await fetch(apiUrl, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'AidSec-Monitor/2.0',
-        'Accept': 'application/json'
-      }
-    });
+    
+    // Fetch security checks and reputation in parallel
+    const [response, reputation] = await Promise.all([
+      fetch(apiUrl, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'AidSec-Monitor/2.0',
+          'Accept': 'application/json'
+        }
+      }),
+      checkDomainReputation(url).catch((err) => {
+        console.error('[monitoring] Reputation check failed:', err.message);
+        return { isClean: true };
+      })
+    ]);
 
     clearTimeout(timeout);
 
@@ -57,6 +65,7 @@ async function checkSecurityHeaders(url) {
       score: data.score || 0,
       maxScore: SECURITY_HEADERS.length,
       headers: data.headers || {},
+      reputation,
       checkedAt: data.metadata?.checkedAt || new Date().toISOString()
     };
   } catch (err) {
@@ -132,6 +141,25 @@ async function runMonitoring() {
           type: 'security_headers',
           message: `Security Header Note: ${result.grade}`,
           score: result.score
+        });
+      }
+
+      // Check reputation issues
+      if (result.reputation && !result.reputation.isClean) {
+        let reputationMsg = '';
+        if (result.reputation.dnsbl?.listed) {
+          reputationMsg += `Gelistet auf DNSBL: ${result.reputation.dnsbl.listName}. `;
+        }
+        if (result.reputation.safeBrowsing && !result.reputation.safeBrowsing.safe) {
+          reputationMsg += `Google Safe Browsing: ${result.reputation.safeBrowsing.threatType || 'Schadsoftware/Social Engineering'}. `;
+        }
+        issues.push({
+          customerId: customer.id,
+          customerName: customer.name,
+          website: customer.website.url,
+          severity: 'critical',
+          type: 'domain_reputation',
+          message: reputationMsg || 'Domain-Reputation gefaehrdet'
         });
       }
     } catch (e) {

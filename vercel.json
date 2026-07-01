@@ -134,6 +134,10 @@
     {
       "source": "/api/plugin/scan-result",
       "destination": "/api/plugin-scan-result.js"
+    },
+    {
+      "source": "/api/plugin/update",
+      "destination": "/api/plugin/update.js"
     }
   ],
   "crons": [

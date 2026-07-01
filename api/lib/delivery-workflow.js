@@ -1,6 +1,15 @@
 import { scanSecurityHeaders } from './header-scan.js';
-import { sendDeliveryEmail, sendMagicLinkEmail, sendOpsReviewEmail, sendPaymentConfirmationEmail } from './mailer.js';
+import { 
+  sendDeliveryEmail, 
+  sendMagicLinkEmail, 
+  sendOpsReviewEmail, 
+  sendPaymentConfirmationEmail,
+  buildDeliveryEmail,
+  sendTransactionalEmail
+} from './mailer.js';
 import { getObjectStorageConfig } from './signed-storage-url.js';
+import { getEnvFirst, isProduction } from './env.js';
+import { generatePdfBufferForOrder } from './pdf-generator.js';
 import {
   createLicenseForOrder,
   createOnboardingTaskForOrder,
@@ -162,10 +171,15 @@ async function runDeliveryReport(order, workflow) {
   const currentOrder = await getOrder(order.orderId);
   const createdAt = new Date().toISOString();
   const reportKey = `reports/orders/${order.orderId}-delivery.json`;
+  const pdfKey = `reports/orders/${order.orderId}-delivery.pdf`;
   let storedReport = false;
 
-  if (getObjectStorageConfig()) {
-    const { storage } = await import('../cron/storage.js');
+  const storageModule = getObjectStorageConfig() || !isProduction() || getEnvFirst(['USE_LOCAL_STORAGE']) === 'true'
+    ? await import('../cron/storage.js')
+    : null;
+
+  if (storageModule) {
+    const { storage } = storageModule;
     await storage.putJson(reportKey, {
       type: 'delivery_report',
       orderId: order.orderId,
@@ -175,6 +189,14 @@ async function runDeliveryReport(order, workflow) {
       status: 'ready',
       createdAt,
     });
+
+    try {
+      const pdfBuffer = await generatePdfBufferForOrder(currentOrder || order);
+      await storage.put(pdfKey, pdfBuffer, 'application/pdf');
+    } catch (pdfError) {
+      console.error(`[delivery-workflow] PDF generation failed for ${order.orderId}:`, pdfError.message);
+    }
+
     storedReport = true;
   }
 
@@ -282,7 +304,36 @@ async function executeStep(stepId, order, workflow) {
   if (stepId === 'delivery_report') return runDeliveryReport(order, workflow);
   if (stepId === 'payment_email') return sendOnce(order, 'email.payment_confirmation', sendPaymentConfirmationEmail);
   if (stepId === 'magic_link_email') return sendOnce(order, 'email.magic_link', sendMagicLinkEmail);
-  if (stepId === 'delivery_email') return sendOnce(order, 'email.delivery', sendDeliveryEmail);
+  if (stepId === 'delivery_email') {
+    return sendOnce(order, 'email.delivery', async (o) => {
+      let attachments = undefined;
+      const pdfKey = `reports/orders/${o.orderId}-delivery.pdf`;
+      try {
+        const storageModule = getObjectStorageConfig() || !isProduction() || getEnvFirst(['USE_LOCAL_STORAGE']) === 'true'
+          ? await import('../cron/storage.js')
+          : null;
+        if (storageModule) {
+          const { storage } = storageModule;
+          const pdfBuffer = await storage.get(pdfKey, true);
+          if (pdfBuffer) {
+            attachments = [{
+              filename: `Audit-Protokoll_${o.orderId}.pdf`,
+              content: pdfBuffer,
+              contentType: 'application/pdf'
+            }];
+          }
+        }
+      } catch (err) {
+        console.warn(`[delivery-workflow] Could not retrieve PDF for attachment:`, err.message);
+      }
+
+      const message = buildDeliveryEmail(o);
+      if (attachments) {
+        message.attachments = attachments;
+      }
+      return sendTransactionalEmail(message);
+    });
+  }
   if (stepId === 'activate_monitoring') return runActivateMonitoring(order, workflow);
   if (stepId === 'ops_review') return runOpsReview(order, workflow);
   if (stepId === 'complete') return runComplete(order, workflow);

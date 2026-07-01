@@ -306,6 +306,7 @@ return {
       licenseId: order.licenseId || order.licenseKey || '',
       results: order.results || {},
       createdAt: order.createdAt || '',
+      stripeInvoiceUrl: apiResponse.stripeInvoiceUrl || null,
     };
   }
 
@@ -415,10 +416,18 @@ return {
     // Rechnungen kommen direkt von Stripe per E-Mail — bis ein Kundenportal-Link
     // existiert, bleibt der Button deaktiviert (es gibt keinen /api/invoice Endpoint).
     if (elements.invoiceLink) {
-      elements.invoiceLink.style.pointerEvents = 'none';
-      elements.invoiceLink.style.opacity = '0.4';
-      elements.invoiceLink.style.cursor = 'default';
-      elements.invoiceLink.title = 'Ihre Rechnung erhalten Sie per E-Mail von Stripe';
+      if (data.stripeInvoiceUrl) {
+        elements.invoiceLink.href = data.stripeInvoiceUrl;
+        elements.invoiceLink.style.pointerEvents = 'auto';
+        elements.invoiceLink.style.opacity = '1';
+        elements.invoiceLink.style.cursor = 'pointer';
+        elements.invoiceLink.title = 'Abonnements & Rechnungen verwalten';
+      } else {
+        elements.invoiceLink.style.pointerEvents = 'none';
+        elements.invoiceLink.style.opacity = '0.4';
+        elements.invoiceLink.style.cursor = 'default';
+        elements.invoiceLink.title = 'Ihre Rechnung erhalten Sie per E-Mail von Stripe';
+      }
     }
   }
 

@@ -39,6 +39,28 @@ async function sendTransactionalEmail(message) {
   if ((provider === 'auto' || provider === 'brevo') && brevoApiKey) {
     const sender = parseAddress(config.from, 'AidSec');
     const recipient = parseAddress(message.to);
+    const bodyPayload = {
+      sender,
+      to: [recipient],
+      subject: message.subject,
+      htmlContent: message.html,
+      textContent: message.text,
+    };
+
+    if (message.attachments && Array.isArray(message.attachments)) {
+      bodyPayload.attachment = message.attachments.map((att) => {
+        const base64Content = Buffer.isBuffer(att.content)
+          ? att.content.toString('base64')
+          : typeof att.content === 'string'
+            ? Buffer.from(att.content).toString('base64')
+            : att.content;
+        return {
+          name: att.filename,
+          content: base64Content,
+        };
+      });
+    }
+
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -46,13 +68,7 @@ async function sendTransactionalEmail(message) {
         'Content-Type': 'application/json',
         'api-key': brevoApiKey,
       },
-      body: JSON.stringify({
-        sender,
-        to: [recipient],
-        subject: message.subject,
-        htmlContent: message.html,
-        textContent: message.text,
-      }),
+      body: JSON.stringify(bodyPayload),
     });
 
     if (!response.ok) {
@@ -87,6 +103,7 @@ async function sendTransactionalEmail(message) {
     subject: message.subject,
     text: message.text,
     html: message.html,
+    attachments: message.attachments || [],
   });
   return { sent: true, provider: 'smtp', messageId: result.messageId };
 }

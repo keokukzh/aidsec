@@ -7,9 +7,10 @@
  * and Stripe invoice URL for the customer portal.
  */
 
-import { getEnvFirst } from './lib/env.js';
+import { getEnvFirst, isProduction } from './lib/env.js';
 import { getCustomerPortalByOrderId } from './lib/order-store.js';
 import { verifyDemoMagicToken, verifyMagicToken } from './lib/order-token.js';
+import { createStripePortalSession } from './lib/stripe-portal.js';
 
 function safeCustomerInfo(customer) {
   return {
@@ -31,13 +32,6 @@ function publicOrders(orders) {
     results: order.results || null,
     createdAt: order.createdAt,
   }));
-}
-
-function getStripeInvoiceUrl(customerId, stripeCustomerId) {
-  if (!stripeCustomerId) return null;
-  // In production, this would use Stripe Customer Portal URL
-  // For now, return null unless we have a customer portal session URL
-  return null;
 }
 
 export default async function handler(req, res) {
@@ -107,6 +101,19 @@ export default async function handler(req, res) {
     const authenticatedOrder = portalData.orders?.find((o) => o.orderId === orderId);
     const stripeCustomerId = authenticatedOrder?.stripeCustomerId || null;
 
+    let stripeInvoiceUrl = null;
+    if (stripeCustomerId) {
+      const requestOrigin = req.headers?.origin || (req.headers?.host ? `http://${req.headers.host}` : '');
+      const baseUrl = !isProduction() && requestOrigin ? requestOrigin : getEnvFirst(['BASE_URL']) || 'https://aidsec.ch';
+      const returnUrl = `${baseUrl}/dashboard.html?orderId=${orderId}&token=${token}`;
+      try {
+        const portalSession = await createStripePortalSession({ stripeCustomerId, returnUrl });
+        stripeInvoiceUrl = portalSession.url || null;
+      } catch (err) {
+        console.error('[dashboard-status] Failed to create Stripe portal session:', err.message);
+      }
+    }
+
     // Build response
     const response = {
       success: true,
@@ -115,9 +122,7 @@ export default async function handler(req, res) {
       licenseIds: portalData.orders
         .map((o) => o.licenseId)
         .filter(Boolean),
-      stripeInvoiceUrl: stripeCustomerId
-        ? getStripeInvoiceUrl(portalData.customer?.customerId, stripeCustomerId)
-        : null,
+      stripeInvoiceUrl,
       _meta: {
         checkedAt: new Date().toISOString(),
         apiVersion: '1.0.0-dashboard-status',
