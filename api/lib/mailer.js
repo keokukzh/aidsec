@@ -31,7 +31,7 @@ function emailProvider() {
   throw new Error('EMAIL_PROVIDER must be one of: auto, brevo, smtp');
 }
 
-async function sendTransactionalEmail(message) {
+export async function sendTransactionalEmail(message) {
   const config = smtpConfig();
   const brevoApiKey = getEnvFirst(['BREVO_API_KEY']);
   const provider = emailProvider();
