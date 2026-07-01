@@ -354,7 +354,7 @@ async function checkPricingCtas() {
 
     // HEAD spart Bandbreite; manche Hosts antworten mit 405 -> Fallback GET.
     let status = 0;
-    const absoluteUrl = new URL(href, baseUrl).href;
+    const absoluteUrl = new URL(href, meta.sourceUrl).href;
     try {
       const headRes = await fetch(absoluteUrl, { method: 'HEAD', redirect: 'follow' });
       status = headRes.status;
